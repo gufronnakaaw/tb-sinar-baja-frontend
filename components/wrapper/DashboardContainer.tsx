@@ -1,11 +1,14 @@
 import React from "react";
 
-interface ContainerProps {
+interface DashboardContainerProps {
   children: React.ReactNode;
   className?: string;
 }
 
-export default function Container({ children, className }: ContainerProps) {
+export default function DashboardContainer({
+  children,
+  className,
+}: DashboardContainerProps) {
   return (
     <div className="min-h-screen">
       <div className={`grid ${className}`}>{children}</div>

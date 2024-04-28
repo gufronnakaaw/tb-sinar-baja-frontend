@@ -9,7 +9,7 @@ import {
 import { SignOut } from "@phosphor-icons/react";
 
 // components
-import ButtonMobileMenu from "./button/ButtonMobileMenu";
+import ButtonMobileMenu from "../button/ButtonMobileMenu";
 
 export default function Navbar() {
   return (

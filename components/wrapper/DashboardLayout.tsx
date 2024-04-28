@@ -3,15 +3,18 @@ import React from "react";
 
 // components
 import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/navbar/NavbarDashboard";
 import Sidebar from "@/components/Sidebar";
 
-interface LayoutProps {
+interface DashboardLayoutProps {
   children: React.ReactNode;
-  title: string;
+  title?: string;
 }
 
-export default function Layout({ children, title }: LayoutProps) {
+export default function DashboardLayout({
+  children,
+  title,
+}: DashboardLayoutProps) {
   return (
     <>
       <Head>

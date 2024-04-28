@@ -1,11 +1,12 @@
+// components
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 
-export default function DashboardPage() {
+export default function ProductPage() {
   return (
-    <Layout title="Dashboard">
+    <Layout title="Produk">
       <Container>
-        <div>dashboard page</div>
+        <div>product page</div>
       </Container>
     </Layout>
   );
