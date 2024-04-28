@@ -2,7 +2,7 @@ import { ArchiveBox, House, ListPlus } from "@phosphor-icons/react";
 import Link from "next/link";
 
 // components
-import ButtonSidebar from "@/components/button/buttonSidebar";
+import ButtonSidebar from "@/components/button/ButtonSidebar";
 
 const Sidebar = () => {
   return (

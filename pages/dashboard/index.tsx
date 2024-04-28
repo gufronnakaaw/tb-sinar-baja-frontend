@@ -1,5 +1,5 @@
-import Container from "@/components/wrapper/container";
-import Layout from "@/components/wrapper/layout";
+import Container from "@/components/wrapper/Container";
+import Layout from "@/components/wrapper/Layout";
 
 const DashboardPage = () => {
   return (

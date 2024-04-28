@@ -1,10 +1,10 @@
+import Head from "next/head";
 import React from "react";
 
 // components
-import Footer from "@/components/footer";
-import Navbar from "@/components/navbar";
-import Sidebar from "@/components/sidebar";
-import Head from "next/head";
+import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
+import Sidebar from "@/components/Sidebar";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -17,6 +17,7 @@ const Layout = ({ children, title }: LayoutProps) => {
       <Head>
         <title>{title}</title>
       </Head>
+
       <main className="flex h-screen">
         <Sidebar />
 
