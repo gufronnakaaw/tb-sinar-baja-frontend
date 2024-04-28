@@ -1,7 +1,7 @@
 import Container from "@/components/wrapper/Container";
 import Layout from "@/components/wrapper/Layout";
 
-const DashboardPage = () => {
+export default function DashboardPage() {
   return (
     <Layout title="Dashboard">
       <Container>
@@ -9,6 +9,4 @@ const DashboardPage = () => {
       </Container>
     </Layout>
   );
-};
-
-export default DashboardPage;
+}
