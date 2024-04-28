@@ -13,11 +13,11 @@ export default function LoginPage() {
       </Head>
 
       <div className="container grid h-screen w-full grid-rows-[1fr_100px] items-center justify-center gap-4">
-        <div className="grid gap-8">
+        <div className="grid gap-8 rounded-xl border border-gray-200/60 bg-gray-50 p-12 shadow-[4px_4px_20px_rgba(0,0,0,0.1)]">
           <div className="text-center">
             <h1 className="text-[24px] font-bold leading-[140%] text-default-900">
               Selamat Datang Kasir{" "}
-              <span className="text-blue-600">TB. Sinar Baja</span>
+              <span className="text-cyan-600">TB. Sinar Baja</span>
             </h1>
             <p className="font-medium text-default-500">
               Silahkan login untuk melakukan transaksi.
@@ -54,9 +54,8 @@ export default function LoginPage() {
 
             <div className="mt-4 grid gap-2">
               <Button
-                color="primary"
                 onClick={() => router.push("/cashier/menu")}
-                className="font-semibold"
+                className="bg-cyan-600 font-semibold text-white"
               >
                 Login
               </Button>
