@@ -16,10 +16,11 @@ const HomePage = () => {
         <div className="grid gap-8">
           <div className="text-center">
             <h1 className="text-[24px] font-bold text-default-900">
-              Halo, Admin TB Sinar Baja
+              Selamat Datang Di Aplikasi{" "}
+              <span className="text-blue-600">TB. Sinar Baja</span>
             </h1>
             <p className="font-medium text-default-500">
-              Silakan login dulu, agar bisa mengatur semuanya.
+              Silahkan login untuk mengatur semuanya.
             </p>
           </div>
 
@@ -62,7 +63,8 @@ const HomePage = () => {
         </div>
 
         <p className="text-center text-sm font-medium text-default-500">
-          TB Sinar Baja Store & Warehouse Management
+          TB. Sinar Baja Jl. Letjend Sutoyo No.67, Burengan, Kec. Pesantren,
+          Kabupaten Kediri, Jawa Timur 64131
         </p>
       </div>
     </>
