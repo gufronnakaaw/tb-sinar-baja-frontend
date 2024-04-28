@@ -1,5 +1,5 @@
 import { Button, Input } from "@nextui-org/react";
-import { EnvelopeSimple, Key } from "@phosphor-icons/react";
+import { ArrowLeft, EnvelopeSimple, Key } from "@phosphor-icons/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
@@ -9,7 +9,7 @@ export default function LoginPage() {
   return (
     <>
       <Head>
-        <title>Login</title>
+        <title>Login Owner</title>
       </Head>
 
       <div className="container grid h-screen w-full grid-rows-[1fr_100px] items-center justify-center gap-4">
@@ -52,13 +52,25 @@ export default function LoginPage() {
               }
             />
 
-            <Button
-              color="primary"
-              onClick={() => router.push("/owner/dashboard")}
-              className="mt-4 font-semibold"
-            >
-              Login
-            </Button>
+            <div className="mt-4 grid gap-2">
+              <Button
+                color="primary"
+                onClick={() => router.push("/owner/dashboard")}
+                className="font-semibold"
+              >
+                Login
+              </Button>
+
+              <Button
+                variant="light"
+                color="default"
+                onClick={() => router.push("/")}
+                startContent={<ArrowLeft weight="bold" size={16} />}
+                className="font-semibold"
+              >
+                Kembali
+              </Button>
+            </div>
           </div>
         </div>
 
