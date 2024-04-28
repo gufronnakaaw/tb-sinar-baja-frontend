@@ -8,7 +8,7 @@ import {
 import { ArchiveBox, House, List, ListPlus } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
 
-const ButtonMobileMenu = () => {
+export default function ButtonMobileMenu() {
   const router = useRouter();
 
   return (
@@ -54,6 +54,4 @@ const ButtonMobileMenu = () => {
       </DropdownMenu>
     </Dropdown>
   );
-};
-
-export default ButtonMobileMenu;
+}

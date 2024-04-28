@@ -5,12 +5,10 @@ interface ContainerProps {
   className?: string;
 }
 
-const Container = ({ children, className }: ContainerProps) => {
+export default function Container({ children, className }: ContainerProps) {
   return (
     <div className="min-h-screen">
       <div className={`grid ${className}`}>{children}</div>
     </div>
   );
-};
-
-export default Container;
+}

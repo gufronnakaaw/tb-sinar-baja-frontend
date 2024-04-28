@@ -11,7 +11,7 @@ interface LayoutProps {
   title: string;
 }
 
-const Layout = ({ children, title }: LayoutProps) => {
+export default function Layout({ children, title }: LayoutProps) {
   return (
     <>
       <Head>
@@ -33,6 +33,4 @@ const Layout = ({ children, title }: LayoutProps) => {
       </main>
     </>
   );
-};
-
-export default Layout;
+}

@@ -4,7 +4,7 @@ import Link from "next/link";
 // components
 import ButtonSidebar from "@/components/button/ButtonSidebar";
 
-const Sidebar = () => {
+export default function Sidebar() {
   return (
     <div className="hidden bg-gray-50 xl:flex xl:h-full xl:min-w-[250px] xl:flex-col xl:gap-[30px] xl:px-[20px] xl:py-[30px]">
       <Link href="/" className="inline-flex items-center justify-center gap-2">
@@ -36,6 +36,4 @@ const Sidebar = () => {
       </div>
     </div>
   );
-};
-
-export default Sidebar;
+}

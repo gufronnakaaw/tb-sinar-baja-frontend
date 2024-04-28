@@ -11,7 +11,7 @@ import { SignOut } from "@phosphor-icons/react";
 // components
 import ButtonMobileMenu from "./button/ButtonMobileMenu";
 
-const Navbar = () => {
+export default function Navbar() {
   return (
     <nav className="bg-white px-6">
       <div className="flex h-20 items-center justify-between xl:justify-end">
@@ -58,6 +58,4 @@ const Navbar = () => {
       </div>
     </nav>
   );
-};
-
-export default Navbar;
+}

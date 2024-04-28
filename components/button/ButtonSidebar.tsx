@@ -7,7 +7,11 @@ interface SidebarButtonProps {
   icon: React.ReactNode;
 }
 
-const ButtonSidebar = ({ icon, label, path }: SidebarButtonProps) => {
+export default function ButtonSidebar({
+  icon,
+  label,
+  path,
+}: SidebarButtonProps) {
   const router = useRouter();
 
   return (
@@ -29,6 +33,4 @@ const ButtonSidebar = ({ icon, label, path }: SidebarButtonProps) => {
       </div>
     </Link>
   );
-};
-
-export default ButtonSidebar;
+}
