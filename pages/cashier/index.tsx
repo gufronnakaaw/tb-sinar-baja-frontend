@@ -54,7 +54,7 @@ export default function LoginPage() {
 
             <div className="mt-4 grid gap-2">
               <Button
-                onClick={() => router.push("/cashier/dashboard")}
+                onClick={() => router.push("/cashier/menu")}
                 className="bg-rose-500 font-semibold text-white"
               >
                 Login

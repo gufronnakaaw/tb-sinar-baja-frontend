@@ -11,7 +11,7 @@ import { SignOut } from "@phosphor-icons/react";
 
 export default function NavbarCashier() {
   return (
-    <nav className="fixed inset-x-0 top-0 z-50 mx-auto max-w-[1120px] border-b border-gray-200/40 bg-white">
+    <nav className="fixed inset-x-0 top-0 z-50 mx-auto max-w-7xl border-b border-gray-200/40 bg-white">
       <div className="container flex h-20 items-center justify-between">
         <Link
           href="/"

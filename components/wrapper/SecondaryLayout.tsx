@@ -23,7 +23,7 @@ export default function SecondaryLayout({
 
       <Navbar />
       <main
-        className={`mx-auto min-h-screen max-w-[1120px] overflow-hidden ${className}`}
+        className={`mx-auto min-h-screen max-w-7xl overflow-hidden ${className}`}
       >
         {children}
       </main>

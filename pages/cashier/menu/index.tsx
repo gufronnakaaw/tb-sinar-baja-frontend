@@ -1,5 +1,10 @@
-import { Button, Link } from "@nextui-org/react";
-import { ArrowLeft, ListNumbers, PlusCircle } from "@phosphor-icons/react";
+import { Button } from "@nextui-org/react";
+import {
+  ClipboardText,
+  Money,
+  SquaresFour,
+  XCircle,
+} from "@phosphor-icons/react";
 import { useRouter } from "next/router";
 
 // components
@@ -10,60 +15,49 @@ export default function MenuPage() {
 
   return (
     <Layout title="Menu Kasir">
-      <section className="py-24">
-        <div className="container grid gap-16">
+      <section className="flex h-screen items-center justify-center">
+        <div className="container grid max-w-[550px] grid-cols-2 grid-rows-3 gap-x-3 gap-y-6">
           <Button
-            as={Link}
-            variant="light"
-            color="default"
-            size="sm"
-            startContent={<ArrowLeft weight="bold" size={16} />}
+            variant="bordered"
+            endContent={<SquaresFour weight="bold" size={24} />}
             onClick={() => router.push("/cashier/dashboard")}
-            className="my-16 w-max font-medium"
+            className="border-rose-500 py-10 text-base font-semibold text-rose-500"
           >
-            Kembali ke Dashboard
+            Lihat Dashboard
           </Button>
 
-          <div className="grid w-[450px] grid-cols-2 grid-rows-2 gap-x-2 gap-y-6 justify-self-center">
-            <Button
-              variant="bordered"
-              size="lg"
-              endContent={
-                <ListNumbers
-                  weight="bold"
-                  size={20}
-                  className="text-rose-500"
-                />
+          <Button
+            variant="solid"
+            endContent={<Money weight="bold" size={24} />}
+            onClick={() => router.push("/cashier/menu/selling")}
+            className="bg-rose-500 py-10 text-base font-semibold text-white"
+          >
+            Penjualan
+          </Button>
+
+          <Button
+            variant="flat"
+            color="default"
+            endContent={<ClipboardText weight="bold" size={24} />}
+            onClick={() => router.push("/cashier/menu/transaction")}
+            className="col-span-2 py-10 text-base font-semibold"
+          >
+            Daftar Transaksi
+          </Button>
+
+          <Button
+            variant="flat"
+            color="danger"
+            endContent={<XCircle weight="bold" size={24} />}
+            onClick={() => {
+              if (confirm("Apakah anda ingin melakukan penutupan?")) {
+                router.push("/cashier/menu/closing");
               }
-              onClick={() => router.push("/cashier/menu/transaction")}
-              className="border-rose-500 font-medium text-rose-500"
-            >
-              Daftar Transaksi
-            </Button>
-
-            <Button
-              size="lg"
-              endContent={<PlusCircle weight="bold" size={20} />}
-              onClick={() => router.push("/cashier/menu/selling")}
-              className="bg-rose-500 font-medium text-white"
-            >
-              Penjualan
-            </Button>
-
-            <Button
-              variant="light"
-              color="danger"
-              size="lg"
-              onClick={() => {
-                if (confirm("Apakah anda ingin melakukan penutupan?")) {
-                  router.push("/cashier/menu/closing");
-                }
-              }}
-              className="col-span-2 font-medium"
-            >
-              Penutupan
-            </Button>
-          </div>
+            }}
+            className="col-span-2 py-10 text-base font-semibold"
+          >
+            Penutupan
+          </Button>
         </div>
       </section>
     </Layout>
