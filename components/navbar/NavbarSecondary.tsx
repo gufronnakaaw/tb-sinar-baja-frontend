@@ -17,7 +17,7 @@ export default function NavbarCashier() {
           href="/"
           className="inline-flex items-center justify-center gap-2"
         >
-          <div className="h-6 w-6 rounded-full bg-cyan-600" />
+          <div className="h-6 w-6 rounded-full bg-rose-500" />
 
           <div className="font-bold text-default-900">TB Sinar Baja</div>
         </Link>

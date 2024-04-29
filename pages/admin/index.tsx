@@ -9,18 +9,18 @@ export default function LoginPage() {
   return (
     <>
       <Head>
-        <title>Login Cashier</title>
+        <title>Login Admin</title>
       </Head>
 
       <div className="container grid h-screen w-full grid-rows-[1fr_100px] items-center justify-center gap-4">
         <div className="grid gap-8 rounded-xl border border-gray-200/60 bg-gray-50 p-12 shadow-[4px_4px_20px_rgba(0,0,0,0.1)]">
           <div className="text-center">
             <h1 className="text-[24px] font-bold leading-[140%] text-default-900">
-              Selamat Datang Kasir{" "}
-              <span className="text-rose-500">TB. Sinar Baja</span>
+              Selamat Datang Admin{" "}
+              <span className="text-lime-500">TB. Sinar Baja</span>
             </h1>
             <p className="font-medium text-default-500">
-              Silahkan login untuk mengatur semuanya.
+              Silahkan login untuk melakukan transaksi.
             </p>
           </div>
 
@@ -54,8 +54,8 @@ export default function LoginPage() {
 
             <div className="mt-4 grid gap-2">
               <Button
-                onClick={() => router.push("/cashier/dashboard")}
-                className="bg-rose-500 font-semibold text-white"
+                onClick={() => router.push("/admin/dashboard")}
+                className="bg-lime-500 font-semibold text-white"
               >
                 Login
               </Button>

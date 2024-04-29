@@ -4,9 +4,9 @@ import Layout from "@/components/wrapper/DashboardLayout";
 
 export default function DashboardPage() {
   return (
-    <Layout title="Dashboard Owner">
+    <Layout title="Dashboard Admin">
       <Container>
-        <div>owner dashboard page</div>
+        <div>admin dashboard page</div>
       </Container>
     </Layout>
   );

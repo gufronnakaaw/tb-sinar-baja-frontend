@@ -19,7 +19,7 @@ export default function ButtonSidebar({
       href={path}
       className={`flex h-10 items-center justify-between rounded-xl px-3 py-2 ${
         router.pathname.includes(path)
-          ? "bg-primary text-white hover:bg-primary/90"
+          ? "bg-gray-300 text-gray-900 hover:bg-gray-400"
           : "bg-transparent text-gray-600 hover:bg-gray-200"
       }`}
       onClick={(e) => {

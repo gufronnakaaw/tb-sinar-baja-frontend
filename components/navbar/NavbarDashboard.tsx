@@ -23,7 +23,7 @@ export default function Navbar() {
               <Avatar
                 isBordered
                 size="sm"
-                color="primary"
+                color="default"
                 src="https://i.pravatar.cc/150?u=a04258114e29026302d"
               />
 

@@ -17,7 +17,7 @@ export default function LoginPage() {
           <div className="text-center">
             <h1 className="text-[24px] font-bold leading-[140%] text-default-900">
               Selamat Datang Di Aplikasi{" "}
-              <span className="text-blue-600">TB. Sinar Baja</span>
+              <span className="text-primary">TB. Sinar Baja</span>
             </h1>
             <p className="font-medium text-default-500">
               Silahkan login untuk mengatur semuanya.

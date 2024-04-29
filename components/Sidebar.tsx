@@ -6,11 +6,9 @@ import ButtonSidebar from "@/components/button/ButtonSidebar";
 
 export default function Sidebar() {
   return (
-    <div className="hidden bg-gray-50 xl:flex xl:h-full xl:min-w-[250px] xl:flex-col xl:gap-[30px] xl:px-[20px] xl:py-[30px]">
-      <Link href="/" className="inline-flex items-center justify-center gap-2">
-        <div className="h-6 w-6 rounded-full bg-primary" />
-
-        <div className="font-bold text-default-900">TB Sinar Baja</div>
+    <div className="hidden border-r border-gray-100 bg-gray-50 xl:flex xl:h-full xl:min-w-[250px] xl:flex-col xl:gap-[30px] xl:px-[20px] xl:py-[30px]">
+      <Link href="/" className="text-center font-bold text-default-900">
+        TB Sinar Baja
       </Link>
 
       <div className="flex flex-1 flex-col overflow-y-scroll">
@@ -23,13 +21,13 @@ export default function Sidebar() {
 
           <ButtonSidebar
             label="Produk"
-            path="/products"
+            path="#"
             icon={<ArchiveBox weight="bold" size={20} />}
           />
 
           <ButtonSidebar
             label="Kategori"
-            path="/categories"
+            path="#"
             icon={<ListPlus weight="bold" size={20} />}
           />
         </div>
