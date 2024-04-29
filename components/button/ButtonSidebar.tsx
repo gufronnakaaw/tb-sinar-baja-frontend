@@ -14,14 +14,42 @@ export default function ButtonSidebar({
 }: SidebarButtonProps) {
   const router = useRouter();
 
+  function setActive(path: string) {
+    const ownerColor = "bg-primary text-white hover:bg-primary/90";
+    const adminColor = "bg-lime-500 text-white hover:bg-lime-500/90";
+    const cashierColor = "bg-rose-500 text-white hover:bg-rose-500/90";
+    const defaultColor = "bg-transparent text-gray-600 hover:bg-gray-200";
+
+    if (
+      router.pathname.startsWith("/owner") &&
+      router.pathname.includes(path)
+    ) {
+      return ownerColor;
+    }
+
+    if (
+      router.pathname.startsWith("/admin") &&
+      router.pathname.includes(path)
+    ) {
+      return adminColor;
+    }
+
+    if (
+      router.pathname.startsWith("/cashier") &&
+      router.pathname.includes(path)
+    ) {
+      return cashierColor;
+    }
+
+    return defaultColor;
+  }
+
   return (
     <Link
       href={path}
-      className={`flex h-10 items-center justify-between rounded-xl px-3 py-2 ${
-        router.pathname.startsWith("/owner") && router.pathname.includes(path)
-          ? "bg-primary text-white hover:bg-primary/90"
-          : "bg-transparent text-gray-600 hover:bg-gray-200"
-      }`}
+      className={`flex h-10 items-center justify-between rounded-xl px-3 py-2 ${setActive(
+        path,
+      )}`}
       onClick={(e) => {
         e.preventDefault();
         alert("masih dalam tahap pengembangan");
