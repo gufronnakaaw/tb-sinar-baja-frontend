@@ -10,17 +10,17 @@ export default function HomePage() {
       <Head>
         <title>Select Role</title>
       </Head>
-      <div className="container flex h-screen w-full flex-col items-center justify-center">
-        <h5 className="mb-4 text-xl font-medium text-default-900">
+      <div className="container flex h-screen w-full flex-col justify-center">
+        <h5 className="mb-4 text-center text-xl font-medium text-default-900">
           Silakan pilih role untuk login:
         </h5>
 
-        <div className="inline-flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center justify-center gap-2">
           <Button
             color="primary"
             size="lg"
             onClick={() => router.push("/owner")}
-            className="w-36 font-semibold"
+            className="font-semibold sm:w-40"
           >
             Owner
           </Button>
@@ -28,7 +28,7 @@ export default function HomePage() {
           <Button
             size="lg"
             onClick={() => router.push("/admin")}
-            className="w-36 bg-lime-500 font-semibold text-white"
+            className="bg-lime-500 font-semibold text-white sm:w-40"
           >
             Admin
           </Button>
@@ -36,7 +36,7 @@ export default function HomePage() {
           <Button
             size="lg"
             onClick={() => router.push("/cashier")}
-            className="w-36 bg-rose-500 font-semibold text-white"
+            className="bg-rose-500 font-semibold text-white sm:w-40"
           >
             Kasir
           </Button>
