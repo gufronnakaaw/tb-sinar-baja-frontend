@@ -16,40 +16,59 @@ export default function Sidebar() {
 
       <div className="flex flex-1 flex-col overflow-y-scroll">
         <div className="grid gap-1">
-          {/* <div
-            className={`flex h-10 items-center justify-between rounded-xl px-3 py-2 ${
-              router.pathname.startsWith("/owner")
-                ? "bg-primary text-white hover:bg-primary/90"
-                : router.pathname.startsWith("/admin")
-                  ? "bg-lime-500 text-white hover:bg-lime-500/90"
-                  : router.pathname.startsWith("/cashier")
-                    ? "bg-rose-500 text-white hover:bg-rose-500/90"
-                    : "bg-transparent text-gray-600 hover:bg-gray-200"
-            }`}
-          >
-            <div className="flex flex-1 items-center gap-2">
-              <House weight="bold" size={20} />
-              <div className="text-sm font-semibold">Dashboard</div>
-            </div>
-          </div> */}
+          {router.pathname.startsWith("/owner") ? (
+            <>
+              <ButtonSidebar
+                label="Dashboard"
+                path="/owner/dashboard"
+                icon={<House weight="bold" size={20} />}
+              />
 
-          <ButtonSidebar
-            label="Dashboard"
-            path="/owner/dashboard"
-            icon={<House weight="bold" size={20} />}
-          />
+              <ButtonSidebar
+                label="Produk"
+                path="/owner/products"
+                icon={<ArchiveBox weight="bold" size={20} />}
+              />
 
-          <ButtonSidebar
-            label="Produk"
-            path="/owner/products"
-            icon={<ArchiveBox weight="bold" size={20} />}
-          />
+              <ButtonSidebar
+                label="Kategori"
+                path="/owner/categories"
+                icon={<ListPlus weight="bold" size={20} />}
+              />
+            </>
+          ) : null}
 
-          <ButtonSidebar
-            label="Kategori"
-            path="/owner/categories"
-            icon={<ListPlus weight="bold" size={20} />}
-          />
+          {router.pathname.startsWith("/admin") ? (
+            <>
+              <ButtonSidebar
+                label="Dashboard"
+                path="/admin/dashboard"
+                icon={<House weight="bold" size={20} />}
+              />
+
+              <ButtonSidebar
+                label="Produk"
+                path="/admin/products"
+                icon={<ArchiveBox weight="bold" size={20} />}
+              />
+
+              <ButtonSidebar
+                label="Kategori"
+                path="/admin/categories"
+                icon={<ListPlus weight="bold" size={20} />}
+              />
+            </>
+          ) : null}
+
+          {router.pathname.startsWith("/cashier") ? (
+            <>
+              <ButtonSidebar
+                label="Dashboard"
+                path="/cashier/dashboard"
+                icon={<House weight="bold" size={20} />}
+              />
+            </>
+          ) : null}
         </div>
       </div>
     </div>

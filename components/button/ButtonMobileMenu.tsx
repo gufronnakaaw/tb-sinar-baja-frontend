@@ -31,7 +31,7 @@ export default function ButtonMobileMenu() {
         <DropdownItem
           key="dashboard"
           startContent={<House weight="bold" size={20} />}
-          onClick={() => router.push("/dashboard")}
+          onClick={() => alert("masih dalam tahap pengembangan")}
         >
           Dashboard
         </DropdownItem>
