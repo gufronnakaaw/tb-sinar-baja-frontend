@@ -111,7 +111,7 @@ export default function DashboardPage() {
                     />
                   </div>
                   <p className="text-sm font-medium text-default-600">
-                    Barang Konsinyasi
+                    Konsinyasi
                   </p>
                 </div>
 
