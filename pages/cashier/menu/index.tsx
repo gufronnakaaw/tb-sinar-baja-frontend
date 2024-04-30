@@ -23,7 +23,7 @@ export default function MenuPage() {
             onClick={() => router.push("/cashier/dashboard")}
             className="border-rose-500 py-10 text-base font-semibold text-rose-500"
           >
-            Lihat Dashboard
+            Dashboard
           </Button>
 
           <Button

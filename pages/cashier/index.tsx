@@ -1,5 +1,5 @@
 import { Button, Input } from "@nextui-org/react";
-import { ArrowLeft, EnvelopeSimple, Key } from "@phosphor-icons/react";
+import { ArrowLeft, Key, User } from "@phosphor-icons/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
@@ -30,13 +30,9 @@ export default function LoginPage() {
               variant="flat"
               color="default"
               labelPlacement="outside"
-              placeholder="Email"
+              placeholder="Username"
               endContent={
-                <EnvelopeSimple
-                  weight="bold"
-                  size={18}
-                  className="text-gray-600"
-                />
+                <User weight="bold" size={18} className="text-gray-600" />
               }
             />
 
