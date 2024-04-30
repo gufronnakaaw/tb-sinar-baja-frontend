@@ -4,12 +4,14 @@ import { useRouter } from "next/router";
 interface SidebarButtonProps {
   label: string;
   path: string;
+  className?: string;
   icon: React.ReactNode;
 }
 
 export default function ButtonSidebar({
   icon,
   label,
+  className,
   path,
 }: SidebarButtonProps) {
   const router = useRouter();
@@ -49,7 +51,7 @@ export default function ButtonSidebar({
       href={path}
       className={`flex h-10 items-center justify-between rounded-xl px-3 py-2 ${setActive(
         path,
-      )}`}
+      )} ${className}`}
       onClick={(e) => {
         e.preventDefault();
         alert("masih dalam tahap pengembangan");
