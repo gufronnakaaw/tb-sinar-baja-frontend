@@ -1,6 +1,16 @@
-import { Basket, Money } from "@phosphor-icons/react";
+import { Button } from "@nextui-org/react";
+import {
+  ArrowRight,
+  ChartLineDown,
+  HandCoins,
+  HourglassMedium,
+  ImageBroken,
+  Money,
+  Package,
+} from "@phosphor-icons/react";
 
 // components
+import StatusStock from "@/components/status/StatusStock";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 
@@ -8,46 +18,173 @@ export default function DashboardPage() {
   return (
     <Layout title="Dashboard Owner">
       <Container>
-        <section className="grid grid-cols-3 gap-4">
-          <div className="grid h-[150px] w-full rounded-xl bg-white p-6 shadow-[2px_2px_12px_rgba(0,0,0,0.15)]">
-            <div className="inline-flex items-center gap-2">
-              <div className="aspect-square rounded-lg bg-green-100 p-2">
-                <Money weight="bold" size={24} className="text-green-600" />
+        <section className="grid gap-12">
+          <StatusStock text="stok aman" />
+
+          <div className="grid gap-4">
+            <h4 className="text-lg font-semibold text-default-900">
+              Ringkasan Toko
+            </h4>
+
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4 xl:grid-cols-3">
+              <div className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-6">
+                <div className="inline-flex items-center gap-2">
+                  <div className="aspect-square rounded-lg bg-gray-200 p-2">
+                    <Money weight="bold" size={20} className="text-gray-600" />
+                  </div>
+                  <p className="text-sm font-medium text-default-600">Omzet</p>
+                </div>
+
+                <h6 className="text-2xl font-semibold text-default-900">
+                  Rp1.186.917
+                </h6>
+
+                <Button
+                  variant="light"
+                  size="sm"
+                  endContent={<ArrowRight weight="bold" size={14} />}
+                  className="w-max self-end font-medium text-default-600"
+                >
+                  Selengkapnya
+                </Button>
               </div>
-              <p className="font-medium text-default-600">Total Keuntungan</p>
-            </div>
 
-            <h6 className="text-default-900-900 justify-self-center text-3xl font-semibold">
-              Rp1.186.917
-            </h6>
-          </div>
+              <div className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-6">
+                <div className="inline-flex items-center gap-2">
+                  <div className="aspect-square rounded-lg bg-gray-200 p-2">
+                    <HourglassMedium
+                      weight="bold"
+                      size={20}
+                      className="text-gray-600"
+                    />
+                  </div>
+                  <p className="text-sm font-medium text-default-600">
+                    Laba Kotor
+                  </p>
+                </div>
 
-          <div className="grid h-[150px] w-full rounded-xl bg-white p-6 shadow-[2px_2px_12px_rgba(0,0,0,0.15)]">
-            <div className="inline-flex items-center gap-2">
-              <div className="aspect-square rounded-lg bg-red-100 p-2">
-                <Money weight="bold" size={24} className="text-red-600" />
+                <h6 className="text-2xl font-semibold text-default-900">
+                  Rp2.819.109
+                </h6>
+
+                <Button
+                  variant="light"
+                  size="sm"
+                  endContent={<ArrowRight weight="bold" size={14} />}
+                  className="w-max self-end font-medium text-default-600"
+                >
+                  Selengkapnya
+                </Button>
               </div>
-              <p className="font-medium text-default-600">Laba Kotor</p>
-            </div>
 
-            <h6 className="text-default-900-900 justify-self-center text-3xl font-semibold">
-              Rp2.819.109
-            </h6>
-          </div>
+              <div className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-6">
+                <div className="inline-flex items-center gap-2">
+                  <div className="aspect-square rounded-lg bg-gray-200 p-2">
+                    <ImageBroken
+                      weight="bold"
+                      size={20}
+                      className="text-gray-600"
+                    />
+                  </div>
+                  <p className="text-sm font-medium text-default-600">
+                    Barang Rusak/Hilang
+                  </p>
+                </div>
 
-          <div className="grid h-[150px] w-full rounded-xl bg-white p-6 shadow-[2px_2px_12px_rgba(0,0,0,0.15)]">
-            <div className="inline-flex items-center gap-2">
-              <div className="aspect-square rounded-lg bg-orange-100 p-2">
-                <Basket weight="bold" size={24} className="text-orange-500" />
+                <h6 className="text-2xl font-semibold text-default-900">12</h6>
+
+                <Button
+                  variant="light"
+                  size="sm"
+                  endContent={<ArrowRight weight="bold" size={14} />}
+                  className="w-max self-end font-medium text-default-600"
+                >
+                  Selengkapnya
+                </Button>
               </div>
-              <p className="font-medium text-default-600">
-                Barang Rusak/Hilang
-              </p>
-            </div>
 
-            <h6 className="text-default-900-900 justify-self-center text-3xl font-semibold">
-              12
-            </h6>
+              <div className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-6">
+                <div className="inline-flex items-center gap-2">
+                  <div className="aspect-square rounded-lg bg-gray-200 p-2">
+                    <HandCoins
+                      weight="bold"
+                      size={20}
+                      className="text-gray-600"
+                    />
+                  </div>
+                  <p className="text-sm font-medium text-default-600">
+                    Pembayaran Lunas
+                  </p>
+                </div>
+
+                <h6 className="text-2xl font-semibold text-default-900">
+                  Rp2.182.572
+                </h6>
+
+                <Button
+                  variant="light"
+                  size="sm"
+                  endContent={<ArrowRight weight="bold" size={14} />}
+                  className="w-max self-end font-medium text-default-600"
+                >
+                  Selengkapnya
+                </Button>
+              </div>
+
+              <div className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-6">
+                <div className="inline-flex items-center gap-2">
+                  <div className="aspect-square rounded-lg bg-gray-200 p-2">
+                    <ChartLineDown
+                      weight="bold"
+                      size={20}
+                      className="text-gray-600"
+                    />
+                  </div>
+                  <p className="text-sm font-medium text-default-600">
+                    Estimasi Rugi
+                  </p>
+                </div>
+
+                <h6 className="text-2xl font-semibold text-default-900">
+                  Rp561.129
+                </h6>
+
+                <Button
+                  variant="light"
+                  size="sm"
+                  endContent={<ArrowRight weight="bold" size={14} />}
+                  className="w-max self-end font-medium text-default-600"
+                >
+                  Selengkapnya
+                </Button>
+              </div>
+
+              <div className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-6">
+                <div className="inline-flex items-center gap-2">
+                  <div className="aspect-square rounded-lg bg-gray-200 p-2">
+                    <Package
+                      weight="bold"
+                      size={20}
+                      className="text-gray-600"
+                    />
+                  </div>
+                  <p className="text-sm font-medium text-default-600">
+                    Barang Konsinyasi
+                  </p>
+                </div>
+
+                <h6 className="text-2xl font-semibold text-default-900">18</h6>
+
+                <Button
+                  variant="light"
+                  size="sm"
+                  endContent={<ArrowRight weight="bold" size={14} />}
+                  className="w-max self-end font-medium text-default-600"
+                >
+                  Selengkapnya
+                </Button>
+              </div>
+            </div>
           </div>
         </section>
       </Container>
