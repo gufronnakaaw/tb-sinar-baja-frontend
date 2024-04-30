@@ -26,8 +26,20 @@ export default function Sidebar() {
 
   return (
     <div className="hidden border-r border-gray-100 bg-gray-50 xl:flex xl:h-full xl:min-w-[250px] xl:flex-col xl:gap-[30px] xl:px-[20px] xl:py-[30px]">
-      <Link href="/" className="text-center font-bold text-default-900">
-        TB Sinar Baja
+      <Link href="/" className="inline-flex items-center justify-center gap-2">
+        <div
+          className={`h-6 w-6 rounded-full ${
+            router.pathname.startsWith("/owner")
+              ? "bg-primary"
+              : router.pathname.startsWith("/admin")
+                ? "bg-lime-500"
+                : router.pathname.startsWith("/cashier")
+                  ? "bg-rose-500"
+                  : null
+          }`}
+        />
+
+        <div className="font-bold text-default-900">TB Sinar Baja</div>
       </Link>
 
       <div className="flex flex-1 flex-col overflow-y-scroll">
@@ -103,6 +115,36 @@ export default function Sidebar() {
                 path="/admin/categories"
                 icon={<ListPlus weight="bold" size={20} />}
               />
+
+              <Accordion isCompact itemClasses={itemClasses} className="p-0">
+                <AccordionItem
+                  aria-label="button"
+                  title="Supplier"
+                  indicator={<CaretRight weight="bold" size={16} />}
+                  startContent={
+                    <Package
+                      weight="bold"
+                      size={20}
+                      className="text-gray-600"
+                    />
+                  }
+                  className="grid gap-1"
+                >
+                  <ButtonSidebar
+                    label="Supplier 1"
+                    path="#"
+                    icon={<Circle weight="fill" size={6} />}
+                    className="mx-4"
+                  />
+
+                  <ButtonSidebar
+                    label="Supplier 2"
+                    path="#"
+                    icon={<Circle weight="fill" size={6} />}
+                    className="mx-4"
+                  />
+                </AccordionItem>
+              </Accordion>
             </>
           ) : null}
 
@@ -113,6 +155,36 @@ export default function Sidebar() {
                 path="/cashier/dashboard"
                 icon={<House weight="bold" size={20} />}
               />
+
+              <Accordion isCompact itemClasses={itemClasses} className="p-0">
+                <AccordionItem
+                  aria-label="button"
+                  title="Supplier"
+                  indicator={<CaretRight weight="bold" size={16} />}
+                  startContent={
+                    <Package
+                      weight="bold"
+                      size={20}
+                      className="text-gray-600"
+                    />
+                  }
+                  className="grid gap-1"
+                >
+                  <ButtonSidebar
+                    label="Supplier 1"
+                    path="#"
+                    icon={<Circle weight="fill" size={6} />}
+                    className="mx-4"
+                  />
+
+                  <ButtonSidebar
+                    label="Supplier 2"
+                    path="#"
+                    icon={<Circle weight="fill" size={6} />}
+                    className="mx-4"
+                  />
+                </AccordionItem>
+              </Accordion>
             </>
           ) : null}
         </div>
