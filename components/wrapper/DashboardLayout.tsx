@@ -17,8 +17,6 @@ export default function DashboardLayout({
 }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
-  console.log(sidebarOpen);
-
   return (
     <>
       <Head>

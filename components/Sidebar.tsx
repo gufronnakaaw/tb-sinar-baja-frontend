@@ -57,158 +57,297 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
       </Link>
 
       <div className="flex flex-1 flex-col overflow-y-scroll">
-        <div className="grid gap-1">
+        <div className="grid gap-5">
           {router.pathname.startsWith("/owner") ? (
             <>
-              <ButtonSidebar
-                label="Dashboard"
-                path="/owner/dashboard"
-                icon={<House weight="bold" size={20} />}
-              />
+              <div className="grid gap-1">
+                <ButtonSidebar
+                  label="Dashboard"
+                  path="/owner/dashboard"
+                  icon={<House weight="bold" size={20} />}
+                />
 
-              <ButtonSidebar
-                label="Produk"
-                path="/owner/products"
-                icon={<ArchiveBox weight="bold" size={20} />}
-              />
+                <ButtonSidebar
+                  label="Produk"
+                  path="/owner/products"
+                  icon={<ArchiveBox weight="bold" size={20} />}
+                />
+              </div>
 
-              <ButtonSidebar
-                label="Kategori"
-                path="/owner/categories"
-                icon={<ListPlus weight="bold" size={20} />}
-              />
-              <ButtonSidebar
-                label="Stok"
-                path="/owner/stocks"
-                icon={<Package weight="bold" size={20} />}
-              />
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-[2px] text-gray-600">
+                  Transaksi
+                </span>
 
-              <Accordion isCompact itemClasses={itemClasses} className="p-0">
-                <AccordionItem
-                  aria-label="button"
-                  title="Supplier"
-                  indicator={<CaretRight weight="bold" size={16} />}
-                  startContent={
-                    <Truck weight="bold" size={20} className="text-gray-600" />
-                  }
-                  className="grid gap-1"
-                >
+                <div className="mt-1 grid gap-1">
                   <ButtonSidebar
-                    label="Daftar Supplier"
-                    path="/owner/supplier/lists"
-                    icon={<Circle weight="fill" size={6} />}
-                    className="mx-4"
+                    label="Kategori"
+                    path="/owner/categories"
+                    icon={<ListPlus weight="bold" size={20} />}
                   />
 
                   <ButtonSidebar
-                    label="Harga Supplier"
-                    path="/owner/supplier/pricelists"
-                    icon={<Circle weight="fill" size={6} />}
-                    className="mx-4"
+                    label="Stok"
+                    path="/owner/stocks"
+                    icon={<Package weight="bold" size={20} />}
+                  />
+
+                  <Accordion
+                    isCompact
+                    itemClasses={itemClasses}
+                    className="p-0"
+                  >
+                    <AccordionItem
+                      aria-label="button"
+                      title="Supplier"
+                      indicator={<CaretRight weight="bold" size={16} />}
+                      startContent={
+                        <Truck
+                          weight="bold"
+                          size={20}
+                          className="text-gray-600"
+                        />
+                      }
+                      className="grid gap-1"
+                    >
+                      <ButtonSidebar
+                        label="Daftar Supplier"
+                        path="/owner/supplier/lists"
+                        icon={<Circle weight="fill" size={6} />}
+                        className="mx-4"
+                      />
+
+                      <ButtonSidebar
+                        label="Harga Supplier"
+                        path="/owner/supplier/pricelists"
+                        icon={<Circle weight="fill" size={6} />}
+                        className="mx-4"
+                      />
+
+                      <ButtonSidebar
+                        label="Preorder"
+                        path="/owner/supplier/preorders"
+                        icon={<Circle weight="fill" size={6} />}
+                        className="mx-4"
+                      />
+
+                      <ButtonSidebar
+                        label="Order"
+                        path="/owner/supplier/orders"
+                        icon={<Circle weight="fill" size={6} />}
+                        className="mx-4"
+                      />
+
+                      <ButtonSidebar
+                        label="Invoice"
+                        path="/owner/supplier/invoices"
+                        icon={<Circle weight="fill" size={6} />}
+                        className="mx-4"
+                      />
+
+                      <ButtonSidebar
+                        label="Pembayaran"
+                        path="/owner/supplier/payments"
+                        icon={<Circle weight="fill" size={6} />}
+                        className="mx-4"
+                      />
+                    </AccordionItem>
+                  </Accordion>
+                </div>
+              </div>
+
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-[2px] text-gray-600">
+                  Pengaturan
+                </span>
+
+                <div className="mt-1 grid gap-1">
+                  <ButtonSidebar
+                    label="Riwayat"
+                    path="/owner/histories"
+                    icon={<ClockCounterClockwise weight="bold" size={20} />}
                   />
 
                   <ButtonSidebar
-                    label="Preorder"
-                    path="/owner/supplier/preorders"
-                    icon={<Circle weight="fill" size={6} />}
-                    className="mx-4"
+                    label="Pengguna"
+                    path="/owner/users"
+                    icon={<Users weight="bold" size={20} />}
                   />
-
-                  <ButtonSidebar
-                    label="Order"
-                    path="/owner/supplier/orders"
-                    icon={<Circle weight="fill" size={6} />}
-                    className="mx-4"
-                  />
-
-                  <ButtonSidebar
-                    label="Invoice"
-                    path="/owner/supplier/invoices"
-                    icon={<Circle weight="fill" size={6} />}
-                    className="mx-4"
-                  />
-
-                  <ButtonSidebar
-                    label="Pembayaran"
-                    path="/owner/supplier/payments"
-                    icon={<Circle weight="fill" size={6} />}
-                    className="mx-4"
-                  />
-                </AccordionItem>
-              </Accordion>
-
-              <ButtonSidebar
-                label="Riwayat"
-                path="/owner/histories"
-                icon={<ClockCounterClockwise weight="bold" size={20} />}
-              />
-
-              <ButtonSidebar
-                label="Pengguna"
-                path="/owner/users"
-                icon={<Users weight="bold" size={20} />}
-              />
+                </div>
+              </div>
             </>
           ) : null}
 
           {router.pathname.startsWith("/admin") ? (
             <>
-              <ButtonSidebar
-                label="Dashboard"
-                path="/admin/dashboard"
-                icon={<House weight="bold" size={20} />}
-              />
+              <div className="grid gap-1">
+                <ButtonSidebar
+                  label="Dashboard"
+                  path="/admin/dashboard"
+                  icon={<House weight="bold" size={20} />}
+                />
 
-              <ButtonSidebar
-                label="Produk"
-                path="/admin/products"
-                icon={<ArchiveBox weight="bold" size={20} />}
-              />
+                <ButtonSidebar
+                  label="Produk"
+                  path="/admin/products"
+                  icon={<ArchiveBox weight="bold" size={20} />}
+                />
+              </div>
 
-              <ButtonSidebar
-                label="Kategori"
-                path="/admin/categories"
-                icon={<ListPlus weight="bold" size={20} />}
-              />
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-[2px] text-gray-600">
+                  Transaksi
+                </span>
 
-              <Accordion isCompact itemClasses={itemClasses} className="p-0">
-                <AccordionItem
-                  aria-label="button"
-                  title="Supplier"
-                  indicator={<CaretRight weight="bold" size={16} />}
-                  startContent={
-                    <Package
-                      weight="bold"
-                      size={20}
-                      className="text-gray-600"
-                    />
-                  }
-                  className="grid gap-1"
-                >
+                <div className="mt-1 grid gap-1">
                   <ButtonSidebar
-                    label="Supplier 1"
-                    path="#"
-                    icon={<Circle weight="fill" size={6} />}
-                    className="mx-4"
+                    label="Kategori"
+                    path="/admin/categories"
+                    icon={<ListPlus weight="bold" size={20} />}
+                  />
+
+                  <Accordion
+                    isCompact
+                    itemClasses={itemClasses}
+                    className="p-0"
+                  >
+                    <AccordionItem
+                      aria-label="button"
+                      title="Supplier"
+                      indicator={<CaretRight weight="bold" size={16} />}
+                      startContent={
+                        <Package
+                          weight="bold"
+                          size={20}
+                          className="text-gray-600"
+                        />
+                      }
+                      className="grid gap-1"
+                    >
+                      <ButtonSidebar
+                        label="Supplier 1"
+                        path="#"
+                        icon={<Circle weight="fill" size={6} />}
+                        className="mx-4"
+                      />
+
+                      <ButtonSidebar
+                        label="Supplier 2"
+                        path="#"
+                        icon={<Circle weight="fill" size={6} />}
+                        className="mx-4"
+                      />
+                    </AccordionItem>
+                  </Accordion>
+                </div>
+              </div>
+
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-[2px] text-gray-600">
+                  Pengaturan
+                </span>
+
+                <div className="mt-1 grid gap-1">
+                  <ButtonSidebar
+                    label="Riwayat"
+                    path="/admin/histories"
+                    icon={<ClockCounterClockwise weight="bold" size={20} />}
                   />
 
                   <ButtonSidebar
-                    label="Supplier 2"
-                    path="#"
-                    icon={<Circle weight="fill" size={6} />}
-                    className="mx-4"
+                    label="Riwayat"
+                    path="/admin/histories"
+                    icon={<ClockCounterClockwise weight="bold" size={20} />}
                   />
-                </AccordionItem>
-              </Accordion>
+                </div>
+              </div>
             </>
           ) : null}
 
           {router.pathname.startsWith("/cashier") ? (
-            <ButtonSidebar
-              label="Dashboard"
-              path="/cashier/dashboard"
-              icon={<House weight="bold" size={20} />}
-            />
+            <>
+              <div className="grid gap-1">
+                <ButtonSidebar
+                  label="Dashboard"
+                  path="/cashier/dashboard"
+                  icon={<House weight="bold" size={20} />}
+                />
+
+                <ButtonSidebar
+                  label="Produk"
+                  path="/cashier/products"
+                  icon={<ArchiveBox weight="bold" size={20} />}
+                />
+              </div>
+
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-[2px] text-gray-600">
+                  Transaksi
+                </span>
+
+                <div className="mt-1 grid gap-1">
+                  <ButtonSidebar
+                    label="Kategori"
+                    path="/cashier/categories"
+                    icon={<ListPlus weight="bold" size={20} />}
+                  />
+
+                  <Accordion
+                    isCompact
+                    itemClasses={itemClasses}
+                    className="p-0"
+                  >
+                    <AccordionItem
+                      aria-label="button"
+                      title="Supplier"
+                      indicator={<CaretRight weight="bold" size={16} />}
+                      startContent={
+                        <Package
+                          weight="bold"
+                          size={20}
+                          className="text-gray-600"
+                        />
+                      }
+                      className="grid gap-1"
+                    >
+                      <ButtonSidebar
+                        label="Supplier 1"
+                        path="#"
+                        icon={<Circle weight="fill" size={6} />}
+                        className="mx-4"
+                      />
+
+                      <ButtonSidebar
+                        label="Supplier 2"
+                        path="#"
+                        icon={<Circle weight="fill" size={6} />}
+                        className="mx-4"
+                      />
+                    </AccordionItem>
+                  </Accordion>
+                </div>
+              </div>
+
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-[2px] text-gray-600">
+                  Pengaturan
+                </span>
+
+                <div className="mt-1 grid gap-1">
+                  <ButtonSidebar
+                    label="Riwayat"
+                    path="/cashier/histories"
+                    icon={<ClockCounterClockwise weight="bold" size={20} />}
+                  />
+
+                  <ButtonSidebar
+                    label="Riwayat"
+                    path="/cashier/histories"
+                    icon={<ClockCounterClockwise weight="bold" size={20} />}
+                  />
+                </div>
+              </div>
+            </>
           ) : null}
         </div>
       </div>
