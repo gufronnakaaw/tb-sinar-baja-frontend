@@ -3,9 +3,12 @@ import {
   ArchiveBox,
   CaretRight,
   Circle,
+  ClockCounterClockwise,
   House,
   ListPlus,
   Package,
+  Truck,
+  Users,
 } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -63,6 +66,11 @@ export default function Sidebar() {
                 path="/owner/categories"
                 icon={<ListPlus weight="bold" size={20} />}
               />
+              <ButtonSidebar
+                label="Stok"
+                path="/owner/stocks"
+                icon={<Package weight="bold" size={20} />}
+              />
 
               <Accordion isCompact itemClasses={itemClasses} className="p-0">
                 <AccordionItem
@@ -70,29 +78,65 @@ export default function Sidebar() {
                   title="Supplier"
                   indicator={<CaretRight weight="bold" size={16} />}
                   startContent={
-                    <Package
-                      weight="bold"
-                      size={20}
-                      className="text-gray-600"
-                    />
+                    <Truck weight="bold" size={20} className="text-gray-600" />
                   }
                   className="grid gap-1"
                 >
                   <ButtonSidebar
-                    label="Supplier 1"
-                    path="#"
+                    label="Daftar Supplier"
+                    path="/owner/supplier/lists"
                     icon={<Circle weight="fill" size={6} />}
                     className="mx-4"
                   />
 
                   <ButtonSidebar
-                    label="Supplier 2"
-                    path="#"
+                    label="Harga Supplier"
+                    path="/owner/supplier/pricelists"
+                    icon={<Circle weight="fill" size={6} />}
+                    className="mx-4"
+                  />
+
+                  <ButtonSidebar
+                    label="Preorder"
+                    path="/owner/supplier/preorders"
+                    icon={<Circle weight="fill" size={6} />}
+                    className="mx-4"
+                  />
+
+                  <ButtonSidebar
+                    label="Order"
+                    path="/owner/supplier/orders"
+                    icon={<Circle weight="fill" size={6} />}
+                    className="mx-4"
+                  />
+
+                  <ButtonSidebar
+                    label="Invoice"
+                    path="/owner/supplier/invoices"
+                    icon={<Circle weight="fill" size={6} />}
+                    className="mx-4"
+                  />
+
+                  <ButtonSidebar
+                    label="Pembayaran"
+                    path="/owner/supplier/payments"
                     icon={<Circle weight="fill" size={6} />}
                     className="mx-4"
                   />
                 </AccordionItem>
               </Accordion>
+
+              <ButtonSidebar
+                label="Riwayat"
+                path="/owner/histories"
+                icon={<ClockCounterClockwise weight="bold" size={20} />}
+              />
+
+              <ButtonSidebar
+                label="Pengguna"
+                path="/owner/users"
+                icon={<Users weight="bold" size={20} />}
+              />
             </>
           ) : null}
 
@@ -149,43 +193,11 @@ export default function Sidebar() {
           ) : null}
 
           {router.pathname.startsWith("/cashier") ? (
-            <>
-              <ButtonSidebar
-                label="Dashboard"
-                path="/cashier/dashboard"
-                icon={<House weight="bold" size={20} />}
-              />
-
-              <Accordion isCompact itemClasses={itemClasses} className="p-0">
-                <AccordionItem
-                  aria-label="button"
-                  title="Supplier"
-                  indicator={<CaretRight weight="bold" size={16} />}
-                  startContent={
-                    <Package
-                      weight="bold"
-                      size={20}
-                      className="text-gray-600"
-                    />
-                  }
-                  className="grid gap-1"
-                >
-                  <ButtonSidebar
-                    label="Supplier 1"
-                    path="#"
-                    icon={<Circle weight="fill" size={6} />}
-                    className="mx-4"
-                  />
-
-                  <ButtonSidebar
-                    label="Supplier 2"
-                    path="#"
-                    icon={<Circle weight="fill" size={6} />}
-                    className="mx-4"
-                  />
-                </AccordionItem>
-              </Accordion>
-            </>
+            <ButtonSidebar
+              label="Dashboard"
+              path="/cashier/dashboard"
+              icon={<House weight="bold" size={20} />}
+            />
           ) : null}
         </div>
       </div>
