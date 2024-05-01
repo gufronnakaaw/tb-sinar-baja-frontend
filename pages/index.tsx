@@ -10,37 +10,44 @@ export default function HomePage() {
       <Head>
         <title>Select Role</title>
       </Head>
-      <div className="container flex h-screen w-full flex-col justify-center">
-        <h5 className="mb-4 text-center text-xl font-medium text-default-900">
-          Silakan pilih role untuk login:
-        </h5>
+      <div className="container grid h-screen w-full grid-rows-[1fr_100px] items-center justify-center gap-4">
+        <div className="grid gap-4">
+          <h5 className="text-center text-xl font-medium text-default-900">
+            Silakan pilih role untuk login:
+          </h5>
 
-        <div className="flex flex-wrap items-center justify-center gap-2">
-          <Button
-            color="primary"
-            size="lg"
-            onClick={() => router.push("/owner")}
-            className="font-semibold sm:w-40"
-          >
-            Owner
-          </Button>
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <Button
+              color="primary"
+              size="lg"
+              onClick={() => router.push("/owner")}
+              className="font-semibold sm:w-40"
+            >
+              Owner
+            </Button>
 
-          <Button
-            size="lg"
-            onClick={() => router.push("/admin")}
-            className="bg-lime-500 font-semibold text-white sm:w-40"
-          >
-            Admin
-          </Button>
+            <Button
+              size="lg"
+              onClick={() => router.push("/admin")}
+              className="bg-lime-500 font-semibold text-white sm:w-40"
+            >
+              Admin
+            </Button>
 
-          <Button
-            size="lg"
-            onClick={() => router.push("/cashier")}
-            className="bg-rose-500 font-semibold text-white sm:w-40"
-          >
-            Kasir
-          </Button>
+            <Button
+              size="lg"
+              onClick={() => router.push("/cashier")}
+              className="bg-rose-500 font-semibold text-white sm:w-40"
+            >
+              Kasir
+            </Button>
+          </div>
         </div>
+
+        <p className="max-w-[500px] text-center text-sm font-medium text-default-500">
+          TB. Sinar Baja - Jl. Letjend Sutoyo No.67, Burengan, Kec. Pesantren,
+          Kabupaten Kediri, Jawa Timur 64131
+        </p>
       </div>
     </>
   );
