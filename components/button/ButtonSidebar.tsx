@@ -49,9 +49,11 @@ export default function ButtonSidebar({
   return (
     <Link
       href={path}
-      className={`flex h-10 items-center justify-between rounded-xl px-3 py-2 ${setActive(
-        path,
-      )} ${className}`}
+      className={`flex h-10 items-center justify-between rounded-xl px-3 py-2 ${setActive(path)} ${className}`}
+      onClick={(e) => {
+        e.preventDefault();
+        alert("masih dalam tahap pengembangan");
+      }}
     >
       <div className="flex flex-1 items-center gap-2">
         <>{icon}</>

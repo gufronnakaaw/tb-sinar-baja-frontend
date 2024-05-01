@@ -3,12 +3,16 @@ import {
   ArchiveBox,
   CaretRight,
   Circle,
+  ClipboardText,
   ClockCounterClockwise,
   House,
-  ListPlus,
+  Invoice,
+  ListBullets,
+  ListNumbers,
   Package,
   Truck,
   Users,
+  Wallet,
 } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -66,12 +70,6 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                   path="/owner/dashboard"
                   icon={<House weight="bold" size={20} />}
                 />
-
-                <ButtonSidebar
-                  label="Produk"
-                  path="/owner/products"
-                  icon={<ArchiveBox weight="bold" size={20} />}
-                />
               </div>
 
               <div>
@@ -81,15 +79,53 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
 
                 <div className="mt-1 grid gap-1">
                   <ButtonSidebar
-                    label="Kategori"
-                    path="/owner/categories"
-                    icon={<ListPlus weight="bold" size={20} />}
+                    label="Order"
+                    path="/owner/orders"
+                    icon={<ClipboardText weight="bold" size={20} />}
+                  />
+
+                  <ButtonSidebar
+                    label="Invoice"
+                    path="/owner/invoices"
+                    icon={<Invoice weight="bold" size={20} />}
+                  />
+
+                  <ButtonSidebar
+                    label="Pembayaran"
+                    path="/owner/payments"
+                    icon={<Wallet weight="bold" size={20} />}
+                  />
+
+                  <ButtonSidebar
+                    label="Riwayat"
+                    path="/owner/histories"
+                    icon={<ClockCounterClockwise weight="bold" size={20} />}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-[2px] text-gray-600">
+                  Pengaturan
+                </span>
+
+                <div className="mt-1 grid gap-1">
+                  <ButtonSidebar
+                    label="Produk"
+                    path="/owner/products"
+                    icon={<ArchiveBox weight="bold" size={20} />}
                   />
 
                   <ButtonSidebar
                     label="Stok"
                     path="/owner/stocks"
-                    icon={<Package weight="bold" size={20} />}
+                    icon={<ListNumbers weight="bold" size={20} />}
+                  />
+
+                  <ButtonSidebar
+                    label="Kategori"
+                    path="/owner/categories"
+                    icon={<ListBullets weight="bold" size={20} />}
                   />
 
                   <Accordion
@@ -123,50 +159,56 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
                       />
+                    </AccordionItem>
+                  </Accordion>
 
+                  <Accordion
+                    isCompact
+                    itemClasses={itemClasses}
+                    className="p-0"
+                  >
+                    <AccordionItem
+                      aria-label="button"
+                      title="Gudang"
+                      indicator={<CaretRight weight="bold" size={16} />}
+                      startContent={
+                        <Package
+                          weight="bold"
+                          size={20}
+                          className="text-gray-600"
+                        />
+                      }
+                      className="grid gap-1"
+                    >
                       <ButtonSidebar
-                        label="Preorder"
-                        path="/owner/supplier/preorders"
+                        label="In"
+                        path="/owner/warehouses/in"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
                       />
 
                       <ButtonSidebar
-                        label="Order"
-                        path="/owner/supplier/orders"
+                        label="Out"
+                        path="/owner/warehouses/out"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
                       />
 
                       <ButtonSidebar
-                        label="Invoice"
-                        path="/owner/supplier/invoices"
+                        label="Surat Jalan"
+                        path="/owner/warehouses/documents"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
                       />
 
                       <ButtonSidebar
-                        label="Pembayaran"
-                        path="/owner/supplier/payments"
+                        label="Daftar Gudang"
+                        path="/owner/warehouses/lists"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
                       />
                     </AccordionItem>
                   </Accordion>
-                </div>
-              </div>
-
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-[2px] text-gray-600">
-                  Pengaturan
-                </span>
-
-                <div className="mt-1 grid gap-1">
-                  <ButtonSidebar
-                    label="Riwayat"
-                    path="/owner/histories"
-                    icon={<ClockCounterClockwise weight="bold" size={20} />}
-                  />
 
                   <ButtonSidebar
                     label="Pengguna"
@@ -186,12 +228,6 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                   path="/admin/dashboard"
                   icon={<House weight="bold" size={20} />}
                 />
-
-                <ButtonSidebar
-                  label="Produk"
-                  path="/admin/products"
-                  icon={<ArchiveBox weight="bold" size={20} />}
-                />
               </div>
 
               <div>
@@ -201,9 +237,53 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
 
                 <div className="mt-1 grid gap-1">
                   <ButtonSidebar
+                    label="Order"
+                    path="/admin/orders"
+                    icon={<ClipboardText weight="bold" size={20} />}
+                  />
+
+                  <ButtonSidebar
+                    label="Invoice"
+                    path="/admin/invoices"
+                    icon={<Invoice weight="bold" size={20} />}
+                  />
+
+                  <ButtonSidebar
+                    label="Pembayaran"
+                    path="/admin/payments"
+                    icon={<Wallet weight="bold" size={20} />}
+                  />
+
+                  <ButtonSidebar
+                    label="Riwayat"
+                    path="/admin/histories"
+                    icon={<ClockCounterClockwise weight="bold" size={20} />}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-[2px] text-gray-600">
+                  Pengaturan
+                </span>
+
+                <div className="mt-1 grid gap-1">
+                  <ButtonSidebar
+                    label="Produk"
+                    path="/admin/products"
+                    icon={<ArchiveBox weight="bold" size={20} />}
+                  />
+
+                  <ButtonSidebar
+                    label="Stok"
+                    path="/admin/stocks"
+                    icon={<ListNumbers weight="bold" size={20} />}
+                  />
+
+                  <ButtonSidebar
                     label="Kategori"
                     path="/admin/categories"
-                    icon={<ListPlus weight="bold" size={20} />}
+                    icon={<ListBullets weight="bold" size={20} />}
                   />
 
                   <Accordion
@@ -216,6 +296,40 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                       title="Supplier"
                       indicator={<CaretRight weight="bold" size={16} />}
                       startContent={
+                        <Truck
+                          weight="bold"
+                          size={20}
+                          className="text-gray-600"
+                        />
+                      }
+                      className="grid gap-1"
+                    >
+                      <ButtonSidebar
+                        label="Daftar Supplier"
+                        path="/admin/supplier/lists"
+                        icon={<Circle weight="fill" size={6} />}
+                        className="mx-4"
+                      />
+
+                      <ButtonSidebar
+                        label="Harga Supplier"
+                        path="/admin/supplier/pricelists"
+                        icon={<Circle weight="fill" size={6} />}
+                        className="mx-4"
+                      />
+                    </AccordionItem>
+                  </Accordion>
+
+                  <Accordion
+                    isCompact
+                    itemClasses={itemClasses}
+                    className="p-0"
+                  >
+                    <AccordionItem
+                      aria-label="button"
+                      title="Gudang"
+                      indicator={<CaretRight weight="bold" size={16} />}
+                      startContent={
                         <Package
                           weight="bold"
                           size={20}
@@ -225,40 +339,34 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                       className="grid gap-1"
                     >
                       <ButtonSidebar
-                        label="Supplier 1"
-                        path="#"
+                        label="In"
+                        path="/admin/warehouses/in"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
                       />
 
                       <ButtonSidebar
-                        label="Supplier 2"
-                        path="#"
+                        label="Out"
+                        path="/admin/warehouses/out"
+                        icon={<Circle weight="fill" size={6} />}
+                        className="mx-4"
+                      />
+
+                      <ButtonSidebar
+                        label="Surat Jalan"
+                        path="/admin/warehouses/documents"
+                        icon={<Circle weight="fill" size={6} />}
+                        className="mx-4"
+                      />
+
+                      <ButtonSidebar
+                        label="Daftar Gudang"
+                        path="/admin/warehouses/lists"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
                       />
                     </AccordionItem>
                   </Accordion>
-                </div>
-              </div>
-
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-[2px] text-gray-600">
-                  Pengaturan
-                </span>
-
-                <div className="mt-1 grid gap-1">
-                  <ButtonSidebar
-                    label="Riwayat"
-                    path="/admin/histories"
-                    icon={<ClockCounterClockwise weight="bold" size={20} />}
-                  />
-
-                  <ButtonSidebar
-                    label="Riwayat"
-                    path="/admin/histories"
-                    icon={<ClockCounterClockwise weight="bold" size={20} />}
-                  />
                 </div>
               </div>
             </>
@@ -272,80 +380,6 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                   path="/cashier/dashboard"
                   icon={<House weight="bold" size={20} />}
                 />
-
-                <ButtonSidebar
-                  label="Produk"
-                  path="/cashier/products"
-                  icon={<ArchiveBox weight="bold" size={20} />}
-                />
-              </div>
-
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-[2px] text-gray-600">
-                  Transaksi
-                </span>
-
-                <div className="mt-1 grid gap-1">
-                  <ButtonSidebar
-                    label="Kategori"
-                    path="/cashier/categories"
-                    icon={<ListPlus weight="bold" size={20} />}
-                  />
-
-                  <Accordion
-                    isCompact
-                    itemClasses={itemClasses}
-                    className="p-0"
-                  >
-                    <AccordionItem
-                      aria-label="button"
-                      title="Supplier"
-                      indicator={<CaretRight weight="bold" size={16} />}
-                      startContent={
-                        <Package
-                          weight="bold"
-                          size={20}
-                          className="text-gray-600"
-                        />
-                      }
-                      className="grid gap-1"
-                    >
-                      <ButtonSidebar
-                        label="Supplier 1"
-                        path="#"
-                        icon={<Circle weight="fill" size={6} />}
-                        className="mx-4"
-                      />
-
-                      <ButtonSidebar
-                        label="Supplier 2"
-                        path="#"
-                        icon={<Circle weight="fill" size={6} />}
-                        className="mx-4"
-                      />
-                    </AccordionItem>
-                  </Accordion>
-                </div>
-              </div>
-
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-[2px] text-gray-600">
-                  Pengaturan
-                </span>
-
-                <div className="mt-1 grid gap-1">
-                  <ButtonSidebar
-                    label="Riwayat"
-                    path="/cashier/histories"
-                    icon={<ClockCounterClockwise weight="bold" size={20} />}
-                  />
-
-                  <ButtonSidebar
-                    label="Riwayat"
-                    path="/cashier/histories"
-                    icon={<ClockCounterClockwise weight="bold" size={20} />}
-                  />
-                </div>
               </div>
             </>
           ) : null}
