@@ -15,6 +15,10 @@ export default function DashboardLayout({
   children,
   title,
 }: DashboardLayoutProps) {
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
+
+  console.log(sidebarOpen);
+
   return (
     <>
       <Head>
@@ -22,10 +26,10 @@ export default function DashboardLayout({
       </Head>
 
       <main className="flex h-screen">
-        <Sidebar />
+        <Sidebar sidebarOpen={sidebarOpen} />
 
         <div className="grid w-full">
-          <Navbar />
+          <Navbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
           <div className="overflow-y-scroll">
             <div className="mx-auto w-full max-w-[1200px] p-6">{children}</div>

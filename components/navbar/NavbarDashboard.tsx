@@ -1,24 +1,45 @@
 import {
   Avatar,
+  Button,
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownSection,
   DropdownTrigger,
 } from "@nextui-org/react";
-import { SignOut } from "@phosphor-icons/react";
-
-// components
+import { List, SignOut } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
-import ButtonMobileMenu from "../button/ButtonMobileMenu";
+import React from "react";
 
-export default function Navbar() {
+interface NavbarProps {
+  sidebarOpen?: boolean;
+  setSidebarOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function Navbar({ sidebarOpen, setSidebarOpen }: NavbarProps) {
   const router = useRouter();
+
+  const toggleSidebar = () => {
+    if (setSidebarOpen) {
+      setSidebarOpen(!sidebarOpen);
+    }
+  };
 
   return (
     <nav className="bg-white px-6">
       <div className="flex h-20 items-center justify-between xl:justify-end">
-        <ButtonMobileMenu />
+        <Button
+          isIconOnly
+          aria-label="menu list mobile view button"
+          variant="bordered"
+          size="sm"
+          radius="md"
+          color="default"
+          onClick={toggleSidebar}
+          className="z-50 bg-white xl:hidden"
+        >
+          <List weight="bold" size={16} className="text-default-900" />
+        </Button>
 
         <Dropdown>
           <DropdownTrigger>

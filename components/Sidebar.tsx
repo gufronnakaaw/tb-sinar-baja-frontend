@@ -14,9 +14,13 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 // components
-import ButtonSidebar from "./button/ButtonSidebar";
+import ButtonSidebar from "@/components/button/ButtonSidebar";
 
-export default function Sidebar() {
+interface SidebarProps {
+  sidebarOpen?: boolean;
+}
+
+export default function Sidebar({ sidebarOpen }: SidebarProps) {
   const router = useRouter();
 
   const itemClasses = {
@@ -28,8 +32,15 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="hidden border-r border-gray-100 bg-gray-50 xl:flex xl:h-full xl:min-w-[250px] xl:flex-col xl:gap-[30px] xl:px-[20px] xl:py-[30px]">
-      <Link href="/" className="inline-flex items-center justify-center gap-2">
+    <div
+      className={`fixed top-0 z-40 grid h-screen min-w-[250px] grid-rows-[24px_1fr] gap-[30px] border-r border-gray-100 bg-gray-50 px-[20px] py-[30px] shadow-[0_4px_10px_rgba(0,0,0,0.1)] transition-all duration-500 xl:static xl:shadow-none ${
+        sidebarOpen ? "left-0" : "-left-full"
+      }`}
+    >
+      <Link
+        href="/"
+        className="inline-flex w-max items-center gap-2 justify-self-end xl:justify-self-center"
+      >
         <div
           className={`h-6 w-6 rounded-full ${
             router.pathname.startsWith("/owner")
