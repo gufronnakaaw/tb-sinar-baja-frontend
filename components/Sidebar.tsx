@@ -64,13 +64,11 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
         <div className="grid gap-5">
           {router.pathname.startsWith("/owner") ? (
             <>
-              <div className="grid gap-1">
-                <ButtonSidebar
-                  label="Dashboard"
-                  path="/owner/dashboard"
-                  icon={<House weight="bold" size={20} />}
-                />
-              </div>
+              <ButtonSidebar
+                label="Dashboard"
+                path="/owner/dashboard"
+                icon={<House weight="bold" size={20} />}
+              />
 
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-[2px] text-gray-600">
@@ -222,13 +220,11 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
 
           {router.pathname.startsWith("/admin") ? (
             <>
-              <div className="grid gap-1">
-                <ButtonSidebar
-                  label="Dashboard"
-                  path="/admin/dashboard"
-                  icon={<House weight="bold" size={20} />}
-                />
-              </div>
+              <ButtonSidebar
+                label="Dashboard"
+                path="/admin/dashboard"
+                icon={<House weight="bold" size={20} />}
+              />
 
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-[2px] text-gray-600">
@@ -374,13 +370,11 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
 
           {router.pathname.startsWith("/cashier") ? (
             <>
-              <div className="grid gap-1">
-                <ButtonSidebar
-                  label="Dashboard"
-                  path="/cashier/dashboard"
-                  icon={<House weight="bold" size={20} />}
-                />
-              </div>
+              <ButtonSidebar
+                label="Dashboard"
+                path="/cashier/dashboard"
+                icon={<House weight="bold" size={20} />}
+              />
             </>
           ) : null}
         </div>
