@@ -13,7 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { DotsThreeVertical, Pencil, Plus, Trash } from "@phosphor-icons/react";
+import { DotsThreeVertical, Pencil, Trash } from "@phosphor-icons/react";
 import React from "react";
 
 // components
@@ -21,8 +21,9 @@ import InputSearchBar from "@/components/input/InputSearchBar";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 
-// hooks
+// utils
 import usePagination from "@/hooks/usepagination";
+import { customStyleTable } from "@/utils/customStyleTable";
 
 // dummy data
 import { users } from "@/_dummy/users";
@@ -122,7 +123,6 @@ export default function UsersPage() {
             <Button
               variant="solid"
               color="primary"
-              endContent={<Plus weight="bold" size={18} />}
               className="w-full font-medium sm:w-max"
             >
               Tambah Pengguna
@@ -131,16 +131,12 @@ export default function UsersPage() {
 
           <Table
             isHeaderSticky
-            removeWrapper
             aria-label="users table"
             color="primary"
             selectionMode="single"
             sortDescriptor={sortDescriptor}
             onSortChange={setSortDescriptor}
-            classNames={{
-              base: "max-h-[calc(100vh-100px)] overflow-scroll",
-              table: "min-w-[700px]",
-            }}
+            classNames={customStyleTable}
           >
             <TableHeader columns={columns}>
               {(column) => (
