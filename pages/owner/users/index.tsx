@@ -4,6 +4,7 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  Pagination,
   SortDescriptor,
   Table,
   TableBody,
@@ -12,13 +13,16 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { DotsThreeVertical, Pencil, Trash } from "@phosphor-icons/react";
+import { DotsThreeVertical, Pencil, Plus, Trash } from "@phosphor-icons/react";
 import React from "react";
 
 // components
 import InputSearchBar from "@/components/input/InputSearchBar";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
+
+// hooks
+import usePagination from "@/hooks/usepagination";
 
 // dummy data
 import { users } from "@/_dummy/users";
@@ -31,6 +35,8 @@ export default function UsersPage() {
     direction: "descending",
   });
 
+  const { page, pages, data, setPage } = usePagination(users, 10);
+
   const columns = [
     { name: "Nama Pengguna", uid: "name", sortable: true },
     { name: "Username", uid: "username", sortable: false },
@@ -39,7 +45,7 @@ export default function UsersPage() {
     { name: "Aksi", uid: "action", sortable: false },
   ];
 
-  const sortedItems = [...users].sort((a: UserType, b: UserType) => {
+  const sortedItems = [...data].sort((a: UserType, b: UserType) => {
     const first = a[sortDescriptor.column as keyof UserType] as number;
     const second = b[sortDescriptor.column as keyof UserType] as number;
     const cmp = first < second ? -1 : first > second ? 1 : 0;
@@ -107,7 +113,21 @@ export default function UsersPage() {
         </h4>
 
         <div className="grid gap-4">
-          <InputSearchBar placeholder="Cari nama pengguna..." />
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <InputSearchBar
+              placeholder="Cari nama pengguna..."
+              className="w-full sm:max-w-[500px]"
+            />
+
+            <Button
+              variant="solid"
+              color="primary"
+              endContent={<Plus weight="bold" size={18} />}
+              className="w-full font-medium sm:w-max"
+            >
+              Tambah Pengguna
+            </Button>
+          </div>
 
           <Table
             isHeaderSticky
@@ -140,6 +160,17 @@ export default function UsersPage() {
               )}
             </TableBody>
           </Table>
+
+          <Pagination
+            isCompact
+            showControls
+            showShadow
+            color="primary"
+            page={page}
+            total={pages}
+            onChange={setPage}
+            className="justify-self-center"
+          />
         </div>
       </Container>
     </Layout>

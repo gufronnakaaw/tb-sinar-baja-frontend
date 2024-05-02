@@ -10,7 +10,6 @@ export default function InputSearchBar(props: InputProps) {
       startContent={
         <MagnifyingGlass weight="bold" size={18} className="text-gray-500" />
       }
-      className="max-w-[500px]"
       {...props}
     />
   );
