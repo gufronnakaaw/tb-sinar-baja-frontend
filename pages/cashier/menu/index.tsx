@@ -39,7 +39,7 @@ export default function MenuPage() {
             variant="flat"
             color="default"
             endContent={<ClipboardText weight="bold" size={24} />}
-            onClick={() => router.push("/cashier/menu/transaction")}
+            onClick={() => router.push("/cashier/menu/transactions")}
             className="col-span-2 py-10 text-base font-semibold"
           >
             Daftar Transaksi
