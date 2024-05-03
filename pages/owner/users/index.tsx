@@ -5,7 +5,6 @@ import {
   DropdownMenu,
   DropdownTrigger,
   Pagination,
-  SortDescriptor,
   Table,
   TableBody,
   TableCell,
@@ -31,11 +30,6 @@ import { users } from "@/_dummy/users";
 type UserType = (typeof users)[0];
 
 export default function UsersPage() {
-  const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-    column: "created_at",
-    direction: "descending",
-  });
-
   const { page, pages, data, setPage } = usePagination(users, 10);
 
   const columns = [
@@ -45,14 +39,6 @@ export default function UsersPage() {
     { name: "Dibuat Pada", uid: "created_at", sortable: true },
     { name: "Aksi", uid: "action", sortable: false },
   ];
-
-  const sortedItems = [...data].sort((a: UserType, b: UserType) => {
-    const first = a[sortDescriptor.column as keyof UserType] as number;
-    const second = b[sortDescriptor.column as keyof UserType] as number;
-    const cmp = first < second ? -1 : first > second ? 1 : 0;
-
-    return sortDescriptor.direction === "descending" ? -cmp : cmp;
-  });
 
   const renderCell = (user: UserType, columnKey: React.Key) => {
     const cellValue = user[columnKey as keyof UserType];
@@ -134,19 +120,15 @@ export default function UsersPage() {
             aria-label="users table"
             color="primary"
             selectionMode="single"
-            sortDescriptor={sortDescriptor}
-            onSortChange={setSortDescriptor}
             classNames={customStyleTable}
           >
             <TableHeader columns={columns}>
               {(column) => (
-                <TableColumn key={column.uid} allowsSorting={column.sortable}>
-                  {column.name}
-                </TableColumn>
+                <TableColumn key={column.uid}>{column.name}</TableColumn>
               )}
             </TableHeader>
 
-            <TableBody items={sortedItems}>
+            <TableBody items={data}>
               {(user) => (
                 <TableRow key={user.id}>
                   {(columnKey) => (
