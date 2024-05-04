@@ -49,7 +49,7 @@ export default function TransactionPage() {
       case "total":
         return (
           <div className="text-default-900">
-            Rp {formatRupiah(transaction.total)}
+            {formatRupiah(transaction.total)}
           </div>
         );
       case "action":
