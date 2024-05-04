@@ -4,6 +4,7 @@ import {
   CaretRight,
   Circle,
   ClipboardText,
+  ClockClockwise,
   ClockCounterClockwise,
   House,
   Invoice,
@@ -77,16 +78,50 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
 
                 <div className="mt-1 grid gap-1">
                   <ButtonSidebar
+                    label="Pre Order"
+                    path="/owner/preorders"
+                    icon={<ClockClockwise weight="bold" size={20} />}
+                  />
+
+                  <ButtonSidebar
                     label="Order"
                     path="/owner/orders"
                     icon={<ClipboardText weight="bold" size={20} />}
                   />
 
-                  <ButtonSidebar
-                    label="Invoice"
-                    path="/owner/invoices"
-                    icon={<Invoice weight="bold" size={20} />}
-                  />
+                  <Accordion
+                    isCompact
+                    itemClasses={itemClasses}
+                    className="p-0"
+                  >
+                    <AccordionItem
+                      aria-label="button"
+                      title="Invoice"
+                      indicator={<CaretRight weight="bold" size={16} />}
+                      startContent={
+                        <Invoice
+                          weight="bold"
+                          size={20}
+                          className="text-gray-600"
+                        />
+                      }
+                      className="grid gap-1"
+                    >
+                      <ButtonSidebar
+                        label="In"
+                        path="/owner/invoices/in"
+                        icon={<Circle weight="fill" size={6} />}
+                        className="mx-4"
+                      />
+
+                      <ButtonSidebar
+                        label="Out"
+                        path="/owner/invoices/out"
+                        icon={<Circle weight="fill" size={6} />}
+                        className="mx-4"
+                      />
+                    </AccordionItem>
+                  </Accordion>
 
                   <ButtonSidebar
                     label="Pembayaran"
@@ -108,23 +143,46 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                 </span>
 
                 <div className="mt-1 grid gap-1">
-                  <ButtonSidebar
-                    label="Produk"
-                    path="/owner/products"
-                    icon={<ArchiveBox weight="bold" size={20} />}
-                  />
+                  <Accordion
+                    isCompact
+                    itemClasses={itemClasses}
+                    className="p-0"
+                  >
+                    <AccordionItem
+                      aria-label="button"
+                      title="Produk"
+                      indicator={<CaretRight weight="bold" size={16} />}
+                      startContent={
+                        <ArchiveBox
+                          weight="bold"
+                          size={20}
+                          className="text-gray-600"
+                        />
+                      }
+                      className="grid gap-1"
+                    >
+                      <ButtonSidebar
+                        label="Daftar Produk"
+                        path="/owner/products/lists"
+                        icon={<Circle weight="fill" size={6} />}
+                        className="mx-4"
+                      />
 
-                  <ButtonSidebar
-                    label="Stok"
-                    path="/owner/stocks"
-                    icon={<ListNumbers weight="bold" size={20} />}
-                  />
-
-                  <ButtonSidebar
-                    label="Kategori"
-                    path="/owner/categories"
-                    icon={<ListBullets weight="bold" size={20} />}
-                  />
+                      <ButtonSidebar
+                        label="Stok"
+                        path="/owner/products/stocks"
+                        icon={<Circle weight="fill" size={6} />}
+                        className="mx-4"
+                      />
+                      
+                      <ButtonSidebar
+                        label="Kategori"
+                        path="/owner/products/categories"
+                        icon={<Circle weight="fill" size={6} />}
+                        className="mx-4"
+                      />
+                    </AccordionItem>
+                  </Accordion>
 
                   <Accordion
                     isCompact
