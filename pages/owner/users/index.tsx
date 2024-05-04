@@ -71,7 +71,7 @@ export default function UsersPage() {
                 color="default"
                 startContent={<Pencil weight="bold" size={18} />}
               >
-                Edit Pengguna
+                Edit
               </DropdownItem>
 
               <DropdownItem
@@ -81,7 +81,7 @@ export default function UsersPage() {
                 onClick={() => confirm("Apakah anda yakin?")}
                 className="text-danger"
               >
-                Hapus Pengguna
+                Hapus
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
@@ -95,9 +95,7 @@ export default function UsersPage() {
   return (
     <Layout title="Users Page">
       <Container className="gap-8">
-        <h4 className="text-lg font-semibold text-default-900">
-          Tabel Pengguna
-        </h4>
+        <h4 className="text-lg font-semibold text-default-900">Pengguna</h4>
 
         <div className="grid gap-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
