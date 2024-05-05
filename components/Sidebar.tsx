@@ -12,6 +12,7 @@ import {
   ListNumbers,
   Package,
   Truck,
+  User,
   Users,
   Wallet,
 } from "@phosphor-icons/react";
@@ -20,6 +21,7 @@ import { useRouter } from "next/router";
 
 // components
 import ButtonSidebar from "@/components/button/ButtonSidebar";
+import { useEffect, useState } from "react";
 
 interface SidebarProps {
   sidebarOpen?: boolean;
@@ -27,11 +29,117 @@ interface SidebarProps {
 
 export default function Sidebar({ sidebarOpen }: SidebarProps) {
   const router = useRouter();
+  const [invoicesActive, setInvoicesActive] = useState<{
+    trigger: string;
+    title: string;
+  }>({
+    trigger: "",
+    title: "",
+  });
+
+  const [productsActive, setProductsActive] = useState<{
+    trigger: string;
+    title: string;
+  }>({
+    trigger: "",
+    title: "",
+  });
+
+  const [suppliersActive, setSuppliersActive] = useState<{
+    trigger: string;
+    title: string;
+  }>({
+    trigger: "",
+    title: "",
+  });
+
+  const [membersActive, setMembersActive] = useState<{
+    trigger: string;
+    title: string;
+  }>({
+    trigger: "",
+    title: "",
+  });
+
+  const [warehousesActive, setWarehousesActive] = useState<{
+    trigger: string;
+    title: string;
+  }>({
+    trigger: "",
+    title: "",
+  });
+
+  useEffect(() => {
+    setColor();
+
+    function setColor() {
+      const trigger = "bg-primary data-[hover=true]:bg-primary/90";
+      const title = "text-white";
+
+      if (
+        (router.pathname.startsWith("/owner/invoices") &&
+          router.pathname.includes("/owner/invoices/in")) ||
+        router.pathname.includes("/owner/invoices/out")
+      ) {
+        setInvoicesActive({
+          trigger,
+          title,
+        });
+      }
+
+      if (
+        (router.pathname.startsWith("/owner/products") &&
+          router.pathname.includes("/owner/products/lists")) ||
+        router.pathname.includes("/owner/products/stocks") ||
+        router.pathname.includes("/owner/products/categories")
+      ) {
+        setProductsActive({
+          trigger,
+          title,
+        });
+      }
+
+      if (
+        (router.pathname.startsWith("/owner/suppliers") &&
+          router.pathname.includes("/owner/suppliers/lists")) ||
+        router.pathname.includes("/owner/suppliers/pricelists")
+      ) {
+        setSuppliersActive({
+          trigger,
+          title,
+        });
+      }
+
+      if (
+        (router.pathname.startsWith("/owner/members") &&
+          router.pathname.includes("/owner/members/lists")) ||
+        router.pathname.includes("/owner/members/levels")
+      ) {
+        setMembersActive({
+          trigger,
+          title,
+        });
+      }
+
+      if (
+        (router.pathname.startsWith("/owner/warehouses") &&
+          router.pathname.includes("/owner/warehouses/in")) ||
+        router.pathname.includes("/owner/warehouses/out") ||
+        router.pathname.includes("/owner/warehouses/documents") ||
+        router.pathname.includes("/owner/warehouses/lists")
+      ) {
+        setWarehousesActive({
+          trigger,
+          title,
+        });
+      }
+    }
+  }, [router]);
 
   const itemClasses = {
     base: "p-0 w-full",
     trigger:
-      "py-2 px-3 h-10 data-[hover=true]:bg-gray-200 rounded-xl flex gap-2 items-center",
+      "py-2 px-3 h-10 rounded-xl flex gap-2 items-center data-[hover=true]:bg-gray-200",
     title: "text-sm font-semibold text-gray-600",
     content: "text-small",
   };
@@ -91,18 +199,22 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
 
                   <Accordion
                     isCompact
-                    itemClasses={itemClasses}
+                    itemClasses={{
+                      ...itemClasses,
+                      trigger: `${itemClasses.trigger} ${invoicesActive.trigger}`,
+                      title: `${itemClasses.title} ${invoicesActive.title}`,
+                    }}
                     className="p-0"
                   >
                     <AccordionItem
                       aria-label="button"
                       title="Invoice"
-                      indicator={<CaretRight weight="bold" size={16} />}
+                      indicator={<CaretRight weight="bold" size={16} className={`${invoicesActive.title ? invoicesActive.title : "text-gray-600"}`}/>}
                       startContent={
                         <Invoice
                           weight="bold"
                           size={20}
-                          className="text-gray-600"
+                          className={`${invoicesActive.title ? invoicesActive.title : "text-gray-600"}`}
                         />
                       }
                       className="grid gap-1"
@@ -145,18 +257,28 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                 <div className="mt-1 grid gap-1">
                   <Accordion
                     isCompact
-                    itemClasses={itemClasses}
+                    itemClasses={{
+                      ...itemClasses,
+                      trigger: `${itemClasses.trigger} ${productsActive.trigger}`,
+                      title: `${itemClasses.title} ${productsActive.title}`,
+                    }}
                     className="p-0"
                   >
                     <AccordionItem
                       aria-label="button"
                       title="Produk"
-                      indicator={<CaretRight weight="bold" size={16} />}
+                      indicator={
+                        <CaretRight
+                          weight="bold"
+                          size={16}
+                          className={`${productsActive.title ? productsActive.title : "text-gray-600"}`}
+                        />
+                      }
                       startContent={
                         <ArchiveBox
                           weight="bold"
                           size={20}
-                          className="text-gray-600"
+                          className={`${productsActive.title ? productsActive.title : "text-gray-600"}`}
                         />
                       }
                       className="grid gap-1"
@@ -169,14 +291,14 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                       />
 
                       <ButtonSidebar
-                        label="Stok"
+                        label="Stok Produk"
                         path="/owner/products/stocks"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
                       />
-                      
+
                       <ButtonSidebar
-                        label="Kategori"
+                        label="Kategori Produk"
                         path="/owner/products/categories"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
@@ -186,32 +308,42 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
 
                   <Accordion
                     isCompact
-                    itemClasses={itemClasses}
+                    itemClasses={{
+                      ...itemClasses,
+                      trigger: `${itemClasses.trigger} ${suppliersActive.trigger}`,
+                      title: `${itemClasses.title} ${suppliersActive.title}`,
+                    }}
                     className="p-0"
                   >
                     <AccordionItem
                       aria-label="button"
                       title="Supplier"
-                      indicator={<CaretRight weight="bold" size={16} />}
+                      indicator={
+                        <CaretRight
+                          weight="bold"
+                          size={16}
+                          className={`${suppliersActive.title ? suppliersActive.title : "text-gray-600"}`}
+                        />
+                      }
                       startContent={
                         <Truck
                           weight="bold"
                           size={20}
-                          className="text-gray-600"
+                          className={`${suppliersActive.title ? suppliersActive.title : "text-gray-600"}`}
                         />
                       }
                       className="grid gap-1"
                     >
                       <ButtonSidebar
                         label="Daftar Supplier"
-                        path="/owner/supplier/lists"
+                        path="/owner/suppliers/lists"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
                       />
 
                       <ButtonSidebar
                         label="Harga Supplier"
-                        path="/owner/supplier/pricelists"
+                        path="/owner/suppliers/pricelists"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
                       />
@@ -220,18 +352,60 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
 
                   <Accordion
                     isCompact
-                    itemClasses={itemClasses}
+                    itemClasses={{
+                      ...itemClasses,
+                      trigger: `${itemClasses.trigger} ${membersActive.trigger}`,
+                      title: `${itemClasses.title} ${membersActive.title}`,
+                    }}
+                    className="p-0"
+                  >
+                    <AccordionItem
+                      aria-label="button"
+                      title="Member"
+                      indicator={<CaretRight weight="bold" size={16} className={`${membersActive.title ? membersActive.title : "text-gray-600"}`}/>}
+                      startContent={
+                        <Users
+                          weight="bold"
+                          size={20}
+                          className={`${membersActive.title ? membersActive.title : "text-gray-600"}`}
+                        />
+                      }
+                      className="grid gap-1"
+                    >
+                      <ButtonSidebar
+                        label="Daftar Member"
+                        path="/owner/members/lists"
+                        icon={<Circle weight="fill" size={6} />}
+                        className="mx-4"
+                      />
+
+                      <ButtonSidebar
+                        label="Level Member"
+                        path="/owner/members/levels"
+                        icon={<Circle weight="fill" size={6} />}
+                        className="mx-4"
+                      />
+                    </AccordionItem>
+                  </Accordion>
+
+                  <Accordion
+                    isCompact
+                    itemClasses={{
+                      ...itemClasses,
+                      trigger: `${itemClasses.trigger} ${warehousesActive.trigger}`,
+                      title: `${itemClasses.title} ${warehousesActive.title}`,
+                    }}
                     className="p-0"
                   >
                     <AccordionItem
                       aria-label="button"
                       title="Gudang"
-                      indicator={<CaretRight weight="bold" size={16} />}
+                      indicator={<CaretRight weight="bold" size={16} className={`${warehousesActive.title ? warehousesActive.title : "text-gray-600"}`}/>}
                       startContent={
                         <Package
                           weight="bold"
                           size={20}
-                          className="text-gray-600"
+                          className={`${warehousesActive.title ? warehousesActive.title : "text-gray-600"}`}
                         />
                       }
                       className="grid gap-1"
@@ -269,7 +443,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                   <ButtonSidebar
                     label="Pengguna"
                     path="/owner/users"
-                    icon={<Users weight="bold" size={20} />}
+                    icon={<User weight="bold" size={20} />}
                   />
                 </div>
               </div>
