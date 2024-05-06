@@ -209,7 +209,13 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                     <AccordionItem
                       aria-label="button"
                       title="Invoice"
-                      indicator={<CaretRight weight="bold" size={16} className={`${invoicesActive.title ? invoicesActive.title : "text-gray-600"}`}/>}
+                      indicator={
+                        <CaretRight
+                          weight="bold"
+                          size={16}
+                          className={`${invoicesActive.title ? invoicesActive.title : "text-gray-600"}`}
+                        />
+                      }
                       startContent={
                         <Invoice
                           weight="bold"
@@ -362,7 +368,13 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                     <AccordionItem
                       aria-label="button"
                       title="Member"
-                      indicator={<CaretRight weight="bold" size={16} className={`${membersActive.title ? membersActive.title : "text-gray-600"}`}/>}
+                      indicator={
+                        <CaretRight
+                          weight="bold"
+                          size={16}
+                          className={`${membersActive.title ? membersActive.title : "text-gray-600"}`}
+                        />
+                      }
                       startContent={
                         <Users
                           weight="bold"
@@ -400,7 +412,13 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                     <AccordionItem
                       aria-label="button"
                       title="Gudang"
-                      indicator={<CaretRight weight="bold" size={16} className={`${warehousesActive.title ? warehousesActive.title : "text-gray-600"}`}/>}
+                      indicator={
+                        <CaretRight
+                          weight="bold"
+                          size={16}
+                          className={`${warehousesActive.title ? warehousesActive.title : "text-gray-600"}`}
+                        />
+                      }
                       startContent={
                         <Package
                           weight="bold"
