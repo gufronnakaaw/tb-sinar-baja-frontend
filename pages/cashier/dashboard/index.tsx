@@ -1,16 +1,34 @@
 import { Button } from "@nextui-org/react";
-import { ArrowRight, ImageBroken, Money } from "@phosphor-icons/react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ImageBroken,
+  Money,
+} from "@phosphor-icons/react";
 
 // components
 import StatusStock from "@/components/status/StatusStock";
-import Container from "@/components/wrapper/DashboardContainer";
-import Layout from "@/components/wrapper/DashboardLayout";
+import Layout from "@/components/wrapper/SecondaryLayout";
+import { useRouter } from "next/router";
 
 export default function DashboardPage() {
+  const router = useRouter();
+
   return (
     <Layout title="Dashboard Kasir">
-      <Container>
-        <section className="grid gap-12">
+      <section className="py-24">
+        <div className="container mt-8 grid gap-12">
+          <Button
+            variant="light"
+            color="danger"
+            size="sm"
+            startContent={<ArrowLeft weight="bold" size={16} />}
+            onClick={() => router.push("/cashier/menu")}
+            className="w-max font-semibold"
+          >
+            Kembali ke Menu
+          </Button>
+
           <StatusStock text="stok habis" />
 
           <div className="grid gap-4">
@@ -68,8 +86,8 @@ export default function DashboardPage() {
               </div>
             </div>
           </div>
-        </section>
-      </Container>
+        </div>
+      </section>
     </Layout>
   );
 }
