@@ -2,11 +2,11 @@
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 
-export default function ProductPage() {
+export default function InvoicesOutPage() {
   return (
-    <Layout title="Produk">
+    <Layout title="Invoice Keluar">
       <Container>
-        <div>product page</div>
+        <div>invoice keluar page</div>
       </Container>
     </Layout>
   );
