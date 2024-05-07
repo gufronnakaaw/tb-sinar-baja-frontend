@@ -15,11 +15,6 @@ export const categories: CategoriesType[] = [
     name: "Selang",
     created_at: "10 Mei 2024 19:00",
   },
-  {
-    code: "CAT03",
-    name: "Peralatan Rumah",
-    created_at: "10 Mei 2024 19:00",
-  },
 ];
 
 export type SubCategoriesType = {
