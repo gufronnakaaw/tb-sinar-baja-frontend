@@ -26,13 +26,13 @@ export default function InvoicesOutPage() {
 
   const columns = [
     { name: "ID Invoice Keluar", uid: "invout_id", sortable: false },
-    { name: "Tanggal", uid: "invout_date", sortable: true },
     {
       name: "Ke",
       uid: "to",
       sortable: false,
     },
     { name: "Total", uid: "total", sortable: true },
+    { name: "Tanggal", uid: "invout_date", sortable: true },
     { name: "Aksi", uid: "action", sortable: false },
   ];
 
@@ -42,14 +42,16 @@ export default function InvoicesOutPage() {
     switch (columnKey) {
       case "invout_id":
         return <div className="text-default-900">{invout.id}</div>;
-      case "invout_date":
-        return <div className="text-default-900">{invout.date}</div>;
-      case "customer":
-        return <div className="text-default-900">{invout.to}</div>;
+      case "to":
+        return <div className="w-max text-default-900">{invout.to}</div>;
       case "total":
         return (
-          <div className="text-default-900">{formatRupiah(invout.total)}</div>
+          <div className="w-max text-default-900">
+            {formatRupiah(invout.total)}
+          </div>
         );
+      case "invout_date":
+        return <div className="w-max text-default-900">{invout.date}</div>;
       case "action":
         return (
           <Button

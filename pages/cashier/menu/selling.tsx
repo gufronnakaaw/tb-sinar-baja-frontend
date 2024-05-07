@@ -1,4 +1,4 @@
-import { Button, Chip, Input, Textarea, Tooltip } from "@nextui-org/react";
+import { Button, Chip, Input, Textarea } from "@nextui-org/react";
 import { ArrowLeft, Circle, Minus, Plus } from "@phosphor-icons/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 // components
 import InputSearchBar from "@/components/input/InputSearchBar";
 import PopupContinuePayment from "@/components/popup/popupContinuePayment";
+import CustomTooltip from "@/components/tooltip";
 
 export default function SellingPage() {
   const router = useRouter();
@@ -66,16 +67,11 @@ export default function SellingPage() {
               {/* ==== card here ==== */}
               <div className="grid gap-[20px] rounded-xl border border-default-200 p-4">
                 <div className="grid gap-1">
-                  <h1 className="line-clamp-2 text-lg font-bold text-default-900">
-                    <Tooltip
-                      delay={0}
-                      closeDelay={0}
-                      placement="top-start"
-                      content="C-truss Mini SNI tbl KD 10"
-                    >
+                  <CustomTooltip content="C-truss Mini SNI tbl KD 10">
+                    <h1 className="line-clamp-2 text-lg font-bold text-default-900">
                       C-truss Mini SNI tbl KD 10
-                    </Tooltip>
-                  </h1>
+                    </h1>
+                  </CustomTooltip>
                   <h1 className="font-semibold text-rose-500">Rp 93.000</h1>
                 </div>
 

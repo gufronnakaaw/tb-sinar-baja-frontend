@@ -15,6 +15,7 @@ import Layout from "@/components/wrapper/DashboardLayout";
 
 // utils
 import InputSearchBar from "@/components/input/InputSearchBar";
+import CustomTooltip from "@/components/tooltip";
 import usePagination from "@/hooks/usepagination";
 import { customStyleTable } from "@/utils/customStyleTable";
 import { formatRupiah } from "@/utils/formatRupiah";
@@ -26,18 +27,18 @@ export default function InvoicesInPage() {
 
   const columns = [
     { name: "ID Invoice Masuk", uid: "invin_id", sortable: false },
-    { name: "Nomor", uid: "reference", sortable: false },
-    {
-      name: "Jatuh Tempo",
-      uid: "due_date",
-      sortable: false,
-    },
     {
       name: "Dari",
       uid: "from",
       sortable: false,
     },
+    { name: "Nomor", uid: "reference", sortable: false },
     { name: "Total", uid: "total", sortable: true },
+    {
+      name: "Jatuh Tempo",
+      uid: "due_date",
+      sortable: false,
+    },
     {
       name: "Deskripsi",
       uid: "description",
@@ -53,18 +54,24 @@ export default function InvoicesInPage() {
     switch (columnKey) {
       case "invin_id":
         return <div className="text-default-900">{invin.id}</div>;
+      case "from":
+        return <div className="w-max text-default-900">{invin.from}</div>;
       case "reference":
         return <div className="text-default-900">{invin.reference}</div>;
-      case "due_date":
-        return <div className="text-default-900">{invin.due_date}</div>;
-      case "from":
-        return <div className="text-default-900">{invin.from}</div>;
       case "total":
         return (
           <div className="text-default-900">{formatRupiah(invin.total)}</div>
         );
+      case "due_date":
+        return <div className="w-max text-default-900">{invin.due_date}</div>;
       case "description":
-        return <div className="text-default-900">{invin.description}</div>;
+        return (
+          <CustomTooltip content={invin.description}>
+            <div className="line-clamp-1 max-w-[250px] text-default-900">
+              {invin.description}
+            </div>
+          </CustomTooltip>
+        );
       case "action":
         return (
           <Button
