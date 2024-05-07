@@ -7,13 +7,13 @@ export type WarehouseInType = {
 
 export const warehouseIn: WarehouseInType[] = [
   {
-    product: "Cat Dulux",
+    product: "Kalsiboard",
     total: 1000,
     from: "Supplier A",
     created_at: "10 Mei 2024 10:00",
   },
   {
-    product: "Cat Dulux",
+    product: "Kalsiboard",
     total: 500,
     from: "Supplier B",
     created_at: "10 Mei 2024 10:00",
@@ -29,13 +29,13 @@ export type WarehouseOutType = {
 
 export const warehouseOut: WarehouseOutType[] = [
   {
-    product: "Cat Vinilex",
+    product: "Kalsiboard",
     total: 10,
     reason: "Rusak",
     created_at: "10 Mei 2024 20:00",
   },
   {
-    product: "Cat Vinilex",
+    product: "Kalsiboard",
     total: 2,
     reason: "Hilang",
     created_at: "10 Mei 2024 20:00",
