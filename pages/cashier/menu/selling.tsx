@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 
 // components
 import InputSearchBar from "@/components/input/InputSearchBar";
+import PopupContinuePayment from "@/components/popup/popupContinuePayment";
 
 export default function SellingPage() {
   const router = useRouter();
@@ -231,12 +232,7 @@ export default function SellingPage() {
                 />
               </div>
 
-              <Button
-                variant="solid"
-                className="bg-rose-500 py-8 font-semibold text-white"
-              >
-                Lanjutkan Pembayaran
-              </Button>
+              <PopupContinuePayment />
             </div>
           </div>
         </div>
