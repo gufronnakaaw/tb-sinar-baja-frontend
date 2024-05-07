@@ -11,14 +11,14 @@ export const suppliers: SuppliersType[] = [
     code: "SUP1",
     name: "Supplier 1",
     price: 110000,
-    product: "Cat Dulux",
+    product: "Pipa UPVC Alderon AW 1",
     created_at: "10 Mei 2024 10:00",
   },
   {
     code: "SUP2",
     name: "Supplier 2",
     price: 109000,
-    product: "Cat Dulux",
+    product: "Pipa UPVC Alderon D 3",
     created_at: "10 Mei 2024 10:00",
   },
 ];
