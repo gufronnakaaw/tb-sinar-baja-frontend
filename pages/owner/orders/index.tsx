@@ -26,13 +26,13 @@ export default function OrderPage() {
 
   const columns = [
     { name: "ID Order", uid: "orders_id", sortable: false },
-    { name: "Tanggal", uid: "orders_date", sortable: true },
     {
       name: "Pembelian Ke",
       uid: "to",
       sortable: false,
     },
     { name: "Total", uid: "total", sortable: true },
+    { name: "Tanggal", uid: "orders_date", sortable: true },
     { name: "Aksi", uid: "action", sortable: false },
   ];
 
@@ -42,14 +42,16 @@ export default function OrderPage() {
     switch (columnKey) {
       case "orders_id":
         return <div className="text-default-900">{orders.id}</div>;
-      case "orders_date":
-        return <div className="text-default-900">{orders.date}</div>;
       case "customer":
-        return <div className="text-default-900">{orders.to}</div>;
+        return <div className="w-max text-default-900">{orders.to}</div>;
       case "total":
         return (
-          <div className="text-default-900">{formatRupiah(orders.total)}</div>
+          <div className="w-max text-default-900">
+            {formatRupiah(orders.total)}
+          </div>
         );
+      case "orders_date":
+        return <div className="w-max text-default-900">{orders.date}</div>;
       case "action":
         return (
           <Button

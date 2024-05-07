@@ -28,13 +28,13 @@ export default function PreOrdersPage() {
 
   const columns = [
     { name: "ID Pre Order", uid: "preorders_id", sortable: false },
-    { name: "Tanggal", uid: "preorders_date", sortable: true },
     {
       name: "Nama Pelanggan",
       uid: "customer",
       sortable: false,
     },
     { name: "Total", uid: "total", sortable: true },
+    { name: "Tanggal", uid: "preorders_date", sortable: true },
     { name: "Aksi", uid: "action", sortable: false },
   ];
 
@@ -44,16 +44,18 @@ export default function PreOrdersPage() {
     switch (columnKey) {
       case "preorders_id":
         return <div className="text-default-900">{preorders.id}</div>;
-      case "preorders_date":
-        return <div className="text-default-900">{preorders.date}</div>;
       case "customer":
-        return <div className="text-default-900">{preorders.customer}</div>;
+        return (
+          <div className="w-max text-default-900">{preorders.customer}</div>
+        );
       case "total":
         return (
-          <div className="text-default-900">
+          <div className="w-max text-default-900">
             {formatRupiah(preorders.total)}
           </div>
         );
+      case "preorders_date":
+        return <div className="w-max text-default-900">{preorders.date}</div>;
       case "action":
         return (
           <Button
