@@ -2,7 +2,7 @@ export type PaymentsType = {
   id: string;
   date: string;
   from: string;
-  status: "lunas" | "hutang";
+  status: "lunas" | "piutang";
   total: number;
 };
 
@@ -11,7 +11,7 @@ export const payments: PaymentsType[] = [
     id: "PAY02022024",
     date: "10 Mei 2024 10:00",
     from: "Supplier A",
-    status: "hutang",
+    status: "piutang",
     total: 1000000,
   },
   {
