@@ -6,8 +6,7 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  Radio,
-  RadioGroup,
+  Textarea,
   useDisclosure,
 } from "@nextui-org/react";
 import { Printer } from "@phosphor-icons/react";
@@ -30,89 +29,82 @@ export default function PopupContinuePayment() {
         onOpenChange={onOpenChange}
         isDismissable={false}
         isKeyboardDismissDisabled={true}
-        size="xl"
+        size="2xl"
       >
         <ModalContent>
           {(onClose) => (
             <>
               <ModalHeader className="font-semibold text-default-900">
-                Metode Pembayaran
+                Informasi Tambahan
               </ModalHeader>
 
               <ModalBody>
-                <div className="grid gap-12">
-                  <RadioGroup
-                    orientation="horizontal"
-                    color="danger"
-                    defaultValue="tunai"
-                    classNames={{
-                      wrapper: "justify-evenly",
-                    }}
-                  >
-                    <Radio
-                      value="tunai"
-                      className="font-medium text-default-900"
-                    >
-                      Tunai
-                    </Radio>
-                    <Radio
-                      value="transfer"
-                      className="font-medium text-default-900"
-                    >
-                      Transfer
-                    </Radio>
-                    <Radio
-                      value="qris"
-                      className="font-medium text-default-900"
-                    >
-                      QRIS
-                    </Radio>
-                  </RadioGroup>
-
+                <div className="grid gap-8">
                   <div className="grid gap-4">
                     <Input
                       type="number"
                       variant="flat"
                       labelPlacement="outside"
-                      label="Nominal (Rp)"
-                      placeholder="Masukan nominal..."
+                      label="No. Telp"
+                      placeholder="Masukan no. telp..."
                       className="w-full"
                     />
 
-                    <RadioGroup
-                      orientation="horizontal"
-                      color="danger"
-                      defaultValue="uang-pas"
-                      classNames={{
-                        wrapper: "justify-evenly",
-                      }}
-                    >
-                      <Radio
-                        value="uang-pas"
-                        className="font-medium text-default-900"
-                      >
-                        Uang Pas
-                      </Radio>
-                      <Radio
-                        value="250"
-                        className="font-medium text-default-900"
-                      >
-                        Rp 250.000
-                      </Radio>
-                      <Radio
-                        value="500"
-                        className="font-medium text-default-900"
-                      >
-                        Rp 500.000
-                      </Radio>
-                    </RadioGroup>
+                    <div className="grid grid-cols-2 gap-4">
+                      <Textarea
+                        type="number"
+                        variant="flat"
+                        maxRows={3}
+                        labelPlacement="outside"
+                        label="Keterangan"
+                        placeholder="Masukan keterangan..."
+                        className="w-full"
+                      />
+                      <Textarea
+                        type="number"
+                        variant="flat"
+                        maxRows={3}
+                        labelPlacement="outside"
+                        label="Alamat"
+                        placeholder="Masukan alamat lengkap..."
+                        className="w-full"
+                      />
+                    </div>
+
+                    <Input
+                      type="number"
+                      variant="flat"
+                      labelPlacement="outside"
+                      label="Biaya Ongkir"
+                      placeholder="Masukan biaya ongkir..."
+                      startContent={
+                        <div className="pointer-events-none flex items-center">
+                          <span className="text-sm text-default-600">Rp</span>
+                        </div>
+                      }
+                      className="w-full"
+                    />
+
+                    <Input
+                      type="number"
+                      variant="flat"
+                      labelPlacement="outside"
+                      label="Nominal"
+                      placeholder="Masukan nominal..."
+                      startContent={
+                        <div className="pointer-events-none flex items-center">
+                          <span className="text-sm text-default-600">Rp</span>
+                        </div>
+                      }
+                      className="w-full"
+                    />
                   </div>
 
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="text-sm font-medium text-foreground-600">
-                      Total Pembayaran
+                  <div className="flex items-center gap-8">
+                    <p className="font-medium text-foreground-600">
+                      Total Pembayaran :
                     </p>
-                    <h4 className="text-[24px] font-bold text-rose-500">
+                    <h4 className="text-[28px] font-bold text-rose-500">
                       Rp 417.000
                     </h4>
                   </div>
