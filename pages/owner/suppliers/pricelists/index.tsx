@@ -8,17 +8,20 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
+import { Eye, Pencil, Trash } from "@phosphor-icons/react";
 
 // components
+import InputSearchBar from "@/components/input/InputSearchBar";
+import CustomTooltip from "@/components/tooltip";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 
 // utils
-import { SuppliersType, suppliers } from "@/_dummy/suppliers";
-import InputSearchBar from "@/components/input/InputSearchBar";
 import usePagination from "@/hooks/usepagination";
 import { customStyleTable } from "@/utils/customStyleTable";
 import { formatRupiah } from "@/utils/formatRupiah";
+
+import { SuppliersType, suppliers } from "@/_dummy/suppliers";
 
 export default function SupplierPriceListsPage() {
   const { page, pages, data, setPage } = usePagination(suppliers, 10);
@@ -39,7 +42,7 @@ export default function SupplierPriceListsPage() {
       case "code":
         return <div className="text-default-900">{suppliers.code}</div>;
       case "name":
-        return <div className="text-default-900">{suppliers.name}</div>;
+        return <div className="w-max text-default-900">{suppliers.name}</div>;
       case "price":
         return (
           <div className="text-default-900">
@@ -47,20 +50,38 @@ export default function SupplierPriceListsPage() {
           </div>
         );
       case "product":
-        return <div className="text-default-900">{suppliers.product}</div>;
+        return (
+          <CustomTooltip content={suppliers.product}>
+            <div className="line-clamp-1 w-max max-w-[250px] text-default-900">
+              {suppliers.product}
+            </div>
+          </CustomTooltip>
+        );
       case "created_at":
-        return <div className="text-default-900">{suppliers.created_at}</div>;
+        return (
+          <div className="w-max text-default-900">{suppliers.created_at}</div>
+        );
       case "action":
         return (
-          <Button
-            variant="bordered"
-            color="default"
-            size="sm"
-            onClick={() => alert(`ID Order: ${suppliers.code}`)}
-            className="font-medium"
-          >
-            Detail
-          </Button>
+          <div className="flex max-w-[110px] items-center gap-1">
+            <CustomTooltip content="Edit">
+              <Button isIconOnly variant="light" size="sm">
+                <Pencil weight="bold" size={20} className="text-default-600" />
+              </Button>
+            </CustomTooltip>
+
+            <CustomTooltip content="Detail">
+              <Button isIconOnly variant="light" size="sm">
+                <Eye weight="bold" size={20} className="text-default-600" />
+              </Button>
+            </CustomTooltip>
+
+            <CustomTooltip content="Hapus">
+              <Button isIconOnly variant="light" color="danger" size="sm">
+                <Trash weight="bold" size={20} />
+              </Button>
+            </CustomTooltip>
+          </div>
         );
 
       default:
@@ -97,6 +118,7 @@ export default function SupplierPriceListsPage() {
             color="primary"
             selectionMode="single"
             classNames={customStyleTable}
+            className="scrollbar-hide"
           >
             <TableHeader columns={columns}>
               {(column) => (
