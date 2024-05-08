@@ -137,7 +137,7 @@ export default function ProductsCategoriesPage() {
 
   return (
     <Layout title="Produk Kategori">
-      <Container className="grid gap-20">
+      <Container className="gap-20">
         <div className="grid gap-8">
           <h4 className="text-lg font-semibold text-default-900">
             Kategori Produk

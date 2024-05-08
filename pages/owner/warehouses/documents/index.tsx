@@ -8,16 +8,19 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
+import { Eye, Pencil, Trash } from "@phosphor-icons/react";
 
 // components
+import InputSearchBar from "@/components/input/InputSearchBar";
+import CustomTooltip from "@/components/tooltip";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 
 // utils
-import { WarehouseDocuments, warehouseDocuments } from "@/_dummy/warehouses";
-import InputSearchBar from "@/components/input/InputSearchBar";
 import usePagination from "@/hooks/usepagination";
 import { customStyleTable } from "@/utils/customStyleTable";
+
+import { WarehouseDocuments, warehouseDocuments } from "@/_dummy/warehouses";
 
 export default function WarehousesDocumentsPage() {
   const { page, pages, data, setPage } = usePagination(warehouseDocuments, 10);
@@ -40,18 +43,32 @@ export default function WarehousesDocumentsPage() {
           <div className="text-default-900">{warehouseDocuments.invoice}</div>
         );
       case "to":
-        return <div className="text-default-900">{warehouseDocuments.to}</div>;
+        return (
+          <div className="line-clamp-1 w-max max-w-[250px] text-default-900">
+            {warehouseDocuments.to}
+          </div>
+        );
       case "action":
         return (
-          <Button
-            variant="bordered"
-            color="default"
-            size="sm"
-            onClick={() => alert(`ID Order: ${warehouseDocuments.invoice}`)}
-            className="font-medium"
-          >
-            Detail
-          </Button>
+          <div className="flex max-w-[110px] items-center gap-1">
+            <CustomTooltip content="Edit">
+              <Button isIconOnly variant="light" size="sm">
+                <Pencil weight="bold" size={20} className="text-default-600" />
+              </Button>
+            </CustomTooltip>
+
+            <CustomTooltip content="Detail">
+              <Button isIconOnly variant="light" size="sm">
+                <Eye weight="bold" size={20} className="text-default-600" />
+              </Button>
+            </CustomTooltip>
+
+            <CustomTooltip content="Hapus">
+              <Button isIconOnly variant="light" color="danger" size="sm">
+                <Trash weight="bold" size={20} />
+              </Button>
+            </CustomTooltip>
+          </div>
         );
 
       default:
@@ -86,6 +103,7 @@ export default function WarehousesDocumentsPage() {
             color="primary"
             selectionMode="single"
             classNames={customStyleTable}
+            className="scrollbar-hide"
           >
             <TableHeader columns={columns}>
               {(column) => (

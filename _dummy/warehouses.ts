@@ -7,7 +7,7 @@ export type WarehouseInType = {
 
 export const warehouseIn: WarehouseInType[] = [
   {
-    product: "Kalsiboard",
+    product: "Papan Trimpek",
     total: 1000,
     from: "Supplier A",
     created_at: "10 Mei 2024 10:00",
@@ -29,7 +29,7 @@ export type WarehouseOutType = {
 
 export const warehouseOut: WarehouseOutType[] = [
   {
-    product: "Kalsiboard",
+    product: "Papan Trimpek",
     total: 10,
     reason: "Rusak",
     created_at: "10 Mei 2024 20:00",
@@ -49,11 +49,11 @@ export type WarehouseDocuments = {
 
 export const warehouseDocuments: WarehouseDocuments[] = [
   {
-    invoice: "INVOUT02022024",
+    invoice: "INVOUT08052024",
     to: "Pelanggan A",
   },
   {
-    invoice: "INVOUT02022024",
+    invoice: "INVOUT05052024",
     to: "Pelanggan B",
   },
 ];

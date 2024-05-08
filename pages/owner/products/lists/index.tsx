@@ -86,7 +86,7 @@ export default function ProductsListsPage() {
         );
       case "action":
         return (
-          <div className="flex items-center gap-1">
+          <div className="flex max-w-[110px] items-center gap-1">
             <CustomTooltip content="Edit">
               <Button isIconOnly variant="light" size="sm">
                 <Pencil weight="bold" size={20} className="text-default-600" />
@@ -114,7 +114,7 @@ export default function ProductsListsPage() {
 
   return (
     <Layout title="Stok Produk">
-      <Container className="grid gap-8">
+      <Container className="gap-8">
         <h4 className="text-lg font-semibold text-default-900">
           Daftar Produk
         </h4>

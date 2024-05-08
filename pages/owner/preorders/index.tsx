@@ -8,10 +8,12 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
+import { Eye, Pencil, Trash } from "@phosphor-icons/react";
 import React from "react";
 
 // components
 import InputSearchBar from "@/components/input/InputSearchBar";
+import CustomTooltip from "@/components/tooltip";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 
@@ -58,15 +60,25 @@ export default function PreOrdersPage() {
         return <div className="w-max text-default-900">{preorders.date}</div>;
       case "action":
         return (
-          <Button
-            variant="bordered"
-            color="default"
-            size="sm"
-            onClick={() => alert(`ID Pre Order: ${preorders.id}`)}
-            className="font-medium"
-          >
-            Detail
-          </Button>
+          <div className="flex max-w-[110px] items-center gap-1">
+            <CustomTooltip content="Edit">
+              <Button isIconOnly variant="light" size="sm">
+                <Pencil weight="bold" size={20} className="text-default-600" />
+              </Button>
+            </CustomTooltip>
+
+            <CustomTooltip content="Detail">
+              <Button isIconOnly variant="light" size="sm">
+                <Eye weight="bold" size={20} className="text-default-600" />
+              </Button>
+            </CustomTooltip>
+
+            <CustomTooltip content="Hapus">
+              <Button isIconOnly variant="light" color="danger" size="sm">
+                <Trash weight="bold" size={20} />
+              </Button>
+            </CustomTooltip>
+          </div>
         );
 
       default:
@@ -101,6 +113,7 @@ export default function PreOrdersPage() {
             color="primary"
             selectionMode="single"
             classNames={customStyleTable}
+            className="scrollbar-hide"
           >
             <TableHeader columns={columns}>
               {(column) => (

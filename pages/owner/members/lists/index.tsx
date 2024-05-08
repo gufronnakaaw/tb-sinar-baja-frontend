@@ -8,18 +8,19 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
+import { Eye, Pencil, Trash } from "@phosphor-icons/react";
 
 // components
+import InputSearchBar from "@/components/input/InputSearchBar";
+import CustomTooltip from "@/components/tooltip";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 
 // utils
-import { MembersType, members } from "@/_dummy/members";
-import InputSearchBar from "@/components/input/InputSearchBar";
-import CustomTooltip from "@/components/tooltip";
 import usePagination from "@/hooks/usepagination";
 import { customStyleTable } from "@/utils/customStyleTable";
-import { Eye, Pencil, Trash } from "@phosphor-icons/react";
+
+import { MembersType, members } from "@/_dummy/members";
 
 export default function MembersListsPage() {
   const { page, pages, data, setPage } = usePagination(members, 10);
@@ -75,7 +76,7 @@ export default function MembersListsPage() {
   };
   return (
     <Layout title="Daftar Member">
-      <Container className="grid gap-8">
+      <Container className="gap-8">
         <h4 className="text-lg font-semibold text-default-900">
           Daftar Member
         </h4>

@@ -1,9 +1,5 @@
 import {
   Button,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
   Pagination,
   Table,
   TableBody,
@@ -12,11 +8,12 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { DotsThreeVertical, Pencil, Trash } from "@phosphor-icons/react";
+import { Pencil, Trash } from "@phosphor-icons/react";
 import React from "react";
 
 // components
 import InputSearchBar from "@/components/input/InputSearchBar";
+import CustomTooltip from "@/components/tooltip";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 
@@ -46,45 +43,31 @@ export default function UsersPage() {
     switch (columnKey) {
       case "name":
         return (
-          <div className="text-default-900 xl:line-clamp-1 xl:max-w-[300px]">
+          <div className="line-clamp-1 w-max max-w-[250px] text-default-900">
             {user.name}
           </div>
         );
       case "username":
-        return <div className="text-default-900">{user.username}</div>;
+        return <div className="w-max text-default-900">{user.username}</div>;
       case "password":
-        return <div className="text-default-900">{user.password}</div>;
+        return <div className="w-max text-default-900">{user.password}</div>;
       case "created_at":
-        return <div className="text-default-900">{user.created_at}</div>;
+        return <div className="w-max text-default-900">{user.created_at}</div>;
       case "action":
         return (
-          <Dropdown>
-            <DropdownTrigger>
-              <Button isIconOnly variant="light" color="default" size="sm">
-                <DotsThreeVertical weight="bold" size={18} />
+          <div className="flex max-w-[110px] items-center gap-1">
+            <CustomTooltip content="Edit">
+              <Button isIconOnly variant="light" size="sm">
+                <Pencil weight="bold" size={20} className="text-default-600" />
               </Button>
-            </DropdownTrigger>
+            </CustomTooltip>
 
-            <DropdownMenu aria-label="users table action">
-              <DropdownItem
-                key="edit"
-                color="default"
-                startContent={<Pencil weight="bold" size={18} />}
-              >
-                Edit
-              </DropdownItem>
-
-              <DropdownItem
-                key="delete"
-                color="danger"
-                startContent={<Trash weight="bold" size={18} />}
-                onClick={() => confirm("Apakah anda yakin?")}
-                className="text-danger"
-              >
-                Hapus
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+            <CustomTooltip content="Hapus">
+              <Button isIconOnly variant="light" color="danger" size="sm">
+                <Trash weight="bold" size={20} />
+              </Button>
+            </CustomTooltip>
+          </div>
         );
 
       default:
@@ -119,6 +102,7 @@ export default function UsersPage() {
             color="primary"
             selectionMode="single"
             classNames={customStyleTable}
+            className="scrollbar-hide"
           >
             <TableHeader columns={columns}>
               {(column) => (

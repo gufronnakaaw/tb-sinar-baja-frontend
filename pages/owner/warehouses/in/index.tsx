@@ -8,16 +8,19 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
+import { Eye, Pencil, Trash } from "@phosphor-icons/react";
 
 // components
+import InputSearchBar from "@/components/input/InputSearchBar";
+import CustomTooltip from "@/components/tooltip";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 
 // utils
-import { warehouseIn, WarehouseInType } from "@/_dummy/warehouses";
-import InputSearchBar from "@/components/input/InputSearchBar";
 import usePagination from "@/hooks/usepagination";
 import { customStyleTable } from "@/utils/customStyleTable";
+
+import { warehouseIn, WarehouseInType } from "@/_dummy/warehouses";
 
 export default function WarehousesInPage() {
   const { page, pages, data, setPage } = usePagination(warehouseIn, 10);
@@ -35,24 +38,42 @@ export default function WarehousesInPage() {
 
     switch (columnKey) {
       case "product":
-        return <div className="text-default-900">{warehouseIn.product}</div>;
+        return (
+          <CustomTooltip content={warehouseIn.product}>
+            <div className="line-clamp-1 w-max max-w-[250px] text-default-900">
+              {warehouseIn.product}
+            </div>
+          </CustomTooltip>
+        );
       case "total":
         return <div className="text-default-900">{warehouseIn.total}</div>;
       case "from":
-        return <div className="text-default-900">{warehouseIn.from}</div>;
+        return <div className="w-max text-default-900">{warehouseIn.from}</div>;
       case "created_at":
-        return <div className="text-default-900">{warehouseIn.created_at}</div>;
+        return (
+          <div className="w-max text-default-900">{warehouseIn.created_at}</div>
+        );
       case "action":
         return (
-          <Button
-            variant="bordered"
-            color="default"
-            size="sm"
-            onClick={() => alert(`ID Order: ${warehouseIn.product}`)}
-            className="font-medium"
-          >
-            Detail
-          </Button>
+          <div className="flex max-w-[110px] items-center gap-1">
+            <CustomTooltip content="Edit">
+              <Button isIconOnly variant="light" size="sm">
+                <Pencil weight="bold" size={20} className="text-default-600" />
+              </Button>
+            </CustomTooltip>
+
+            <CustomTooltip content="Detail">
+              <Button isIconOnly variant="light" size="sm">
+                <Eye weight="bold" size={20} className="text-default-600" />
+              </Button>
+            </CustomTooltip>
+
+            <CustomTooltip content="Hapus">
+              <Button isIconOnly variant="light" color="danger" size="sm">
+                <Trash weight="bold" size={20} />
+              </Button>
+            </CustomTooltip>
+          </div>
         );
 
       default:
@@ -71,6 +92,14 @@ export default function WarehousesInPage() {
               placeholder="Cari barang..."
               className="w-full sm:max-w-[500px]"
             />
+
+            <Button
+              variant="solid"
+              color="primary"
+              className="w-full font-medium sm:w-max"
+            >
+              Tambah Barang Masuk
+            </Button>
           </div>
 
           <Table
@@ -79,6 +108,7 @@ export default function WarehousesInPage() {
             color="primary"
             selectionMode="single"
             classNames={customStyleTable}
+            className="scrollbar-hide"
           >
             <TableHeader columns={columns}>
               {(column) => (

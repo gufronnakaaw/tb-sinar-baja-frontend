@@ -73,7 +73,7 @@ export default function MembersLevelsPage() {
   };
   return (
     <Layout title="Level Member">
-      <Container className="grid gap-8">
+      <Container className="gap-8">
         <h4 className="text-lg font-semibold text-default-900">Level Member</h4>
 
         <div className="grid gap-4">

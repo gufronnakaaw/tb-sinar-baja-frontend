@@ -75,12 +75,10 @@ export default function HistoriesPage() {
         </h4>
 
         <div className="grid gap-4">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <InputSearchBar
-              placeholder="Cari transaksi..."
-              className="w-full sm:max-w-[500px]"
-            />
-          </div>
+          <InputSearchBar
+            placeholder="Cari transaksi..."
+            className="w-full sm:max-w-[500px]"
+          />
 
           <Table
             isHeaderSticky
@@ -88,6 +86,7 @@ export default function HistoriesPage() {
             color="primary"
             selectionMode="single"
             classNames={customStyleTable}
+            className="scrollbar-hide"
           >
             <TableHeader columns={columns}>
               {(column) => (
