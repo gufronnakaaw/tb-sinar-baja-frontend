@@ -10,11 +10,12 @@ import {
 } from "@nextui-org/react";
 
 // components
+import InputSearchBar from "@/components/input/InputSearchBar";
+import StatusPayment from "@/components/status/StatusPayment";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 
 // utils
-import InputSearchBar from "@/components/input/InputSearchBar";
 import usePagination from "@/hooks/usepagination";
 import { customStyleTable } from "@/utils/customStyleTable";
 import { formatRupiah } from "@/utils/formatRupiah";
@@ -26,7 +27,6 @@ export default function InvoicesOutPage() {
 
   const columns = [
     { name: "ID Pembayaran", uid: "payments_id", sortable: false },
-    { name: "Tanggal", uid: "payments_date", sortable: true },
     {
       name: "Dari",
       uid: "from",
@@ -34,6 +34,7 @@ export default function InvoicesOutPage() {
     },
     { name: "Status", uid: "status", sortable: true },
     { name: "Total", uid: "total", sortable: true },
+    { name: "Tanggal", uid: "payments_date", sortable: true },
     { name: "Aksi", uid: "action", sortable: false },
   ];
 
@@ -43,22 +44,16 @@ export default function InvoicesOutPage() {
     switch (columnKey) {
       case "payments_id":
         return <div className="text-default-900">{payments.id}</div>;
-      case "payments_date":
-        return <div className="text-default-900">{payments.date}</div>;
       case "from":
-        return <div className="text-default-900">{payments.from}</div>;
+        return <div className="w-max text-default-900">{payments.from}</div>;
       case "status":
-        return (
-          <div
-            className={`${payments.status == "lunas" ? "text-green-500" : "text-red-500"}`}
-          >
-            {payments.status}
-          </div>
-        );
+        return <StatusPayment text={payments.status} />;
       case "total":
         return (
           <div className="text-default-900">{formatRupiah(payments.total)}</div>
         );
+      case "payments_date":
+        return <div className="w-max text-default-900">{payments.date}</div>;
       case "action":
         return (
           <Button

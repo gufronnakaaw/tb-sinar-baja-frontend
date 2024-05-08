@@ -30,8 +30,8 @@ export default function HistoriesPage() {
 
   const columns = [
     { name: "ID Transaksi", uid: "transactions_id", sortable: false },
-    { name: "Tanggal", uid: "transactions_date", sortable: true },
     { name: "Total", uid: "total", sortable: true },
+    { name: "Tanggal", uid: "transactions_date", sortable: true },
     { name: "Aksi", uid: "action", sortable: false },
   ];
 
@@ -41,14 +41,14 @@ export default function HistoriesPage() {
     switch (columnKey) {
       case "transactions_id":
         return <div className="text-default-900">{transaction.id}</div>;
-      case "transactions_date":
-        return <div className="text-default-900">{transaction.date}</div>;
       case "total":
         return (
-          <div className="text-default-900">
+          <div className="w-max text-default-900">
             {formatRupiah(transaction.total)}
           </div>
         );
+      case "transactions_date":
+        return <div className="w-max text-default-900">{transaction.date}</div>;
       case "action":
         return (
           <Button
