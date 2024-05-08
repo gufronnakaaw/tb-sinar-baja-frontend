@@ -16,8 +16,10 @@ import Layout from "@/components/wrapper/DashboardLayout";
 // utils
 import { MembersType, members } from "@/_dummy/members";
 import InputSearchBar from "@/components/input/InputSearchBar";
+import CustomTooltip from "@/components/tooltip";
 import usePagination from "@/hooks/usepagination";
 import { customStyleTable } from "@/utils/customStyleTable";
+import { Eye, Pencil, Trash } from "@phosphor-icons/react";
 
 export default function MembersListsPage() {
   const { page, pages, data, setPage } = usePagination(members, 10);
@@ -37,22 +39,34 @@ export default function MembersListsPage() {
       case "members_id":
         return <div className="text-default-900">{members.id}</div>;
       case "name":
-        return <div className="text-default-900">{members.name}</div>;
+        return <div className="w-max text-default-900">{members.name}</div>;
       case "level":
-        return <div className="text-default-900">{members.level}</div>;
+        return <div className="w-max text-default-900">{members.level}</div>;
       case "created_at":
-        return <div className="text-default-900">{members.created_at}</div>;
+        return (
+          <div className="w-max text-default-900">{members.created_at}</div>
+        );
       case "action":
         return (
-          <Button
-            variant="bordered"
-            color="default"
-            size="sm"
-            onClick={() => alert(`ID Order: ${members.id}`)}
-            className="font-medium"
-          >
-            Detail
-          </Button>
+          <div className="flex max-w-[110px] items-center gap-1">
+            <CustomTooltip content="Edit">
+              <Button isIconOnly variant="light" size="sm">
+                <Pencil weight="bold" size={20} className="text-default-600" />
+              </Button>
+            </CustomTooltip>
+
+            <CustomTooltip content="Detail">
+              <Button isIconOnly variant="light" size="sm">
+                <Eye weight="bold" size={20} className="text-default-600" />
+              </Button>
+            </CustomTooltip>
+
+            <CustomTooltip content="Hapus">
+              <Button isIconOnly variant="light" color="danger" size="sm">
+                <Trash weight="bold" size={20} />
+              </Button>
+            </CustomTooltip>
+          </div>
         );
 
       default:
@@ -61,7 +75,7 @@ export default function MembersListsPage() {
   };
   return (
     <Layout title="Daftar Member">
-      <Container className="gap-8">
+      <Container className="grid gap-8">
         <h4 className="text-lg font-semibold text-default-900">
           Daftar Member
         </h4>
@@ -88,6 +102,7 @@ export default function MembersListsPage() {
             color="primary"
             selectionMode="single"
             classNames={customStyleTable}
+            className="scrollbar-hide"
           >
             <TableHeader columns={columns}>
               {(column) => (

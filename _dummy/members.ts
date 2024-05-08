@@ -6,14 +6,14 @@ export type MembersLevelsType = {
 
 export const memberLevels: MembersLevelsType[] = [
   {
-    id: "LEVEL020220241",
+    id: "LEVEL100520241",
     name: "Level 1",
     created_at: "10 Mei 2024 20:00",
   },
   {
-    id: "LEVEL020220241",
+    id: "LEVEL070520241",
     name: "Level 2",
-    created_at: "10 Mei 2024 20:00",
+    created_at: "7 Mei 2024 20:00",
   },
 ];
 
