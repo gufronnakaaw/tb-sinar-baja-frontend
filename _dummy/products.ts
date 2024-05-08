@@ -13,7 +13,7 @@ export type ProductsType = {
 export const products: ProductsType[] = [
   {
     id: "PRODUCT01",
-    nama: "Pipa UPVC Alderon AW 1",
+    nama: "Pipa UPVC Alderon AW 1 Pipa UPVC Alderon AW 1",
     stok: 100,
     kategori: "Paralon - Pipa Bulat UPVC",
     harga_umum: 35000,

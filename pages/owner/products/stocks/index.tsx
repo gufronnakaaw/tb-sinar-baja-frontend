@@ -10,14 +10,15 @@ import {
 } from "@nextui-org/react";
 
 // components
+import InputSearchBar from "@/components/input/InputSearchBar";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 
 // utils
-import { ProductsType, products } from "@/_dummy/products";
-import InputSearchBar from "@/components/input/InputSearchBar";
 import usePagination from "@/hooks/usepagination";
 import { customStyleTable } from "@/utils/customStyleTable";
+
+import { ProductsType, products } from "@/_dummy/products";
 
 export default function ProductsStocksPage() {
   const { page, pages, data, setPage } = usePagination(products, 10);
@@ -37,7 +38,11 @@ export default function ProductsStocksPage() {
       case "products_id":
         return <div className="text-default-900">{products.id}</div>;
       case "nama":
-        return <div className="text-default-900">{products.nama}</div>;
+        return (
+          <div className="line-clamp-1 w-max max-w-[250px] text-default-900">
+            {products.nama}
+          </div>
+        );
       case "kategori":
         return <div className="text-default-900">{products.kategori}</div>;
       case "stok":
@@ -62,16 +67,14 @@ export default function ProductsStocksPage() {
 
   return (
     <Layout title="Stok Produk">
-      <Container className="gap-8">
+      <Container className="grid gap-8">
         <h4 className="text-lg font-semibold text-default-900">Stok Produk</h4>
 
         <div className="grid gap-4">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <InputSearchBar
-              placeholder="Cari produk..."
-              className="w-full sm:max-w-[500px]"
-            />
-          </div>
+          <InputSearchBar
+            placeholder="Cari produk..."
+            className="w-full sm:max-w-[500px]"
+          />
 
           <Table
             isHeaderSticky
@@ -79,6 +82,7 @@ export default function ProductsStocksPage() {
             color="primary"
             selectionMode="single"
             classNames={customStyleTable}
+            className="scrollbar-hide"
           >
             <TableHeader columns={columns}>
               {(column) => (

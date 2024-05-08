@@ -29,7 +29,7 @@ export default function DashboardLayout({
         <div className="grid w-full">
           <Navbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-          <div className="overflow-y-scroll">
+          <div className="overflow-y-scroll scrollbar-hide">
             <div className="mx-auto w-full max-w-[1200px] p-6">{children}</div>
 
             <Footer />

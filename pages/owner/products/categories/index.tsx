@@ -8,13 +8,15 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
+import { Eye, Pencil, Trash } from "@phosphor-icons/react";
 
 // components
+import InputSearchBar from "@/components/input/InputSearchBar";
+import CustomTooltip from "@/components/tooltip";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 
 // utils
-import InputSearchBar from "@/components/input/InputSearchBar";
 import usePagination from "@/hooks/usepagination";
 import { customStyleTable } from "@/utils/customStyleTable";
 
@@ -43,20 +45,32 @@ export default function ProductsCategoriesPage() {
       case "code":
         return <div className="text-default-900">{categories.code}</div>;
       case "name":
-        return <div className="text-default-900">{categories.name}</div>;
+        return <div className="w-max text-default-900">{categories.name}</div>;
       case "created_at":
-        return <div className="text-default-900">{categories.created_at}</div>;
+        return (
+          <div className="w-max text-default-900">{categories.created_at}</div>
+        );
       case "action":
         return (
-          <Button
-            variant="bordered"
-            color="default"
-            size="sm"
-            onClick={() => alert(`ID Order: ${categories.code}`)}
-            className="font-medium"
-          >
-            Detail
-          </Button>
+          <div className="flex max-w-[110px] items-center gap-1">
+            <CustomTooltip content="Edit">
+              <Button isIconOnly variant="light" size="sm">
+                <Pencil weight="bold" size={20} className="text-default-600" />
+              </Button>
+            </CustomTooltip>
+
+            <CustomTooltip content="Detail">
+              <Button isIconOnly variant="light" size="sm">
+                <Eye weight="bold" size={20} className="text-default-600" />
+              </Button>
+            </CustomTooltip>
+
+            <CustomTooltip content="Hapus">
+              <Button isIconOnly variant="light" color="danger" size="sm">
+                <Trash weight="bold" size={20} />
+              </Button>
+            </CustomTooltip>
+          </div>
         );
 
       default:
@@ -84,22 +98,36 @@ export default function ProductsCategoriesPage() {
       case "category":
         return <div className="text-default-900">{subcategories.category}</div>;
       case "name":
-        return <div className="text-default-900">{subcategories.name}</div>;
+        return (
+          <div className="w-max text-default-900">{subcategories.name}</div>
+        );
       case "created_at":
         return (
-          <div className="text-default-900">{subcategories.created_at}</div>
+          <div className="w-max text-default-900">
+            {subcategories.created_at}
+          </div>
         );
       case "action":
         return (
-          <Button
-            variant="bordered"
-            color="default"
-            size="sm"
-            onClick={() => alert(`ID Order: ${subcategories.code}`)}
-            className="font-medium"
-          >
-            Detail
-          </Button>
+          <div className="flex max-w-[110px] items-center gap-1">
+            <CustomTooltip content="Edit">
+              <Button isIconOnly variant="light" size="sm">
+                <Pencil weight="bold" size={20} className="text-default-600" />
+              </Button>
+            </CustomTooltip>
+
+            <CustomTooltip content="Detail">
+              <Button isIconOnly variant="light" size="sm">
+                <Eye weight="bold" size={20} className="text-default-600" />
+              </Button>
+            </CustomTooltip>
+
+            <CustomTooltip content="Hapus">
+              <Button isIconOnly variant="light" color="danger" size="sm">
+                <Trash weight="bold" size={20} />
+              </Button>
+            </CustomTooltip>
+          </div>
         );
 
       default:
@@ -109,117 +137,123 @@ export default function ProductsCategoriesPage() {
 
   return (
     <Layout title="Produk Kategori">
-      <Container className="gap-8">
-        <h4 className="text-lg font-semibold text-default-900">
-          Kategori Produk
-        </h4>
+      <Container className="grid gap-20">
+        <div className="grid gap-8">
+          <h4 className="text-lg font-semibold text-default-900">
+            Kategori Produk
+          </h4>
 
-        <div className="grid gap-4">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <InputSearchBar
-              placeholder="Cari Kategori..."
-              className="w-full sm:max-w-[500px]"
-            />
+          <div className="grid gap-4">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <InputSearchBar
+                placeholder="Cari Kategori..."
+                className="w-full sm:max-w-[500px]"
+              />
 
-            <Button
-              variant="solid"
+              <Button
+                variant="solid"
+                color="primary"
+                className="w-full font-medium sm:w-max"
+              >
+                Buat Kategori
+              </Button>
+            </div>
+
+            <Table
+              isHeaderSticky
+              aria-label="payments table"
               color="primary"
-              className="w-full font-medium sm:w-max"
+              selectionMode="single"
+              classNames={customStyleTable}
+              className="scrollbar-hide"
             >
-              Buat Kategori
-            </Button>
+              <TableHeader columns={columns}>
+                {(column) => (
+                  <TableColumn key={column.uid}>{column.name}</TableColumn>
+                )}
+              </TableHeader>
+
+              <TableBody items={data}>
+                {(categories) => (
+                  <TableRow key={categories.code}>
+                    {(columnKey) => (
+                      <TableCell>{renderCell(categories, columnKey)}</TableCell>
+                    )}
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+
+            <Pagination
+              isCompact
+              showControls
+              color="primary"
+              page={page}
+              total={pages}
+              onChange={setPage}
+              className="justify-self-center"
+            />
           </div>
-
-          <Table
-            isHeaderSticky
-            aria-label="payments table"
-            color="primary"
-            selectionMode="single"
-            classNames={customStyleTable}
-          >
-            <TableHeader columns={columns}>
-              {(column) => (
-                <TableColumn key={column.uid}>{column.name}</TableColumn>
-              )}
-            </TableHeader>
-
-            <TableBody items={data}>
-              {(categories) => (
-                <TableRow key={categories.code}>
-                  {(columnKey) => (
-                    <TableCell>{renderCell(categories, columnKey)}</TableCell>
-                  )}
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-
-          <Pagination
-            isCompact
-            showControls
-            color="primary"
-            page={page}
-            total={pages}
-            onChange={setPage}
-            className="justify-self-center"
-          />
         </div>
 
-        <h4 className="text-lg font-semibold text-default-900">
-          Sub Kategori Produk
-        </h4>
+        <div className="grid gap-8">
+          <h4 className="text-lg font-semibold text-default-900">
+            Sub Kategori Produk
+          </h4>
 
-        <div className="grid gap-4">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <InputSearchBar
-              placeholder="Cari sub Kategori..."
-              className="w-full sm:max-w-[500px]"
-            />
+          <div className="grid gap-4">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <InputSearchBar
+                placeholder="Cari sub Kategori..."
+                className="w-full sm:max-w-[500px]"
+              />
 
-            <Button
-              variant="solid"
+              <Button
+                variant="solid"
+                color="primary"
+                className="w-full font-medium sm:w-max"
+              >
+                Buat Sub Kategori
+              </Button>
+            </div>
+
+            <Table
+              isHeaderSticky
+              aria-label="payments table"
               color="primary"
-              className="w-full font-medium sm:w-max"
+              selectionMode="single"
+              classNames={customStyleTable}
+              className="scrollbar-hide"
             >
-              Buat Sub Kategori
-            </Button>
+              <TableHeader columns={subColumns}>
+                {(column) => (
+                  <TableColumn key={column.uid}>{column.name}</TableColumn>
+                )}
+              </TableHeader>
+
+              <TableBody items={subCategories.data}>
+                {(subcategories) => (
+                  <TableRow key={subcategories.code}>
+                    {(columnKey) => (
+                      <TableCell>
+                        {renderSubCell(subcategories, columnKey)}
+                      </TableCell>
+                    )}
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+
+            <Pagination
+              isCompact
+              showControls
+              color="primary"
+              page={page}
+              total={pages}
+              onChange={setPage}
+              className="justify-self-center"
+            />
           </div>
-
-          <Table
-            isHeaderSticky
-            aria-label="payments table"
-            color="primary"
-            selectionMode="single"
-            classNames={customStyleTable}
-          >
-            <TableHeader columns={subColumns}>
-              {(column) => (
-                <TableColumn key={column.uid}>{column.name}</TableColumn>
-              )}
-            </TableHeader>
-
-            <TableBody items={subCategories.data}>
-              {(subcategories) => (
-                <TableRow key={subcategories.code}>
-                  {(columnKey) => (
-                    <TableCell>
-                      {renderCell(subcategories, columnKey)}
-                    </TableCell>
-                  )}
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-
-          <Pagination
-            isCompact
-            showControls
-            color="primary"
-            page={page}
-            total={pages}
-            onChange={setPage}
-            className="justify-self-center"
-          />
         </div>
       </Container>
     </Layout>
