@@ -45,7 +45,7 @@ export default function TransactionPage() {
       case "transactions_id":
         return <div className="text-default-900">{transaction.id}</div>;
       case "transactions_date":
-        return <div className="text-default-900">{transaction.date}</div>;
+        return <div className="w-max text-default-900">{transaction.date}</div>;
       case "total":
         return (
           <div className="text-default-900">
@@ -103,6 +103,7 @@ export default function TransactionPage() {
               color="danger"
               selectionMode="single"
               classNames={customStyleTable}
+              className="scrollbar-hide"
             >
               <TableHeader columns={columns}>
                 {(column) => (

@@ -48,7 +48,7 @@ export default function SellingPage() {
 
         <div className="grid h-[calc(100vh-64px)] grid-cols-[480px_auto_1fr] gap-4 overflow-hidden">
           {/* ==== left content ==== */}
-          <div className="flex flex-col gap-6 overflow-scroll p-4">
+          <div className="flex flex-col gap-6 overflow-scroll p-4 scrollbar-hide">
             <div className="flex items-center gap-2">
               <InputSearchBar
                 placeholder="Cari produk/barang..."
@@ -63,7 +63,7 @@ export default function SellingPage() {
               </Button>
             </div>
 
-            <div className="grid gap-4 overflow-y-scroll">
+            <div className="grid gap-4 overflow-y-scroll scrollbar-hide">
               {/* ==== card here ==== */}
               <div className="grid gap-[20px] rounded-xl border border-default-300 p-4 transition hover:border-rose-500">
                 <div className="grid gap-1">
@@ -110,7 +110,7 @@ export default function SellingPage() {
           <div className="h-full w-[1px] bg-gray-300" />
 
           {/* ==== right content ==== */}
-          <div className="grid grid-rows-[auto_1fr_auto] gap-4 overflow-scroll p-4">
+          <div className="grid grid-rows-[auto_1fr_auto] gap-4 overflow-scroll p-4 scrollbar-hide">
             <div className="sticky top-0 grid gap-4 bg-white">
               <h4 className="text-lg font-semibold text-default-900">
                 Daftar Pesanan
@@ -129,7 +129,7 @@ export default function SellingPage() {
               </div>
             </div>
 
-            <div className="overflow-y-scroll">
+            <div className="overflow-y-scroll scrollbar-hide">
               <div className="grid gap-4">
                 {/* ==== card here ==== */}
                 <div className="grid grid-cols-[1fr_160px_1fr] items-center gap-16">
@@ -142,7 +142,7 @@ export default function SellingPage() {
 
                   <div className="flex items-center gap-4 text-sm font-semibold text-default-600">
                     <Button isIconOnly color="danger" variant="flat" size="sm">
-                      <Plus weight="bold" size={16} />
+                      <Minus weight="bold" size={16} />
                     </Button>
                     <Input
                       type="number"
@@ -152,7 +152,7 @@ export default function SellingPage() {
                       labelPlacement="outside"
                     />
                     <Button isIconOnly color="danger" variant="flat" size="sm">
-                      <Minus weight="bold" size={16} />
+                      <Plus weight="bold" size={16} />
                     </Button>
                   </div>
 
