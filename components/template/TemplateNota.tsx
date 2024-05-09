@@ -140,6 +140,7 @@ export default function TemplateNota() {
           aria-label="nota table"
           selectionMode="single"
           classNames={customStyleTable}
+          className="scrollbar-hide"
         >
           <TableHeader columns={columns}>
             {(column) => (
