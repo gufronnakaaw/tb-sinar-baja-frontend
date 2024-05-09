@@ -89,7 +89,7 @@ export default function SellingPage() {
                         Lokasi:
                       </p>
                       <h4 className="line-clamp-1 font-semibold capitalize text-default-900">
-                        Gedung A, Rak 12
+                        Gudang A, Rak 12
                       </h4>
                     </div>
                   </div>

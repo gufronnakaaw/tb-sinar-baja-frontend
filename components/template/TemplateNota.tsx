@@ -157,7 +157,6 @@ export default function TemplateNota() {
         <Table
           isHeaderSticky
           aria-label="nota table"
-          selectionMode="single"
           classNames={customStyleTable}
           className="scrollbar-hide"
         >

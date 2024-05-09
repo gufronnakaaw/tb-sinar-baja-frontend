@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@nextui-org/react";
 import { Eye, Pencil, Trash } from "@phosphor-icons/react";
+import { useRouter } from "next/router";
 
 // components
 import InputSearchBar from "@/components/input/InputSearchBar";
@@ -23,6 +24,7 @@ import { customStyleTable } from "@/utils/customStyleTable";
 import { WarehouseDocuments, warehouseDocuments } from "@/_dummy/warehouses";
 
 export default function WarehousesDocumentsPage() {
+  const router = useRouter();
   const { page, pages, data, setPage } = usePagination(warehouseDocuments, 10);
 
   const columns = [
@@ -58,7 +60,16 @@ export default function WarehousesDocumentsPage() {
             </CustomTooltip>
 
             <CustomTooltip content="Detail">
-              <Button isIconOnly variant="light" size="sm">
+              <Button
+                isIconOnly
+                variant="light"
+                size="sm"
+                onClick={() =>
+                  router.push(
+                    `/owner/warehouses/documents/${warehouseDocuments.invoice}`,
+                  )
+                }
+              >
                 <Eye weight="bold" size={20} className="text-default-600" />
               </Button>
             </CustomTooltip>
