@@ -56,15 +56,15 @@ export default function WarehousesInPage() {
       case "action":
         return (
           <div className="flex max-w-[110px] items-center gap-1">
-            <CustomTooltip content="Edit">
-              <Button isIconOnly variant="light" size="sm">
-                <Pencil weight="bold" size={20} className="text-default-600" />
-              </Button>
-            </CustomTooltip>
-
             <CustomTooltip content="Detail">
               <Button isIconOnly variant="light" size="sm">
                 <Eye weight="bold" size={20} className="text-default-600" />
+              </Button>
+            </CustomTooltip>
+
+            <CustomTooltip content="Edit">
+              <Button isIconOnly variant="light" size="sm">
+                <Pencil weight="bold" size={20} className="text-default-600" />
               </Button>
             </CustomTooltip>
 
