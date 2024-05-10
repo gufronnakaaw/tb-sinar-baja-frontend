@@ -16,7 +16,8 @@
     "nextjs-progressbar": "^0.0.16",
     "react": "^18",
     "react-dom": "^18",
-    "react-to-print": "^2.15.1"
+    "react-to-print": "^2.15.1",
+    "use-debounce": "^10.0.0"
   },
   "devDependencies": {
     "@types/node": "^20",
