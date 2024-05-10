@@ -5,7 +5,7 @@ import {
   Circle,
   ClipboardText,
   ClockClockwise,
-  ClockCounterClockwise,
+  Eye,
   House,
   Invoice,
   ListBullets,
@@ -18,10 +18,10 @@ import {
 } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 // components
 import ButtonSidebar from "@/components/button/ButtonSidebar";
-import { useEffect, useState } from "react";
 
 interface SidebarProps {
   sidebarOpen?: boolean;
@@ -250,7 +250,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                   <ButtonSidebar
                     label="Riwayat"
                     path="/owner/histories"
-                    icon={<ClockCounterClockwise weight="bold" size={20} />}
+                    icon={<Eye weight="bold" size={20} />}
                   />
                 </div>
               </div>
@@ -503,7 +503,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                   <ButtonSidebar
                     label="Riwayat"
                     path="/admin/histories"
-                    icon={<ClockCounterClockwise weight="bold" size={20} />}
+                    icon={<Eye weight="bold" size={20} />}
                   />
                 </div>
               </div>

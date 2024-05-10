@@ -76,9 +76,9 @@ export default function InvoicesInPage() {
       case "action":
         return (
           <div className="flex items-center gap-1">
-            <CustomTooltip content="Edit">
+            <CustomTooltip content="Cetak">
               <Button isIconOnly variant="light" size="sm">
-                <Pencil weight="bold" size={20} className="text-default-600" />
+                <Printer weight="bold" size={20} className="text-default-600" />
               </Button>
             </CustomTooltip>
 
@@ -88,9 +88,9 @@ export default function InvoicesInPage() {
               </Button>
             </CustomTooltip>
 
-            <CustomTooltip content="Cetak">
+            <CustomTooltip content="Edit">
               <Button isIconOnly variant="light" size="sm">
-                <Printer weight="bold" size={20} className="text-default-600" />
+                <Pencil weight="bold" size={20} className="text-default-600" />
               </Button>
             </CustomTooltip>
 
