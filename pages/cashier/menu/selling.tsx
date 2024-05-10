@@ -4,15 +4,103 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 
 // components
+import SellingProductCard from "@/components/SellingProductCard";
 import InputSearchBar from "@/components/input/InputSearchBar";
 import PopupContinuePayment from "@/components/popup/popupContinuePayment";
-import CustomTooltip from "@/components/tooltip";
+import { TemplateNota } from "@/components/template/TemplateNota";
+import { useRef, useState } from "react";
+import { useReactToPrint } from "react-to-print";
+import { useDebounce } from "use-debounce";
+
+const produk = [
+  {
+    kode_item: "111",
+    nama_produk: "Test 1",
+    harga: 10000,
+    stok: 100,
+    gudang: "Gudang A",
+    rak: "Rak 10",
+  },
+  {
+    kode_item: "222",
+    nama_produk: "Test 2",
+    harga: 103000,
+    stok: 15,
+    gudang: "Gudang B",
+    rak: "Rak 12",
+  },
+];
 
 export default function SellingPage() {
+  const [telp, setTelp] = useState("-");
+  const [penerima, setPenerima] = useState("Umum");
+  const [ket, setKet] = useState("-");
+  const [alamat, setAlamat] = useState("-");
+  const [ongkir, setOngkir] = useState(0);
+  const [pengiriman, setPengiriman] = useState("-");
+  const [tipe, setTipe] = useState("nota");
+
+  const [totalBelanja, setTotalBelanja] = useState(0);
+  const [pajak, setPajak] = useState(0);
+  const [totalPajak, setTotalPajak] = useState(0);
+  const [totalPembayaran, setTotalPembayaran] = useState(0);
+  const [tunai, setTunai] = useState(0);
+  const [kembali, setKembali] = useState(0);
+
   const router = useRouter();
+  const sellingRef = useRef(null);
+  const handlePrint = useReactToPrint({
+    content: () => sellingRef.current,
+  });
+
+  const [search, setSearch] = useState("");
+  const [searchValue] = useDebounce(search, 1000);
+
+  const popupProps = {
+    setTelp,
+    setPenerima,
+    setKet,
+    setAlamat,
+    setOngkir,
+    setPengiriman,
+    setTipe,
+    setTunai,
+    setTotalBelanja,
+    setTotalPembayaran,
+    setKembali,
+    setPajak,
+    setTotalPajak,
+    totalPajak,
+    pajak,
+    tunai,
+    totalBelanja,
+    totalPembayaran,
+    kembali,
+    ongkir,
+    tipe,
+    handlePrint,
+  };
+
+  const notaProps = {
+    ket,
+    penerima,
+    telp,
+    pengiriman,
+    alamat,
+    totalBelanja,
+    ongkir,
+    totalPembayaran,
+  };
+
+  console.log(searchValue);
 
   return (
     <>
+      <div className="hidden">
+        {tipe == "nota" ? (
+          <TemplateNota {...notaProps} ref={sellingRef} />
+        ) : null}
+      </div>
       <Head>
         <title>Halaman Penjualan</title>
       </Head>
@@ -32,7 +120,7 @@ export default function SellingPage() {
 
           <Chip
             variant="flat"
-            color="default"
+            color="success"
             startContent={
               <Circle weight="fill" size={8} className="animate-ping" />
             }
@@ -42,7 +130,7 @@ export default function SellingPage() {
             }}
             className="gap-1"
           >
-            Kasir Onlne: Nanang
+            Kasir Online: Ucup Sitorus
           </Chip>
         </div>
 
@@ -51,59 +139,20 @@ export default function SellingPage() {
           <div className="flex flex-col gap-6 overflow-scroll p-4 scrollbar-hide">
             <div className="flex items-center gap-2">
               <InputSearchBar
-                placeholder="Cari produk/barang..."
+                placeholder="Ketik kode produk/nama produk..."
                 className="sticky left-0 top-0"
+                onKeyUp={(e) => {
+                  setTimeout(() => {
+                    setSearch(e.target.value);
+                  }, 500);
+                }}
               />
-
-              <Button
-                variant="solid"
-                className="bg-rose-500 font-semibold text-white"
-              >
-                Cari
-              </Button>
             </div>
 
             <div className="grid gap-4 overflow-y-scroll scrollbar-hide">
-              {/* ==== card here ==== */}
-              <div className="grid gap-[20px] rounded-xl border border-default-300 p-4 transition hover:border-rose-500">
-                <div className="grid gap-1">
-                  <CustomTooltip content="C-truss Mini SNI tbl KD 10">
-                    <h1 className="line-clamp-2 text-lg font-bold text-default-900">
-                      C-truss Mini SNI tbl KD 10
-                    </h1>
-                  </CustomTooltip>
-                  <h1 className="font-semibold text-rose-500">Rp 93.000</h1>
-                </div>
-
-                <div className="grid grid-cols-[1fr_100px] items-end gap-2">
-                  <div className="flex items-center gap-6">
-                    <div className="grid">
-                      <p className="text-[12px] font-medium text-default-600">
-                        Stok:
-                      </p>
-                      <h4 className="font-semibold text-default-900">186</h4>
-                    </div>
-
-                    <div className="grid">
-                      <p className="text-[12px] font-medium text-default-600">
-                        Lokasi:
-                      </p>
-                      <h4 className="line-clamp-1 font-semibold capitalize text-default-900">
-                        Gudang A, Rak 12
-                      </h4>
-                    </div>
-                  </div>
-
-                  <Button
-                    variant="flat"
-                    color="danger"
-                    size="sm"
-                    className="w-max font-medium"
-                  >
-                    Tambahkan
-                  </Button>
-                </div>
-              </div>
+              {produk.map((el) => {
+                return <SellingProductCard key={el.kode_item} {...el} />;
+              })}
             </div>
           </div>
 
@@ -116,7 +165,7 @@ export default function SellingPage() {
                 Daftar Pesanan
               </h4>
 
-              <div className="grid grid-cols-[1fr_160px_1fr] items-center gap-16 border-b border-gray-300 pb-2">
+              <div className="grid grid-cols-4 items-center gap-16 border-b border-gray-300 pb-2">
                 <div className="text-sm font-semibold text-default-600">
                   Item
                 </div>
@@ -126,13 +175,16 @@ export default function SellingPage() {
                 <div className="text-sm font-semibold text-default-600">
                   Harga
                 </div>
+                <div className="text-sm font-semibold text-default-600">
+                  Sub Total
+                </div>
               </div>
             </div>
 
             <div className="overflow-y-scroll scrollbar-hide">
               <div className="grid gap-4">
                 {/* ==== card here ==== */}
-                <div className="grid grid-cols-[1fr_160px_1fr] items-center gap-16">
+                <div className="grid grid-cols-4 items-center gap-16">
                   <div className="grid font-semibold text-default-600">
                     <h4 className="line-clamp-2 font-medium text-default-900">
                       C-truss Mini SNI tbl KD 10
@@ -157,19 +209,20 @@ export default function SellingPage() {
                   </div>
 
                   <div className="font-bold text-default-900">Rp 93.000</div>
+                  <div className="font-bold text-default-900">Rp 200.000</div>
                 </div>
               </div>
             </div>
 
             <div className="sticky bottom-0 grid grid-cols-2 items-center gap-16 border-t border-gray-300 bg-white pt-8">
               <div className="flex items-center justify-between gap-2">
-                <p className="font-medium text-gray-600">Total Harga :</p>
+                <p className="font-medium text-gray-600">Total Belanja :</p>
                 <h5 className="text-[28px] font-semibold text-rose-500">
                   Rp 417.000
                 </h5>
               </div>
 
-              <PopupContinuePayment />
+              <PopupContinuePayment {...popupProps} />
             </div>
           </div>
         </div>

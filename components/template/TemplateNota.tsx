@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import React from "react";
+import { forwardRef } from "react";
 
 // utils
 import { customStyleTable } from "@/utils/customStyleTable";
@@ -14,64 +14,75 @@ import { formatRupiah } from "@/utils/formatRupiah";
 
 type NotaProps = {
   id: number;
-  product_name: string;
-  amount: number | string;
-  price: number;
-  total: number;
+  nama_produk: string;
+  jumlah: number | string;
+  harga: number;
+  subtotal: number;
+};
+
+type NotaComponentProps = {
+  ket: string;
+  penerima: string;
+  telp: string;
+  pengiriman: string;
+  alamat: string;
+  totalBelanja: number;
+  ongkir: number;
+  totalPembayaran: number;
 };
 
 // dummy data
 const transactions: NotaProps[] = [
   {
     id: 1,
-    product_name: "C-truss Mini SNI tbl KD 10",
-    amount: "3 btg",
-    price: 93577,
-    total: 280750,
+    nama_produk: "C-truss Mini SNI tbl KD 10",
+    jumlah: "3 btg",
+    harga: 93577,
+    subtotal: 280750,
   },
   {
     id: 2,
-    product_name: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-    amount: "6 lbr",
-    price: 110372,
-    total: 662250,
+    nama_produk: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    jumlah: "6 lbr",
+    harga: 110372,
+    subtotal: 662250,
   },
 ];
 
-export default function TemplateNota() {
+const Nota = (props: NotaComponentProps, ref: any) => {
   const columns = [
-    { name: "Jumlah", uid: "amount" },
-    { name: "Nama Produk", uid: "product_name" },
-    { name: "Harga", uid: "price" },
-    { name: "Total", uid: "total" },
+    { name: "Jumlah", uid: "jumlah" },
+    { name: "Nama Produk", uid: "nama_produk" },
+    { name: "Harga", uid: "harga" },
+    { name: "Sub Total", uid: "subtotal" },
   ];
 
   const renderCell = (transaction: NotaProps, columnKey: React.Key) => {
     const cellValue = transaction[columnKey as keyof NotaProps];
 
     switch (columnKey) {
-      case "amount":
+      case "jumlah":
         return (
           <div className="text-[10px] font-medium text-default-900">
-            {transaction.amount}
+            {transaction.jumlah}
           </div>
         );
-      case "product_name":
+      case "nama_produk":
         return (
           <div className="max-w-[300px] text-[10px] font-medium text-default-900">
-            {transaction.product_name}
+            {transaction.nama_produk}
           </div>
         );
-      case "price":
+      case "harga":
         return (
           <div className="text-[10px] font-medium text-default-900">
-            {formatRupiah(transaction.price)}
+            {formatRupiah(transaction.harga)}
           </div>
         );
-      case "total":
+      case "subtotal":
         return (
           <div className="text-[10px] font-medium text-default-900">
-            {formatRupiah(transaction.total)}
+            {formatRupiah(transaction.subtotal)}
           </div>
         );
 
@@ -81,7 +92,7 @@ export default function TemplateNota() {
   };
 
   return (
-    <div className="grid gap-8 pt-8">
+    <div className="container grid gap-8 pt-8" ref={ref}>
       <div className="grid grid-cols-3 gap-4">
         <div className="grid gap-1">
           <h1 className="font-bold text-default-900">TB. Sinar Baja</h1>
@@ -104,22 +115,19 @@ export default function TemplateNota() {
           <div className="grid grid-cols-[30px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="font-medium">No</div>
             <div className="font-medium">:</div>
-            <p className="font-medium">SB.816824676735</p>
+            <p className="font-medium">TX1005202401</p>
           </div>
 
           <div className="grid grid-cols-[30px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="font-medium">Tgl</div>
             <div className="font-medium">:</div>
-            <p className="font-medium">3 Mei 2024</p>
+            <p className="font-medium">10 Mei 2024</p>
           </div>
 
           <div className="grid grid-cols-[30px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="font-medium">Ket</div>
             <div className="font-medium">:</div>
-            <p className="font-medium">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse,
-              est?
-            </p>
+            <p className="font-medium">{props.ket}</p>
           </div>
         </div>
 
@@ -127,28 +135,25 @@ export default function TemplateNota() {
           <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="font-medium">Penerima</div>
             <div className="font-medium">:</div>
-            <p className="font-medium">Umum</p>
+            <p className="font-medium">{props.penerima}</p>
           </div>
 
           <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="font-medium">No. Telp</div>
             <div className="font-medium">:</div>
-            <p className="font-medium">0891234567890</p>
+            <p className="font-medium">{props.telp}</p>
           </div>
 
           <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="font-medium">Pengiriman</div>
             <div className="font-medium">:</div>
-            <p className="font-medium">Pagi</p>
+            <p className="font-medium">{props.pengiriman}</p>
           </div>
 
           <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="font-medium">Alamat</div>
             <div className="font-medium">:</div>
-            <p className="font-medium">
-              TB. Sinar Baja - Jl. Letjend Sutoyo No.67, Burengan, Kec.
-              Pesantren, Kabupaten Kediri, Jawa Timur 64131
-            </p>
+            <p className="font-medium">{props.alamat}</p>
           </div>
         </div>
       </div>
@@ -181,22 +186,24 @@ export default function TemplateNota() {
           <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="w-24 font-medium">Total</div>
             <div className="font-medium">:</div>
-            <p className="font-medium">943.000</p>
+            <p className="font-medium">{formatRupiah(props.totalBelanja)}</p>
           </div>
 
           <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="w-24 font-medium">Ongkir</div>
             <div className="font-medium">:</div>
-            <p className="font-medium">25.000</p>
+            <p className="font-medium">{formatRupiah(props.ongkir)}</p>
           </div>
 
           <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="w-24 font-medium">Tagihan</div>
             <div className="font-medium">:</div>
-            <p className="font-medium">968.000</p>
+            <p className="font-medium">{formatRupiah(props.totalPembayaran)}</p>
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export const TemplateNota = forwardRef(Nota);
