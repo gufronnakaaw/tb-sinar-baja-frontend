@@ -5,7 +5,7 @@ import { Button } from "@nextui-org/react";
 type CardSellingProductProps = {
   kode_item?: string;
   nama_produk: string;
-  harga: number;
+  harga_4: number;
   gudang: string;
   rak: string;
   stok: number;
@@ -13,7 +13,7 @@ type CardSellingProductProps = {
 
 export default function CardSellingProduct({
   nama_produk,
-  harga,
+  harga_4,
   gudang,
   rak,
   stok,
@@ -26,7 +26,7 @@ export default function CardSellingProduct({
             {nama_produk}
           </h1>
         </CustomTooltip>
-        <h1 className="font-semibold text-rose-500">{formatRupiah(harga)}</h1>
+        <h1 className="font-semibold text-rose-500">{formatRupiah(harga_4)}</h1>
       </div>
 
       <div className="grid grid-cols-[1fr_100px] items-end gap-2">

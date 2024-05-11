@@ -8,28 +8,19 @@ import CardSellingProduct from "@/components/card/CardSellingProduct";
 import InputSearchBar from "@/components/input/InputSearchBar";
 import PopupContinuePayment from "@/components/popup/popupContinuePayment";
 import { TemplateNota } from "@/components/template/TemplateNota";
-import { useRef, useState } from "react";
+import { fetcher } from "@/utils/fetcher";
+import { useEffect, useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import { useDebounce } from "use-debounce";
 
-const produk = [
-  {
-    kode_item: "111",
-    nama_produk: "Test 1",
-    harga: 10000,
-    stok: 100,
-    gudang: "Gudang A",
-    rak: "Rak 10",
-  },
-  {
-    kode_item: "222",
-    nama_produk: "Test 2",
-    harga: 103000,
-    stok: 15,
-    gudang: "Gudang B",
-    rak: "Rak 12",
-  },
-];
+type ProdukType = {
+  kode_item?: string;
+  nama_produk: string;
+  harga_4: number;
+  gudang: string;
+  rak: string;
+  stok: number;
+};
 
 export default function SellingPage() {
   const [telp, setTelp] = useState("-");
@@ -46,6 +37,7 @@ export default function SellingPage() {
   const [totalPembayaran, setTotalPembayaran] = useState(0);
   const [tunai, setTunai] = useState(0);
   const [kembali, setKembali] = useState(0);
+  const [produk, setProduk] = useState<ProdukType[]>([]);
 
   const router = useRouter();
   const sellingRef = useRef(null);
@@ -54,7 +46,7 @@ export default function SellingPage() {
   });
 
   const [search, setSearch] = useState("");
-  const [searchValue] = useDebounce(search, 1000);
+  const [searchValue] = useDebounce(search, 800);
 
   const popupProps = {
     setTelp,
@@ -92,7 +84,26 @@ export default function SellingPage() {
     totalPembayaran,
   };
 
-  console.log(searchValue);
+  useEffect(() => {
+    if (searchValue != "") {
+      getProduk(searchValue);
+    } else {
+      setProduk([]);
+    }
+
+    async function getProduk(search: string) {
+      try {
+        const data = await fetcher({
+          url: "/produk?search=" + encodeURI(search),
+          method: "GET",
+        });
+
+        setProduk(data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [searchValue]);
 
   return (
     <>
@@ -141,16 +152,12 @@ export default function SellingPage() {
             <InputSearchBar
               placeholder="Ketik kode produk/nama produk..."
               className="sticky left-0 top-0"
-              onKeyUp={(e) => {
-                setTimeout(() => {
-                  setSearch(e.target.value);
-                }, 500);
-              }}
+              onChange={(e) => setSearch(e.target.value)}
             />
 
             <div className="grid gap-4 overflow-y-scroll scrollbar-hide">
-              {produk.map((el) => {
-                return <CardSellingProduct key={el.kode_item} {...el} />;
+              {produk.map((item) => {
+                return <CardSellingProduct key={item.kode_item} {...item} />;
               })}
             </div>
           </div>
