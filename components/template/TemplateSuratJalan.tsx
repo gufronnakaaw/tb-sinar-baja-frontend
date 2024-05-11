@@ -9,7 +9,6 @@ import {
 import React from "react";
 
 // utils
-import { customStyleTable } from "@/utils/customStyleTable";
 
 type SuratJalanProps = {
   id: number;
@@ -83,7 +82,7 @@ export default function TemplateSuratJalan() {
         </div>
 
         <div className="grid gap-4">
-          <div className="grid gap-1">
+          <div className="grid">
             <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-default-900">
               <div className="font-medium">Tanggal</div>
               <div className="font-medium">:</div>
@@ -101,16 +100,16 @@ export default function TemplateSuratJalan() {
             <h5 className="text-[12px] font-semibold text-default-900">
               Kepada Yth,
             </h5>
-            <div className="h-5 w-full border-b border-dashed border-default-900 text-[10px] font-medium text-default-900" />
-            <div className="h-5 w-full border-b border-dashed border-default-900 text-[10px] font-medium text-default-900" />
-            <div className="h-5 w-full border-b border-dashed border-default-900 text-[10px] font-medium text-default-900" />
+            <div className="h-4 w-full border-b border-dashed border-default-900 text-[10px] font-medium text-default-900" />
+            <div className="h-4 w-full border-b border-dashed border-default-900 text-[10px] font-medium text-default-900" />
+            <div className="h-4 w-full border-b border-dashed border-default-900 text-[10px] font-medium text-default-900" />
           </div>
         </div>
       </div>
 
       <div className="grid gap-4">
         <div className="grid grid-cols-[1fr_100px] gap-4">
-          <div className="grid gap-2 text-[10px]">
+          <div className="grid gap-1 text-[10px]">
             <p className="font-medium text-default-600">
               Kami kirimkan barang-barang dibawah ini dengan
               kendaraan......................................................................,
@@ -122,9 +121,20 @@ export default function TemplateSuratJalan() {
         </div>
 
         <Table
+          removeWrapper
           isHeaderSticky
           aria-label="surat jalan table"
-          classNames={customStyleTable}
+          classNames={{
+            base: ["max-h-[calc(100vh-100px)] overflow-scroll"],
+            table: ["border border-black"],
+            thead: [
+              "[&>tr]:first:rounded-none [&>tr]:first:shadow-none border-b border-black",
+            ],
+            th: [
+              "px-5 h-[14px] first:rounded-none last:rounded-none bg-transparent text-default-600",
+            ],
+            td: ["px-5 py-0 h-[14px]"],
+          }}
           className="scrollbar-hide"
         >
           <TableHeader columns={columns}>
