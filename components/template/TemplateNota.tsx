@@ -91,7 +91,7 @@ const Nota = (props: NotaComponentProps, ref: any) => {
   };
 
   return (
-    <div className="font-inter container grid gap-8 px-20 pt-12" ref={ref}>
+    <div className="container grid gap-8 px-20 pt-12 font-inter" ref={ref}>
       <div className="grid grid-cols-3 gap-4">
         <div className="grid gap-1">
           <h1 className="font-bold text-default-900">TB. Sinar Baja</h1>
@@ -110,7 +110,7 @@ const Nota = (props: NotaComponentProps, ref: any) => {
       </div>
 
       <div className="grid w-full grid-cols-2 items-start gap-8">
-        <div className="grid gap-1">
+        <div className="grid">
           <div className="grid grid-cols-[30px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="font-medium">No</div>
             <div className="font-medium">:</div>
@@ -130,7 +130,7 @@ const Nota = (props: NotaComponentProps, ref: any) => {
           </div>
         </div>
 
-        <div className="grid gap-1">
+        <div className="grid">
           <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="font-medium">Penerima</div>
             <div className="font-medium">:</div>
@@ -168,9 +168,9 @@ const Nota = (props: NotaComponentProps, ref: any) => {
               "[&>tr]:first:rounded-none [&>tr]:first:shadow-none border-b border-black",
             ],
             th: [
-              "px-5 py-4 first:rounded-none last:rounded-none bg-transparent text-default-600",
+              "px-5 h-[14px] first:rounded-none last:rounded-none bg-transparent text-default-600",
             ],
-            td: ["px-5"],
+            td: ["px-5 py-0 h-[14px]"],
           }}
           className="scrollbar-hide"
           removeWrapper
@@ -192,7 +192,7 @@ const Nota = (props: NotaComponentProps, ref: any) => {
           </TableBody>
         </Table>
 
-        <div className="grid gap-1 justify-self-end border border-black p-4">
+        <div className="grid justify-self-end border border-black p-2">
           <div className="grid grid-cols-[50px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="w-24 font-medium">Total</div>
             <div className="font-medium">:</div>

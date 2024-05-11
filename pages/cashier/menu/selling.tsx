@@ -4,7 +4,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 
 // components
-import SellingProductCard from "@/components/SellingProductCard";
+import CardSellingProduct from "@/components/card/CardSellingProduct";
 import InputSearchBar from "@/components/input/InputSearchBar";
 import PopupContinuePayment from "@/components/popup/popupContinuePayment";
 import { TemplateNota } from "@/components/template/TemplateNota";
@@ -101,6 +101,7 @@ export default function SellingPage() {
           <TemplateNota {...notaProps} ref={sellingRef} />
         ) : null}
       </div>
+
       <Head>
         <title>Halaman Penjualan</title>
       </Head>
@@ -137,21 +138,19 @@ export default function SellingPage() {
         <div className="grid h-[calc(100vh-64px)] grid-cols-[480px_auto_1fr] gap-4 overflow-hidden">
           {/* ==== left content ==== */}
           <div className="flex flex-col gap-6 overflow-scroll p-4 scrollbar-hide">
-            <div className="flex items-center gap-2">
-              <InputSearchBar
-                placeholder="Ketik kode produk/nama produk..."
-                className="sticky left-0 top-0"
-                onKeyUp={(e) => {
-                  setTimeout(() => {
-                    setSearch(e.target.value);
-                  }, 500);
-                }}
-              />
-            </div>
+            <InputSearchBar
+              placeholder="Ketik kode produk/nama produk..."
+              className="sticky left-0 top-0"
+              onKeyUp={(e) => {
+                setTimeout(() => {
+                  setSearch(e.target.value);
+                }, 500);
+              }}
+            />
 
             <div className="grid gap-4 overflow-y-scroll scrollbar-hide">
               {produk.map((el) => {
-                return <SellingProductCard key={el.kode_item} {...el} />;
+                return <CardSellingProduct key={el.kode_item} {...el} />;
               })}
             </div>
           </div>

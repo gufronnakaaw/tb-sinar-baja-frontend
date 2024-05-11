@@ -134,6 +134,7 @@ export default function PopupContinuePayment({
                         }}
                       />
                     </div>
+
                     <div className="grid grid-cols-2 gap-4">
                       <Textarea
                         type="text"
@@ -161,6 +162,7 @@ export default function PopupContinuePayment({
                         }}
                       />
                     </div>
+
                     <div className="grid grid-cols-2 gap-4">
                       <Input
                         type="number"
@@ -195,15 +197,13 @@ export default function PopupContinuePayment({
                         }}
                       />
                     </div>
+
                     <Input
+                      isRequired
                       type="number"
                       variant="flat"
                       labelPlacement="outside"
-                      label={
-                        <p>
-                          Tunai <span className="text-danger">*</span>
-                        </p>
-                      }
+                      label="Tunai"
                       placeholder="Masukan tunai..."
                       startContent={
                         <div className="pointer-events-none flex items-center">
@@ -220,11 +220,13 @@ export default function PopupContinuePayment({
                       }}
                       min={0}
                     />
+
                     <div className="grid grid-cols-2 gap-4">
                       <RadioGroup
                         orientation="horizontal"
+                        color="danger"
                         label={
-                          <p>
+                          <p className="text-small text-default-900">
                             Tipe <span className="text-danger">*</span>
                           </p>
                         }
@@ -234,23 +236,24 @@ export default function PopupContinuePayment({
                         }}
                       >
                         <Radio value="nota">
-                          <p className="text-sm text-default-600">Nota</p>
+                          <p className="text-sm font-medium text-default-600">
+                            Nota
+                          </p>
                         </Radio>
                         <Radio value="faktur">
-                          <p className="text-sm text-default-600">Faktur</p>
+                          <p className="text-sm font-medium text-default-600">
+                            Faktur
+                          </p>
                         </Radio>
                       </RadioGroup>
 
                       {tipe == "faktur" ? (
                         <Input
+                          isRequired
                           type="number"
                           variant="flat"
                           labelPlacement="outside"
-                          label={
-                            <p>
-                              Pajak <span className="text-danger">*</span>
-                            </p>
-                          }
+                          label="Pajak"
                           placeholder="Masukan persen pajak..."
                           startContent={
                             <div className="pointer-events-none flex items-center">
@@ -273,67 +276,54 @@ export default function PopupContinuePayment({
                     </div>
                   </div>
 
-                  <div>
-                    <table>
-                      <tr>
-                        <td>Biaya Ongkir</td>
-                        <td colSpan={3}></td>
-                        <td></td>
-                        <td>:</td>
-                        <td>
-                          <p>{formatRupiah(ongkir)}</p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Total Belanja</td>
-                        <td colSpan={3}></td>
-                        <td></td>
-                        <td>:</td>
-                        <td>
-                          <p>{formatRupiah(totalBelanja)}</p>
-                        </td>
-                      </tr>
-                      {tipe == "faktur" ? (
-                        <tr>
-                          <td>Pajak ({pajak} %) </td>
-                          <td colSpan={3}></td>
-                          <td></td>
-                          <td>:</td>
-                          <td>
-                            <p>{formatRupiah(totalPajak)}</p>
-                          </td>
-                        </tr>
-                      ) : null}
-                      <tr>
-                        <td>Total Pembayaran</td>
-                        <td colSpan={3}></td>
-                        <td></td>
-                        <td>:</td>
-                        <td>
-                          <p>{formatRupiah(totalPembayaran)}</p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Tunai</td>
-                        <td colSpan={3}></td>
-                        <td></td>
-                        <td>:</td>
-                        <td>
-                          <p className="text-rose-500">{formatRupiah(tunai)}</p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Kembali</td>
-                        <td colSpan={3}></td>
-                        <td></td>
-                        <td>:</td>
-                        <td>
-                          <p className="text-rose-500">
-                            {formatRupiah(kembali)}
-                          </p>
-                        </td>
-                      </tr>
-                    </table>
+                  <div className="grid gap-1 border-l-4 border-rose-500 pl-6">
+                    <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                      <div className="font-medium">Biaya Ongkir</div>
+                      <div className="font-medium">:</div>
+                      <p className="font-medium">{formatRupiah(ongkir)}</p>
+                    </div>
+
+                    <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                      <div className="font-medium">Total Belanja</div>
+                      <div className="font-medium">:</div>
+                      <p className="font-medium">
+                        {formatRupiah(totalBelanja)}
+                      </p>
+                    </div>
+
+                    {tipe == "faktur" ? (
+                      <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                        <div className="font-medium">Pajak ({pajak} %)</div>
+                        <div className="font-medium">:</div>
+                        <p className="font-medium">
+                          {formatRupiah(totalPajak)}
+                        </p>
+                      </div>
+                    ) : null}
+
+                    <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                      <div className="font-medium">Total Pembayaran</div>
+                      <div className="font-medium">:</div>
+                      <p className="font-medium">
+                        {formatRupiah(totalPembayaran)}
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                      <div className="font-medium">Tunai</div>
+                      <div className="font-medium">:</div>
+                      <p className="font-medium text-rose-500">
+                        {formatRupiah(tunai)}
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                      <div className="font-medium">Kembali</div>
+                      <div className="font-medium">:</div>
+                      <p className="font-medium text-rose-500">
+                        {formatRupiah(kembali)}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </ModalBody>

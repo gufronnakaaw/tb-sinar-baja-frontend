@@ -2,7 +2,7 @@ import CustomTooltip from "@/components/tooltip";
 import { formatRupiah } from "@/utils/formatRupiah";
 import { Button } from "@nextui-org/react";
 
-type SellingProductCardProps = {
+type CardSellingProductProps = {
   kode_item?: string;
   nama_produk: string;
   harga: number;
@@ -11,13 +11,13 @@ type SellingProductCardProps = {
   stok: number;
 };
 
-export default function SellingProductCard({
+export default function CardSellingProduct({
   nama_produk,
   harga,
   gudang,
   rak,
   stok,
-}: SellingProductCardProps) {
+}: CardSellingProductProps) {
   return (
     <div className="grid gap-[20px] rounded-xl border border-default-300 p-4 transition hover:border-rose-500">
       <div className="grid gap-1">
