@@ -9,7 +9,6 @@ import {
 import { forwardRef } from "react";
 
 // utils
-import { customStyleTable } from "@/utils/customStyleTable";
 import { formatRupiah } from "@/utils/formatRupiah";
 
 type NotaProps = {
@@ -92,7 +91,7 @@ const Nota = (props: NotaComponentProps, ref: any) => {
   };
 
   return (
-    <div className="container grid gap-8 pt-8" ref={ref}>
+    <div className="font-inter container grid gap-8 px-20 pt-12" ref={ref}>
       <div className="grid grid-cols-3 gap-4">
         <div className="grid gap-1">
           <h1 className="font-bold text-default-900">TB. Sinar Baja</h1>
@@ -110,7 +109,7 @@ const Nota = (props: NotaComponentProps, ref: any) => {
         </h4>
       </div>
 
-      <div className="grid grid-cols-2 items-start gap-8">
+      <div className="grid w-full grid-cols-2 items-start gap-8">
         <div className="grid gap-1">
           <div className="grid grid-cols-[30px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="font-medium">No</div>
@@ -124,36 +123,36 @@ const Nota = (props: NotaComponentProps, ref: any) => {
             <p className="font-medium">10 Mei 2024</p>
           </div>
 
-          <div className="grid grid-cols-[30px_6px_1fr] gap-1 text-[10px] text-default-900">
+          <div className="grid w-[250px] grid-cols-[30px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="font-medium">Ket</div>
             <div className="font-medium">:</div>
-            <p className="font-medium">{props.ket}</p>
+            <p className="break-all font-medium">{props.ket}</p>
           </div>
         </div>
 
         <div className="grid gap-1">
-          <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-default-900">
+          <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="font-medium">Penerima</div>
             <div className="font-medium">:</div>
             <p className="font-medium">{props.penerima}</p>
           </div>
 
-          <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-default-900">
+          <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="font-medium">No. Telp</div>
             <div className="font-medium">:</div>
             <p className="font-medium">{props.telp}</p>
           </div>
 
-          <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-default-900">
+          <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="font-medium">Pengiriman</div>
             <div className="font-medium">:</div>
             <p className="font-medium">{props.pengiriman}</p>
           </div>
 
-          <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-default-900">
+          <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="font-medium">Alamat</div>
             <div className="font-medium">:</div>
-            <p className="font-medium">{props.alamat}</p>
+            <p className="break-all font-medium">{props.alamat}</p>
           </div>
         </div>
       </div>
@@ -162,8 +161,19 @@ const Nota = (props: NotaComponentProps, ref: any) => {
         <Table
           isHeaderSticky
           aria-label="nota table"
-          classNames={customStyleTable}
+          classNames={{
+            base: ["max-h-[calc(100vh-100px)] overflow-scroll"],
+            table: ["border border-black"],
+            thead: [
+              "[&>tr]:first:rounded-none [&>tr]:first:shadow-none border-b border-black",
+            ],
+            th: [
+              "px-5 py-4 first:rounded-none last:rounded-none bg-transparent text-default-600",
+            ],
+            td: ["px-5"],
+          }}
           className="scrollbar-hide"
+          removeWrapper
         >
           <TableHeader columns={columns}>
             {(column) => (
@@ -182,20 +192,20 @@ const Nota = (props: NotaComponentProps, ref: any) => {
           </TableBody>
         </Table>
 
-        <div className="grid gap-1 justify-self-end rounded-xl border-[2px] border-default-200 p-4">
-          <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-default-900">
+        <div className="grid gap-1 justify-self-end border border-black p-4">
+          <div className="grid grid-cols-[50px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="w-24 font-medium">Total</div>
             <div className="font-medium">:</div>
             <p className="font-medium">{formatRupiah(props.totalBelanja)}</p>
           </div>
 
-          <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-default-900">
+          <div className="grid grid-cols-[50px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="w-24 font-medium">Ongkir</div>
             <div className="font-medium">:</div>
             <p className="font-medium">{formatRupiah(props.ongkir)}</p>
           </div>
 
-          <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-default-900">
+          <div className="grid grid-cols-[50px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="w-24 font-medium">Tagihan</div>
             <div className="font-medium">:</div>
             <p className="font-medium">{formatRupiah(props.totalPembayaran)}</p>
