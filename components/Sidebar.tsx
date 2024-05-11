@@ -5,7 +5,7 @@ import {
   Circle,
   ClipboardText,
   ClockClockwise,
-  Eye,
+  ClockCounterClockwise,
   House,
   Invoice,
   ListBullets,
@@ -250,7 +250,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                   <ButtonSidebar
                     label="Riwayat"
                     path="/owner/histories"
-                    icon={<Eye weight="bold" size={20} />}
+                    icon={<ClockCounterClockwise weight="bold" size={20} />}
                   />
                 </div>
               </div>
@@ -503,7 +503,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                   <ButtonSidebar
                     label="Riwayat"
                     path="/admin/histories"
-                    icon={<Eye weight="bold" size={20} />}
+                    icon={<ClockCounterClockwise weight="bold" size={20} />}
                   />
                 </div>
               </div>

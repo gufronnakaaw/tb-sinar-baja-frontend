@@ -8,10 +8,12 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
+import { Eye } from "@phosphor-icons/react";
 import React from "react";
 
 // components
 import InputSearchBar from "@/components/input/InputSearchBar";
+import CustomTooltip from "@/components/tooltip";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 
@@ -51,15 +53,16 @@ export default function HistoriesPage() {
         return <div className="w-max text-default-900">{transaction.date}</div>;
       case "action":
         return (
-          <Button
-            variant="bordered"
-            color="default"
-            size="sm"
-            onClick={() => alert(`ID Transactions: ${transaction.id}`)}
-            className="font-medium"
-          >
-            Detail
-          </Button>
+          <CustomTooltip content="Detail">
+            <Button
+              isIconOnly
+              variant="light"
+              size="sm"
+              onClick={() => alert(`ID Transactions ${transaction.id}`)}
+            >
+              <Eye weight="bold" size={20} className="text-default-600" />
+            </Button>
+          </CustomTooltip>
         );
 
       default:
