@@ -6,6 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
+import { forwardRef } from "react";
 
 // utils
 import { formatRupiah } from "@/utils/formatRupiah";
@@ -16,6 +17,18 @@ type FakturProps = {
   jumlah: number | string;
   harga: number;
   subtotal: number;
+};
+
+type FakturComponentProps = {
+  ket: string;
+  penerima: string;
+  telp: string;
+  pengiriman: string;
+  alamat: string;
+  totalBelanja: number;
+  ongkir: number;
+  totalPembayaran: number;
+  pajak: number;
 };
 
 // dummy data
@@ -36,7 +49,7 @@ const transactions: FakturProps[] = [
   },
 ];
 
-export default function TemplateFaktur() {
+const Faktur = (props: FakturComponentProps, ref: any) => {
   const columns = [
     { name: "Jumlah", uid: "jumlah" },
     { name: "Nama Produk", uid: "nama_produk" },
@@ -114,7 +127,7 @@ export default function TemplateFaktur() {
           <div className="grid w-[250px] grid-cols-[30px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="font-medium">Ket</div>
             <div className="font-medium">:</div>
-            <p className="break-all font-medium">Pengiriman Barang Bangunan</p>
+            <p className="break-all font-medium">{props.ket}</p>
           </div>
         </div>
 
@@ -122,27 +135,25 @@ export default function TemplateFaktur() {
           <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="font-medium">Penerima</div>
             <div className="font-medium">:</div>
-            <p className="font-medium">Fajar Fadillah Agustian</p>
+            <p className="font-medium">{props.penerima}</p>
           </div>
 
           <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="font-medium">No. Telp</div>
             <div className="font-medium">:</div>
-            <p className="font-medium">089123456789</p>
+            <p className="font-medium">{props.telp}</p>
           </div>
 
           <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="font-medium">Pengiriman</div>
             <div className="font-medium">:</div>
-            <p className="font-medium">Besok Pagi</p>
+            <p className="font-medium">{props.pengiriman}</p>
           </div>
 
           <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="font-medium">Alamat</div>
             <div className="font-medium">:</div>
-            <p className="break-all font-medium">
-              Jl. Pertanian, Grogol, Kota depk
-            </p>
+            <p className="break-all font-medium">{props.alamat}</p>
           </div>
         </div>
       </div>
@@ -186,28 +197,30 @@ export default function TemplateFaktur() {
           <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="w-24 font-medium">Total</div>
             <div className="font-medium">:</div>
-            <p className="font-medium">Rp 350.000</p>
+            <p className="font-medium">{formatRupiah(props.totalBelanja)}</p>
           </div>
 
           <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="w-24 font-medium">Ongkir</div>
             <div className="font-medium">:</div>
-            <p className="font-medium">Rp 45.000</p>
+            <p className="font-medium">{formatRupiah(props.ongkir)}</p>
           </div>
 
           <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="w-24 font-medium">Pajak (10%)</div>
             <div className="font-medium">:</div>
-            <p className="font-medium">Rp 100.000</p>
+            <p className="font-medium">{formatRupiah(props.pajak)}</p>
           </div>
 
           <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="w-24 font-medium">Tagihan</div>
             <div className="font-medium">:</div>
-            <p className="font-medium">Rp 400.000</p>
+            <p className="font-medium">{formatRupiah(props.totalPembayaran)}</p>
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export const TemplateFaktur = forwardRef(Faktur);

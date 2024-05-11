@@ -1,17 +1,19 @@
-import { Button, Chip, Input } from "@nextui-org/react";
-import { ArrowLeft, Circle, Minus, Plus } from "@phosphor-icons/react";
+import { Button, Chip } from "@nextui-org/react";
+import { ArrowLeft, Circle } from "@phosphor-icons/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-
-// components
-import CardSellingProduct from "@/components/card/CardSellingProduct";
-import InputSearchBar from "@/components/input/InputSearchBar";
-import PopupContinuePayment from "@/components/popup/popupContinuePayment";
-import { TemplateNota } from "@/components/template/TemplateNota";
-import { fetcher } from "@/utils/fetcher";
 import { useEffect, useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import { useDebounce } from "use-debounce";
+
+// components
+import CardSellingProduct from "@/components/card/CardSellingProduct";
+import CardSellingQuantityProduct from "@/components/card/CardSellingQuantityProduct";
+import InputSearchBar from "@/components/input/InputSearchBar";
+import PopupContinuePayment from "@/components/popup/popupContinuePayment";
+import { TemplateFaktur } from "@/components/template/TemplateFaktur";
+import { TemplateNota } from "@/components/template/TemplateNota";
+import { fetcher } from "@/utils/fetcher";
 
 type ProdukType = {
   kode_item?: string;
@@ -84,6 +86,18 @@ export default function SellingPage() {
     totalPembayaran,
   };
 
+  const fakturProps = {
+    ket,
+    penerima,
+    telp,
+    pengiriman,
+    alamat,
+    totalBelanja,
+    ongkir,
+    totalPembayaran,
+    pajak,
+  };
+
   useEffect(() => {
     if (searchValue != "") {
       getProduk(searchValue);
@@ -110,6 +124,8 @@ export default function SellingPage() {
       <div className="hidden">
         {tipe == "nota" ? (
           <TemplateNota {...notaProps} ref={sellingRef} />
+        ) : tipe == "faktur" ? (
+          <TemplateFaktur {...fakturProps} ref={sellingRef} />
         ) : null}
       </div>
 
@@ -190,33 +206,7 @@ export default function SellingPage() {
             <div className="overflow-y-scroll scrollbar-hide">
               <div className="grid gap-4">
                 {/* ==== card here ==== */}
-                <div className="grid grid-cols-4 items-center gap-16">
-                  <div className="grid font-semibold text-default-600">
-                    <h4 className="line-clamp-2 font-medium text-default-900">
-                      C-truss Mini SNI tbl KD 10
-                    </h4>
-                    <p className="font-medium text-rose-500">Rp 93.000</p>
-                  </div>
-
-                  <div className="flex items-center gap-4 text-sm font-semibold text-default-600">
-                    <Button isIconOnly color="danger" variant="flat" size="sm">
-                      <Minus weight="bold" size={16} />
-                    </Button>
-                    <Input
-                      type="number"
-                      variant="flat"
-                      size="sm"
-                      defaultValue="1"
-                      labelPlacement="outside"
-                    />
-                    <Button isIconOnly color="danger" variant="flat" size="sm">
-                      <Plus weight="bold" size={16} />
-                    </Button>
-                  </div>
-
-                  <div className="font-bold text-default-900">Rp 93.000</div>
-                  <div className="font-bold text-default-900">Rp 200.000</div>
-                </div>
+                <CardSellingQuantityProduct />
               </div>
             </div>
 
