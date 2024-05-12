@@ -166,11 +166,22 @@ export default function SellingPage() {
         <div className="grid h-[calc(100vh-64px)] grid-cols-[480px_auto_1fr] gap-4 overflow-hidden">
           {/* ==== left content ==== */}
           <div className="flex flex-col gap-6 overflow-scroll p-4 scrollbar-hide">
-            <InputSearchBar
-              placeholder="Ketik kode produk/nama produk..."
-              className="sticky left-0 top-0"
-              onChange={(e) => setSearch(e.target.value)}
-            />
+            <div className="sticky left-0 top-0 grid gap-4">
+              <InputSearchBar
+                placeholder="Ketik kode produk/nama produk..."
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <p className="text-sm font-medium text-default-600">
+                <span className="font-bold text-rose-500">{produk.length}</span>{" "}
+                produk ditemukan
+              </p>
+            </div>
+
+            {search == "" ? (
+              <p className="pt-24 text-center text-sm font-medium italic text-default-400">
+                Produk yang anda cari akan muncul disini!
+              </p>
+            ) : null}
 
             <div className="grid gap-4 overflow-y-scroll scrollbar-hide">
               {produk.map((item) => {

@@ -39,7 +39,7 @@ export default function CardSellingProduct({
         <div className="flex items-center gap-4">
           <div className="grid">
             <p className="text-[12px] font-medium text-default-600">Harga:</p>
-            <h4 className="font-bold text-rose-500">{formatRupiah(harga)}</h4>
+            <h4 className="font-bold text-rose-500">{formatRupiah(harga_4)}</h4>
           </div>
 
           <div className="grid">
