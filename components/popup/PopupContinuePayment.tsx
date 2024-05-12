@@ -12,7 +12,7 @@ import {
   Textarea,
   useDisclosure,
 } from "@nextui-org/react";
-import { Printer } from "@phosphor-icons/react";
+import { CheckCircle, Printer } from "@phosphor-icons/react";
 import { Dispatch, SetStateAction, useEffect } from "react";
 
 type PopupContinuePaymentProps = {
@@ -127,7 +127,7 @@ export default function PopupContinuePayment({
                         variant="flat"
                         labelPlacement="outside"
                         label="Penerima (opsional)"
-                        placeholder="Masukan penerima"
+                        placeholder="Masukan penerima..."
                         className="w-full"
                         onChange={(e) => {
                           setPenerima(e.target.value);
@@ -339,12 +339,22 @@ export default function PopupContinuePayment({
                 </Button>
 
                 <Button
-                  variant="solid"
-                  endContent={<Printer weight="bold" size={17} />}
-                  className="bg-rose-500 font-semibold text-white"
+                  variant="flat"
+                  color="danger"
+                  endContent={<Printer weight="bold" size={18} />}
                   onClick={handlePrint}
+                  className="font-medium"
                 >
                   Cetak
+                </Button>
+
+                <Button
+                  variant="solid"
+                  endContent={<CheckCircle weight="bold" size={18} />}
+                  onPress={onClose}
+                  className="bg-rose-500 font-semibold text-white"
+                >
+                  Selesai
                 </Button>
               </ModalFooter>
             </>

@@ -10,24 +10,25 @@ import { useDebounce } from "use-debounce";
 import CardSellingProduct from "@/components/card/CardSellingProduct";
 import CardSellingQuantityProduct from "@/components/card/CardSellingQuantityProduct";
 import InputSearchBar from "@/components/input/InputSearchBar";
-import PopupContinuePayment from "@/components/popup/popupContinuePayment";
+import PopupContinuePayment from "@/components/popup/PopupContinuePayment";
+
 import { TemplateFaktur } from "@/components/template/TemplateFaktur";
 import { TemplateNota } from "@/components/template/TemplateNota";
 
 const produk = [
   {
-    kode_item: "111",
-    nama_produk: "Test 1",
-    harga: 10000,
+    kode_item: "LSHAL-408.9-8-6",
+    nama_produk: "List H besar Alumunium 40 8,9 0.9 6  CA",
+    harga: 67095,
     stok: 100,
     gudang: "Gudang A",
     rak: "Rak 10",
   },
   {
-    kode_item: "222",
-    nama_produk: "Test 2",
-    harga: 103000,
-    stok: 15,
+    kode_item: "TRP-24-5.2-080",
+    nama_produk: "Transport Showcase 1 Alumunium 24 5,2 0.8 6  CA",
+    harga: 28045,
+    stok: 130,
     gudang: "Gudang B",
     rak: "Rak 12",
   },
@@ -174,31 +175,23 @@ export default function SellingPage() {
           <div className="h-full w-[1px] bg-gray-300" />
 
           {/* ==== right content ==== */}
-          <div className="grid grid-rows-[auto_1fr_auto] gap-4 overflow-scroll p-4 scrollbar-hide">
-            <div className="sticky top-0 grid gap-4 bg-white">
-              <h4 className="text-lg font-semibold text-default-900">
-                Daftar Pesanan
-              </h4>
-
-              <div className="grid grid-cols-4 items-center gap-16 border-b border-gray-300 pb-2">
-                <div className="text-sm font-semibold text-default-600">
-                  Item
-                </div>
-                <div className="text-sm font-semibold text-default-600">
-                  Qty
-                </div>
-                <div className="text-sm font-semibold text-default-600">
-                  Harga
-                </div>
-                <div className="text-sm font-semibold text-default-600">
-                  Sub Total
-                </div>
+          <div className="grid grid-rows-[auto_1fr_auto] overflow-scroll p-4 scrollbar-hide">
+            <div className="sticky top-0 grid grid-cols-[1fr_repeat(3,140px)_42px] items-center gap-10 border-b border-gray-300 bg-white pb-4">
+              <div className="text-sm font-semibold text-default-600">Item</div>
+              <div className="text-sm font-semibold text-default-600">Qty</div>
+              <div className="text-sm font-semibold text-default-600">
+                Harga
               </div>
+              <div className="text-sm font-semibold text-default-600">
+                Sub Total
+              </div>
+              <div className="text-sm font-semibold text-default-600">Aksi</div>
             </div>
 
             <div className="overflow-y-scroll scrollbar-hide">
-              <div className="grid gap-4">
+              <div className="grid">
                 {/* ==== card here ==== */}
+                <CardSellingQuantityProduct />
                 <CardSellingQuantityProduct />
               </div>
             </div>
