@@ -8,12 +8,26 @@ import CustomTooltip from "@/components/tooltip";
 import { formatRupiah } from "@/utils/formatRupiah";
 
 type CardSellingProductProps = {
-  kode_item?: string;
+  kode_item: string;
   nama_produk: string;
   harga_4: number;
   gudang: string;
   rak: string;
   stok: number;
+  satuan_kecil: string;
+  setListProduk: React.Dispatch<
+    React.SetStateAction<
+      {
+        kode_item: string;
+        nama_produk: string;
+        harga: number;
+        stok: number;
+        qty: number;
+        subtotal: number;
+        satuan_kecil: string;
+      }[]
+    >
+  >;
 };
 
 export default function CardSellingProduct({
@@ -23,6 +37,8 @@ export default function CardSellingProduct({
   gudang,
   rak,
   stok,
+  setListProduk,
+  satuan_kecil,
 }: CardSellingProductProps) {
   return (
     <div className="grid gap-[20px] rounded-xl border border-default-300 p-4 transition hover:border-rose-500">
@@ -56,7 +72,32 @@ export default function CardSellingProduct({
         </div>
 
         <CustomTooltip content="Tambahkan">
-          <Button isIconOnly variant="flat" color="danger" size="sm">
+          <Button
+            isIconOnly
+            variant="flat"
+            color="danger"
+            size="sm"
+            onClick={() => {
+              setListProduk((prev) => {
+                if (prev.find((produk) => produk.kode_item == kode_item)) {
+                  return [...prev];
+                }
+
+                return [
+                  ...prev,
+                  {
+                    nama_produk,
+                    kode_item,
+                    harga: harga_4,
+                    stok,
+                    qty: 1,
+                    subtotal: harga_4 * 1,
+                    satuan_kecil,
+                  },
+                ];
+              });
+            }}
+          >
             <Plus weight="bold" size={20} />
           </Button>
         </CustomTooltip>

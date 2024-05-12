@@ -1,0 +1,26 @@
+const months = [
+  "Januari",
+  "Februari",
+  "Maret",
+  "April",
+  "Mei",
+  "Juni",
+  "Juli",
+  "Agustus",
+  "September",
+  "Oktober",
+  "November",
+  "Desember",
+];
+
+export function formatDate(dateProp: string) {
+  const date = new Date(dateProp);
+  const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+  const month = date.getMonth();
+  const year = date.getFullYear();
+  const hours = date.getHours() < 10 ? `0${date.getHours()}` : date.getHours();
+  const minutes =
+    date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
+
+  return `${day} ${months[month]} ${year} ${hours}:${minutes}`;
+}

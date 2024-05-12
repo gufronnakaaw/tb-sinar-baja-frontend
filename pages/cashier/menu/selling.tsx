@@ -12,18 +12,32 @@ import CardSellingQuantityProduct from "@/components/card/CardSellingQuantityPro
 import InputSearchBar from "@/components/input/InputSearchBar";
 import PopupContinuePayment from "@/components/popup/PopupContinuePayment";
 
-import { TemplateFaktur } from "@/components/template/TemplateFaktur";
 import { TemplateNota } from "@/components/template/TemplateNota";
+import { TransaksiType } from "@/types/transactions.type";
 import { fetcher } from "@/utils/fetcher";
+import { formatRupiah } from "@/utils/formatRupiah";
 
 type ProdukType = {
-  kode_item?: string;
+  kode_item: string;
   nama_produk: string;
   harga_4: number;
   gudang: string;
   rak: string;
   stok: number;
+  satuan_kecil: string;
 };
+
+type ProdukList = {
+  kode_item: string;
+  nama_produk: string;
+  harga: number;
+  stok: number;
+  qty: number;
+  subtotal: number;
+  satuan_kecil: string;
+};
+
+const unique_key = (Math.random() + 1).toString(36).substring(7);
 
 export default function SellingPage() {
   const [telp, setTelp] = useState("-");
@@ -33,23 +47,67 @@ export default function SellingPage() {
   const [ongkir, setOngkir] = useState(0);
   const [pengiriman, setPengiriman] = useState("-");
   const [tipe, setTipe] = useState("nota");
-
-  const [totalBelanja, setTotalBelanja] = useState(0);
   const [pajak, setPajak] = useState(0);
   const [totalPajak, setTotalPajak] = useState(0);
-  const [totalPembayaran, setTotalPembayaran] = useState(0);
+
   const [tunai, setTunai] = useState(0);
   const [kembali, setKembali] = useState(0);
   const [produk, setProduk] = useState<ProdukType[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [title, setTitle] = useState("");
+  const [nota, setNota] = useState<TransaksiType>(null);
 
   const router = useRouter();
   const sellingRef = useRef(null);
-  const handlePrint = useReactToPrint({
+  const reactPrint = useReactToPrint({
+    documentTitle: title,
     content: () => sellingRef.current,
   });
 
   const [search, setSearch] = useState("");
   const [searchValue] = useDebounce(search, 800);
+  const [listProduk, setListProduk] = useState<ProdukList[]>([]);
+  const [totalPembayaran, setTotalPembayaran] = useState(0);
+  const [totalBelanja, setTotalBelanja] = useState(0);
+
+  async function handlePrint() {
+    try {
+      const response = await fetcher({
+        url: "/transaksi",
+        method: "POST",
+        data: {
+          keterangan: ket,
+          penerima,
+          no_telp: telp,
+          alamat,
+          pengiriman,
+          ongkir,
+          total_belanja: listProduk.reduce((a, b) => a + b.subtotal, 0),
+          total_pembayaran: totalPembayaran,
+          tipe: "umum",
+          unique_key,
+          tunai,
+          list_produk: listProduk.map((produk) => {
+            return {
+              jumlah: produk.qty,
+              satuan: produk.satuan_kecil,
+              nama_produk: produk.nama_produk,
+              harga: produk.harga,
+              sub_total: produk.subtotal,
+            };
+          }),
+        },
+      });
+
+      setNota(response.data as TransaksiType);
+      setTitle(response.data.id_transaksi);
+      setTimeout(() => {
+        reactPrint();
+      }, 0);
+    } catch (error) {
+      alert("tidak dapat melakukan transaksi");
+    }
+  }
 
   const popupProps = {
     setTelp,
@@ -76,29 +134,6 @@ export default function SellingPage() {
     handlePrint,
   };
 
-  const notaProps = {
-    ket,
-    penerima,
-    telp,
-    pengiriman,
-    alamat,
-    totalBelanja,
-    ongkir,
-    totalPembayaran,
-  };
-
-  const fakturProps = {
-    ket,
-    penerima,
-    telp,
-    pengiriman,
-    alamat,
-    totalBelanja,
-    ongkir,
-    totalPembayaran,
-    pajak,
-  };
-
   useEffect(() => {
     if (searchValue != "") {
       getProduk(searchValue);
@@ -108,26 +143,36 @@ export default function SellingPage() {
 
     async function getProduk(search: string) {
       try {
+        setLoading(true);
         const data = await fetcher({
           url: "/produk?search=" + encodeURI(search),
           method: "GET",
         });
 
         setProduk(data.data);
+        setLoading(false);
       } catch (error) {
         console.log(error);
       }
     }
   }, [searchValue]);
 
+  useEffect(() => {
+    if (tipe == "nota") {
+      setTotalPembayaran(ongkir + totalBelanja);
+    } else {
+      setTotalPembayaran(ongkir + totalBelanja);
+    }
+  }, [totalBelanja, ongkir, tipe]);
+
+  useEffect(() => {
+    setTotalBelanja(listProduk.reduce((a, b) => a + b.subtotal, 0));
+  }, [listProduk]);
+
   return (
     <>
       <div className="hidden">
-        {tipe == "nota" ? (
-          <TemplateNota {...notaProps} ref={sellingRef} />
-        ) : tipe == "faktur" ? (
-          <TemplateFaktur {...fakturProps} ref={sellingRef} />
-        ) : null}
+        {title ? <TemplateNota {...nota} ref={sellingRef} /> : null}
       </div>
 
       <Head>
@@ -171,13 +216,19 @@ export default function SellingPage() {
                 placeholder="Ketik kode produk/nama produk..."
                 onChange={(e) => setSearch(e.target.value)}
               />
-              <p className="text-sm font-medium text-default-600">
-                <span className="font-bold text-rose-500">{produk.length}</span>{" "}
-                produk ditemukan
-              </p>
+              {loading ? (
+                <p className="text-sm font-bold text-rose-500">loading...</p>
+              ) : produk.length != 0 ? (
+                <p className="text-sm font-medium text-default-600">
+                  <span className="font-bold text-rose-500">
+                    {produk.length}
+                  </span>{" "}
+                  produk ditemukan
+                </p>
+              ) : null}
             </div>
 
-            {search == "" ? (
+            {produk.length == 0 ? (
               <p className="pt-24 text-center text-sm font-medium italic text-default-400">
                 Produk yang anda cari akan muncul disini!
               </p>
@@ -185,7 +236,13 @@ export default function SellingPage() {
 
             <div className="grid gap-4 overflow-y-scroll scrollbar-hide">
               {produk.map((item) => {
-                return <CardSellingProduct key={item.kode_item} {...item} />;
+                return (
+                  <CardSellingProduct
+                    key={item.kode_item}
+                    {...item}
+                    setListProduk={setListProduk}
+                  />
+                );
               })}
             </div>
           </div>
@@ -208,9 +265,15 @@ export default function SellingPage() {
 
             <div className="overflow-y-scroll scrollbar-hide">
               <div className="grid">
-                {/* ==== card here ==== */}
-                <CardSellingQuantityProduct />
-                <CardSellingQuantityProduct />
+                {listProduk.map((item) => {
+                  return (
+                    <CardSellingQuantityProduct
+                      key={item.kode_item}
+                      {...item}
+                      setListProduk={setListProduk}
+                    />
+                  );
+                })}
               </div>
             </div>
 
@@ -218,7 +281,7 @@ export default function SellingPage() {
               <div className="flex items-center justify-between gap-2">
                 <p className="font-medium text-gray-600">Total Belanja :</p>
                 <h5 className="text-[28px] font-semibold text-rose-500">
-                  Rp 417.000
+                  {formatRupiah(totalBelanja)}
                 </h5>
               </div>
 

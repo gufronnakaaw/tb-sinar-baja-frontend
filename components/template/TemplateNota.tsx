@@ -11,44 +11,10 @@ import { forwardRef } from "react";
 // utils
 import { formatRupiah } from "@/utils/formatRupiah";
 
-type NotaProps = {
-  id: number;
-  nama_produk: string;
-  jumlah: number | string;
-  harga: number;
-  subtotal: number;
-};
+import { ListProduk, TransaksiType } from "@/types/transactions.type";
+import { formatDate } from "@/utils/formatDate";
 
-type NotaComponentProps = {
-  ket: string;
-  penerima: string;
-  telp: string;
-  pengiriman: string;
-  alamat: string;
-  totalBelanja: number;
-  ongkir: number;
-  totalPembayaran: number;
-};
-
-// dummy data
-const transactions: NotaProps[] = [
-  {
-    id: 1,
-    nama_produk: "C-truss Mini SNI tbl KD 10",
-    jumlah: "3 btg",
-    harga: 93577,
-    subtotal: 280750,
-  },
-  {
-    id: 2,
-    nama_produk: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-    jumlah: "6 lbr",
-    harga: 110372,
-    subtotal: 662250,
-  },
-];
-
-const Nota = (props: NotaComponentProps, ref: any) => {
+const Nota = (props: TransaksiType, ref: any) => {
   const columns = [
     { name: "Jumlah", uid: "jumlah" },
     { name: "Nama Produk", uid: "nama_produk" },
@@ -56,14 +22,14 @@ const Nota = (props: NotaComponentProps, ref: any) => {
     { name: "Sub Total", uid: "subtotal" },
   ];
 
-  const renderCell = (transaction: NotaProps, columnKey: React.Key) => {
-    const cellValue = transaction[columnKey as keyof NotaProps];
+  const renderCell = (transaction: ListProduk, columnKey: React.Key) => {
+    const cellValue = transaction[columnKey as keyof ListProduk];
 
     switch (columnKey) {
       case "jumlah":
         return (
           <div className="text-[10px] font-medium text-default-900">
-            {transaction.jumlah}
+            {transaction.jumlah} {transaction.satuan}
           </div>
         );
       case "nama_produk":
@@ -81,7 +47,7 @@ const Nota = (props: NotaComponentProps, ref: any) => {
       case "subtotal":
         return (
           <div className="text-[10px] font-medium text-default-900">
-            {formatRupiah(transaction.subtotal)}
+            {formatRupiah(transaction.sub_total)}
           </div>
         );
 
@@ -114,19 +80,19 @@ const Nota = (props: NotaComponentProps, ref: any) => {
           <div className="grid grid-cols-[30px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="font-medium">No</div>
             <div className="font-medium">:</div>
-            <p className="font-medium">TX1005202401</p>
+            <p className="font-medium">{props.id_transaksi}</p>
           </div>
 
           <div className="grid grid-cols-[30px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="font-medium">Tgl</div>
             <div className="font-medium">:</div>
-            <p className="font-medium">10 Mei 2024</p>
+            <p className="font-medium">{formatDate(props.created_at)}</p>
           </div>
 
           <div className="grid w-[250px] grid-cols-[30px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="font-medium">Ket</div>
             <div className="font-medium">:</div>
-            <p className="break-all font-medium">{props.ket}</p>
+            <p className="break-all font-medium">{props.keterangan}</p>
           </div>
         </div>
 
@@ -140,7 +106,7 @@ const Nota = (props: NotaComponentProps, ref: any) => {
           <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="font-medium">No. Telp</div>
             <div className="font-medium">:</div>
-            <p className="font-medium">{props.telp}</p>
+            <p className="font-medium">{props.no_telp}</p>
           </div>
 
           <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-default-900">
@@ -181,9 +147,9 @@ const Nota = (props: NotaComponentProps, ref: any) => {
             )}
           </TableHeader>
 
-          <TableBody items={transactions}>
+          <TableBody items={props.list_produk}>
             {(transaction) => (
-              <TableRow key={transaction.id}>
+              <TableRow key={transaction.nama_produk}>
                 {(columnKey) => (
                   <TableCell>{renderCell(transaction, columnKey)}</TableCell>
                 )}
@@ -196,7 +162,7 @@ const Nota = (props: NotaComponentProps, ref: any) => {
           <div className="grid grid-cols-[50px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="w-24 font-medium">Total</div>
             <div className="font-medium">:</div>
-            <p className="font-medium">{formatRupiah(props.totalBelanja)}</p>
+            <p className="font-medium">{formatRupiah(props.total_belanja)}</p>
           </div>
 
           <div className="grid grid-cols-[50px_6px_1fr] gap-1 text-[10px] text-default-900">
@@ -208,7 +174,9 @@ const Nota = (props: NotaComponentProps, ref: any) => {
           <div className="grid grid-cols-[50px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="w-24 font-medium">Tagihan</div>
             <div className="font-medium">:</div>
-            <p className="font-medium">{formatRupiah(props.totalPembayaran)}</p>
+            <p className="font-medium">
+              {formatRupiah(props.total_pembayaran)}
+            </p>
           </div>
         </div>
       </div>

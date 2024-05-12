@@ -18,18 +18,19 @@ import Layout from "@/components/wrapper/SecondaryLayout";
 
 // utils
 import usePagination from "@/hooks/usepagination";
+import { TransaksiType } from "@/types/transactions.type";
 import { customStyleTable } from "@/utils/customStyleTable";
+import { fetcher } from "@/utils/fetcher";
+import { formatDate } from "@/utils/formatDate";
 import { formatRupiah } from "@/utils/formatRupiah";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
-// dummy data
-import { transactions } from "@/_dummy/transactions";
-
-type TransactionType = (typeof transactions)[0];
-
-export default function TransactionPage() {
+export default function TransactionPage({
+  transaksi,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
 
-  const { page, pages, data, setPage } = usePagination(transactions, 10);
+  const { page, pages, data, setPage } = usePagination(transaksi, 10);
 
   const columns = [
     { name: "ID Transaksi", uid: "transactions_id", sortable: false },
@@ -38,18 +39,24 @@ export default function TransactionPage() {
     { name: "Aksi", uid: "action", sortable: false },
   ];
 
-  const renderCell = (transaction: TransactionType, columnKey: React.Key) => {
-    const cellValue = transaction[columnKey as keyof TransactionType];
+  const renderCell = (transaction: TransaksiType, columnKey: React.Key) => {
+    const cellValue = transaction[columnKey as keyof TransaksiType];
 
     switch (columnKey) {
       case "transactions_id":
-        return <div className="text-default-900">{transaction.id}</div>;
+        return (
+          <div className="text-default-900">{transaction.id_transaksi}</div>
+        );
       case "transactions_date":
-        return <div className="w-max text-default-900">{transaction.date}</div>;
+        return (
+          <div className="w-max text-default-900">
+            {formatDate(transaction.created_at)}
+          </div>
+        );
       case "total":
         return (
           <div className="text-default-900">
-            {formatRupiah(transaction.total)}
+            {formatRupiah(transaction.total_pembayaran)}
           </div>
         );
       case "action":
@@ -58,7 +65,9 @@ export default function TransactionPage() {
             variant="bordered"
             color="default"
             size="sm"
-            onClick={() => alert(`ID Transactions: ${transaction.id}`)}
+            onClick={() =>
+              alert(`ID Transactions: ${transaction.id_transaksi}`)
+            }
             className="font-medium"
           >
             Detail
@@ -112,12 +121,10 @@ export default function TransactionPage() {
               </TableHeader>
 
               <TableBody items={data}>
-                {(transaction) => (
-                  <TableRow key={transaction.id}>
+                {(transaksi) => (
+                  <TableRow key={transaksi.id_transaksi}>
                     {(columnKey) => (
-                      <TableCell>
-                        {renderCell(transaction, columnKey)}
-                      </TableCell>
+                      <TableCell>{renderCell(transaksi, columnKey)}</TableCell>
                     )}
                   </TableRow>
                 )}
@@ -139,3 +146,18 @@ export default function TransactionPage() {
     </Layout>
   );
 }
+
+export const getServerSideProps = (async () => {
+  const result = await fetcher({
+    url: "/transaksi",
+    method: "GET",
+  });
+
+  const transaksi: TransaksiType[] = result.data as TransaksiType[];
+
+  return {
+    props: {
+      transaksi,
+    },
+  };
+}) satisfies GetServerSideProps<{ transaksi: TransaksiType[] }>;

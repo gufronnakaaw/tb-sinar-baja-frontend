@@ -48,9 +48,7 @@ export default function PopupContinuePayment({
   setPengiriman,
   setTipe,
   setTunai,
-  setTotalPembayaran,
   setKembali,
-  setTotalPajak,
   totalPajak,
   setPajak,
   pajak,
@@ -63,12 +61,6 @@ export default function PopupContinuePayment({
   handlePrint,
 }: PopupContinuePaymentProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
-  useEffect(() => {
-    if (tipe == "nota") {
-      setTotalPembayaran(ongkir + totalBelanja);
-    }
-  }, [ongkir, tipe, setTotalPembayaran, totalBelanja]);
 
   useEffect(() => {
     if (tunai == 0) {
@@ -351,7 +343,9 @@ export default function PopupContinuePayment({
                 <Button
                   variant="solid"
                   endContent={<CheckCircle weight="bold" size={18} />}
-                  onPress={onClose}
+                  onPress={() => {
+                    window.location.reload();
+                  }}
                   className="bg-rose-500 font-semibold text-white"
                 >
                   Selesai
