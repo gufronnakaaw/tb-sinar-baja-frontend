@@ -10,7 +10,7 @@ import { formatRupiah } from "@/utils/formatRupiah";
 type CardSellingProductProps = {
   kode_item?: string;
   nama_produk: string;
-  harga: number;
+  harga_4: number;
   gudang: string;
   rak: string;
   stok: number;
@@ -19,7 +19,7 @@ type CardSellingProductProps = {
 export default function CardSellingProduct({
   kode_item,
   nama_produk,
-  harga,
+  harga_4,
   gudang,
   rak,
   stok,
