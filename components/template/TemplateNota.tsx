@@ -17,6 +17,7 @@ import { formatDate } from "@/utils/formatDate";
 const Nota = (props: TransaksiType, ref: any) => {
   const columns = [
     { name: "Jumlah", uid: "jumlah" },
+    { name: "Kode Item", uid: "kode_item" },
     { name: "Nama Produk", uid: "nama_produk" },
     { name: "Harga", uid: "harga" },
     { name: "Sub Total", uid: "subtotal" },
@@ -30,6 +31,12 @@ const Nota = (props: TransaksiType, ref: any) => {
         return (
           <div className="text-[10px] font-medium text-default-900">
             {transaction.jumlah} {transaction.satuan}
+          </div>
+        );
+      case "kode_item":
+        return (
+          <div className="text-[10px] font-medium text-default-900">
+            {transaction.kode_item}
           </div>
         );
       case "nama_produk":
@@ -134,7 +141,7 @@ const Nota = (props: TransaksiType, ref: any) => {
               "[&>tr]:first:rounded-none [&>tr]:first:shadow-none border-b border-black",
             ],
             th: [
-              "px-5 h-[14px] first:rounded-none last:rounded-none bg-transparent text-default-600",
+              "px-5 h-[14px] text-[10px] first:rounded-none last:rounded-none bg-transparent text-default-900",
             ],
             td: ["px-5 py-0 h-[14px]"],
           }}
@@ -149,7 +156,7 @@ const Nota = (props: TransaksiType, ref: any) => {
 
           <TableBody items={props.list_produk}>
             {(transaction) => (
-              <TableRow key={transaction.nama_produk}>
+              <TableRow key={transaction.kode_item}>
                 {(columnKey) => (
                   <TableCell>{renderCell(transaction, columnKey)}</TableCell>
                 )}
@@ -159,19 +166,29 @@ const Nota = (props: TransaksiType, ref: any) => {
         </Table>
 
         <div className="grid justify-self-end border border-black p-2">
-          <div className="grid grid-cols-[50px_6px_1fr] gap-1 text-[10px] text-default-900">
+          <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="w-24 font-medium">Total</div>
             <div className="font-medium">:</div>
             <p className="font-medium">{formatRupiah(props.total_belanja)}</p>
           </div>
 
-          <div className="grid grid-cols-[50px_6px_1fr] gap-1 text-[10px] text-default-900">
+          <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="w-24 font-medium">Ongkir</div>
             <div className="font-medium">:</div>
             <p className="font-medium">{formatRupiah(props.ongkir)}</p>
           </div>
 
-          <div className="grid grid-cols-[50px_6px_1fr] gap-1 text-[10px] text-default-900">
+          {props.pajak ? (
+            <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-default-900">
+              <div className="w-24 font-medium">
+                Pajak ({props.persen_pajak}%)
+              </div>
+              <div className="font-medium">:</div>
+              <p className="font-medium">{formatRupiah(props.pajak)}</p>
+            </div>
+          ) : null}
+
+          <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="w-24 font-medium">Tagihan</div>
             <div className="font-medium">:</div>
             <p className="font-medium">

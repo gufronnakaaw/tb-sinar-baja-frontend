@@ -10,74 +10,28 @@ import {
 } from "@nextui-org/react";
 import { ArrowLeft } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
-import React from "react";
 
 // components
 import InputSearchBar from "@/components/input/InputSearchBar";
 import Layout from "@/components/wrapper/SecondaryLayout";
 
 // utils
+import {
+  columnsTransaksi,
+  renderCellTransaksi,
+} from "@/headers/cashier/transactions";
 import usePagination from "@/hooks/usepagination";
 import { TransaksiType } from "@/types/transactions.type";
 import { customStyleTable } from "@/utils/customStyleTable";
 import { fetcher } from "@/utils/fetcher";
-import { formatDate } from "@/utils/formatDate";
-import { formatRupiah } from "@/utils/formatRupiah";
+
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
 export default function TransactionPage({
   transaksi,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
-
   const { page, pages, data, setPage } = usePagination(transaksi, 10);
-
-  const columns = [
-    { name: "ID Transaksi", uid: "transactions_id", sortable: false },
-    { name: "Tanggal", uid: "transactions_date", sortable: true },
-    { name: "Total", uid: "total", sortable: true },
-    { name: "Aksi", uid: "action", sortable: false },
-  ];
-
-  const renderCell = (transaction: TransaksiType, columnKey: React.Key) => {
-    const cellValue = transaction[columnKey as keyof TransaksiType];
-
-    switch (columnKey) {
-      case "transactions_id":
-        return (
-          <div className="text-default-900">{transaction.id_transaksi}</div>
-        );
-      case "transactions_date":
-        return (
-          <div className="w-max text-default-900">
-            {formatDate(transaction.created_at)}
-          </div>
-        );
-      case "total":
-        return (
-          <div className="text-default-900">
-            {formatRupiah(transaction.total_pembayaran)}
-          </div>
-        );
-      case "action":
-        return (
-          <Button
-            variant="bordered"
-            color="default"
-            size="sm"
-            onClick={() =>
-              alert(`ID Transactions: ${transaction.id_transaksi}`)
-            }
-            className="font-medium"
-          >
-            Detail
-          </Button>
-        );
-
-      default:
-        return cellValue;
-    }
-  };
 
   return (
     <Layout title="Transactions List">
@@ -114,7 +68,7 @@ export default function TransactionPage({
               classNames={customStyleTable}
               className="scrollbar-hide"
             >
-              <TableHeader columns={columns}>
+              <TableHeader columns={columnsTransaksi}>
                 {(column) => (
                   <TableColumn key={column.uid}>{column.name}</TableColumn>
                 )}
@@ -124,7 +78,9 @@ export default function TransactionPage({
                 {(transaksi) => (
                   <TableRow key={transaksi.id_transaksi}>
                     {(columnKey) => (
-                      <TableCell>{renderCell(transaksi, columnKey)}</TableCell>
+                      <TableCell>
+                        {renderCellTransaksi(transaksi, columnKey, router)}
+                      </TableCell>
                     )}
                   </TableRow>
                 )}

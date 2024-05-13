@@ -60,7 +60,6 @@ export default function SellingPage() {
   const router = useRouter();
   const sellingRef = useRef(null);
   const reactPrint = useReactToPrint({
-    documentTitle: title,
     content: () => sellingRef.current,
   });
 
@@ -69,6 +68,10 @@ export default function SellingPage() {
   const [listProduk, setListProduk] = useState<ProdukList[]>([]);
   const [totalPembayaran, setTotalPembayaran] = useState(0);
   const [totalBelanja, setTotalBelanja] = useState(0);
+
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
 
   async function handlePrint() {
     try {
@@ -84,12 +87,16 @@ export default function SellingPage() {
           ongkir,
           total_belanja: listProduk.reduce((a, b) => a + b.subtotal, 0),
           total_pembayaran: totalPembayaran,
+          pajak: totalPajak ? totalPajak : null,
+          persen_pajak: pajak ? pajak : null,
           tipe: "umum",
           unique_key,
           tunai,
+          metode: "Cash",
           list_produk: listProduk.map((produk) => {
             return {
               jumlah: produk.qty,
+              kode_item: produk.kode_item,
               satuan: produk.satuan_kecil,
               nama_produk: produk.nama_produk,
               harga: produk.harga,
@@ -99,11 +106,11 @@ export default function SellingPage() {
         },
       });
 
-      setNota(response.data as TransaksiType);
       setTitle(response.data.id_transaksi);
+      setNota(response.data as TransaksiType);
       setTimeout(() => {
         reactPrint();
-      }, 0);
+      }, 100);
     } catch (error) {
       alert("tidak dapat melakukan transaksi");
     }
@@ -161,9 +168,10 @@ export default function SellingPage() {
     if (tipe == "nota") {
       setTotalPembayaran(ongkir + totalBelanja);
     } else {
-      setTotalPembayaran(ongkir + totalBelanja);
+      setTotalPajak((totalBelanja / 100) * pajak);
+      setTotalPembayaran(totalPajak + ongkir + totalBelanja);
     }
-  }, [totalBelanja, ongkir, tipe]);
+  }, [totalBelanja, ongkir, tipe, pajak, totalPajak]);
 
   useEffect(() => {
     setTotalBelanja(listProduk.reduce((a, b) => a + b.subtotal, 0));
@@ -236,6 +244,10 @@ export default function SellingPage() {
 
             <div className="grid gap-4 overflow-y-scroll scrollbar-hide">
               {produk.map((item) => {
+                if (!item.stok) {
+                  return null;
+                }
+
                 return (
                   <CardSellingProduct
                     key={item.kode_item}

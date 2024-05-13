@@ -15,10 +15,11 @@ export interface TransaksiType {
   unique_key: string;
   created_at: string;
   updated_at: string;
-  list_produk: ListProduk[];
+  list_produk?: ListProduk[];
 }
 
 export interface ListProduk {
+  kode_item: string;
   jumlah: number;
   satuan: string;
   nama_produk: string;
