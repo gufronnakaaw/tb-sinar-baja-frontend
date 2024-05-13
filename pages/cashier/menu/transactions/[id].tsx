@@ -1,5 +1,5 @@
 import { Button } from "@nextui-org/react";
-import { ArrowLeft } from "@phosphor-icons/react";
+import { ArrowLeft, Printer } from "@phosphor-icons/react";
 
 // components
 import { TemplateNota } from "@/components/template/TemplateNota";
@@ -22,16 +22,28 @@ export default function TransactionsDetail({
     <Layout title={`Detail Transaksi ${transaksi.id_transaksi}`}>
       <section className="py-24">
         <div className="container mt-8 grid gap-12">
-          <Button
-            variant="light"
-            color="danger"
-            size="sm"
-            startContent={<ArrowLeft weight="bold" size={16} />}
-            onClick={() => router.push("/cashier/menu/transactions")}
-            className="w-max font-semibold"
-          >
-            Kembali ke Menu
-          </Button>
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <Button
+              variant="light"
+              color="danger"
+              size="sm"
+              startContent={<ArrowLeft weight="bold" size={16} />}
+              onClick={() => router.push("/cashier/menu/transactions")}
+              className="w-max font-semibold"
+            >
+              Kembali ke Menu
+            </Button>
+
+            <Button
+              color="danger"
+              size="sm"
+              startContent={<Printer weight="bold" size={17} />}
+              onClick={() => alert("Tombol print telah ditekan!")}
+              className="w-max font-semibold"
+            >
+              Cetak Nota
+            </Button>
+          </div>
 
           <div className="grid gap-4">
             <TemplateNota {...transaksi} />
