@@ -5,7 +5,7 @@ import React from "react";
 
 // components & utils
 import CustomTooltip from "@/components/tooltip";
-import { InvoicesInType } from "@/types/invoice.type";
+import { InvoicesInType, InvoicesOutType } from "@/types/invoice.type";
 import { formatRupiah } from "@/utils/formatRupiah";
 
 type InvoicesInTable = {
@@ -17,6 +17,13 @@ type InvoicesInTable = {
   description: string;
 };
 
+type InvoicesOutTable = {
+  id: string;
+  date: string;
+  total: number;
+  to: string;
+};
+
 export const columnsInvoicesIn = [
   { name: "ID Invoice Masuk", uid: "invin_id" },
   { name: "Dari", uid: "from" },
@@ -24,6 +31,14 @@ export const columnsInvoicesIn = [
   { name: "Total", uid: "total" },
   { name: "Jatuh Tempo", uid: "due_date" },
   { name: "Deskripsi", uid: "description" },
+  { name: "Aksi", uid: "action" },
+];
+
+export const columnsInvoicesOut = [
+  { name: "ID Invoice Keluar", uid: "invout_id" },
+  { name: "Ke", uid: "to" },
+  { name: "Total", uid: "total" },
+  { name: "Tanggal", uid: "invout_date" },
   { name: "Aksi", uid: "action" },
 ];
 
@@ -70,6 +85,65 @@ export function renderCellInvoicesIn(
               variant="light"
               size="sm"
               onClick={() => router.push("/owner/invoices/in")}
+            >
+              <Eye weight="bold" size={20} className="text-default-600" />
+            </Button>
+          </CustomTooltip>
+
+          <CustomTooltip content="Edit">
+            <Button isIconOnly variant="light" size="sm">
+              <Pencil weight="bold" size={20} className="text-default-600" />
+            </Button>
+          </CustomTooltip>
+
+          <CustomTooltip content="Hapus">
+            <Button isIconOnly variant="light" color="danger" size="sm">
+              <Trash weight="bold" size={20} />
+            </Button>
+          </CustomTooltip>
+        </div>
+      );
+
+    default:
+      return cellValue;
+  }
+}
+
+export function renderCellInvoicesOut(
+  invout: InvoicesOutType,
+  columnKey: React.Key,
+  router: NextRouter,
+) {
+  const cellValue = invout[columnKey as keyof InvoicesOutTable];
+
+  switch (columnKey) {
+    case "invout_id":
+      return <div className="text-default-900">{invout.id}</div>;
+    case "to":
+      return <div className="w-max text-default-900">{invout.to}</div>;
+    case "total":
+      return (
+        <div className="w-max text-default-900">
+          {formatRupiah(invout.total)}
+        </div>
+      );
+    case "invout_date":
+      return <div className="w-max text-default-900">{invout.date}</div>;
+    case "action":
+      return (
+        <div className="flex items-center gap-1">
+          <CustomTooltip content="Cetak">
+            <Button isIconOnly variant="light" size="sm">
+              <Printer weight="bold" size={20} className="text-default-600" />
+            </Button>
+          </CustomTooltip>
+
+          <CustomTooltip content="Detail">
+            <Button
+              isIconOnly
+              variant="light"
+              size="sm"
+              onClick={() => router.push("/owner/invoices/out")}
             >
               <Eye weight="bold" size={20} className="text-default-600" />
             </Button>
