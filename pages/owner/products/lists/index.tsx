@@ -12,6 +12,7 @@ import { Eye, Pencil, Trash } from "@phosphor-icons/react";
 
 // components
 import InputSearchBar from "@/components/input/InputSearchBar";
+import PopupImportProducts from "@/components/popup/PopupImportProducts";
 import CustomTooltip from "@/components/tooltip";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
@@ -126,13 +127,7 @@ export default function ProductsListsPage() {
               className="w-full sm:max-w-[500px]"
             />
 
-            <Button
-              variant="solid"
-              color="primary"
-              className="w-full font-medium sm:w-max"
-            >
-              Buat Produk
-            </Button>
+            <PopupImportProducts />
           </div>
 
           <Table
