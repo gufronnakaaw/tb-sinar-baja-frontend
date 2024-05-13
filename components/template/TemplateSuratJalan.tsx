@@ -6,59 +6,59 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import React from "react";
+import React, { forwardRef } from "react";
 
 // utils
 
 type SuratJalanProps = {
   id: number;
-  product_name: string;
-  amount: number | string;
-  description: string;
+  nama_produk: string;
+  jumlah: number;
+  lokasi: string;
 };
 
 const items: SuratJalanProps[] = [
   {
     id: 1,
-    product_name: "Spigot Alumunium 16x14x1.7",
-    amount: 3,
-    description: "Lorem ipsum dolor sit, amet consectetur adipisicing.",
+    nama_produk: "Lorem ipsum",
+    jumlah: 3,
+    lokasi: "Gudang A",
   },
   {
     id: 2,
-    product_name: "Plat Alumunium (1100) 100x200x1.58-1.62",
-    amount: 6,
-    description: "Lorem ipsum dolor sit, amet consectetur adipisicing.",
+    nama_produk: "Lorem ipsum",
+    jumlah: 6,
+    lokasi: "Gudang B",
   },
 ];
 
-export default function TemplateSuratJalan() {
+const SuratJalan = (props: any, ref: any) => {
   const columns = [
-    { name: "Nama Barang", uid: "product_name" },
-    { name: "Jumlah", uid: "amount" },
-    { name: "Keterangan", uid: "description" },
+    { name: "Jumlah", uid: "jumlah" },
+    { name: "Nama Barang", uid: "nama_produk" },
+    { name: "Lokasi", uid: "lokasi" },
   ];
 
   const renderCell = (item: SuratJalanProps, columnKey: React.Key) => {
     const cellValue = item[columnKey as keyof SuratJalanProps];
 
     switch (columnKey) {
-      case "product_name":
+      case "jumlah":
+        return (
+          <div className="text-[10px] font-medium text-default-900">
+            {item.jumlah} btl
+          </div>
+        );
+      case "nama_produk":
         return (
           <div className="w-max text-[10px] font-medium text-default-900">
-            {item.product_name}
+            {item.nama_produk}
           </div>
         );
-      case "amount":
+      case "lokasi":
         return (
-          <div className="text-[10px] font-medium text-default-900">
-            {item.amount}
-          </div>
-        );
-      case "description":
-        return (
-          <div className="text-[10px] font-medium text-default-900">
-            {item.description}
+          <div className="w-max text-[10px] font-medium text-default-900">
+            {item.lokasi}
           </div>
         );
 
@@ -68,7 +68,7 @@ export default function TemplateSuratJalan() {
   };
 
   return (
-    <div className="grid gap-8 pt-8">
+    <div className="grid gap-8 px-20 pt-8" ref={ref}>
       <div className="grid grid-cols-2 items-start gap-12">
         <div className="grid gap-1">
           <h1 className="text-lg font-bold text-default-900">TB. Sinar Baja</h1>
@@ -83,6 +83,12 @@ export default function TemplateSuratJalan() {
 
         <div className="grid gap-4">
           <div className="grid">
+            <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-default-900">
+              <div className="font-medium">Id Transaksi</div>
+              <div className="font-medium">:</div>
+              <p className="font-medium">TX130524084725</p>
+            </div>
+
             <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-default-900">
               <div className="font-medium">Tanggal</div>
               <div className="font-medium">:</div>
@@ -158,7 +164,23 @@ export default function TemplateSuratJalan() {
       <div className="flex items-center justify-between gap-4">
         <div className="grid gap-12 text-center">
           <h4 className="text-[12px] font-semibold text-default-900">
-            Yang Menerina,
+            Disiapkan oleh,
+          </h4>
+          <div className="text-sm font-medium text-default-900">
+            (............................................................)
+          </div>
+        </div>
+        <div className="grid gap-12 text-center">
+          <h4 className="text-[12px] font-semibold text-default-900">
+            Gudang A
+          </h4>
+          <div className="text-sm font-medium text-default-900">
+            (............................................................)
+          </div>
+        </div>
+        <div className="grid gap-12 text-center">
+          <h4 className="text-[12px] font-semibold text-default-900">
+            Gudang B
           </h4>
           <div className="text-sm font-medium text-default-900">
             (............................................................)
@@ -176,4 +198,6 @@ export default function TemplateSuratJalan() {
       </div>
     </div>
   );
-}
+};
+
+export const TemplateSuratJalan = forwardRef(SuratJalan);

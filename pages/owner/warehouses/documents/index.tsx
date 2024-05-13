@@ -1,31 +1,28 @@
-import {
-  Button,
-  Pagination,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import { Eye, Pencil, Trash } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
 
 // components
-import InputSearchBar from "@/components/input/InputSearchBar";
 import CustomTooltip from "@/components/tooltip";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 
 // utils
 import usePagination from "@/hooks/usepagination";
-import { customStyleTable } from "@/utils/customStyleTable";
 
 import { WarehouseDocuments, warehouseDocuments } from "@/_dummy/warehouses";
+import { TemplateSuratJalan } from "@/components/template/TemplateSuratJalan";
+import { useRef } from "react";
+import { useReactToPrint } from "react-to-print";
 
 export default function WarehousesDocumentsPage() {
   const router = useRouter();
   const { page, pages, data, setPage } = usePagination(warehouseDocuments, 10);
+
+  const componentRef = useRef(null);
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
 
   const columns = [
     { name: "Invoice", uid: "invoice", sortable: false },
@@ -90,10 +87,10 @@ export default function WarehousesDocumentsPage() {
   return (
     <Layout title="Surat Jalan">
       <Container className="gap-8">
-        <h4 className="text-lg font-semibold text-default-900">Surat Jalan</h4>
+        {/* <h4 className="text-lg font-semibold text-default-900">Surat Jalan</h4> */}
 
         <div className="grid gap-4">
-          <div className="flex flex-wrap items-center justify-between gap-4">
+          {/* <div className="flex flex-wrap items-center justify-between gap-4">
             <InputSearchBar
               placeholder="Cari surat jalan..."
               className="w-full sm:max-w-[500px]"
@@ -106,9 +103,9 @@ export default function WarehousesDocumentsPage() {
             >
               Buat Surat Jalan
             </Button>
-          </div>
+          </div> */}
 
-          <Table
+          {/* <Table
             isHeaderSticky
             aria-label="warehouseDocuments table"
             color="primary"
@@ -143,7 +140,18 @@ export default function WarehousesDocumentsPage() {
             total={pages}
             onChange={setPage}
             className="justify-self-center"
-          />
+          /> */}
+
+          <Button
+            variant="solid"
+            color="primary"
+            className="w-full justify-self-end font-medium sm:w-max"
+            onClick={handlePrint}
+          >
+            Print
+          </Button>
+
+          <TemplateSuratJalan ref={componentRef} />
         </div>
       </Container>
     </Layout>
