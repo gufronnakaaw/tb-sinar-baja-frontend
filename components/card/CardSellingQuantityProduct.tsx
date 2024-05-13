@@ -100,12 +100,17 @@ export default function CardSellingQuantityProduct({
           labelPlacement="outside"
           onChange={(e) => {
             if (parseInt(e.target.value) > stok) {
+              setKodeItem(kode_item);
               setQuantity(stok);
             }
 
             if (e.target.value == "") {
+              setKodeItem(kode_item);
+
               setQuantity(0);
             } else {
+              setKodeItem(kode_item);
+
               setQuantity(parseInt(e.target.value));
             }
           }}
