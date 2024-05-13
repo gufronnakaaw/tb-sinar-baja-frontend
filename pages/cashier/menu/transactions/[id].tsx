@@ -18,8 +18,6 @@ export default function TransactionsDetail({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
 
-  console.log(transaksi);
-
   return (
     <Layout title={`Detail Transaksi ${transaksi.id_transaksi}`}>
       <section className="py-24">

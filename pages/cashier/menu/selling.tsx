@@ -55,7 +55,7 @@ export default function SellingPage() {
   const [produk, setProduk] = useState<ProdukType[]>([]);
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
-  const [nota, setNota] = useState<TransaksiType>(null);
+  const [dataPrint, setDataPrint] = useState<TransaksiType>(null);
 
   const router = useRouter();
   const sellingRef = useRef(null);
@@ -107,7 +107,7 @@ export default function SellingPage() {
       });
 
       setTitle(response.data.id_transaksi);
-      setNota(response.data as TransaksiType);
+      setDataPrint(response.data as TransaksiType);
       setTimeout(() => {
         reactPrint();
       }, 100);
@@ -180,7 +180,7 @@ export default function SellingPage() {
   return (
     <>
       <div className="hidden">
-        {title ? <TemplateNota {...nota} ref={sellingRef} /> : null}
+        {title ? <TemplateNota {...dataPrint} ref={sellingRef} /> : null}
       </div>
 
       <Head>

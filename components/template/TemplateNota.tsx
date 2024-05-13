@@ -78,7 +78,7 @@ const Nota = (props: TransaksiType, ref: any) => {
         </div>
 
         <h4 className="text-center text-xl font-bold uppercase text-black">
-          Nota
+          {props.pajak ? "FAKTUR" : "NOTA"}
         </h4>
       </div>
 
