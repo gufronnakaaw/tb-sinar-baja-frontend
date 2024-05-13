@@ -56,9 +56,7 @@ export function renderCellTransaksi(
             variant="light"
             size="sm"
             onClick={() =>
-              router.push(
-                `/cashier/menu/transactions/${transaction.id_transaksi}`,
-              )
+              router.push(`/owner/histories/${transaction.id_transaksi}`)
             }
           >
             <Eye weight="bold" size={20} className="text-default-600" />

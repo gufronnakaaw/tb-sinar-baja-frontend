@@ -1,5 +1,4 @@
 import {
-  Button,
   Pagination,
   Table,
   TableBody,
@@ -8,70 +7,34 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { Eye } from "@phosphor-icons/react";
-import React from "react";
 
 // components
 import InputSearchBar from "@/components/input/InputSearchBar";
-import CustomTooltip from "@/components/tooltip";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 
 // utils
 import usePagination from "@/hooks/usepagination";
 import { customStyleTable } from "@/utils/customStyleTable";
-import { formatRupiah } from "@/utils/formatRupiah";
 
 // dummy data
-import { transactions } from "@/_dummy/transactions";
+import {
+  columnsTransaksi,
+  renderCellTransaksi,
+} from "@/headers/owner/histories";
+import { TransaksiType } from "@/types/transactions.type";
+import { fetcher } from "@/utils/fetcher";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { useRouter } from "next/router";
 
-type TransactionType = (typeof transactions)[0];
-
-export default function HistoriesPage() {
-  const { page, pages, data, setPage } = usePagination(transactions, 10);
-
-  const columns = [
-    { name: "ID Transaksi", uid: "transactions_id", sortable: false },
-    { name: "Total", uid: "total", sortable: true },
-    { name: "Tanggal", uid: "transactions_date", sortable: true },
-    { name: "Aksi", uid: "action", sortable: false },
-  ];
-
-  const renderCell = (transaction: TransactionType, columnKey: React.Key) => {
-    const cellValue = transaction[columnKey as keyof TransactionType];
-
-    switch (columnKey) {
-      case "transactions_id":
-        return <div className="text-default-900">{transaction.id}</div>;
-      case "total":
-        return (
-          <div className="w-max text-default-900">
-            {formatRupiah(transaction.total)}
-          </div>
-        );
-      case "transactions_date":
-        return <div className="w-max text-default-900">{transaction.date}</div>;
-      case "action":
-        return (
-          <CustomTooltip content="Detail">
-            <Button
-              isIconOnly
-              variant="light"
-              size="sm"
-              onClick={() => alert(`ID Transactions ${transaction.id}`)}
-            >
-              <Eye weight="bold" size={20} className="text-default-600" />
-            </Button>
-          </CustomTooltip>
-        );
-
-      default:
-        return cellValue;
-    }
-  };
+export default function HistoriesPage({
+  transaksi,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const { page, pages, data, setPage } = usePagination(transaksi, 10);
+  const router = useRouter();
 
   return (
-    <Layout title="Transactions List">
+    <Layout title="Daftar Transaksi">
       <Container className="gap-8">
         <h4 className="text-lg font-semibold text-default-900">
           Riwayat Transaksi
@@ -91,7 +54,7 @@ export default function HistoriesPage() {
             classNames={customStyleTable}
             className="scrollbar-hide"
           >
-            <TableHeader columns={columns}>
+            <TableHeader columns={columnsTransaksi}>
               {(column) => (
                 <TableColumn key={column.uid}>{column.name}</TableColumn>
               )}
@@ -99,9 +62,11 @@ export default function HistoriesPage() {
 
             <TableBody items={data}>
               {(transaction) => (
-                <TableRow key={transaction.id}>
+                <TableRow key={transaction.id_transaksi}>
                   {(columnKey) => (
-                    <TableCell>{renderCell(transaction, columnKey)}</TableCell>
+                    <TableCell>
+                      {renderCellTransaksi(transaction, columnKey, router)}
+                    </TableCell>
                   )}
                 </TableRow>
               )}
@@ -122,3 +87,18 @@ export default function HistoriesPage() {
     </Layout>
   );
 }
+
+export const getServerSideProps = (async () => {
+  const result = await fetcher({
+    url: "/transaksi",
+    method: "GET",
+  });
+
+  const transaksi: TransaksiType[] = result.data as TransaksiType[];
+
+  return {
+    props: {
+      transaksi,
+    },
+  };
+}) satisfies GetServerSideProps<{ transaksi: TransaksiType[] }>;
