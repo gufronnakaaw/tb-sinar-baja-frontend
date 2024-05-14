@@ -20,15 +20,15 @@ type SuratJalanProps = {
 const items: SuratJalanProps[] = [
   {
     id: 1,
-    nama_produk: "Lorem ipsum",
+    nama_produk: "Sealent Asam Hitam(Black) 300gr",
     jumlah: 3,
-    lokasi: "Gudang A",
+    lokasi: "Gudang 1",
   },
   {
     id: 2,
-    nama_produk: "Lorem ipsum",
+    nama_produk: "Sealent Asam abu-abu(Light Grey) 300gr",
     jumlah: 6,
-    lokasi: "Gudang B",
+    lokasi: "Gudang 2",
   },
 ];
 

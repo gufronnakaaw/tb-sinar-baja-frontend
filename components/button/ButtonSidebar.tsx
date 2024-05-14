@@ -51,7 +51,7 @@ export default function ButtonSidebar({
   return (
     <Link
       href={path}
-      className={`flex h-10 items-center justify-between rounded-xl px-3 py-2 ${setActive(path)} ${className}`}
+      className={`flex h-10 items-center justify-between rounded-xl px-3 py-2 ${setActive(path)} ${className} ${isDev ? "text-gray-300" : ""}`}
       onClick={(e) => {
         if (isDev) {
           e.preventDefault();
