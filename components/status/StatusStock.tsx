@@ -10,11 +10,7 @@ export default function StatusStock({ text }: StatusStockProps) {
     <Chip
       variant="flat"
       color={
-        text === "stok aman"
-          ? "success"
-          : text === "stok menipis"
-            ? "warning"
-            : "danger"
+        text === "aman" ? "success" : text === "menipis" ? "warning" : "danger"
       }
       size="lg"
       startContent={<Circle weight="fill" size={8} className="animate-ping" />}
@@ -23,7 +19,7 @@ export default function StatusStock({ text }: StatusStockProps) {
         content: "font-semibold capitalize",
       }}
     >
-      {text}
+      stok {text}
     </Chip>
   );
 }

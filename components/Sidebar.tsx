@@ -8,8 +8,6 @@ import {
   ClockCounterClockwise,
   House,
   Invoice,
-  ListBullets,
-  ListNumbers,
   Package,
   Truck,
   User,
@@ -189,11 +187,13 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                     label="Pre Order"
                     path="/owner/preorders"
                     icon={<ClockClockwise weight="bold" size={20} />}
+                    isDev={true}
                   />
 
                   <ButtonSidebar
                     label="Order"
                     path="/owner/orders"
+                    isDev={true}
                     icon={<ClipboardText weight="bold" size={20} />}
                   />
 
@@ -230,6 +230,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                         path="/owner/invoices/in"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
+                        isDev={true}
                       />
 
                       <ButtonSidebar
@@ -237,6 +238,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                         path="/owner/invoices/out"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
+                        isDev={true}
                       />
                     </AccordionItem>
                   </Accordion>
@@ -245,6 +247,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                     label="Pembayaran"
                     path="/owner/payments"
                     icon={<Wallet weight="bold" size={20} />}
+                    isDev={true}
                   />
 
                   <ButtonSidebar
@@ -301,6 +304,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                         path="/owner/products/stocks"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
+                        isDev={true}
                       />
 
                       <ButtonSidebar
@@ -308,6 +312,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                         path="/owner/products/categories"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
+                        isDev={true}
                       />
                     </AccordionItem>
                   </Accordion>
@@ -345,6 +350,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                         path="/owner/suppliers/lists"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
+                        isDev={true}
                       />
 
                       <ButtonSidebar
@@ -352,6 +358,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                         path="/owner/suppliers/pricelists"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
+                        isDev={true}
                       />
                     </AccordionItem>
                   </Accordion>
@@ -389,6 +396,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                         path="/owner/members/lists"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
+                        isDev={true}
                       />
 
                       <ButtonSidebar
@@ -396,6 +404,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                         path="/owner/members/levels"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
+                        isDev={true}
                       />
                     </AccordionItem>
                   </Accordion>
@@ -433,6 +442,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                         path="/owner/warehouses/in"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
+                        isDev={true}
                       />
 
                       <ButtonSidebar
@@ -440,6 +450,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                         path="/owner/warehouses/out"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
+                        isDev={true}
                       />
 
                       <ButtonSidebar
@@ -462,13 +473,14 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                     label="Pengguna"
                     path="/owner/users"
                     icon={<User weight="bold" size={20} />}
+                    isDev={true}
                   />
                 </div>
               </div>
             </>
           ) : null}
 
-          {router.pathname.startsWith("/admin") ? (
+          {/* {router.pathname.startsWith("/admin") ? (
             <>
               <ButtonSidebar
                 label="Dashboard"
@@ -616,7 +628,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                 </div>
               </div>
             </>
-          ) : null}
+          ) : null} */}
 
           {router.pathname.startsWith("/cashier") ? (
             <>

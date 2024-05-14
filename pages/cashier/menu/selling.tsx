@@ -244,10 +244,6 @@ export default function SellingPage() {
 
             <div className="grid gap-4 overflow-y-scroll scrollbar-hide">
               {produk.map((item) => {
-                if (!item.stok) {
-                  return null;
-                }
-
                 return (
                   <CardSellingProduct
                     key={item.kode_item}

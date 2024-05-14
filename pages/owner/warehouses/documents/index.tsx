@@ -104,7 +104,6 @@ export default function WarehousesDocumentsPage() {
               Buat Surat Jalan
             </Button>
           </div> */}
-
           {/* <Table
             isHeaderSticky
             aria-label="warehouseDocuments table"
@@ -141,7 +140,11 @@ export default function WarehousesDocumentsPage() {
             onChange={setPage}
             className="justify-self-center"
           /> */}
-
+          <div className="printLayoutContainer">
+            <style type="text/css" media="print">
+              {" @page { size: landscape; } "}
+            </style>
+          </div>
           <Button
             variant="solid"
             color="primary"
@@ -150,7 +153,6 @@ export default function WarehousesDocumentsPage() {
           >
             Print
           </Button>
-
           <TemplateSuratJalan ref={componentRef} />
         </div>
       </Container>

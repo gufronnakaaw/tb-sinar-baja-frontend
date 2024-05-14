@@ -34,7 +34,7 @@ export default function TransactionPage({
   const { page, pages, data, setPage } = usePagination(transaksi, 10);
 
   return (
-    <Layout title="Transactions List">
+    <Layout title="Daftar Transaksi">
       <section className="py-24">
         <div className="container mt-8 grid gap-8">
           <Button

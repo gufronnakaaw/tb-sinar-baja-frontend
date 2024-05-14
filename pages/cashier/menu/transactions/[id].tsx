@@ -12,11 +12,18 @@ import {
   InferGetServerSidePropsType,
 } from "next";
 import { useRouter } from "next/router";
+import { useRef } from "react";
+import { useReactToPrint } from "react-to-print";
 
 export default function TransactionsDetail({
   transaksi,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
+  const componentRef = useRef(null)
+  const handlePrint = useReactToPrint({
+    documentTitle: transaksi.id_transaksi,
+    content: () => componentRef.current
+  })
 
   return (
     <Layout title={`Detail Transaksi ${transaksi.id_transaksi}`}>
@@ -38,7 +45,7 @@ export default function TransactionsDetail({
               color="danger"
               size="sm"
               startContent={<Printer weight="bold" size={17} />}
-              onClick={() => alert("Tombol print telah ditekan!")}
+              onClick={handlePrint}
               className="w-max font-semibold"
             >
               Cetak Nota
@@ -46,7 +53,7 @@ export default function TransactionsDetail({
           </div>
 
           <div className="grid gap-4">
-            <TemplateNota {...transaksi} />
+            <TemplateNota {...transaksi} ref={componentRef}/>
           </div>
         </div>
       </section>

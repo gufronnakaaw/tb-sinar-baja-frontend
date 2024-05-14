@@ -6,6 +6,7 @@ interface SidebarButtonProps {
   path: string;
   className?: string;
   icon: React.ReactNode;
+  isDev?: boolean;
 }
 
 export default function ButtonSidebar({
@@ -13,6 +14,7 @@ export default function ButtonSidebar({
   label,
   className,
   path,
+  isDev,
 }: SidebarButtonProps) {
   const router = useRouter();
 
@@ -50,6 +52,12 @@ export default function ButtonSidebar({
     <Link
       href={path}
       className={`flex h-10 items-center justify-between rounded-xl px-3 py-2 ${setActive(path)} ${className}`}
+      onClick={(e) => {
+        if (isDev) {
+          e.preventDefault();
+          return alert("dalam tahap pengembangan");
+        }
+      }}
     >
       <div className="flex flex-1 items-center gap-2">
         <>{icon}</>

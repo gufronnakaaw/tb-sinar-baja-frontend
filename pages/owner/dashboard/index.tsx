@@ -19,7 +19,7 @@ export default function DashboardPage() {
     <Layout title="Dashboard Owner">
       <Container>
         <section className="grid gap-12">
-          <StatusStock text="stok aman" />
+          <StatusStock text="aman" />
 
           <div className="grid gap-4">
             <h4 className="text-lg font-semibold text-default-900">
