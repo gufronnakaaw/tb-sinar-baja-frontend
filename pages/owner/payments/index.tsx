@@ -62,11 +62,11 @@ export default function InvoicesOutPage() {
             </TableHeader>
 
             <TableBody items={data}>
-              {(payments) => (
-                <TableRow key={payments.id}>
+              {(payment) => (
+                <TableRow key={payment.id}>
                   {(columnKey) => (
                     <TableCell>
-                      {renderCellPayments(payments, columnKey, router)}
+                      {renderCellPayments(payment, columnKey, router)}
                     </TableCell>
                   )}
                 </TableRow>

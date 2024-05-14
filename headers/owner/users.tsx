@@ -18,7 +18,7 @@ export const columnsUsers = [
   { name: "Nama Pengguna", uid: "name" },
   { name: "Username", uid: "username" },
   { name: "Kata Sandi", uid: "password" },
-  { name: "Dibuat Pada", uid: "created_at" },
+  { name: "Tanggal", uid: "created_at" },
   { name: "Aksi", uid: "action" },
 ];
 

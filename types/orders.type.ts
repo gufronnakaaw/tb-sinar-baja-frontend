@@ -1,5 +1,5 @@
 export type OrdersType = {
-  id_orders: string;
+  id_order: string;
   created_at: string;
   total: number;
   kepada: string;

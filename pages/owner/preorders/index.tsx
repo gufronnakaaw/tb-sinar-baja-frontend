@@ -23,7 +23,6 @@ import {
 import usePagination from "@/hooks/usepagination";
 import { customStyleTable } from "@/utils/customStyleTable";
 
-// dummy data
 import { preorders } from "@/_dummy/preorders";
 
 export default function PreOrdersPage() {
@@ -66,11 +65,11 @@ export default function PreOrdersPage() {
             </TableHeader>
 
             <TableBody items={data}>
-              {(preorders) => (
-                <TableRow key={preorders.id_preorder}>
+              {(preorder) => (
+                <TableRow key={preorder.id_preorder}>
                   {(columnKey) => (
                     <TableCell>
-                      {renderCellPreOrders(preorders, columnKey, router)}
+                      {renderCellPreOrders(preorder, columnKey, router)}
                     </TableCell>
                   )}
                 </TableRow>

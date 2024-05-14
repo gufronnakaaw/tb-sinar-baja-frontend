@@ -1,15 +1,19 @@
+import { Button } from "@nextui-org/react";
+import { Eye } from "@phosphor-icons/react";
+import { NextRouter } from "next/router";
+
+// components & utils
+import StatusDocument from "@/components/status/StatusDocument";
 import CustomTooltip from "@/components/tooltip";
 import { TransaksiType } from "@/types/transactions.type";
 import { formatDate } from "@/utils/formatDate";
 import { formatRupiah } from "@/utils/formatRupiah";
-import { Button } from "@nextui-org/react";
-import { Eye } from "@phosphor-icons/react";
-import { NextRouter } from "next/router";
 
 type TransaksiTable = {
   id_transaksi: string;
   created_at: string;
   total_pembayaran: number;
+  pajak: number;
 };
 
 export const columnsTransaksi = [
@@ -45,7 +49,11 @@ export function renderCellTransaksi(
     case "tipe":
       return (
         <div className="text-default-900">
-          {transaction.pajak ? "Faktur" : "Nota"}
+          {transaction.pajak ? (
+            <StatusDocument text="Faktur" />
+          ) : (
+            <StatusDocument text="Nota" />
+          )}
         </div>
       );
     case "action":

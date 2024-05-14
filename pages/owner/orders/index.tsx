@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
+import { useRouter } from "next/router";
 
 // components
 import InputSearchBar from "@/components/input/InputSearchBar";
@@ -20,7 +21,6 @@ import usePagination from "@/hooks/usepagination";
 import { customStyleTable } from "@/utils/customStyleTable";
 
 import { orders } from "@/_dummy/orders";
-import { useRouter } from "next/router";
 
 export default function OrderPage() {
   const { page, pages, data, setPage } = usePagination(orders, 10);
@@ -62,11 +62,11 @@ export default function OrderPage() {
             </TableHeader>
 
             <TableBody items={data}>
-              {(orders) => (
-                <TableRow key={orders.id_orders}>
+              {(order) => (
+                <TableRow key={order.id_order}>
                   {(columnKey) => (
                     <TableCell>
-                      {renderCellOrders(orders, columnKey, router)}
+                      {renderCellOrders(order, columnKey, router)}
                     </TableCell>
                   )}
                 </TableRow>

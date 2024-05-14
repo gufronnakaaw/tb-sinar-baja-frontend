@@ -11,43 +11,42 @@ import { formatRupiah } from "@/utils/formatRupiah";
 type PreOrdersTable = {
   id_preorder: string;
   customer_name: string;
+  created_at: string;
   total: number;
-  date: string;
 };
 
 export const columnsPreOrders = [
   { name: "ID Pre Order", uid: "id_preorder" },
-  {
-    name: "Nama Pelanggan",
-    uid: "customer_name",
-  },
+  { name: "Nama Pelanggan", uid: "customer_name" },
   { name: "Total", uid: "total" },
-  { name: "Tanggal", uid: "date" },
+  { name: "Tanggal", uid: "created_at" },
   { name: "Aksi", uid: "action" },
 ];
 
 export function renderCellPreOrders(
-  preorders: PreOrdersType,
+  preorder: PreOrdersType,
   columnKey: React.Key,
   router: NextRouter,
 ) {
-  const cellValue = preorders[columnKey as keyof PreOrdersTable];
+  const cellValue = preorder[columnKey as keyof PreOrdersTable];
 
   switch (columnKey) {
     case "id_preorder":
-      return <div className="text-default-900">{preorders.id_preorder}</div>;
+      return <div className="text-default-900">{preorder.id_preorder}</div>;
     case "customer_name":
       return (
-        <div className="w-max text-default-900">{preorders.customer_name}</div>
+        <div className="w-max text-default-900">{preorder.customer_name}</div>
       );
     case "total":
       return (
         <div className="w-max text-default-900">
-          {formatRupiah(preorders.total)}
+          {formatRupiah(preorder.total)}
         </div>
       );
-    case "date":
-      return <div className="w-max text-default-900">{preorders.date}</div>;
+    case "created_at":
+      return (
+        <div className="w-max text-default-900">{preorder.created_at}</div>
+      );
     case "action":
       return (
         <div className="flex max-w-[110px] items-center gap-1">

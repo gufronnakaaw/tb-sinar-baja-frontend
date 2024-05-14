@@ -5,13 +5,13 @@ import React from "react";
 
 // components & utils
 import CustomTooltip from "@/components/tooltip";
-import { InvoicesInType, InvoicesOutType } from "@/types/invoice.type";
+import { InvoicesInType, InvoicesOutType } from "@/types/invoices.type";
 import { formatRupiah } from "@/utils/formatRupiah";
 
 type InvoicesInTable = {
   id: string;
-  from: string;
   reference: string;
+  from: string;
   total: number;
   due_date: string;
   description: string;

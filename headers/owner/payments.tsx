@@ -27,25 +27,25 @@ export const columnsPayments = [
 ];
 
 export function renderCellPayments(
-  payments: PaymentsType,
+  payment: PaymentsType,
   columnKey: React.Key,
   router: NextRouter,
 ) {
-  const cellValue = payments[columnKey as keyof PaymentsTable];
+  const cellValue = payment[columnKey as keyof PaymentsTable];
 
   switch (columnKey) {
     case "payments_id":
-      return <div className="text-default-900">{payments.id}</div>;
+      return <div className="text-default-900">{payment.id}</div>;
     case "from":
-      return <div className="w-max text-default-900">{payments.from}</div>;
+      return <div className="w-max text-default-900">{payment.from}</div>;
     case "status":
-      return <StatusPayment text={payments.status} />;
+      return <StatusPayment text={payment.status} />;
     case "total":
       return (
-        <div className="text-default-900">{formatRupiah(payments.total)}</div>
+        <div className="text-default-900">{formatRupiah(payment.total)}</div>
       );
     case "payments_date":
-      return <div className="w-max text-default-900">{payments.date}</div>;
+      return <div className="w-max text-default-900">{payment.date}</div>;
     case "action":
       return (
         <div className="flex max-w-[110px] items-center gap-1">

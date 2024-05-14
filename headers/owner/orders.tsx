@@ -9,7 +9,7 @@ import { OrdersType } from "@/types/orders.type";
 import { formatRupiah } from "@/utils/formatRupiah";
 
 type OrdersTable = {
-  id_orders: string;
+  id_order: string;
   created_at: string;
   total: number;
   kepada: string;
@@ -19,30 +19,30 @@ export const columnsOrders = [
   { name: "ID Order", uid: "orders_id" },
   { name: "Pembelian Ke", uid: "kepada" },
   { name: "Total", uid: "total" },
-  { name: "Dibuat Pada", uid: "created_at" },
+  { name: "Tanggal", uid: "created_at" },
   { name: "Aksi", uid: "action" },
 ];
 
 export function renderCellOrders(
-  orders: OrdersType,
+  order: OrdersType,
   columnKey: React.Key,
   router: NextRouter,
 ) {
-  const cellValue = orders[columnKey as keyof OrdersTable];
+  const cellValue = order[columnKey as keyof OrdersTable];
 
   switch (columnKey) {
     case "orders_id":
-      return <div className="text-default-900">{orders.id_orders}</div>;
+      return <div className="text-default-900">{order.id_order}</div>;
     case "kepada":
-      return <div className="w-max text-default-900">{orders.kepada}</div>;
+      return <div className="w-max text-default-900">{order.kepada}</div>;
     case "total":
       return (
         <div className="w-max text-default-900">
-          {formatRupiah(orders.total)}
+          {formatRupiah(order.total)}
         </div>
       );
     case "created_at":
-      return <div className="w-max text-default-900">{orders.created_at}</div>;
+      return <div className="w-max text-default-900">{order.created_at}</div>;
     case "action":
       return (
         <div className="flex max-w-[110px] items-center gap-1">

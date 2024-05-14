@@ -17,7 +17,7 @@ import Layout from "@/components/wrapper/DashboardLayout";
 import {
   columnsInvoicesOut,
   renderCellInvoicesOut,
-} from "@/headers/owner/invoice";
+} from "@/headers/owner/invoices";
 
 // utils
 import usePagination from "@/hooks/usepagination";

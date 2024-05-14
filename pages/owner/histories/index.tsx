@@ -7,25 +7,23 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { useRouter } from "next/router";
 
 // components
 import InputSearchBar from "@/components/input/InputSearchBar";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
-
-// utils
-import usePagination from "@/hooks/usepagination";
-import { customStyleTable } from "@/utils/customStyleTable";
-
-// dummy data
 import {
   columnsTransaksi,
   renderCellTransaksi,
 } from "@/headers/owner/histories";
+
+// utils
+import usePagination from "@/hooks/usepagination";
 import { TransaksiType } from "@/types/transactions.type";
+import { customStyleTable } from "@/utils/customStyleTable";
 import { fetcher } from "@/utils/fetcher";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { useRouter } from "next/router";
 
 export default function HistoriesPage({
   transaksi,

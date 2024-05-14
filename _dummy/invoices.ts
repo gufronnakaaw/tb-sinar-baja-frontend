@@ -1,4 +1,4 @@
-import { InvoicesInType, InvoicesOutType } from "@/types/invoice.type";
+import { InvoicesInType, InvoicesOutType } from "@/types/invoices.type";
 
 export const invin: InvoicesInType[] = [
   {

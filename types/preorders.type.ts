@@ -1,6 +1,6 @@
 export type PreOrdersType = {
   id_preorder: string;
   customer_name: string;
-  date: string;
+  created_at: string;
   total: number;
 };
