@@ -8,6 +8,7 @@ import {
   TableRow,
 } from "@nextui-org/react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR from "swr";
 
@@ -16,7 +17,10 @@ import InputSearchBar from "@/components/input/InputSearchBar";
 import PopupImportProducts from "@/components/popup/PopupImportProducts";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
-import { columnsProduk, renderCellProduk } from "@/headers/owner/products";
+import {
+  columnsProduk,
+  renderCellProduk,
+} from "@/headers/owner/products/lists";
 
 // utils
 import { ProdukType } from "@/types/products.type";
@@ -27,6 +31,7 @@ export default function ProductsListsPage(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
   const [page, setPage] = useState(1);
+  const router = useRouter();
 
   const {
     data: produk,
@@ -88,7 +93,9 @@ export default function ProductsListsPage(
               {(item) => (
                 <TableRow key={item.kode_item}>
                   {(columnKey) => (
-                    <TableCell>{renderCellProduk(item, columnKey)}</TableCell>
+                    <TableCell>
+                      {renderCellProduk(item, columnKey, router)}
+                    </TableCell>
                   )}
                 </TableRow>
               )}

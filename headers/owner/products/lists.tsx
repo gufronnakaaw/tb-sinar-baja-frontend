@@ -1,11 +1,10 @@
 import { Button } from "@nextui-org/react";
 import { Eye, Pencil, Trash } from "@phosphor-icons/react";
+import { NextRouter } from "next/router";
 
-// components
-import CustomTooltip from "@/components/tooltip";
-
-// utils
+// components & utils
 import StatusStock from "@/components/status/StatusStock";
+import CustomTooltip from "@/components/tooltip";
 import { formatDate } from "@/utils/formatDate";
 import { formatRupiah } from "@/utils/formatRupiah";
 
@@ -31,7 +30,11 @@ export const columnsProduk = [
   { name: "Aksi", uid: "action" },
 ];
 
-export function renderCellProduk(produk: ProdukTable, columnKey: React.Key) {
+export function renderCellProduk(
+  produk: ProdukTable,
+  columnKey: React.Key,
+  router: NextRouter,
+) {
   const cellValue = produk[columnKey as keyof ProdukTable];
 
   switch (columnKey) {
@@ -78,7 +81,7 @@ export function renderCellProduk(produk: ProdukTable, columnKey: React.Key) {
         <div className="flex max-w-[110px] items-center gap-1">
           <CustomTooltip content="Detail">
             <Button
-              onClick={() => alert("dalam tahap pengembangan")}
+              onClick={() => router.push("/owner/products/lists")}
               isIconOnly
               variant="light"
               size="sm"
