@@ -8,14 +8,13 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { Pencil, Trash } from "@phosphor-icons/react";
-import React from "react";
+import { useRouter } from "next/router";
 
 // components
 import InputSearchBar from "@/components/input/InputSearchBar";
-import CustomTooltip from "@/components/tooltip";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
+import { columnsUsers, renderCellUsers } from "@/headers/owner/users";
 
 // utils
 import usePagination from "@/hooks/usepagination";
@@ -24,56 +23,9 @@ import { customStyleTable } from "@/utils/customStyleTable";
 // dummy data
 import { users } from "@/_dummy/users";
 
-type UserType = (typeof users)[0];
-
 export default function UsersPage() {
   const { page, pages, data, setPage } = usePagination(users, 10);
-
-  const columns = [
-    { name: "Nama Pengguna", uid: "name", sortable: true },
-    { name: "Username", uid: "username", sortable: false },
-    { name: "Kata Sandi", uid: "password", sortable: false },
-    { name: "Dibuat Pada", uid: "created_at", sortable: true },
-    { name: "Aksi", uid: "action", sortable: false },
-  ];
-
-  const renderCell = (user: UserType, columnKey: React.Key) => {
-    const cellValue = user[columnKey as keyof UserType];
-
-    switch (columnKey) {
-      case "name":
-        return (
-          <div className="line-clamp-1 w-max max-w-[250px] text-default-900">
-            {user.name}
-          </div>
-        );
-      case "username":
-        return <div className="w-max text-default-900">{user.username}</div>;
-      case "password":
-        return <div className="w-max text-default-900">{user.password}</div>;
-      case "created_at":
-        return <div className="w-max text-default-900">{user.created_at}</div>;
-      case "action":
-        return (
-          <div className="flex max-w-[110px] items-center gap-1">
-            <CustomTooltip content="Edit">
-              <Button isIconOnly variant="light" size="sm">
-                <Pencil weight="bold" size={20} className="text-default-600" />
-              </Button>
-            </CustomTooltip>
-
-            <CustomTooltip content="Hapus">
-              <Button isIconOnly variant="light" color="danger" size="sm">
-                <Trash weight="bold" size={20} />
-              </Button>
-            </CustomTooltip>
-          </div>
-        );
-
-      default:
-        return cellValue;
-    }
-  };
+  const router = useRouter();
 
   return (
     <Layout title="Users Page">
@@ -104,7 +56,7 @@ export default function UsersPage() {
             classNames={customStyleTable}
             className="scrollbar-hide"
           >
-            <TableHeader columns={columns}>
+            <TableHeader columns={columnsUsers}>
               {(column) => (
                 <TableColumn key={column.uid}>{column.name}</TableColumn>
               )}
@@ -114,7 +66,9 @@ export default function UsersPage() {
               {(user) => (
                 <TableRow key={user.id}>
                   {(columnKey) => (
-                    <TableCell>{renderCell(user, columnKey)}</TableCell>
+                    <TableCell>
+                      {renderCellUsers(user, columnKey, router)}
+                    </TableCell>
                   )}
                 </TableRow>
               )}
