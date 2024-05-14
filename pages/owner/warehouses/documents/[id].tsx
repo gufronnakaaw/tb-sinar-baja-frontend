@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 // components
 import ButtonBack from "@/components/button/ButtonBack";
-import TemplateSuratJalan from "@/components/template/TemplateSuratJalan";
+// import TemplateSuratJalan from "@/components/template/TemplateSuratJalan";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 
@@ -32,7 +32,7 @@ export default function DocumentDetails() {
           </Button>
         </div>
 
-        <TemplateSuratJalan />
+        {/* <TemplateSuratJalan /> */}
       </Container>
     </Layout>
   );
