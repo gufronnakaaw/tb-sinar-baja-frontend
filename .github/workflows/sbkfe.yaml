@@ -14,7 +14,7 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            cd ${{ secrets.PATH }}
+            cd /home/rodaharapansemesta/tb-sinar-baja-frontend/
             echo ${{ secrets.PASSWORD }} | sudo -S git pull
             sudo git status
             sudo npm run build
