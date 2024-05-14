@@ -1,10 +1,9 @@
-export type CategoriesType = {
-  code: string;
-  name: string;
-  created_at: string;
-};
+import {
+  ProductsCategoriesType,
+  ProductsSubCategoriesType,
+} from "@/types/productsCategories.type";
 
-export const categories: CategoriesType[] = [
+export const categories: ProductsCategoriesType[] = [
   {
     code: "CAT01",
     name: "Paralon",
@@ -17,14 +16,7 @@ export const categories: CategoriesType[] = [
   },
 ];
 
-export type SubCategoriesType = {
-  code: string;
-  name: string;
-  category: string;
-  created_at: string;
-};
-
-export const subcategories: SubCategoriesType[] = [
+export const subcategories: ProductsSubCategoriesType[] = [
   {
     code: "SUBCAT01",
     category: "CAT01",

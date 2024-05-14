@@ -1,16 +1,6 @@
-export type ProductsType = {
-  id: string;
-  nama: string;
-  stok: number;
-  kategori: string;
-  harga_umum: number;
-  harga_reseller: number;
-  harga_agen: number;
-  harga_diskon: number;
-  created_at: string;
-};
+import { ProductsStocksType } from "@/types/productsStocks.type";
 
-export const products: ProductsType[] = [
+export const products: ProductsStocksType[] = [
   {
     id: "PRODUCT01",
     nama: "Pipa UPVC Alderon AW 1 Pipa UPVC Alderon AW 1",

@@ -8,76 +8,26 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { Eye, Pencil, Trash } from "@phosphor-icons/react";
+import { useRouter } from "next/router";
 
 // components
 import InputSearchBar from "@/components/input/InputSearchBar";
-import CustomTooltip from "@/components/tooltip";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
+import {
+  columnsProductsStocks,
+  renderCellProductsStocks,
+} from "@/headers/owner/products/stocks";
 
 // utils
 import usePagination from "@/hooks/usepagination";
 import { customStyleTable } from "@/utils/customStyleTable";
 
-import { ProductsType, products } from "@/_dummy/products";
+import { products } from "@/_dummy/products";
 
 export default function ProductsStocksPage() {
   const { page, pages, data, setPage } = usePagination(products, 10);
-
-  const columns = [
-    { name: "ID Produk", uid: "products_id", sortable: false },
-    { name: "Nama", uid: "nama", sortable: true },
-    { name: "Kategori", uid: "kategori", sortable: true },
-    { name: "Stok", uid: "stok", sortable: true },
-    { name: "Aksi", uid: "action", sortable: false },
-  ];
-
-  const renderCell = (products: ProductsType, columnKey: React.Key) => {
-    const cellValue = products[columnKey as keyof ProductsType];
-
-    switch (columnKey) {
-      case "products_id":
-        return <div className="text-default-900">{products.id}</div>;
-      case "nama":
-        return (
-          <div className="line-clamp-1 w-max max-w-[250px] text-default-900">
-            {products.nama}
-          </div>
-        );
-      case "kategori":
-        return (
-          <div className="w-max text-default-900">{products.kategori}</div>
-        );
-      case "stok":
-        return <div className="text-default-900">{products.stok}</div>;
-      case "action":
-        return (
-          <div className="flex max-w-[110px] items-center gap-1">
-            <CustomTooltip content="Detail">
-              <Button isIconOnly variant="light" size="sm">
-                <Eye weight="bold" size={20} className="text-default-600" />
-              </Button>
-            </CustomTooltip>
-
-            <CustomTooltip content="Edit">
-              <Button isIconOnly variant="light" size="sm">
-                <Pencil weight="bold" size={20} className="text-default-600" />
-              </Button>
-            </CustomTooltip>
-
-            <CustomTooltip content="Hapus">
-              <Button isIconOnly variant="light" color="danger" size="sm">
-                <Trash weight="bold" size={20} />
-              </Button>
-            </CustomTooltip>
-          </div>
-        );
-
-      default:
-        return cellValue;
-    }
-  };
+  const router = useRouter();
 
   return (
     <Layout title="Stok Produk">
@@ -102,23 +52,25 @@ export default function ProductsStocksPage() {
 
           <Table
             isHeaderSticky
-            aria-label="products table"
+            aria-label="products stocks table"
             color="primary"
             selectionMode="single"
             classNames={customStyleTable}
             className="scrollbar-hide"
           >
-            <TableHeader columns={columns}>
+            <TableHeader columns={columnsProductsStocks}>
               {(column) => (
                 <TableColumn key={column.uid}>{column.name}</TableColumn>
               )}
             </TableHeader>
 
             <TableBody items={data}>
-              {(products) => (
-                <TableRow key={products.id}>
+              {(product) => (
+                <TableRow key={product.id}>
                   {(columnKey) => (
-                    <TableCell>{renderCell(products, columnKey)}</TableCell>
+                    <TableCell>
+                      {renderCellProductsStocks(product, columnKey, router)}
+                    </TableCell>
                   )}
                 </TableRow>
               )}
