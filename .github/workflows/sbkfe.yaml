@@ -1,0 +1,21 @@
+name: SBKFE
+on:
+  push:
+    branches: ["main"]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Telemetri SBKFE using ssh
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd ${{ secrets.PATH }}
+            echo ${{ secrets.PASSWORD }} | sudo -S git pull
+            sudo git status
+            sudo npm run build
+            sudo pm2 restart ${{ secrets.APPNAME }}
