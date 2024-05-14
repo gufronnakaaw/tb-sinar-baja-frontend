@@ -140,11 +140,7 @@ export default function WarehousesDocumentsPage() {
             onChange={setPage}
             className="justify-self-center"
           /> */}
-          <div className="printLayoutContainer">
-            <style type="text/css" media="print">
-              {" @page { size: landscape; } "}
-            </style>
-          </div>
+
           <Button
             variant="solid"
             color="primary"

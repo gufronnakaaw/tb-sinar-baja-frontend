@@ -68,7 +68,7 @@ const SuratJalan = (props: any, ref: any) => {
   };
 
   return (
-    <div className="grid gap-8 px-20 pt-8" ref={ref}>
+    <div className="container grid gap-8 px-20 pt-8 font-inter" ref={ref}>
       <div className="grid grid-cols-2 items-start gap-12">
         <div className="grid gap-1">
           <h1 className="text-lg font-bold text-default-900">TB. Sinar Baja</h1>
@@ -84,7 +84,7 @@ const SuratJalan = (props: any, ref: any) => {
         <div className="grid gap-4">
           <div className="grid">
             <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-default-900">
-              <div className="font-medium">Id Transaksi</div>
+              <div className="font-medium">ID Transaksi</div>
               <div className="font-medium">:</div>
               <p className="font-medium">TX130524084725</p>
             </div>
@@ -92,7 +92,7 @@ const SuratJalan = (props: any, ref: any) => {
             <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-default-900">
               <div className="font-medium">Tanggal</div>
               <div className="font-medium">:</div>
-              <p className="font-medium">9 Mei 2024</p>
+              <p className="font-medium">09 Mei 2024</p>
             </div>
 
             <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-default-900">
@@ -137,7 +137,7 @@ const SuratJalan = (props: any, ref: any) => {
               "[&>tr]:first:rounded-none [&>tr]:first:shadow-none border-b border-black",
             ],
             th: [
-              "px-5 h-[14px] first:rounded-none last:rounded-none bg-transparent text-default-600",
+              "px-5 h-[14px] text-[10px] first:rounded-none last:rounded-none bg-transparent text-default-900",
             ],
             td: ["px-5 py-0 h-[14px]"],
           }}
@@ -167,23 +167,23 @@ const SuratJalan = (props: any, ref: any) => {
             Disiapkan oleh,
           </h4>
           <div className="text-sm font-medium text-default-900">
-            (............................................................)
+            (..................................)
           </div>
         </div>
         <div className="grid gap-12 text-center">
           <h4 className="text-[12px] font-semibold text-default-900">
-            Gudang A
+            Gudang 1
           </h4>
           <div className="text-sm font-medium text-default-900">
-            (............................................................)
+            (..................................)
           </div>
         </div>
         <div className="grid gap-12 text-center">
           <h4 className="text-[12px] font-semibold text-default-900">
-            Gudang B
+            Gudang 2
           </h4>
           <div className="text-sm font-medium text-default-900">
-            (............................................................)
+            (..................................)
           </div>
         </div>
 
@@ -192,7 +192,7 @@ const SuratJalan = (props: any, ref: any) => {
             Hormat Kami,
           </h4>
           <div className="text-sm font-medium text-default-900">
-            (............................................................)
+            (..................................)
           </div>
         </div>
       </div>
