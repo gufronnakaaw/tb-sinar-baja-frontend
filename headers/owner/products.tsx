@@ -16,6 +16,7 @@ type ProdukTable = {
   harga_4: number;
   subkategori?: string;
   status_stok: string;
+  stok?: number;
   created_at: string;
 };
 
@@ -23,6 +24,7 @@ export const columnsProduk = [
   { name: "Kode Item", uid: "kode_item" },
   { name: "Nama Produk", uid: "nama_produk" },
   { name: "Kategori", uid: "kategori" },
+  { name: "Stok", uid: "stok" },
   { name: "Harga Umum", uid: "harga_umum" },
   { name: "Status", uid: "status_stok" },
   { name: "Dibuat Pada", uid: "created_at" },
@@ -53,6 +55,8 @@ export function renderCellProduk(produk: ProdukTable, columnKey: React.Key) {
           {produk.kategori} - {produk.subkategori}
         </div>
       );
+    case "stok":
+      return <div className="w-max text-default-900">{produk.stok}</div>;
     case "harga_umum":
       return (
         <div className="text-default-900">{formatRupiah(produk.harga_4)}</div>
