@@ -8,8 +8,6 @@ import {
 } from "@nextui-org/react";
 import React, { forwardRef } from "react";
 
-// utils
-
 type SuratJalanProps = {
   id: number;
   nama_produk: string;
@@ -170,6 +168,7 @@ const SuratJalan = (props: any, ref: any) => {
             (..................................)
           </div>
         </div>
+
         <div className="grid gap-12 text-center">
           <h4 className="text-[12px] font-semibold text-default-900">
             Gudang 1
@@ -178,6 +177,7 @@ const SuratJalan = (props: any, ref: any) => {
             (..................................)
           </div>
         </div>
+
         <div className="grid gap-12 text-center">
           <h4 className="text-[12px] font-semibold text-default-900">
             Gudang 2

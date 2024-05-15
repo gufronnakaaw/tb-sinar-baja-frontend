@@ -1,19 +1,20 @@
 import { Button } from "@nextui-org/react";
 import { Eye, Pencil, Trash } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
+import { useRef } from "react";
+import { useReactToPrint } from "react-to-print";
 
 // components
+import { TemplateSuratJalan } from "@/components/template/TemplateSuratJalan";
 import CustomTooltip from "@/components/tooltip";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 
 // utils
 import usePagination from "@/hooks/usepagination";
+import { WarehouseDocuments } from "@/types/warehouses.type";
 
-import { WarehouseDocuments, warehouseDocuments } from "@/_dummy/warehouses";
-import { TemplateSuratJalan } from "@/components/template/TemplateSuratJalan";
-import { useRef } from "react";
-import { useReactToPrint } from "react-to-print";
+import { warehouseDocuments } from "@/_dummy/warehouses";
 
 export default function WarehousesDocumentsPage() {
   const router = useRouter();

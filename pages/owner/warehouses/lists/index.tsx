@@ -8,20 +8,22 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
 // components
 import InputSearchBar from "@/components/input/InputSearchBar";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
+import {
+  columnsGudang,
+  renderCellGudang,
+} from "@/headers/owner/warehouses/lists";
 
 // utils
 import usePagination from "@/hooks/usepagination";
-import { customStyleTable } from "@/utils/customStyleTable";
-
-import { columnsGudang, renderCellGudang } from "@/headers/owner/warehouses";
 import { WarehousesType } from "@/types/warehouses.type";
+import { customStyleTable } from "@/utils/customStyleTable";
 import { fetcher } from "@/utils/fetcher";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
 export default function WarehousesListsPage({
   gudang,

@@ -1,9 +1,9 @@
-export type WarehouseInType = {
-  product: string;
-  total: number;
-  from: string;
-  created_at: string;
-};
+import {
+  WarehouseDocuments,
+  WarehouseInType,
+  WarehouseLists,
+  WarehouseOutType,
+} from "@/types/warehouses.type";
 
 export const warehouseIn: WarehouseInType[] = [
   {
@@ -20,13 +20,6 @@ export const warehouseIn: WarehouseInType[] = [
   },
 ];
 
-export type WarehouseOutType = {
-  product: string;
-  total: number;
-  reason: string;
-  created_at: string;
-};
-
 export const warehouseOut: WarehouseOutType[] = [
   {
     product: "Papan Trimpek",
@@ -42,11 +35,6 @@ export const warehouseOut: WarehouseOutType[] = [
   },
 ];
 
-export type WarehouseDocuments = {
-  invoice: string;
-  to: string;
-};
-
 export const warehouseDocuments: WarehouseDocuments[] = [
   {
     invoice: "INVOUT08052024",
@@ -57,12 +45,6 @@ export const warehouseDocuments: WarehouseDocuments[] = [
     to: "Pelanggan B",
   },
 ];
-
-export type WarehouseLists = {
-  code: string;
-  name: string;
-  created_at: string;
-};
 
 export const warehouseLists: WarehouseLists[] = [
   {
