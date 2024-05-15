@@ -1,5 +1,12 @@
-import { Button, Chip } from "@nextui-org/react";
-import { ArrowLeft, Circle } from "@phosphor-icons/react";
+import {
+  Button,
+  Chip,
+  Input,
+  Radio,
+  RadioGroup,
+  Textarea,
+} from "@nextui-org/react";
+import { ArrowLeft, ArrowUp, Circle } from "@phosphor-icons/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
@@ -10,9 +17,11 @@ import { useDebounce } from "use-debounce";
 import CardSellingProduct from "@/components/card/CardSellingProduct";
 import CardSellingQuantityProduct from "@/components/card/CardSellingQuantityProduct";
 import InputSearchBar from "@/components/input/InputSearchBar";
-import PopupContinuePayment from "@/components/popup/PopupContinuePayment";
-
+// import PopupContinuePayment from "@/components/popup/PopupContinuePayment";
 import { TemplateNota } from "@/components/template/TemplateNota";
+import CustomTooltip from "@/components/tooltip";
+
+// utils
 import { TransaksiType } from "@/types/transactions.type";
 import { fetcher } from "@/utils/fetcher";
 import { formatRupiah } from "@/utils/formatRupiah";
@@ -40,6 +49,7 @@ type ProdukList = {
 const unique_key = (Math.random() + 1).toString(36).substring(7);
 
 export default function SellingPage() {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [telp, setTelp] = useState("-");
   const [penerima, setPenerima] = useState("Umum");
   const [ket, setKet] = useState("-");
@@ -68,6 +78,12 @@ export default function SellingPage() {
   const [listProduk, setListProduk] = useState<ProdukList[]>([]);
   const [totalPembayaran, setTotalPembayaran] = useState(0);
   const [totalBelanja, setTotalBelanja] = useState(0);
+
+  const toggleMenu = () => {
+    if (setMenuOpen) {
+      setMenuOpen(!menuOpen);
+    }
+  };
 
   useEffect(() => {
     document.title = title;
@@ -216,7 +232,7 @@ export default function SellingPage() {
           </Chip>
         </div>
 
-        <div className="grid h-[calc(100vh-64px)] grid-cols-[480px_auto_1fr] gap-4 overflow-hidden">
+        <div className="grid h-[calc(100vh-64px)] grid-cols-[480px_auto_1fr] overflow-hidden">
           {/* ==== left content ==== */}
           <div className="flex flex-col gap-6 overflow-scroll p-4 scrollbar-hide">
             <div className="sticky left-0 top-0 grid gap-4">
@@ -224,6 +240,7 @@ export default function SellingPage() {
                 placeholder="Ketik kode produk/nama produk..."
                 onChange={(e) => setSearch(e.target.value)}
               />
+
               {loading ? (
                 <p className="text-sm font-bold text-rose-500">loading...</p>
               ) : produk.length != 0 ? (
@@ -258,9 +275,14 @@ export default function SellingPage() {
           <div className="h-full w-[1px] bg-gray-300" />
 
           {/* ==== right content ==== */}
-          <div className="grid grid-rows-[auto_1fr_auto] overflow-scroll p-4 scrollbar-hide">
-            <div className="sticky top-0 grid grid-cols-[1fr_repeat(3,140px)_42px] items-center gap-10 border-b border-gray-300 bg-white pb-4">
-              <div className="text-sm font-semibold text-default-600">Item</div>
+          <div className="relative grid grid-rows-[auto_1fr_auto] overflow-hidden bg-white scrollbar-hide">
+            <div className="sticky top-0 grid grid-cols-[1fr_repeat(3,140px)_42px] items-center gap-10 border-b border-gray-300 bg-white p-4">
+              <div className="text-sm font-semibold text-default-600">
+                Item{" "}
+                <span className="font-bold text-rose-500">
+                  {listProduk.length}
+                </span>
+              </div>
               <div className="text-sm font-semibold text-default-600">Qty</div>
               <div className="text-sm font-semibold text-default-600">
                 Harga
@@ -285,15 +307,350 @@ export default function SellingPage() {
               </div>
             </div>
 
-            <div className="sticky bottom-0 grid grid-cols-2 items-center gap-16 border-t border-gray-300 bg-white pt-8">
+            <div className="sticky bottom-0 z-20 grid grid-cols-2 items-center gap-16 border-t border-gray-300 bg-white p-[2rem_1rem_1rem_1rem]">
               <div className="flex items-center justify-between gap-2">
                 <p className="font-medium text-gray-600">Total Belanja :</p>
-                <h5 className="text-[28px] font-semibold text-rose-500">
+                <h5 className="text-[24px] font-semibold text-rose-500">
                   {formatRupiah(totalBelanja)}
                 </h5>
               </div>
 
-              <PopupContinuePayment {...popupProps} />
+              <div className="flex gap-4">
+                <CustomTooltip content="Informasi Tambahan">
+                  <Button
+                    isIconOnly
+                    variant="light"
+                    onClick={toggleMenu}
+                    className="h-12 min-w-12 bg-rose-100 data-[hover=true]:bg-rose-200"
+                  >
+                    <ArrowUp
+                      weight="bold"
+                      size={22}
+                      className={`text-rose-500 transition-all duration-500 ${
+                        menuOpen ? "rotate-180" : "-rotate-0"
+                      }`}
+                    />
+                  </Button>
+                </CustomTooltip>
+
+                <Button
+                  variant="solid"
+                  className="w-full bg-rose-500 px-8 py-6 font-semibold text-white"
+                >
+                  Lanjutkan Pembayaran
+                </Button>
+
+                {/* <PopupContinuePayment {...popupProps} /> */}
+              </div>
+            </div>
+
+            {/* --- menu additional information --- */}
+            <div
+              className={`absolute left-0 z-10 h-[calc(100%-97px)] w-full bg-white text-white transition-all duration-500 ${
+                menuOpen ? "bottom-24" : "-bottom-full"
+              }`}
+            >
+              <div className="flex h-full w-full flex-col gap-4 bg-white p-4">
+                <h5 className="font-semibold text-default-900">
+                  Informasi Tambahan
+                </h5>
+
+                <div className="flex items-start gap-4">
+                  <div className="grid flex-1 gap-4">
+                    <Input
+                      type="number"
+                      size="sm"
+                      variant="flat"
+                      labelPlacement="outside"
+                      label={
+                        <span className="text-[12px] text-default-900">
+                          No. Telp (opsional)
+                        </span>
+                      }
+                      placeholder="Masukan no. telp..."
+                      className="w-full"
+                      onChange={(e) => {
+                        setTelp(e.target.value);
+                      }}
+                    />
+
+                    <Textarea
+                      type="text"
+                      size="sm"
+                      variant="flat"
+                      maxRows={3}
+                      labelPlacement="outside"
+                      label={
+                        <span className="text-[12px] text-default-900">
+                          Keterangan (opsional)
+                        </span>
+                      }
+                      placeholder="Masukan keterangan..."
+                      className="w-full"
+                      onChange={(e) => {
+                        setKet(e.target.value);
+                      }}
+                    />
+
+                    <Input
+                      type="number"
+                      size="sm"
+                      variant="flat"
+                      labelPlacement="outside"
+                      label={
+                        <span className="text-[12px] text-default-900">
+                          Biaya Ongkir (opsional)
+                        </span>
+                      }
+                      placeholder="Masukan biaya ongkir..."
+                      startContent={
+                        <div className="pointer-events-none flex items-center">
+                          <span className="text-sm text-default-600">Rp</span>
+                        </div>
+                      }
+                      className="w-full"
+                      onChange={(e) => {
+                        if (e.target.value == "") {
+                          setOngkir(0);
+                        } else {
+                          setOngkir(parseInt(e.target.value));
+                        }
+                      }}
+                    />
+
+                    <Input
+                      type="text"
+                      size="sm"
+                      variant="flat"
+                      labelPlacement="outside"
+                      label={
+                        <span className="text-[12px] text-default-900">
+                          Waktu Pengiriman (opsional)
+                        </span>
+                      }
+                      placeholder="Masukan waktu pengiriman..."
+                      className="w-full"
+                      onChange={(e) => {
+                        setPengiriman(e.target.value);
+                      }}
+                    />
+
+                    <div className="grid grid-cols-2 items-center gap-4">
+                      <Input
+                        type="number"
+                        size="sm"
+                        variant="flat"
+                        labelPlacement="outside"
+                        label={
+                          <span className="text-[12px] text-default-900">
+                            Diskon 1 (opsional)
+                          </span>
+                        }
+                        startContent={
+                          <div className="pointer-events-none flex items-center">
+                            <span className="text-sm text-default-600">Rp</span>
+                          </div>
+                        }
+                        placeholder="Masukan diskon 1..."
+                        className="w-full"
+                      />
+
+                      <Input
+                        type="number"
+                        size="sm"
+                        variant="flat"
+                        labelPlacement="outside"
+                        label={
+                          <span className="text-[12px] text-default-900">
+                            Diskon 2 (opsional)
+                          </span>
+                        }
+                        startContent={
+                          <div className="pointer-events-none flex items-center">
+                            <span className="text-sm text-default-600">Rp</span>
+                          </div>
+                        }
+                        placeholder="Masukan diskon 2..."
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid flex-1 gap-4">
+                    <Input
+                      type="text"
+                      size="sm"
+                      variant="flat"
+                      labelPlacement="outside"
+                      label={
+                        <span className="text-[12px] text-default-900">
+                          Penerima (opsional)
+                        </span>
+                      }
+                      placeholder="Masukan penerima..."
+                      className="w-full"
+                      onChange={(e) => {
+                        setPenerima(e.target.value);
+                      }}
+                    />
+
+                    <Textarea
+                      type="text"
+                      size="sm"
+                      variant="flat"
+                      maxRows={3}
+                      labelPlacement="outside"
+                      label={
+                        <span className="text-[12px] text-default-900">
+                          Alamat (opsional)
+                        </span>
+                      }
+                      placeholder="Masukan alamat lengkap..."
+                      className="w-full"
+                      onChange={(e) => {
+                        setAlamat(e.target.value);
+                      }}
+                    />
+
+                    <Input
+                      isRequired
+                      type="number"
+                      size="sm"
+                      variant="flat"
+                      labelPlacement="outside"
+                      label={
+                        <span className="text-[12px] text-default-900">
+                          Tunai
+                        </span>
+                      }
+                      placeholder="Masukan tunai..."
+                      startContent={
+                        <div className="pointer-events-none flex items-center">
+                          <span className="text-sm text-default-600">Rp</span>
+                        </div>
+                      }
+                      className="w-full"
+                      onChange={(e) => {
+                        if (e.target.value == "") {
+                          setTunai(0);
+                        } else {
+                          setTunai(parseInt(e.target.value));
+                        }
+                      }}
+                      min={0}
+                    />
+
+                    <div className="grid grid-cols-2 items-center gap-4">
+                      <RadioGroup
+                        orientation="horizontal"
+                        color="danger"
+                        label={
+                          <p className="text-[12px] text-default-900">
+                            Tipe <span className="text-danger">*</span>
+                          </p>
+                        }
+                        defaultValue="nota"
+                        onChange={(e) => {
+                          setTipe(e.target.value);
+                        }}
+                      >
+                        <Radio value="nota">
+                          <p className="text-sm font-medium text-default-600">
+                            Nota
+                          </p>
+                        </Radio>
+                        <Radio value="faktur">
+                          <p className="text-sm font-medium text-default-600">
+                            Faktur
+                          </p>
+                        </Radio>
+                      </RadioGroup>
+
+                      {tipe == "faktur" ? (
+                        <Input
+                          isRequired
+                          type="number"
+                          size="sm"
+                          variant="flat"
+                          labelPlacement="outside"
+                          label={
+                            <span className="text-[12px] text-default-900">
+                              Pajak
+                            </span>
+                          }
+                          placeholder="Masukan persen pajak..."
+                          startContent={
+                            <div className="pointer-events-none flex items-center">
+                              <span className="text-sm text-default-600">
+                                %
+                              </span>
+                            </div>
+                          }
+                          className="w-full"
+                          onChange={(e) => {
+                            if (e.target.value == "") {
+                              setPajak(0);
+                            } else {
+                              setPajak(parseInt(e.target.value));
+                            }
+                          }}
+                          min={0}
+                        />
+                      ) : null}
+                    </div>
+
+                    <div className="grid gap-1 border-l-4 border-rose-500 pl-6">
+                      <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                        <div className="font-medium">Biaya Ongkir</div>
+                        <div className="font-medium">:</div>
+                        <p className="font-medium">{formatRupiah(ongkir)}</p>
+                      </div>
+
+                      <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                        <div className="font-medium">Total Belanja</div>
+                        <div className="font-medium">:</div>
+                        <p className="font-medium">
+                          {formatRupiah(totalBelanja)}
+                        </p>
+                      </div>
+
+                      {tipe == "faktur" ? (
+                        <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                          <div className="font-medium">Pajak ({pajak} %)</div>
+                          <div className="font-medium">:</div>
+                          <p className="font-medium">
+                            {formatRupiah(totalPajak)}
+                          </p>
+                        </div>
+                      ) : null}
+
+                      <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                        <div className="font-medium">Total Pembayaran</div>
+                        <div className="font-medium">:</div>
+                        <p className="font-medium">
+                          {formatRupiah(totalPembayaran)}
+                        </p>
+                      </div>
+
+                      <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                        <div className="font-medium">Tunai</div>
+                        <div className="font-medium">:</div>
+                        <p className="font-medium text-rose-500">
+                          {formatRupiah(tunai)}
+                        </p>
+                      </div>
+
+                      <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                        <div className="font-medium">Kembali</div>
+                        <div className="font-medium">:</div>
+                        <p className="font-medium text-rose-500">
+                          {formatRupiah(kembali)}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -72,7 +72,7 @@ export default function CardSellingQuantityProduct({
   }
 
   return (
-    <div className="grid grid-cols-[1fr_repeat(3,140px)_42px] items-center gap-10 border-b border-gray-300 py-4">
+    <div className="grid grid-cols-[1fr_repeat(3,140px)_42px] items-center gap-10 border-b border-gray-300 p-4">
       <div className="grid font-semibold text-default-600">
         <h4 className="line-clamp-2 font-semibold text-default-900">
           {nama_produk}

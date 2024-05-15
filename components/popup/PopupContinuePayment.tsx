@@ -79,7 +79,7 @@ export default function PopupContinuePayment({
       <Button
         onPress={onOpen}
         variant="solid"
-        className="bg-rose-500 py-8 font-semibold text-white"
+        className="w-full bg-rose-500 px-8 py-6 font-semibold text-white"
       >
         Lanjutkan Pembayaran
       </Button>
