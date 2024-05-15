@@ -1,10 +1,4 @@
-export type SuppliersType = {
-  code: string;
-  name: string;
-  price: number;
-  product: string;
-  created_at: string;
-};
+import { SuppliersType } from "@/types/suppliers.type";
 
 export const suppliers: SuppliersType[] = [
   {
