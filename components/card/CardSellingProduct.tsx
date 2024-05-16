@@ -1,10 +1,11 @@
 import { Button } from "@nextui-org/react";
-import { Plus } from "@phosphor-icons/react";
+import { ArrowRight } from "@phosphor-icons/react";
 
 // components
 import CustomTooltip from "@/components/tooltip";
 
 // utils
+import { ListProdukType } from "@/types/selling.type";
 import { formatRupiah } from "@/utils/formatRupiah";
 
 type CardSellingProductProps = {
@@ -15,19 +16,7 @@ type CardSellingProductProps = {
   rak: string;
   stok: number;
   satuan_kecil: string;
-  setListProduk: React.Dispatch<
-    React.SetStateAction<
-      {
-        kode_item: string;
-        nama_produk: string;
-        harga: number;
-        stok: number;
-        qty: number;
-        subtotal: number;
-        satuan_kecil: string;
-      }[]
-    >
-  >;
+  setListProduk: React.Dispatch<React.SetStateAction<ListProdukType[]>>;
 };
 
 export default function CardSellingProduct({
@@ -91,6 +80,8 @@ export default function CardSellingProduct({
                     harga: harga_4,
                     stok,
                     qty: 1,
+                    gudang,
+                    rak,
                     subtotal: harga_4 * 1,
                     satuan_kecil,
                   },
@@ -98,7 +89,7 @@ export default function CardSellingProduct({
               });
             }}
           >
-            <Plus weight="bold" size={20} />
+            <ArrowRight weight="bold" size={20} />
           </Button>
         </CustomTooltip>
       </div>

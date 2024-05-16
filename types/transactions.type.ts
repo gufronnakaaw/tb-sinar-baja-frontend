@@ -12,6 +12,8 @@ export interface TransaksiType {
   total_pembayaran: number;
   tunai: number;
   tipe: string;
+  diskon?: number;
+  persen_diskon?: number;
   unique_key: string;
   created_at: string;
   updated_at: string;
@@ -23,6 +25,8 @@ export interface ListProduk {
   jumlah: number;
   satuan: string;
   nama_produk: string;
+  gudang: string;
+  rak: string;
   harga: number;
   sub_total: number;
 }

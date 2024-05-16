@@ -167,15 +167,15 @@ const Nota = (props: TransaksiType, ref: any) => {
 
         <div className="grid justify-self-end border border-black p-2">
           <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-default-900">
-            <div className="w-24 font-medium">Total</div>
-            <div className="font-medium">:</div>
-            <p className="font-medium">{formatRupiah(props.total_belanja)}</p>
-          </div>
-
-          <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-default-900">
             <div className="w-24 font-medium">Ongkir</div>
             <div className="font-medium">:</div>
             <p className="font-medium">{formatRupiah(props.ongkir)}</p>
+          </div>
+
+          <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-default-900">
+            <div className="w-24 font-medium">Total</div>
+            <div className="font-medium">:</div>
+            <p className="font-medium">{formatRupiah(props.total_belanja)}</p>
           </div>
 
           {props.pajak ? (
@@ -185,6 +185,19 @@ const Nota = (props: TransaksiType, ref: any) => {
               </div>
               <div className="font-medium">:</div>
               <p className="font-medium">{formatRupiah(props.pajak)}</p>
+            </div>
+          ) : null}
+
+          {props.diskon || props.persen_diskon ? (
+            <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-default-900">
+              <div className="w-24 font-medium">
+                Diskon{" "}
+                {props.persen_diskon ? `(${props.persen_diskon}%)` : null}
+              </div>
+              <div className="font-medium">:</div>
+              <p className="font-medium">
+                {formatRupiah(props.diskon ? props.diskon : 0)}
+              </p>
             </div>
           ) : null}
 

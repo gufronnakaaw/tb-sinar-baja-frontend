@@ -6,7 +6,7 @@ import {
   RadioGroup,
   Textarea,
 } from "@nextui-org/react";
-import { ArrowLeft, ArrowUp, Circle } from "@phosphor-icons/react";
+import { ArrowLeft, CaretUp, Circle } from "@phosphor-icons/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
@@ -17,104 +17,83 @@ import { useDebounce } from "use-debounce";
 import CardSellingProduct from "@/components/card/CardSellingProduct";
 import CardSellingQuantityProduct from "@/components/card/CardSellingQuantityProduct";
 import InputSearchBar from "@/components/input/InputSearchBar";
-// import PopupContinuePayment from "@/components/popup/PopupContinuePayment";
-import { TemplateNota } from "@/components/template/TemplateNota";
 import CustomTooltip from "@/components/tooltip";
 
 // utils
+import { TemplateNota } from "@/components/template/TemplateNota";
+import { ListProdukType, ProdukType } from "@/types/selling.type";
 import { TransaksiType } from "@/types/transactions.type";
 import { fetcher } from "@/utils/fetcher";
 import { formatRupiah } from "@/utils/formatRupiah";
 
-type ProdukType = {
-  kode_item: string;
-  nama_produk: string;
-  harga_4: number;
-  gudang: string;
-  rak: string;
-  stok: number;
-  satuan_kecil: string;
-};
-
-type ProdukList = {
-  kode_item: string;
-  nama_produk: string;
-  harga: number;
-  stok: number;
-  qty: number;
-  subtotal: number;
-  satuan_kecil: string;
-};
-
 const unique_key = (Math.random() + 1).toString(36).substring(7);
 
 export default function SellingPage() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [telp, setTelp] = useState("-");
-  const [penerima, setPenerima] = useState("Umum");
-  const [ket, setKet] = useState("-");
-  const [alamat, setAlamat] = useState("-");
-  const [ongkir, setOngkir] = useState(0);
-  const [pengiriman, setPengiriman] = useState("-");
-  const [tipe, setTipe] = useState("nota");
-  const [pajak, setPajak] = useState(0);
-  const [totalPajak, setTotalPajak] = useState(0);
-
-  const [tunai, setTunai] = useState(0);
-  const [kembali, setKembali] = useState(0);
-  const [produk, setProduk] = useState<ProdukType[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [title, setTitle] = useState("");
-  const [dataPrint, setDataPrint] = useState<TransaksiType>(null);
-
   const router = useRouter();
+
+  const [noTelp, setNoTelp] = useState<string>("");
+  const [penerima, setPenerima] = useState<string>("");
+  const [keterangan, setKeterangan] = useState<string>("");
+  const [alamat, setAlamat] = useState<string>("");
+  const [pengiriman, setPengiriman] = useState<string>("");
+  const [tipe, setTipe] = useState<string>("nota");
+
+  const [ongkir, setOngkir] = useState<number>(0);
+  const [pajak, setPajak] = useState<number>(0);
+  const [persenPajak, setPersenPajak] = useState<number>(0);
+  const [diskon, setDiskon] = useState<number>(0);
+  const [persenDiskon, setPersenDiskon] = useState<number>(0);
+  const [totalDiskon, setTotalDiskon] = useState<number>(0);
+  const [tunai, setTunai] = useState<number>(0);
+  const [kembali, setKembali] = useState<number>(0);
+  const [produk, setProduk] = useState<ProdukType[]>([]);
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>("");
+  const [dataPrint, setDataPrint] = useState<TransaksiType | null>(null);
   const sellingRef = useRef(null);
   const reactPrint = useReactToPrint({
     content: () => sellingRef.current,
   });
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState<string>("");
   const [searchValue] = useDebounce(search, 800);
-  const [listProduk, setListProduk] = useState<ProdukList[]>([]);
-  const [totalPembayaran, setTotalPembayaran] = useState(0);
-  const [totalBelanja, setTotalBelanja] = useState(0);
+  const [listProduk, setListProduk] = useState<ListProdukType[]>([]);
+  const [totalPembayaran, setTotalPembayaran] = useState<number>(0);
+  const [totalBelanja, setTotalBelanja] = useState<number>(0);
 
-  const toggleMenu = () => {
-    if (setMenuOpen) {
-      setMenuOpen(!menuOpen);
-    }
-  };
-
-  useEffect(() => {
-    document.title = title;
-  }, [title]);
-
-  async function handlePrint() {
+  async function createTransaksi() {
     try {
       const response = await fetcher({
         url: "/transaksi",
         method: "POST",
         data: {
-          keterangan: ket,
-          penerima,
-          no_telp: telp,
-          alamat,
-          pengiriman,
-          ongkir,
-          total_belanja: listProduk.reduce((a, b) => a + b.subtotal, 0),
+          keterangan: keterangan ? keterangan : "-",
+          penerima: penerima ? penerima : "Umum",
+          no_telp: noTelp ? noTelp : "-",
+          alamat: alamat ? alamat : "-",
+          pengiriman: pengiriman ? pengiriman : "-",
+          ongkir: ongkir ? ongkir : 0,
+          total_belanja: totalBelanja,
           total_pembayaran: totalPembayaran,
-          pajak: totalPajak ? totalPajak : null,
-          persen_pajak: pajak ? pajak : null,
+          pajak: pajak ? pajak : null,
+          persen_pajak: persenPajak ? persenPajak : null,
+          diskon: totalDiskon ? totalDiskon : null,
+          persen_diskon: persenDiskon ? persenDiskon : null,
           tipe: "umum",
           unique_key,
-          tunai,
+          tunai: tunai ? tunai : 0,
+          kembalian: kembali ? kembali : 1,
           metode: "Cash",
           list_produk: listProduk.map((produk) => {
             return {
-              jumlah: produk.qty,
               kode_item: produk.kode_item,
+              jumlah: produk.qty,
               satuan: produk.satuan_kecil,
               nama_produk: produk.nama_produk,
+              gudang: produk.gudang,
+              rak: produk.rak,
               harga: produk.harga,
               sub_total: produk.subtotal,
             };
@@ -128,34 +107,49 @@ export default function SellingPage() {
         reactPrint();
       }, 100);
     } catch (error) {
-      alert("tidak dapat melakukan transaksi");
+      const { status_code }: { status_code: number | unknown } = error;
+
+      if (status_code >= 400) {
+        alert("terjadi kesalahan saat menginput data");
+      }
+
+      if (status_code >= 500) {
+        alert("tidak dapat melakukan transaksi");
+      }
     }
   }
 
-  const popupProps = {
-    setTelp,
-    setPenerima,
-    setKet,
-    setAlamat,
-    setOngkir,
-    setPengiriman,
-    setTipe,
-    setTunai,
-    setTotalBelanja,
-    setTotalPembayaran,
-    setKembali,
-    setPajak,
-    setTotalPajak,
-    totalPajak,
-    pajak,
-    tunai,
-    totalBelanja,
-    totalPembayaran,
-    kembali,
-    ongkir,
-    tipe,
-    handlePrint,
-  };
+  function toggleMenu() {
+    if (setMenuOpen) {
+      setMenuOpen(!menuOpen);
+    }
+  }
+
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
+
+  useEffect(() => {
+    setTotalBelanja(listProduk.reduce((a, b) => a + b.subtotal, 0));
+
+    if (listProduk.length == 0) {
+      setNoTelp("");
+      setPenerima("");
+      setKeterangan("");
+      setAlamat("");
+      setPengiriman("");
+      setTipe("nota");
+      setOngkir(0);
+      setPajak(0);
+      setPersenPajak(0);
+      setDiskon(0);
+      setPersenDiskon(0);
+      setTotalDiskon(0);
+      setTunai(0);
+      setKembali(0);
+      setTipe("nota");
+    }
+  }, [listProduk]);
 
   useEffect(() => {
     if (searchValue != "") {
@@ -176,27 +170,64 @@ export default function SellingPage() {
         setLoading(false);
       } catch (error) {
         console.log(error);
+        alert("ups sepertinya tidak bisa mencari produk");
       }
     }
   }, [searchValue]);
 
   useEffect(() => {
+    setTotalPembayaran(ongkir + totalBelanja);
+
     if (tipe == "nota") {
-      setTotalPembayaran(ongkir + totalBelanja);
-    } else {
-      setTotalPajak((totalBelanja / 100) * pajak);
-      setTotalPembayaran(totalPajak + ongkir + totalBelanja);
+      if (diskon) {
+        setTotalDiskon(diskon);
+        setTotalPembayaran(ongkir + totalBelanja - diskon);
+      }
+
+      if (persenDiskon) {
+        const persen = ((ongkir + totalBelanja) / 100) * persenDiskon;
+        setTotalDiskon(persen);
+        setTotalPembayaran(ongkir + totalBelanja - persen);
+      }
     }
-  }, [totalBelanja, ongkir, tipe, pajak, totalPajak]);
+
+    if (tipe == "faktur") {
+      const persenPajakLocal = ((ongkir + totalBelanja) / 100) * persenPajak;
+      setPajak(persenPajakLocal);
+      setTotalPembayaran(ongkir + totalBelanja + persenPajakLocal);
+
+      if (diskon) {
+        setTotalDiskon(diskon);
+        setTotalPembayaran(ongkir + totalBelanja + persenPajakLocal - diskon);
+      }
+
+      if (persenDiskon) {
+        const persenDiskonLocal =
+          ((ongkir + totalBelanja + persenPajakLocal) / 100) * persenDiskon;
+        setTotalDiskon(persenDiskonLocal);
+        setTotalPembayaran(
+          ongkir + totalBelanja + persenPajakLocal - persenDiskonLocal,
+        );
+      }
+    }
+  }, [tipe, diskon, ongkir, totalBelanja, persenDiskon, persenPajak]);
 
   useEffect(() => {
-    setTotalBelanja(listProduk.reduce((a, b) => a + b.subtotal, 0));
-  }, [listProduk]);
+    if (tunai == 0) {
+      setKembali(0);
+    }
+
+    if (tunai - totalPembayaran > 0) {
+      setKembali(tunai - totalPembayaran);
+    } else {
+      setKembali(0);
+    }
+  }, [tunai, totalPembayaran]);
 
   return (
     <>
       <div className="hidden">
-        {title ? <TemplateNota {...dataPrint} ref={sellingRef} /> : null}
+        {dataPrint ? <TemplateNota {...dataPrint} ref={sellingRef} /> : null}
       </div>
 
       <Head>
@@ -323,7 +354,7 @@ export default function SellingPage() {
                     onClick={toggleMenu}
                     className="h-12 min-w-12 bg-rose-100 data-[hover=true]:bg-rose-200"
                   >
-                    <ArrowUp
+                    <CaretUp
                       weight="bold"
                       size={22}
                       className={`text-rose-500 transition-all duration-500 ${
@@ -333,14 +364,31 @@ export default function SellingPage() {
                   </Button>
                 </CustomTooltip>
 
-                <Button
-                  variant="solid"
-                  className="w-full bg-rose-500 px-8 py-6 font-semibold text-white"
-                >
-                  Lanjutkan Pembayaran
-                </Button>
-
-                {/* <PopupContinuePayment {...popupProps} /> */}
+                <div className="grid w-full grid-cols-2 gap-4">
+                  <Button
+                    variant="flat"
+                    color="danger"
+                    className="w-full px-8 py-6 font-semibold"
+                    onClick={createTransaksi}
+                  >
+                    Cetak
+                  </Button>
+                  <Button
+                    variant="solid"
+                    className="w-full bg-rose-500 px-8 py-6 font-semibold text-white"
+                    onClick={() => {
+                      if (
+                        confirm(
+                          "apakah anda yakin ingin menyesaikan transaksi ini?",
+                        )
+                      ) {
+                        router.reload();
+                      }
+                    }}
+                  >
+                    Selesai
+                  </Button>
+                </div>
               </div>
             </div>
 
@@ -355,146 +403,60 @@ export default function SellingPage() {
                   Informasi Tambahan
                 </h5>
 
-                <div className="flex items-start gap-4">
-                  <div className="grid flex-1 gap-4">
+                <div className="grid gap-4">
+                  <div className="grid grid-cols-3 gap-4">
                     <Input
-                      type="number"
+                      value={noTelp}
+                      type="text"
                       size="sm"
                       variant="flat"
                       labelPlacement="outside"
                       label={
                         <span className="text-[12px] text-default-900">
-                          No. Telp (opsional)
+                          No. Telp
                         </span>
                       }
                       placeholder="Masukan no. telp..."
-                      className="w-full"
-                      onChange={(e) => {
-                        setTelp(e.target.value);
-                      }}
-                    />
-
-                    <Textarea
-                      type="text"
-                      size="sm"
-                      variant="flat"
-                      maxRows={3}
-                      labelPlacement="outside"
-                      label={
-                        <span className="text-[12px] text-default-900">
-                          Keterangan (opsional)
-                        </span>
-                      }
-                      placeholder="Masukan keterangan..."
-                      className="w-full"
-                      onChange={(e) => {
-                        setKet(e.target.value);
-                      }}
+                      className="w-full text-black"
+                      onChange={(e) => setNoTelp(e.target.value)}
                     />
 
                     <Input
-                      type="number"
-                      size="sm"
-                      variant="flat"
-                      labelPlacement="outside"
-                      label={
-                        <span className="text-[12px] text-default-900">
-                          Biaya Ongkir (opsional)
-                        </span>
-                      }
-                      placeholder="Masukan biaya ongkir..."
-                      startContent={
-                        <div className="pointer-events-none flex items-center">
-                          <span className="text-sm text-default-600">Rp</span>
-                        </div>
-                      }
-                      className="w-full"
-                      onChange={(e) => {
-                        if (e.target.value == "") {
-                          setOngkir(0);
-                        } else {
-                          setOngkir(parseInt(e.target.value));
-                        }
-                      }}
-                    />
-
-                    <Input
+                      value={penerima}
                       type="text"
                       size="sm"
                       variant="flat"
                       labelPlacement="outside"
                       label={
                         <span className="text-[12px] text-default-900">
-                          Waktu Pengiriman (opsional)
-                        </span>
-                      }
-                      placeholder="Masukan waktu pengiriman..."
-                      className="w-full"
-                      onChange={(e) => {
-                        setPengiriman(e.target.value);
-                      }}
-                    />
-
-                    <div className="grid grid-cols-2 items-center gap-4">
-                      <Input
-                        type="number"
-                        size="sm"
-                        variant="flat"
-                        labelPlacement="outside"
-                        label={
-                          <span className="text-[12px] text-default-900">
-                            Diskon 1 (opsional)
-                          </span>
-                        }
-                        startContent={
-                          <div className="pointer-events-none flex items-center">
-                            <span className="text-sm text-default-600">Rp</span>
-                          </div>
-                        }
-                        placeholder="Masukan diskon 1..."
-                        className="w-full"
-                      />
-
-                      <Input
-                        type="number"
-                        size="sm"
-                        variant="flat"
-                        labelPlacement="outside"
-                        label={
-                          <span className="text-[12px] text-default-900">
-                            Diskon 2 (opsional)
-                          </span>
-                        }
-                        startContent={
-                          <div className="pointer-events-none flex items-center">
-                            <span className="text-sm text-default-600">Rp</span>
-                          </div>
-                        }
-                        placeholder="Masukan diskon 2..."
-                        className="w-full"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid flex-1 gap-4">
-                    <Input
-                      type="text"
-                      size="sm"
-                      variant="flat"
-                      labelPlacement="outside"
-                      label={
-                        <span className="text-[12px] text-default-900">
-                          Penerima (opsional)
+                          Penerima
                         </span>
                       }
                       placeholder="Masukan penerima..."
-                      className="w-full"
-                      onChange={(e) => {
-                        setPenerima(e.target.value);
-                      }}
+                      className="w-full text-black"
+                      onChange={(e) => setPenerima(e.target.value)}
                     />
 
+                    <Input
+                      value={pengiriman}
+                      type="text"
+                      size="sm"
+                      variant="flat"
+                      labelPlacement="outside"
+                      label={
+                        <span className="text-[12px] text-default-900">
+                          Waktu Pengiriman
+                        </span>
+                      }
+                      placeholder="Masukan waktu pengiriman..."
+                      className="w-full text-black"
+                      onChange={(e) => setPengiriman(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
                     <Textarea
+                      value={keterangan}
                       type="text"
                       size="sm"
                       variant="flat"
@@ -502,83 +464,73 @@ export default function SellingPage() {
                       labelPlacement="outside"
                       label={
                         <span className="text-[12px] text-default-900">
-                          Alamat (opsional)
+                          Keterangan
                         </span>
                       }
-                      placeholder="Masukan alamat lengkap..."
-                      className="w-full"
-                      onChange={(e) => {
-                        setAlamat(e.target.value);
-                      }}
+                      placeholder="Masukan keterangan..."
+                      className="w-full text-black"
+                      onChange={(e) => setKeterangan(e.target.value)}
                     />
 
-                    <Input
-                      isRequired
-                      type="number"
+                    <Textarea
+                      value={alamat}
+                      type="text"
                       size="sm"
                       variant="flat"
+                      maxRows={3}
                       labelPlacement="outside"
                       label={
                         <span className="text-[12px] text-default-900">
-                          Tunai
+                          Alamat
                         </span>
                       }
-                      placeholder="Masukan tunai..."
-                      startContent={
-                        <div className="pointer-events-none flex items-center">
-                          <span className="text-sm text-default-600">Rp</span>
-                        </div>
-                      }
-                      className="w-full"
-                      onChange={(e) => {
-                        if (e.target.value == "") {
-                          setTunai(0);
-                        } else {
-                          setTunai(parseInt(e.target.value));
-                        }
-                      }}
-                      min={0}
+                      placeholder="Masukan alamat lengkap..."
+                      className="w-full text-black"
+                      onChange={(e) => setAlamat(e.target.value)}
                     />
+                  </div>
 
-                    <div className="grid grid-cols-2 items-center gap-4">
-                      <RadioGroup
-                        orientation="horizontal"
-                        color="danger"
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="grid gap-3">
+                      <Input
+                        value={ongkir ? `${ongkir}` : ""}
+                        type="number"
+                        size="sm"
+                        variant="flat"
+                        labelPlacement="outside"
                         label={
-                          <p className="text-[12px] text-default-900">
-                            Tipe <span className="text-danger">*</span>
-                          </p>
+                          <span className="text-[12px] text-default-900">
+                            Ongkir
+                          </span>
                         }
-                        defaultValue="nota"
+                        placeholder="Masukan biaya ongkir..."
+                        startContent={
+                          <div className="pointer-events-none flex items-center">
+                            <span className="text-sm text-default-600">Rp</span>
+                          </div>
+                        }
+                        className="w-full text-black"
                         onChange={(e) => {
-                          setTipe(e.target.value);
+                          if (e.target.value == "") {
+                            setOngkir(0);
+                          } else {
+                            setOngkir(parseInt(e.target.value));
+                          }
                         }}
-                      >
-                        <Radio value="nota">
-                          <p className="text-sm font-medium text-default-600">
-                            Nota
-                          </p>
-                        </Radio>
-                        <Radio value="faktur">
-                          <p className="text-sm font-medium text-default-600">
-                            Faktur
-                          </p>
-                        </Radio>
-                      </RadioGroup>
+                      />
 
-                      {tipe == "faktur" ? (
+                      <div className="grid grid-cols-2 items-center gap-4">
                         <Input
-                          isRequired
+                          value={persenDiskon ? `${persenDiskon}` : ""}
                           type="number"
                           size="sm"
                           variant="flat"
                           labelPlacement="outside"
                           label={
                             <span className="text-[12px] text-default-900">
-                              Pajak
+                              Diskon Persen
                             </span>
                           }
-                          placeholder="Masukan persen pajak..."
                           startContent={
                             <div className="pointer-events-none flex items-center">
                               <span className="text-sm text-default-600">
@@ -586,66 +538,217 @@ export default function SellingPage() {
                               </span>
                             </div>
                           }
-                          className="w-full"
+                          placeholder="Masukan diskon persen..."
+                          className="w-full text-black"
                           onChange={(e) => {
                             if (e.target.value == "") {
-                              setPajak(0);
+                              setPersenDiskon(0);
                             } else {
-                              setPajak(parseInt(e.target.value));
+                              setDiskon(0);
+                              setPersenDiskon(parseInt(e.target.value));
+                            }
+                          }}
+                          min={0}
+                          max={100}
+                        />
+
+                        <Input
+                          value={diskon ? `${diskon}` : ""}
+                          type="number"
+                          size="sm"
+                          variant="flat"
+                          labelPlacement="outside"
+                          label={
+                            <span className="text-[12px] text-default-900">
+                              Diskon Langsung
+                            </span>
+                          }
+                          startContent={
+                            <div className="pointer-events-none flex items-center">
+                              <span className="text-sm text-default-600">
+                                Rp
+                              </span>
+                            </div>
+                          }
+                          placeholder="Masukan diskon langsung..."
+                          className="w-full text-black"
+                          onChange={(e) => {
+                            if (e.target.value == "") {
+                              setDiskon(0);
+                            } else {
+                              setPersenDiskon(0);
+                              setDiskon(parseInt(e.target.value));
                             }
                           }}
                           min={0}
                         />
-                      ) : null}
+                      </div>
+
+                      <div className="grid grid-cols-2 items-center gap-4">
+                        <RadioGroup
+                          orientation="horizontal"
+                          color="danger"
+                          label={
+                            <p className="text-[12px] text-danger">
+                              Tipe <span className="text-danger">*</span>
+                            </p>
+                          }
+                          value={tipe}
+                          onChange={(e) => {
+                            if (tipe == "nota") {
+                              setPajak(0);
+                              setPersenPajak(0);
+                              setTipe(e.target.value);
+                            } else {
+                              setTipe(e.target.value);
+                            }
+                          }}
+                        >
+                          <Radio value="nota">
+                            <p className="text-sm font-medium text-default-600">
+                              Nota
+                            </p>
+                          </Radio>
+                          <Radio value="faktur">
+                            <p className="text-sm font-medium text-default-600">
+                              Faktur
+                            </p>
+                          </Radio>
+                        </RadioGroup>
+
+                        {tipe == "faktur" ? (
+                          <Input
+                            value={persenPajak ? `${persenPajak}` : ""}
+                            isRequired
+                            type="number"
+                            size="sm"
+                            variant="flat"
+                            labelPlacement="outside"
+                            label={
+                              <span className="text-[12px] text-danger">
+                                Pajak
+                              </span>
+                            }
+                            placeholder="Masukan persen pajak..."
+                            startContent={
+                              <div className="pointer-events-none flex items-center">
+                                <span className="text-sm text-default-600">
+                                  %
+                                </span>
+                              </div>
+                            }
+                            className="w-full text-black"
+                            onChange={(e) => {
+                              if (e.target.value == "") {
+                                setPersenPajak(0);
+                              } else {
+                                setPersenPajak(parseInt(e.target.value));
+                              }
+                            }}
+                            min={0}
+                            max={100}
+                          />
+                        ) : null}
+                      </div>
+
+                      <Input
+                        value={tunai ? `${tunai}` : ""}
+                        isRequired
+                        type="number"
+                        size="sm"
+                        variant="flat"
+                        labelPlacement="outside"
+                        label={
+                          <span className="text-[12px] text-danger">Tunai</span>
+                        }
+                        placeholder="Masukan tunai..."
+                        startContent={
+                          <div className="pointer-events-none flex items-center">
+                            <span className="text-sm text-default-600">Rp</span>
+                          </div>
+                        }
+                        className="w-full text-black"
+                        onChange={(e) => {
+                          if (e.target.value == "") {
+                            setTunai(0);
+                          } else {
+                            setTunai(parseInt(e.target.value));
+                          }
+                        }}
+                        min={0}
+                      />
                     </div>
 
-                    <div className="grid gap-1 border-l-4 border-rose-500 pl-6">
-                      <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
-                        <div className="font-medium">Biaya Ongkir</div>
-                        <div className="font-medium">:</div>
-                        <p className="font-medium">{formatRupiah(ongkir)}</p>
-                      </div>
-
-                      <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
-                        <div className="font-medium">Total Belanja</div>
-                        <div className="font-medium">:</div>
-                        <p className="font-medium">
-                          {formatRupiah(totalBelanja)}
-                        </p>
-                      </div>
-
-                      {tipe == "faktur" ? (
+                    <div className="h-3/4">
+                      <div className="grid gap-1 border-l-4 border-rose-500 pl-6">
                         <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
-                          <div className="font-medium">Pajak ({pajak} %)</div>
+                          <div className="font-medium">Subtotal Ongkir</div>
+                          <div className="font-medium">:</div>
+                          <p className="font-medium">{formatRupiah(ongkir)}</p>
+                        </div>
+
+                        <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                          <div className="font-medium">Subtotal Produk</div>
                           <div className="font-medium">:</div>
                           <p className="font-medium">
-                            {formatRupiah(totalPajak)}
+                            {formatRupiah(totalBelanja)}
                           </p>
                         </div>
-                      ) : null}
 
-                      <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
-                        <div className="font-medium">Total Pembayaran</div>
-                        <div className="font-medium">:</div>
-                        <p className="font-medium">
-                          {formatRupiah(totalPembayaran)}
-                        </p>
-                      </div>
+                        <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                          <div className="font-medium">Total Belanja</div>
+                          <div className="font-medium">:</div>
+                          <p className="font-medium">
+                            {formatRupiah(ongkir + totalBelanja)}
+                          </p>
+                        </div>
 
-                      <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
-                        <div className="font-medium">Tunai</div>
-                        <div className="font-medium">:</div>
-                        <p className="font-medium text-rose-500">
-                          {formatRupiah(tunai)}
-                        </p>
-                      </div>
+                        {tipe == "faktur" ? (
+                          <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                            <div className="font-medium">
+                              Pajak ({persenPajak} %)
+                            </div>
+                            <div className="font-medium">:</div>
+                            <p className="font-medium">{formatRupiah(pajak)}</p>
+                          </div>
+                        ) : null}
 
-                      <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
-                        <div className="font-medium">Kembali</div>
-                        <div className="font-medium">:</div>
-                        <p className="font-medium text-rose-500">
-                          {formatRupiah(kembali)}
-                        </p>
+                        {diskon || persenDiskon ? (
+                          <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                            <div className="font-medium">
+                              Diskon{" "}
+                              {persenDiskon ? `(${persenDiskon}%)` : null}
+                            </div>
+                            <div className="font-medium">:</div>
+                            <p className="font-medium">
+                              -{formatRupiah(totalDiskon)}
+                            </p>
+                          </div>
+                        ) : null}
+
+                        <div className="mt-5 grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                          <div className="font-medium">Total Pembayaran</div>
+                          <div className="font-medium">:</div>
+                          <p className="font-medium">
+                            {formatRupiah(totalPembayaran)}
+                          </p>
+                        </div>
+
+                        <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                          <div className="font-medium">Tunai</div>
+                          <div className="font-medium">:</div>
+                          <p className="font-medium text-rose-500">
+                            {formatRupiah(tunai)}
+                          </p>
+                        </div>
+
+                        <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                          <div className="font-medium">Kembali</div>
+                          <div className="font-medium">:</div>
+                          <p className="font-medium text-rose-500">
+                            {formatRupiah(kembali)}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>

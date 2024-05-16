@@ -1,3 +1,4 @@
+import { ListProdukType } from "@/types/selling.type";
 import { formatRupiah } from "@/utils/formatRupiah";
 import { Button, Input } from "@nextui-org/react";
 import { Minus, Plus, Trash } from "@phosphor-icons/react";
@@ -12,19 +13,7 @@ type CardSellingQuantityProductProps = {
   qty: number;
   subtotal: number;
   satuan_kecil: string;
-  setListProduk: React.Dispatch<
-    React.SetStateAction<
-      {
-        kode_item: string;
-        nama_produk: string;
-        harga: number;
-        stok: number;
-        qty: number;
-        subtotal: number;
-        satuan_kecil: string;
-      }[]
-    >
-  >;
+  setListProduk: React.Dispatch<React.SetStateAction<ListProdukType[]>>;
 };
 
 export default function CardSellingQuantityProduct({
@@ -92,26 +81,24 @@ export default function CardSellingQuantityProduct({
           <Minus weight="bold" size={16} />
         </Button>
         <Input
+          value={qty ? `${qty}` : ""}
           type="number"
           variant="flat"
           size="sm"
           min={0}
-          value={qty}
           labelPlacement="outside"
           onChange={(e) => {
-            if (parseInt(e.target.value) > stok) {
-              setKodeItem(kode_item);
-              setQuantity(stok);
-            }
-
             if (e.target.value == "") {
               setKodeItem(kode_item);
-
               setQuantity(0);
             } else {
-              setKodeItem(kode_item);
-
-              setQuantity(parseInt(e.target.value));
+              if (parseInt(e.target.value) > stok) {
+                setKodeItem(kode_item);
+                setQuantity(stok);
+              } else {
+                setKodeItem(kode_item);
+                setQuantity(parseInt(e.target.value));
+              }
             }
           }}
         />
