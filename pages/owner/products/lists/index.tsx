@@ -59,7 +59,7 @@ export default function ProductsListsPage(
   }
 
   return (
-    <Layout title="Stok Produk">
+    <Layout title="Daftar Produk">
       <Container className="gap-8">
         <h4 className="text-lg font-semibold text-default-900">
           Daftar Produk
@@ -106,7 +106,7 @@ export default function ProductsListsPage(
             isCompact
             showControls
             color="primary"
-            page={page}
+            page={produk.data.page}
             total={produk.data.total_page}
             onChange={(e) => setPage(e)}
             className="justify-self-center"

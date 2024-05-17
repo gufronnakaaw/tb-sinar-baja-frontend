@@ -3,16 +3,9 @@ import {
   ArchiveBox,
   CaretRight,
   Circle,
-  ClipboardText,
-  ClockClockwise,
   ClockCounterClockwise,
   House,
-  Invoice,
   Package,
-  Truck,
-  User,
-  Users,
-  Wallet,
 } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -183,21 +176,19 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                 </span>
 
                 <div className="mt-1 grid gap-1">
-                  <ButtonSidebar
+                  {/* <ButtonSidebar
                     label="Pre Order"
                     path="/owner/preorders"
                     icon={<ClockClockwise weight="bold" size={20} />}
-                    isDev={true}
-                  />
+                  /> */}
 
-                  <ButtonSidebar
+                  {/* <ButtonSidebar
                     label="Order"
                     path="/owner/orders"
-                    isDev={true}
                     icon={<ClipboardText weight="bold" size={20} />}
-                  />
+                  /> */}
 
-                  <Accordion
+                  {/* <Accordion
                     isCompact
                     itemClasses={{
                       ...itemClasses,
@@ -241,14 +232,14 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                         isDev={true}
                       />
                     </AccordionItem>
-                  </Accordion>
+                  </Accordion> */}
 
-                  <ButtonSidebar
+                  {/* <ButtonSidebar
                     label="Pembayaran"
                     path="/owner/payments"
                     icon={<Wallet weight="bold" size={20} />}
                     isDev={true}
-                  />
+                  /> */}
 
                   <ButtonSidebar
                     label="Riwayat"
@@ -304,7 +295,6 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                         path="/owner/products/stocks"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
-                        isDev={true}
                       />
 
                       <ButtonSidebar
@@ -312,12 +302,11 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                         path="/owner/products/categories"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
-                        isDev={true}
                       />
                     </AccordionItem>
                   </Accordion>
 
-                  <Accordion
+                  {/* <Accordion
                     isCompact
                     itemClasses={{
                       ...itemClasses,
@@ -361,9 +350,9 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                         isDev={true}
                       />
                     </AccordionItem>
-                  </Accordion>
+                  </Accordion> */}
 
-                  <Accordion
+                  {/* <Accordion
                     isCompact
                     itemClasses={{
                       ...itemClasses,
@@ -407,7 +396,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                         isDev={true}
                       />
                     </AccordionItem>
-                  </Accordion>
+                  </Accordion> */}
 
                   <Accordion
                     isCompact
@@ -437,21 +426,19 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                       }
                       className="grid gap-1"
                     >
-                      <ButtonSidebar
+                      {/* <ButtonSidebar
                         label="In"
                         path="/owner/warehouses/in"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
-                        isDev={true}
-                      />
+                      /> */}
 
-                      <ButtonSidebar
+                      {/* <ButtonSidebar
                         label="Out"
                         path="/owner/warehouses/out"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
-                        isDev={true}
-                      />
+                      /> */}
 
                       <ButtonSidebar
                         label="Surat Jalan"
@@ -469,18 +456,17 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                     </AccordionItem>
                   </Accordion>
 
-                  <ButtonSidebar
+                  {/* <ButtonSidebar
                     label="Pengguna"
                     path="/owner/users"
                     icon={<User weight="bold" size={20} />}
-                    isDev={true}
-                  />
+                  /> */}
                 </div>
               </div>
             </>
           ) : null}
 
-          {/* {router.pathname.startsWith("/admin") ? (
+          {router.pathname.startsWith("/admin") ? (
             <>
               <ButtonSidebar
                 label="Dashboard"
@@ -494,7 +480,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                 </span>
 
                 <div className="mt-1 grid gap-1">
-                  <ButtonSidebar
+                  {/* <ButtonSidebar
                     label="Order"
                     path="/admin/orders"
                     icon={<ClipboardText weight="bold" size={20} />}
@@ -510,7 +496,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                     label="Pembayaran"
                     path="/admin/payments"
                     icon={<Wallet weight="bold" size={20} />}
-                  />
+                  /> */}
 
                   <ButtonSidebar
                     label="Riwayat"
@@ -526,25 +512,58 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                 </span>
 
                 <div className="mt-1 grid gap-1">
-                  <ButtonSidebar
-                    label="Produk"
-                    path="/admin/products"
-                    icon={<ArchiveBox weight="bold" size={20} />}
-                  />
+                <Accordion
+                    isCompact
+                    itemClasses={{
+                      ...itemClasses,
+                      trigger: `${itemClasses.trigger} ${productsActive.trigger}`,
+                      title: `${itemClasses.title} ${productsActive.title}`,
+                    }}
+                    className="p-0"
+                  >
+                    <AccordionItem
+                      aria-label="button"
+                      title="Produk"
+                      indicator={
+                        <CaretRight
+                          weight="bold"
+                          size={16}
+                          className={`${productsActive.title ? productsActive.title : "text-gray-600"}`}
+                        />
+                      }
+                      startContent={
+                        <ArchiveBox
+                          weight="bold"
+                          size={20}
+                          className={`${productsActive.title ? productsActive.title : "text-gray-600"}`}
+                        />
+                      }
+                      className="grid gap-1"
+                    >
+                      <ButtonSidebar
+                        label="Daftar Produk"
+                        path="/admin/products/lists"
+                        icon={<Circle weight="fill" size={6} />}
+                        className="mx-4"
+                      />
 
-                  <ButtonSidebar
-                    label="Stok"
-                    path="/admin/stocks"
-                    icon={<ListNumbers weight="bold" size={20} />}
-                  />
+                      <ButtonSidebar
+                        label="Stok Produk"
+                        path="/admin/products/stocks"
+                        icon={<Circle weight="fill" size={6} />}
+                        className="mx-4"
+                      />
 
-                  <ButtonSidebar
-                    label="Kategori"
-                    path="/admin/categories"
-                    icon={<ListBullets weight="bold" size={20} />}
-                  />
+                      <ButtonSidebar
+                        label="Kategori Produk"
+                        path="/admin/products/categories"
+                        icon={<Circle weight="fill" size={6} />}
+                        className="mx-4"
+                      />
+                    </AccordionItem>
+                  </Accordion>
 
-                  <Accordion
+                  {/* <Accordion
                     isCompact
                     itemClasses={itemClasses}
                     className="p-0"
@@ -576,7 +595,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                         className="mx-4"
                       />
                     </AccordionItem>
-                  </Accordion>
+                  </Accordion> */}
 
                   <Accordion
                     isCompact
@@ -596,19 +615,19 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                       }
                       className="grid gap-1"
                     >
-                      <ButtonSidebar
+                      {/* <ButtonSidebar
                         label="In"
                         path="/admin/warehouses/in"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
-                      />
+                      /> */}
 
-                      <ButtonSidebar
+                      {/* <ButtonSidebar
                         label="Out"
                         path="/admin/warehouses/out"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
-                      />
+                      /> */}
 
                       <ButtonSidebar
                         label="Surat Jalan"
@@ -628,7 +647,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                 </div>
               </div>
             </>
-          ) : null} */}
+          ) : null}
 
           {router.pathname.startsWith("/cashier") ? (
             <>

@@ -1,5 +1,4 @@
 import {
-  Button,
   Pagination,
   Table,
   TableBody,
@@ -20,14 +19,43 @@ import {
 } from "@/headers/owner/products/stocks";
 
 // utils
-import usePagination from "@/hooks/usepagination";
 import { customStyleTable } from "@/utils/customStyleTable";
 
-import { products } from "@/_dummy/products";
+import { ProdukType } from "@/types/products.type";
+import { fetcher } from "@/utils/fetcher";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { useState } from "react";
+import useSWR from "swr";
 
-export default function ProductsStocksPage() {
-  const { page, pages, data, setPage } = usePagination(products, 10);
+export default function ProductsStocksPage(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>,
+) {
   const router = useRouter();
+  const [page, setPage] = useState(1);
+
+  const {
+    data: produk,
+    error,
+    isLoading,
+  } = useSWR(
+    {
+      url: "/produk?page=" + page,
+      method: "GET",
+    },
+    fetcher,
+    {
+      fallbackData: props.produk,
+      revalidateOnFocus: false,
+    },
+  );
+
+  if (isLoading) {
+    return;
+  }
+
+  if (error) {
+    console.log(error);
+  }
 
   return (
     <Layout title="Stok Produk">
@@ -40,14 +68,6 @@ export default function ProductsStocksPage() {
               placeholder="Cari produk..."
               className="w-full sm:max-w-[500px]"
             />
-
-            <Button
-              variant="solid"
-              color="primary"
-              className="w-full font-medium sm:w-max"
-            >
-              Tambah Stok
-            </Button>
           </div>
 
           <Table
@@ -64,12 +84,12 @@ export default function ProductsStocksPage() {
               )}
             </TableHeader>
 
-            <TableBody items={data}>
-              {(product) => (
-                <TableRow key={product.id}>
+            <TableBody items={produk.data.produk}>
+              {(item) => (
+                <TableRow key={item.kode_item}>
                   {(columnKey) => (
                     <TableCell>
-                      {renderCellProductsStocks(product, columnKey, router)}
+                      {renderCellProductsStocks(item, columnKey, router)}
                     </TableCell>
                   )}
                 </TableRow>
@@ -81,8 +101,8 @@ export default function ProductsStocksPage() {
             isCompact
             showControls
             color="primary"
-            page={page}
-            total={pages}
+            page={produk.data.page}
+            total={produk.data.total_page}
             onChange={setPage}
             className="justify-self-center"
           />
@@ -91,3 +111,18 @@ export default function ProductsStocksPage() {
     </Layout>
   );
 }
+
+export const getServerSideProps = (async () => {
+  const result = await fetcher({
+    url: "/produk",
+    method: "GET",
+  });
+
+  const produk: ProdukType = result.data as ProdukType;
+
+  return {
+    props: {
+      produk,
+    },
+  };
+}) satisfies GetServerSideProps<{ produk: ProdukType }>;

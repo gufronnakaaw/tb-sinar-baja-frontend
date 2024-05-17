@@ -3,7 +3,6 @@ import { Eye, Pencil, Trash } from "@phosphor-icons/react";
 import { NextRouter } from "next/router";
 
 // components & utils
-import StatusStock from "@/components/status/StatusStock";
 import CustomTooltip from "@/components/tooltip";
 import { formatDate } from "@/utils/formatDate";
 import { formatRupiah } from "@/utils/formatRupiah";
@@ -23,9 +22,7 @@ export const columnsProduk = [
   { name: "Kode Item", uid: "kode_item" },
   { name: "Nama Produk", uid: "nama_produk" },
   { name: "Kategori", uid: "kategori" },
-  { name: "Stok", uid: "stok" },
   { name: "Harga Umum", uid: "harga_umum" },
-  { name: "Status", uid: "status_stok" },
   { name: "Dibuat Pada", uid: "created_at" },
   { name: "Aksi", uid: "action" },
 ];
@@ -58,17 +55,9 @@ export function renderCellProduk(
           {produk.kategori} - {produk.subkategori}
         </div>
       );
-    case "stok":
-      return <div className="w-max text-default-900">{produk.stok}</div>;
     case "harga_umum":
       return (
         <div className="text-default-900">{formatRupiah(produk.harga_4)}</div>
-      );
-    case "status_stok":
-      return (
-        <div className="text-default-900">
-          <StatusStock text={produk.status_stok} />
-        </div>
       );
     case "created_at":
       return (

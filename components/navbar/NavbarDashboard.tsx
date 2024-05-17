@@ -48,7 +48,8 @@ export default function Navbar({ sidebarOpen, setSidebarOpen }: NavbarProps) {
                 isBordered
                 size="sm"
                 color="default"
-                src="https://i.pravatar.cc/150?u=a04258114e29026302d"
+                showFallback
+                src="https://images.unsplash.com/broken"
               />
 
               <div className="-space-y-1">

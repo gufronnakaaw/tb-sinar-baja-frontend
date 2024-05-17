@@ -1,12 +1,6 @@
 export type ProductsCategoriesType = {
-  code: string;
-  name: string;
+  id_kategori: string;
+  nama: string;
   created_at: string;
-};
-
-export type ProductsSubCategoriesType = {
-  code: string;
-  name: string;
-  category: string;
-  created_at: string;
+  updated_at: string;
 };

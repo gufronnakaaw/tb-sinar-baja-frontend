@@ -1,5 +1,5 @@
 import { Button } from "@nextui-org/react";
-import { Eye, Pencil, Trash } from "@phosphor-icons/react";
+import { Pencil, Trash } from "@phosphor-icons/react";
 import { NextRouter } from "next/router";
 import React from "react";
 
@@ -7,55 +7,42 @@ import React from "react";
 import CustomTooltip from "@/components/tooltip";
 import { formatDate } from "@/utils/formatDate";
 
-type KategoriTable = {
-  id_kategori: string;
+type SubKategoriTable = {
+  id_subkategori: number;
   nama: string;
   created_at: string;
 };
 
-export const columnsKategori = [
+export const columnsSubKategori = [
   { name: "Kode", uid: "kode" },
   { name: "Nama", uid: "nama" },
   { name: "Dibuat Pada", uid: "created_at" },
   { name: "Aksi", uid: "action" },
 ];
 
-export function renderCellKategori(
-  kategori: KategoriTable,
+export function renderCellSubKategori(
+  subkategori: SubKategoriTable,
   columnKey: React.Key,
   router: NextRouter,
 ) {
-  const cellValue = kategori[columnKey as keyof KategoriTable];
+  const cellValue = subkategori[columnKey as keyof SubKategoriTable];
 
   switch (columnKey) {
     case "kode":
-      return <div className="text-default-900">{kategori.id_kategori}</div>;
+      return (
+        <div className="text-default-900">{subkategori.id_subkategori}</div>
+      );
     case "nama":
-      return <div className="w-max text-default-900">{kategori.nama}</div>;
+      return <div className="w-max text-default-900">{subkategori.nama}</div>;
     case "created_at":
       return (
         <div className="w-max text-default-900">
-          {formatDate(kategori.created_at)}
+          {formatDate(subkategori.created_at)}
         </div>
       );
     case "action":
       return (
         <div className="flex max-w-[110px] items-center gap-1">
-          <CustomTooltip content="Detail">
-            <Button
-              isIconOnly
-              variant="light"
-              size="sm"
-              onClick={() =>
-                router.push(
-                  `/owner/products/categories/detail/${kategori.id_kategori}`,
-                )
-              }
-            >
-              <Eye weight="bold" size={20} className="text-default-600" />
-            </Button>
-          </CustomTooltip>
-
           <CustomTooltip content="Edit">
             <Button isIconOnly variant="light" size="sm">
               <Pencil weight="bold" size={20} className="text-default-600" />

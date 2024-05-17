@@ -7,7 +7,6 @@ import {
   DropdownTrigger,
   Link,
 } from "@nextui-org/react";
-import { SignOut } from "@phosphor-icons/react";
 
 export default function NavbarCashier() {
   return (
@@ -29,7 +28,8 @@ export default function NavbarCashier() {
                 isBordered
                 size="sm"
                 color="default"
-                src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
+                showFallback
+                src="https://images.unsplash.com/broken"
               />
 
               <div className="-space-y-1">
@@ -44,18 +44,14 @@ export default function NavbarCashier() {
           </DropdownTrigger>
 
           <DropdownMenu aria-label="profile actions">
-            <DropdownSection
-              aria-label="danger zone section"
-              title="Anda Yakin?"
-            >
+            <DropdownSection aria-label="danger zone section" title="Navigasi">
               <DropdownItem
-                key="logout"
+                key="navigation"
                 color="danger"
-                startContent={<SignOut weight="bold" size={18} />}
-                onClick={() => confirm("apakah anda yakin?")}
+                onClick={() => window.open("/admin/dashboard")}
                 className="font-bold text-danger-600"
               >
-                Keluar
+                Admin Menu
               </DropdownItem>
             </DropdownSection>
           </DropdownMenu>

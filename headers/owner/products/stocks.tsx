@@ -1,70 +1,70 @@
 import { Button } from "@nextui-org/react";
-import { Eye, Pencil, Trash } from "@phosphor-icons/react";
+import { Pencil } from "@phosphor-icons/react";
 import { NextRouter } from "next/router";
 import React from "react";
 
 // components & utils
+import StatusStock from "@/components/status/StatusStock";
 import CustomTooltip from "@/components/tooltip";
-import { ProductsStocksType } from "@/types/productsStocks.type";
 
 type ProductsStocksTable = {
-  id: string;
-  nama: string;
-  stok: number;
+  kode_item: string;
+  nama_produk: string;
   kategori: string;
+  subkategori?: string;
+  status_stok: string;
+  stok_aman: string;
+  stok?: number;
+  created_at: string;
 };
 
 export const columnsProductsStocks = [
-  { name: "ID Produk", uid: "products_id" },
-  { name: "Nama", uid: "nama" },
-  { name: "Kategori", uid: "kategori" },
+  { name: "Kode Item", uid: "kode_item" },
+  { name: "Nama Produk", uid: "nama_produk" },
   { name: "Stok", uid: "stok" },
+  { name: "Stok Aman", uid: "stok_aman" },
+  { name: "Status", uid: "status" },
   { name: "Aksi", uid: "action" },
 ];
 
 export function renderCellProductsStocks(
-  product: ProductsStocksType,
+  produk: ProductsStocksTable,
   columnKey: React.Key,
   router: NextRouter,
 ) {
-  const cellValue = product[columnKey as keyof ProductsStocksTable];
+  const cellValue = produk[columnKey as keyof ProductsStocksTable];
 
   switch (columnKey) {
-    case "products_id":
-      return <div className="text-default-900">{product.id}</div>;
-    case "nama":
+    case "kode_item":
       return (
         <div className="line-clamp-1 w-max max-w-[250px] text-default-900">
-          {product.nama}
+          {produk.kode_item}
         </div>
       );
-    case "kategori":
-      return <div className="w-max text-default-900">{product.kategori}</div>;
+    case "nama_produk":
+      return (
+        <CustomTooltip content={produk.nama_produk}>
+          <div className="line-clamp-1 w-max max-w-[250px] text-default-900">
+            {produk.nama_produk}
+          </div>
+        </CustomTooltip>
+      );
     case "stok":
-      return <div className="text-default-900">{product.stok}</div>;
+      return <div className="text-default-900">{produk.stok}</div>;
+    case "stok_aman":
+      return <div className="text-default-900">{produk.stok_aman}</div>;
+    case "status":
+      return (
+        <div className="text-default-900">
+          <StatusStock text={produk.status_stok} size="sm" />
+        </div>
+      );
     case "action":
       return (
         <div className="flex max-w-[110px] items-center gap-1">
-          <CustomTooltip content="Detail">
-            <Button
-              isIconOnly
-              variant="light"
-              size="sm"
-              onClick={() => router.push("/owner/products/stocks")}
-            >
-              <Eye weight="bold" size={20} className="text-default-600" />
-            </Button>
-          </CustomTooltip>
-
-          <CustomTooltip content="Edit">
+          <CustomTooltip content="Edit Stok">
             <Button isIconOnly variant="light" size="sm">
               <Pencil weight="bold" size={20} className="text-default-600" />
-            </Button>
-          </CustomTooltip>
-
-          <CustomTooltip content="Hapus">
-            <Button isIconOnly variant="light" color="danger" size="sm">
-              <Trash weight="bold" size={20} />
             </Button>
           </CustomTooltip>
         </div>
