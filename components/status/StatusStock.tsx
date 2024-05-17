@@ -1,11 +1,10 @@
-import { Chip } from "@nextui-org/react";
+import { Chip, ChipProps } from "@nextui-org/react";
 import { Circle } from "@phosphor-icons/react";
 
-interface StatusStockProps {
-  text: string;
-}
-
-export default function StatusStock({ text }: StatusStockProps) {
+export default function StatusStock({
+  text,
+  ...props
+}: ChipProps & { text: string }) {
   return (
     <Chip
       variant="flat"
@@ -18,6 +17,7 @@ export default function StatusStock({ text }: StatusStockProps) {
         base: "px-3",
         content: "font-semibold capitalize",
       }}
+      {...props}
     >
       stok {text}
     </Chip>
