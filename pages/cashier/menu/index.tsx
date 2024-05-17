@@ -51,7 +51,7 @@ export default function MenuPage() {
             endContent={<XCircle weight="bold" size={24} />}
             onClick={() => {
               if (confirm("Apakah anda ingin melakukan penutupan?")) {
-                router.push("/cashier/menu/closing");
+                router.push("/cashier");
               }
             }}
             className="col-span-2 py-10 text-base font-semibold"

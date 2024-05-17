@@ -1,12 +1,17 @@
 import {
+  Avatar,
   Button,
-  Chip,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownSection,
+  DropdownTrigger,
   Input,
   Radio,
   RadioGroup,
   Textarea,
 } from "@nextui-org/react";
-import { ArrowLeft, CaretUp, Circle } from "@phosphor-icons/react";
+import { ArrowLeft, CaretUp } from "@phosphor-icons/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
@@ -84,7 +89,7 @@ export default function SellingPage() {
           tipe: "umum",
           unique_key,
           tunai: tunai ? tunai : 0,
-          kembalian: kembali ? kembali : 1,
+          kembalian: kembali ? kembali : 0,
           metode: "Cash",
           list_produk: listProduk.map((produk) => {
             return {
@@ -247,20 +252,44 @@ export default function SellingPage() {
             Kambali ke Menu
           </Button>
 
-          <Chip
-            variant="flat"
-            color="success"
-            startContent={
-              <Circle weight="fill" size={8} className="animate-ping" />
-            }
-            classNames={{
-              base: "px-3",
-              content: "font-medium text-[12px]",
-            }}
-            className="gap-1"
-          >
-            Kasir Online: Ucup Sitorus
-          </Chip>
+          <Dropdown>
+            <DropdownTrigger>
+              <div className="inline-flex items-center gap-2 hover:cursor-pointer">
+                <Avatar
+                  isBordered
+                  size="sm"
+                  color="default"
+                  showFallback
+                  src="https://images.unsplash.com/broken"
+                />
+
+                <div className="-space-y-1">
+                  <h6 className="mb-1 text-sm font-bold text-default-900">
+                    Winda
+                  </h6>
+                  <p className="text-[12px] font-medium uppercase text-default-500">
+                    TB Sinar Baja
+                  </p>
+                </div>
+              </div>
+            </DropdownTrigger>
+
+            <DropdownMenu aria-label="profile actions">
+              <DropdownSection
+                aria-label="danger zone section"
+                title="Navigasi"
+              >
+                <DropdownItem
+                  key="navigation"
+                  color="danger"
+                  onClick={() => window.open("/admin/dashboard")}
+                  className="font-bold text-danger-600"
+                >
+                  Admin Menu
+                </DropdownItem>
+              </DropdownSection>
+            </DropdownMenu>
+          </Dropdown>
         </div>
 
         <div className="grid h-[calc(100vh-64px)] grid-cols-[480px_auto_1fr] overflow-hidden">
@@ -370,6 +399,7 @@ export default function SellingPage() {
                     color="danger"
                     className="w-full px-8 py-6 font-semibold"
                     onClick={createTransaksi}
+                    disabled={listProduk.length == 0}
                   >
                     Cetak
                   </Button>
@@ -385,6 +415,7 @@ export default function SellingPage() {
                         router.reload();
                       }
                     }}
+                    disabled={listProduk.length == 0}
                   >
                     Selesai
                   </Button>
