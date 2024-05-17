@@ -11,13 +11,43 @@ import {
 import StatusStock from "@/components/status/StatusStock";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
+import { DashboardType } from "@/types/dashboard.type";
+import { fetcher } from "@/utils/fetcher";
+import { formatRupiah } from "@/utils/formatRupiah";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import useSWR from "swr";
 
-export default function DashboardPage() {
+export default function DashboardPage(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>,
+) {
+  const {
+    data: dashboard,
+    error,
+    isLoading,
+  } = useSWR(
+    {
+      url: "/dashboard",
+      method: "GET",
+    },
+    fetcher,
+    {
+      fallbackData: props.dashboard,
+      refreshInterval: 30 * 1000,
+    },
+  );
+
+  if (isLoading) {
+    return;
+  }
+
+  if (error) {
+    console.log(error);
+  }
   return (
     <Layout title="Dashboard Admin">
       <Container>
         <section className="grid gap-12">
-          <StatusStock text="stok menipis" />
+          <StatusStock text={dashboard.data.status_stok} />
 
           <div className="grid gap-4">
             <h4 className="text-lg font-semibold text-default-900">
@@ -34,7 +64,7 @@ export default function DashboardPage() {
                 </div>
 
                 <h6 className="text-2xl font-semibold text-default-900">
-                  Rp1.186.917
+                  {formatRupiah(dashboard.data.omzet)}
                 </h6>
 
                 <Button
@@ -42,6 +72,7 @@ export default function DashboardPage() {
                   size="sm"
                   endContent={<ArrowRight weight="bold" size={14} />}
                   className="w-max self-end font-medium text-default-600"
+                  onClick={() => alert("dalam tahap pengembangan")}
                 >
                   Selengkapnya
                 </Button>
@@ -61,13 +92,16 @@ export default function DashboardPage() {
                   </p>
                 </div>
 
-                <h6 className="text-2xl font-semibold text-default-900">12</h6>
+                <h6 className="text-2xl font-semibold text-default-900">
+                  {dashboard.data.barang_rusak}
+                </h6>
 
                 <Button
                   variant="light"
                   size="sm"
                   endContent={<ArrowRight weight="bold" size={14} />}
                   className="w-max self-end font-medium text-default-600"
+                  onClick={() => alert("dalam tahap pengembangan")}
                 >
                   Selengkapnya
                 </Button>
@@ -88,7 +122,7 @@ export default function DashboardPage() {
                 </div>
 
                 <h6 className="text-2xl font-semibold text-default-900">
-                  Rp2.182.572
+                  {formatRupiah(dashboard.data.pembayaran_lunas)}
                 </h6>
 
                 <Button
@@ -96,6 +130,7 @@ export default function DashboardPage() {
                   size="sm"
                   endContent={<ArrowRight weight="bold" size={14} />}
                   className="w-max self-end font-medium text-default-600"
+                  onClick={() => alert("dalam tahap pengembangan")}
                 >
                   Selengkapnya
                 </Button>
@@ -115,13 +150,16 @@ export default function DashboardPage() {
                   </p>
                 </div>
 
-                <h6 className="text-2xl font-semibold text-default-900">18</h6>
+                <h6 className="text-2xl font-semibold text-default-900">
+                  {dashboard.data.konsinyasi}
+                </h6>
 
                 <Button
                   variant="light"
                   size="sm"
                   endContent={<ArrowRight weight="bold" size={14} />}
                   className="w-max self-end font-medium text-default-600"
+                  onClick={() => alert("dalam tahap pengembangan")}
                 >
                   Selengkapnya
                 </Button>
@@ -133,3 +171,18 @@ export default function DashboardPage() {
     </Layout>
   );
 }
+
+export const getServerSideProps = (async () => {
+  const result = await fetcher({
+    url: "/dashboard",
+    method: "GET",
+  });
+
+  const dashboard: DashboardType = result.data as DashboardType;
+
+  return {
+    props: {
+      dashboard,
+    },
+  };
+}) satisfies GetServerSideProps<{ dashboard: DashboardType }>;
