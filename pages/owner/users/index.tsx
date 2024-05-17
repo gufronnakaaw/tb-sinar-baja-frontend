@@ -1,5 +1,4 @@
 import {
-  Button,
   Pagination,
   Table,
   TableBody,
@@ -12,6 +11,7 @@ import { useRouter } from "next/router";
 
 // components
 import InputSearchBar from "@/components/input/InputSearchBar";
+import StatusAllStock from "@/components/status/StatusAllStock";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 import { columnsUsers, renderCellUsers } from "@/headers/owner/users";
@@ -20,7 +20,6 @@ import { columnsUsers, renderCellUsers } from "@/headers/owner/users";
 import usePagination from "@/hooks/usepagination";
 import { customStyleTable } from "@/utils/customStyleTable";
 
-// dummy data
 import { users } from "@/_dummy/users";
 
 export default function UsersPage() {
@@ -33,20 +32,24 @@ export default function UsersPage() {
         <h4 className="text-lg font-semibold text-default-900">Pengguna</h4>
 
         <div className="grid gap-4">
-          <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="grid gap-4 xl:flex xl:items-end xl:justify-between">
             <InputSearchBar
               placeholder="Cari nama pengguna..."
-              className="w-full sm:max-w-[500px]"
+              className="w-full sm:max-w-[450px]"
             />
 
-            <Button
+            <StatusAllStock />
+          </div>
+
+          {/* <div className="flex flex-wrap items-end justify-between gap-4"> */}
+          {/* <Button
               variant="solid"
               color="primary"
               className="w-full font-medium sm:w-max"
             >
               Tambah Pengguna
-            </Button>
-          </div>
+            </Button> */}
+          {/* </div> */}
 
           <Table
             isHeaderSticky
