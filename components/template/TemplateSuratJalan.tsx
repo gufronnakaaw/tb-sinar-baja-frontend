@@ -99,7 +99,10 @@ const SuratJalan = (props: DocumentResponse, ref: any) => {
 
           <div>
             <h5 className="text-[12px] font-semibold text-black">
-              Kepada Yth, {props.transaksi.penerima}
+              Kepada Yth,
+            </h5>
+            <h5 className="text-[12px] font-semibold text-black">
+              {props.transaksi.penerima}
             </h5>
           </div>
         </div>
