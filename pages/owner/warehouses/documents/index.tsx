@@ -1,130 +1,127 @@
-import { Button } from "@nextui-org/react";
-import { Eye, Pencil, Trash } from "@phosphor-icons/react";
+import {
+  Pagination,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from "@nextui-org/react";
 import { useRouter } from "next/router";
-import { useRef } from "react";
-import { useReactToPrint } from "react-to-print";
 
 // components
-import { TemplateSuratJalan } from "@/components/template/TemplateSuratJalan";
-import CustomTooltip from "@/components/tooltip";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 
 // utils
 import usePagination from "@/hooks/usepagination";
-import { WarehouseDocuments } from "@/types/warehouses.type";
 
-import { warehouseDocuments } from "@/_dummy/warehouses";
+import InputSearchBar from "@/components/input/InputSearchBar";
+import {
+  columnsDocuments,
+  renderCellDocuments,
+} from "@/headers/owner/warehouses/documents";
+import { GlobalResponse } from "@/types/global.type";
+import { customStyleTable } from "@/utils/customStyleTable";
+import { fetcher } from "@/utils/fetcher";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import React, { useState } from "react";
+import useSWR from "swr";
 
-export default function WarehousesDocumentsPage() {
-  const router = useRouter();
-  const { page, pages, data, setPage } = usePagination(warehouseDocuments, 10);
+type DocumentType = {
+  id_suratjalan: string;
+  transaksi_id: string;
+  nama_driver: string;
+  kendaraan: string;
+  plat_kendaraan: string;
+  verifikasi: boolean;
+  transaksi: {
+    penerima: string;
+  };
+};
 
-  const componentRef = useRef(null);
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
+export default function WarehousesDocumentsPage(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>,
+) {
+  const [search, setSearch] = useState("");
+  const swr = useSWR<GlobalResponse<DocumentType[]>>(
+    {
+      url: "/suratjalan",
+      method: "GET",
+    },
+    fetcher,
+    {
+      fallbackData: props.documents,
+      refreshInterval: 15000,
+    },
+  );
+  if (swr.isLoading) {
+    return;
+  }
+
+  if (swr.error) {
+    console.log(swr.error);
+  }
+
+  const filter = swr.data?.data.filter((item) => {
+    return (
+      item.id_suratjalan.toLowerCase().includes(search.toLowerCase()) ||
+      item.transaksi_id.toLowerCase().includes(search.toLowerCase()) ||
+      item.transaksi.penerima.toLowerCase().includes(search.toLowerCase())
+    );
   });
 
-  const columns = [
-    { name: "Invoice", uid: "invoice", sortable: false },
-    { name: "Ke", uid: "to", sortable: true },
-    { name: "Aksi", uid: "action", sortable: false },
-  ];
+  return <SubComponentDocumentsPage {...{ documents: filter, setSearch }} />;
+}
 
-  const renderCell = (
-    warehouseDocuments: WarehouseDocuments,
-    columnKey: React.Key,
-  ) => {
-    const cellValue = warehouseDocuments[columnKey as keyof WarehouseDocuments];
+function SubComponentDocumentsPage({
+  documents,
+  setSearch,
+}: {
+  documents: DocumentType[] | undefined;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
+}) {
+  const router = useRouter();
 
-    switch (columnKey) {
-      case "invoice":
-        return (
-          <div className="text-default-900">{warehouseDocuments.invoice}</div>
-        );
-      case "to":
-        return (
-          <div className="line-clamp-1 w-max max-w-[250px] text-default-900">
-            {warehouseDocuments.to}
-          </div>
-        );
-      case "action":
-        return (
-          <div className="flex max-w-[110px] items-center gap-1">
-            <CustomTooltip content="Detail">
-              <Button
-                isIconOnly
-                variant="light"
-                size="sm"
-                onClick={() =>
-                  router.push(
-                    `/owner/warehouses/documents/${warehouseDocuments.invoice}`,
-                  )
-                }
-              >
-                <Eye weight="bold" size={20} className="text-default-600" />
-              </Button>
-            </CustomTooltip>
-
-            <CustomTooltip content="Edit">
-              <Button isIconOnly variant="light" size="sm">
-                <Pencil weight="bold" size={20} className="text-default-600" />
-              </Button>
-            </CustomTooltip>
-
-            <CustomTooltip content="Hapus">
-              <Button isIconOnly variant="light" color="danger" size="sm">
-                <Trash weight="bold" size={20} />
-              </Button>
-            </CustomTooltip>
-          </div>
-        );
-
-      default:
-        return cellValue;
-    }
-  };
+  const { page, pages, data, setPage } = usePagination(
+    documents ? documents : [],
+    10,
+  );
 
   return (
     <Layout title="Surat Jalan">
       <Container className="gap-8">
-        {/* <h4 className="text-lg font-semibold text-default-900">Surat Jalan</h4> */}
+        <h4 className="text-lg font-semibold text-default-900">Surat Jalan</h4>
 
         <div className="grid gap-4">
-          {/* <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center justify-between gap-4">
             <InputSearchBar
-              placeholder="Cari surat jalan..."
+              placeholder="Cari ID Surat Jalan atau ID Transaksi atau penerima"
               className="w-full sm:max-w-[500px]"
+              onChange={(e) => setSearch(e.target.value)}
             />
+          </div>
 
-            <Button
-              variant="solid"
-              color="primary"
-              className="w-full font-medium sm:w-max"
-            >
-              Buat Surat Jalan
-            </Button>
-          </div> */}
-          {/* <Table
+          <Table
             isHeaderSticky
-            aria-label="warehouseDocuments table"
+            aria-label="surat jalan table"
             color="primary"
             selectionMode="single"
             classNames={customStyleTable}
             className="scrollbar-hide"
           >
-            <TableHeader columns={columns}>
+            <TableHeader columns={columnsDocuments}>
               {(column) => (
                 <TableColumn key={column.uid}>{column.name}</TableColumn>
               )}
             </TableHeader>
 
             <TableBody items={data}>
-              {(warehouseDocuments) => (
-                <TableRow key={warehouseDocuments.invoice}>
+              {(document) => (
+                <TableRow key={document.id_suratjalan}>
                   {(columnKey) => (
                     <TableCell>
-                      {renderCell(warehouseDocuments, columnKey)}
+                      {renderCellDocuments(document, columnKey, router)}
                     </TableCell>
                   )}
                 </TableRow>
@@ -140,19 +137,24 @@ export default function WarehousesDocumentsPage() {
             total={pages}
             onChange={setPage}
             className="justify-self-center"
-          /> */}
-
-          <Button
-            variant="solid"
-            color="primary"
-            className="w-full justify-self-end font-medium sm:w-max"
-            onClick={handlePrint}
-          >
-            Print
-          </Button>
-          <TemplateSuratJalan ref={componentRef} />
+          />
         </div>
       </Container>
     </Layout>
   );
 }
+
+export const getServerSideProps = (async () => {
+  const result = await fetcher({
+    url: "/suratjalan",
+    method: "GET",
+  });
+
+  const documents: DocumentType[] = result.data as DocumentType[];
+
+  return {
+    props: {
+      documents,
+    },
+  };
+}) satisfies GetServerSideProps<{ documents: DocumentType[] }>;

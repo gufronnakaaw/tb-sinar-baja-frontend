@@ -1,16 +1,13 @@
-import { Button } from "@nextui-org/react";
-import { Check, CheckCircle, Printer } from "@phosphor-icons/react";
+import { Button, Input } from "@nextui-org/react";
 import { useRouter } from "next/router";
 
 // components
 import ButtonBack from "@/components/button/ButtonBack";
-import { TemplateSuratJalan } from "@/components/template/TemplateSuratJalan";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 import { fetcher } from "@/utils/fetcher";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { useRef } from "react";
-import { useReactToPrint } from "react-to-print";
+import { useState } from "react";
 
 export type DocumentResponse = {
   id_suratjalan: string;
@@ -34,32 +31,28 @@ export type TransaksiDetail = {
   rak: string;
 };
 
-export default function DocumentDetails({
+export default function DocumentsUpdate({
   documents,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
-  const componentRef = useRef(null);
+  const [namaDriver, setNamaDriver] = useState(documents.nama_driver);
+  const [kendaraan, setKendaraan] = useState(documents.kendaraan);
+  const [platKendaraan, setPlatKendaraan] = useState(documents.plat_kendaraan);
 
-  const handlePrint = useReactToPrint({
-    documentTitle: documents.id_suratjalan,
-    content: () => componentRef.current,
-  });
-
-  async function handleVerifikasi() {
-    if (!confirm("apakah anda yakin ingin memverifikasi surat jalan ini"))
-      return;
-
+  async function handleUpdate() {
     try {
       await fetcher({
         url: "/suratjalan",
         method: "PATCH",
         data: {
           id_suratjalan: documents.id_suratjalan,
-          verifikasi: true,
+          nama_driver: namaDriver,
+          kendaraan,
+          plat_kendaraan: platKendaraan,
         },
       });
-      alert("verifikasi berhasil");
-      return router.reload();
+      alert("update berhasil");
+      return router.push("/owner/warehouses/documents");
     } catch (error) {
       alert("ups sepertinya ada masalah pada server");
       console.log(error);
@@ -67,7 +60,7 @@ export default function DocumentDetails({
   }
 
   return (
-    <Layout title={`Detail Dokumen ${documents.id_suratjalan}`}>
+    <Layout title={`Update Dokumen ${documents.id_suratjalan}`}>
       <Container className="gap-8">
         <div className="flex items-center justify-between gap-4">
           <ButtonBack
@@ -75,38 +68,54 @@ export default function DocumentDetails({
           >
             Kembali
           </ButtonBack>
+        </div>
 
-          <div className="grid grid-cols-2 gap-2">
-            {!documents.verifikasi ? (
-              <Button
-                variant="solid"
-                color="success"
-                endContent={<Check weight="bold" size={17} />}
-                onClick={handleVerifikasi}
-                className="font-semibold text-white"
-              >
-                Verifikasi
-              </Button>
-            ) : (
-              <div className="flex items-center text-default-600">
-                <CheckCircle className="text-success" weight="fill" size={20} />
-                Terverifikasi
-              </div>
-            )}
+        <div className="grid gap-5">
+          <Input
+            defaultValue={namaDriver}
+            isRequired
+            variant="flat"
+            color="default"
+            labelPlacement="outside"
+            label="Nama Driver"
+            placeholder="Masukan nama driver..."
+            onChange={(e) => setNamaDriver(e.target.value)}
+          />
 
+          <Input
+            defaultValue={kendaraan}
+            isRequired
+            variant="flat"
+            color="default"
+            labelPlacement="outside"
+            label="Kendaraan"
+            placeholder="Masukan kendaraan..."
+            onChange={(e) => setKendaraan(e.target.value)}
+          />
+
+          <Input
+            defaultValue={platKendaraan}
+            isRequired
+            variant="flat"
+            color="default"
+            labelPlacement="outside"
+            label="Plat Kendaraan"
+            placeholder="Masukan plat kendaraan..."
+            onChange={(e) => setPlatKendaraan(e.target.value)}
+          />
+
+          <div>
             <Button
               variant="solid"
               color="primary"
-              endContent={<Printer weight="bold" size={17} />}
-              onClick={handlePrint}
-              className="font-semibold"
+              className="px-6 py-4 font-semibold text-white"
+              size="md"
+              onClick={handleUpdate}
             >
-              Cetak
+              Update
             </Button>
           </div>
         </div>
-
-        <TemplateSuratJalan {...documents} ref={componentRef} />
       </Container>
     </Layout>
   );
