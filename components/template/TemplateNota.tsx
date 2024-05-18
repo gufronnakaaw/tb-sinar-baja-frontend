@@ -73,7 +73,7 @@ const Nota = (props: TransaksiType, ref: any) => {
             Kediri, Jawa Timur 64131
           </p>
           <p className="max-w-[300px] text-[10px] font-medium text-default-600">
-            (+62) 21 3456 7890
+            082140735711
           </p>
         </div>
 

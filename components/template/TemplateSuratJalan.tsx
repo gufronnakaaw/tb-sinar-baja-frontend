@@ -8,55 +8,39 @@ import {
 } from "@nextui-org/react";
 import React, { forwardRef } from "react";
 
-type SuratJalanProps = {
-  id: number;
-  nama_produk: string;
-  jumlah: number;
-  lokasi: string;
-};
+import {
+  DocumentResponse,
+  TransaksiDetail,
+} from "@/pages/owner/warehouses/documents/[id]";
+import { formatDate } from "@/utils/formatDate";
 
-const items: SuratJalanProps[] = [
-  {
-    id: 1,
-    nama_produk: "Sealent Asam Hitam(Black) 300gr",
-    jumlah: 3,
-    lokasi: "Gudang 1",
-  },
-  {
-    id: 2,
-    nama_produk: "Sealent Asam abu-abu(Light Grey) 300gr",
-    jumlah: 6,
-    lokasi: "Gudang 2",
-  },
-];
-
-const SuratJalan = (props: any, ref: any) => {
+const SuratJalan = (props: DocumentResponse, ref: any) => {
   const columns = [
     { name: "Jumlah", uid: "jumlah" },
     { name: "Nama Barang", uid: "nama_produk" },
     { name: "Lokasi", uid: "lokasi" },
   ];
 
-  const renderCell = (item: SuratJalanProps, columnKey: React.Key) => {
-    const cellValue = item[columnKey as keyof SuratJalanProps];
+  const renderCell = (item: TransaksiDetail, columnKey: React.Key) => {
+    const cellValue = item[columnKey as keyof TransaksiDetail];
 
     switch (columnKey) {
       case "jumlah":
         return (
-          <div className="text-[10px] font-medium text-default-900">
+          <div className="text-[10px] font-semibold text-black">
             {item.jumlah} btl
           </div>
         );
       case "nama_produk":
         return (
-          <div className="w-max text-[10px] font-medium text-default-900">
+          <div className="w-max text-[10px] font-semibold text-black">
             {item.nama_produk}
           </div>
         );
       case "lokasi":
         return (
-          <div className="w-max text-[10px] font-medium text-default-900">
-            {item.lokasi}
+          <div className="w-max text-[10px] font-semibold text-black">
+            {item.gudang}, {item.rak}
           </div>
         );
 
@@ -67,46 +51,56 @@ const SuratJalan = (props: any, ref: any) => {
 
   return (
     <div className="container grid gap-8 px-20 pt-8 font-inter" ref={ref}>
+      <h4 className="text-center text-xl font-semibold uppercase text-black">
+        Surat Jalan
+      </h4>
+
       <div className="grid grid-cols-2 items-start gap-12">
         <div className="grid gap-1">
-          <h1 className="text-lg font-bold text-default-900">TB. Sinar Baja</h1>
-          <p className="max-w-[300px] text-[10px] font-medium text-default-600">
+          <h1 className="text-lg font-semibold text-black">TB. Sinar Baja</h1>
+          <p className="max-w-[300px] text-[10px] font-semibold text-default-600">
             Jl. Letjend Sutoyo No.67, Burengan, Kec. Pesantren, Kabupaten
             Kediri, Jawa Timur 64131
           </p>
-          <p className="max-w-[300px] text-[10px] font-medium text-default-600">
-            (+62) 21 3456 7890
+          <p className="max-w-[300px] text-[10px] font-semibold text-default-600">
+            082140735711
           </p>
         </div>
 
-        <div className="grid gap-4">
+        <div className="grid justify-center gap-4">
           <div className="grid">
-            <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-default-900">
-              <div className="font-medium">ID Transaksi</div>
-              <div className="font-medium">:</div>
-              <p className="font-medium">TX130524084725</p>
+            <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-black">
+              <div className="font-semibold">ID Transaksi</div>
+              <div className="font-semibold">:</div>
+              <p className="font-semibold">{props.transaksi.id_transaksi}</p>
             </div>
 
-            <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-default-900">
-              <div className="font-medium">Tanggal</div>
-              <div className="font-medium">:</div>
-              <p className="font-medium">09 Mei 2024</p>
+            <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-black">
+              <div className="font-semibold">Tanggal</div>
+              <div className="font-semibold">:</div>
+              <p className="font-semibold">
+                {formatDate(props.transaksi.created_at)}
+              </p>
             </div>
 
-            <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-default-900">
-              <div className="font-medium">No. Surat Jalan</div>
-              <div className="font-medium">:</div>
-              <p className="font-medium">8172647018375</p>
+            <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-black">
+              <div className="font-semibold">No. Surat Jalan</div>
+              <div className="font-semibold">:</div>
+              <p className="font-semibold">{props.id_suratjalan}</p>
+            </div>
+            <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-black">
+              <div className="font-semibold">Nama Driver</div>
+              <div className="font-semibold">:</div>
+              <p className="font-semibold">
+                {!props.nama_driver ? "-" : props.nama_driver}
+              </p>
             </div>
           </div>
 
           <div>
-            <h5 className="text-[12px] font-semibold text-default-900">
-              Kepada Yth,
+            <h5 className="text-[12px] font-semibold text-black">
+              Kepada Yth, {props.transaksi.penerima}
             </h5>
-            <div className="h-4 w-full border-b border-dashed border-default-900 text-[10px] font-medium text-default-900" />
-            <div className="h-4 w-full border-b border-dashed border-default-900 text-[10px] font-medium text-default-900" />
-            <div className="h-4 w-full border-b border-dashed border-default-900 text-[10px] font-medium text-default-900" />
           </div>
         </div>
       </div>
@@ -114,12 +108,12 @@ const SuratJalan = (props: any, ref: any) => {
       <div className="grid gap-4">
         <div className="grid grid-cols-[1fr_100px] gap-4">
           <div className="grid gap-1 text-[10px]">
-            <p className="font-medium text-default-600">
-              Kami kirimkan barang-barang dibawah ini dengan
-              kendaraan......................................................................,
+            <p className="font-semibold text-default-600">
+              Kami kirimkan barang-barang dibawah ini dengan kendaraan{" "}
+              {props.kendaraan},
             </p>
-            <p className="font-medium text-default-600">
-              bernomor......................................................................
+            <p className="font-semibold text-default-600">
+              bernomor {props.plat_kendaraan}
             </p>
           </div>
         </div>
@@ -135,7 +129,7 @@ const SuratJalan = (props: any, ref: any) => {
               "[&>tr]:first:rounded-none [&>tr]:first:shadow-none border-b border-black",
             ],
             th: [
-              "px-5 h-[14px] text-[10px] first:rounded-none last:rounded-none bg-transparent text-default-900",
+              "px-5 h-[14px] text-[10px] first:rounded-none last:rounded-none font-semibold bg-transparent text-black",
             ],
             td: ["px-5 py-0 h-[14px]"],
           }}
@@ -147,9 +141,9 @@ const SuratJalan = (props: any, ref: any) => {
             )}
           </TableHeader>
 
-          <TableBody items={items}>
+          <TableBody items={props.transaksi.transaksidetail}>
             {(item) => (
-              <TableRow key={item.id}>
+              <TableRow key={item.nama_produk}>
                 {(columnKey) => (
                   <TableCell>{renderCell(item, columnKey)}</TableCell>
                 )}
@@ -161,37 +155,31 @@ const SuratJalan = (props: any, ref: any) => {
 
       <div className="flex items-center justify-between gap-4">
         <div className="grid gap-12 text-center">
-          <h4 className="text-[12px] font-semibold text-default-900">
+          <h4 className="text-[12px] font-semibold text-black">
             Disiapkan oleh,
           </h4>
-          <div className="text-sm font-medium text-default-900">
+          <div className="text-sm font-semibold text-black">
             (..................................)
           </div>
         </div>
 
         <div className="grid gap-12 text-center">
-          <h4 className="text-[12px] font-semibold text-default-900">
-            Gudang 1
-          </h4>
-          <div className="text-sm font-medium text-default-900">
+          <h4 className="text-[12px] font-semibold text-black">Gudang 1,</h4>
+          <div className="text-sm font-semibold text-black">
             (..................................)
           </div>
         </div>
 
         <div className="grid gap-12 text-center">
-          <h4 className="text-[12px] font-semibold text-default-900">
-            Gudang 2
-          </h4>
-          <div className="text-sm font-medium text-default-900">
+          <h4 className="text-[12px] font-semibold text-black">Gudang 2,</h4>
+          <div className="text-sm font-semibold text-black">
             (..................................)
           </div>
         </div>
 
         <div className="grid gap-12 text-center">
-          <h4 className="text-[12px] font-semibold text-default-900">
-            Hormat Kami,
-          </h4>
-          <div className="text-sm font-medium text-default-900">
+          <h4 className="text-[12px] font-semibold text-black">Hormat Kami,</h4>
+          <div className="text-sm font-semibold text-black">
             (..................................)
           </div>
         </div>
