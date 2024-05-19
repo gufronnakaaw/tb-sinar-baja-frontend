@@ -25,13 +25,54 @@ import { TransaksiType } from "@/types/transactions.type";
 import { customStyleTable } from "@/utils/customStyleTable";
 import { fetcher } from "@/utils/fetcher";
 
+import { GlobalResponse } from "@/types/global.type";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { useState } from "react";
+import useSWR from "swr";
 
-export default function TransactionPage({
+export default function TransactionsPage(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>,
+) {
+  const [search, setSearch] = useState("");
+  const swr = useSWR<GlobalResponse<TransaksiType[]>>(
+    {
+      url: "/transaksi",
+      method: "GET",
+    },
+    fetcher,
+    {
+      fallbackData: props.transaksi,
+      refreshInterval: 15000,
+    },
+  );
+
+  if (swr.isLoading) {
+    return;
+  }
+
+  if (swr.error) {
+    console.log(swr.error);
+  }
+
+  const filter = swr.data?.data.filter((item) => {
+    return item.id_transaksi.toLowerCase().includes(search.toLowerCase());
+  });
+
+  return <SubComponentTransactionsPage {...{ transaksi: filter, setSearch }} />;
+}
+
+function SubComponentTransactionsPage({
   transaksi,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  setSearch,
+}: {
+  transaksi: TransaksiType[] | undefined;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
+}) {
   const router = useRouter();
-  const { page, pages, data, setPage } = usePagination(transaksi, 10);
+  const { page, pages, data, setPage } = usePagination(
+    transaksi ? transaksi : [],
+    10,
+  );
 
   return (
     <Layout title="Daftar Transaksi">
@@ -55,8 +96,9 @@ export default function TransactionPage({
               </h4>
 
               <InputSearchBar
-                placeholder="Cari transaksi..."
+                placeholder="Cari ID Transaksi"
                 className="w-full sm:max-w-[500px]"
+                onChange={(e) => setSearch(e.target.value)}
               />
             </div>
 
@@ -109,11 +151,11 @@ export const getServerSideProps = (async () => {
     method: "GET",
   });
 
-  const transaksi: TransaksiType[] = result.data as TransaksiType[];
+  const transaksi: GlobalResponse<TransaksiType[]> = result;
 
   return {
     props: {
       transaksi,
     },
   };
-}) satisfies GetServerSideProps<{ transaksi: TransaksiType[] }>;
+}) satisfies GetServerSideProps<{ transaksi: GlobalResponse<TransaksiType[]> }>;

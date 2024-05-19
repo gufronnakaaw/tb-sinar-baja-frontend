@@ -79,7 +79,7 @@ export default function SellingPage() {
           no_telp: noTelp ? noTelp : "-",
           alamat: alamat ? alamat : "-",
           pengiriman: pengiriman ? pengiriman : "-",
-          ongkir: ongkir ? ongkir : 0,
+          ongkir: ongkir ? ongkir : null,
           total_belanja: totalBelanja,
           total_pembayaran: totalPembayaran,
           pajak: pajak ? pajak : null,
@@ -112,7 +112,10 @@ export default function SellingPage() {
         reactPrint();
       }, 100);
     } catch (error) {
-      const { status_code }: { status_code: number | unknown } = error;
+      const { status_code } = error as {
+        success: boolean;
+        status_code: number;
+      };
 
       if (status_code >= 400) {
         alert("terjadi kesalahan saat menginput data");
