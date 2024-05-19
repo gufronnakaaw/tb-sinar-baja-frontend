@@ -31,19 +31,21 @@ export default function HistoriesPage({
         <div className="flex flex-wrap items-center justify-between gap-4">
           <Button
             variant="light"
+            color="primary"
             size="sm"
             startContent={<ArrowLeft weight="bold" size={16} />}
             onClick={() => router.push("/admin/histories")}
-            className="w-max bg-lime-500 font-semibold text-white"
+            className="w-max font-semibold"
           >
             Kembali ke Menu
           </Button>
 
           <Button
+            color="primary"
             size="sm"
             startContent={<Printer weight="bold" size={17} />}
             onClick={handlePrint}
-            className="w-max bg-lime-500 font-semibold text-white"
+            className="w-max font-semibold"
           >
             Cetak Nota
           </Button>
@@ -55,32 +57,16 @@ export default function HistoriesPage({
 }
 
 export const getServerSideProps = (async ({ params }) => {
-  if (!params) {
-    return {
-      redirect: {
-        destination: "/admin/histories",
-      },
-    };
-  }
-
   const result = await fetcher({
-    url: ("/transaksi?id=" + params.id) as string,
+    url: "/transaksi?id=" + params?.id,
     method: "GET",
   });
 
-  if (result.success) {
-    const transaksi: TransaksiType = result.data as TransaksiType;
-
-    return {
-      props: {
-        transaksi,
-      },
-    };
-  }
+  const transaksi: TransaksiType = result.data as TransaksiType;
 
   return {
-    redirect: {
-      destination: "/admin/histories",
+    props: {
+      transaksi,
     },
   };
 }) satisfies GetServerSideProps<{ transaksi: TransaksiType }>;

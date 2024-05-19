@@ -7,43 +7,54 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 
 // components
-import InputSearchBar from "@/components/input/InputSearchBar";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
-import {
-  columnsTransaksi,
-  renderCellTransaksi,
-} from "@/headers/owner/histories";
 
 // utils
 import usePagination from "@/hooks/usepagination";
+
+import InputSearchBar from "@/components/input/InputSearchBar";
+import {
+  columnsDocuments,
+  renderCellDocuments,
+} from "@/headers/owner/warehouses/documents";
 import { GlobalResponse } from "@/types/global.type";
-import { TransaksiType } from "@/types/transactions.type";
 import { customStyleTable } from "@/utils/customStyleTable";
 import { fetcher } from "@/utils/fetcher";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import React, { useState } from "react";
 import useSWR from "swr";
 
-export default function HistoriesPage(
+type DocumentType = {
+  id_suratjalan: string;
+  transaksi_id: string;
+  nama_driver: string;
+  kendaraan: string;
+  plat_kendaraan: string;
+  verifikasi: boolean;
+  transaksi: {
+    penerima: string;
+  };
+};
+
+export default function WarehousesDocumentsPage(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
   const [search, setSearch] = useState("");
-  const swr = useSWR<GlobalResponse<TransaksiType[]>>(
+  const swr = useSWR<GlobalResponse<DocumentType[]>>(
     {
-      url: "/transaksi",
+      url: "/suratjalan",
       method: "GET",
     },
     fetcher,
     {
-      fallbackData: props.transaksi,
+      fallbackData: props.documents,
       refreshInterval: 15000,
     },
   );
-
   if (swr.isLoading) {
     return;
   }
@@ -53,59 +64,64 @@ export default function HistoriesPage(
   }
 
   const filter = swr.data?.data.filter((item) => {
-    return item.id_transaksi.toLowerCase().includes(search.toLowerCase());
+    return (
+      item.id_suratjalan.toLowerCase().includes(search.toLowerCase()) ||
+      item.transaksi_id.toLowerCase().includes(search.toLowerCase()) ||
+      item.transaksi.penerima.toLowerCase().includes(search.toLowerCase())
+    );
   });
 
-  return <SubComponentHistoriesPage {...{ transaksi: filter, setSearch }} />;
+  return <SubComponentDocumentsPage {...{ documents: filter, setSearch }} />;
 }
 
-function SubComponentHistoriesPage({
-  transaksi,
+function SubComponentDocumentsPage({
+  documents,
   setSearch,
 }: {
-  transaksi: TransaksiType[] | undefined;
+  documents: DocumentType[] | undefined;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
 }) {
-  const { page, pages, data, setPage } = usePagination(
-    transaksi ? transaksi : [],
-    10,
-  );
   const router = useRouter();
 
+  const { page, pages, data, setPage } = usePagination(
+    documents ? documents : [],
+    10,
+  );
+
   return (
-    <Layout title="Daftar Transaksi">
+    <Layout title="Surat Jalan">
       <Container className="gap-8">
-        <h4 className="text-lg font-semibold text-default-900">
-          Riwayat Transaksi
-        </h4>
+        <h4 className="text-lg font-semibold text-default-900">Surat Jalan</h4>
 
         <div className="grid gap-4">
-          <InputSearchBar
-            placeholder="Cari ID Transaksi"
-            className="w-full sm:max-w-[500px]"
-            onChange={(e) => setSearch(e.target.value)}
-          />
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <InputSearchBar
+              placeholder="Cari ID Surat Jalan atau ID Transaksi atau penerima"
+              className="w-full sm:max-w-[500px]"
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
 
           <Table
             isHeaderSticky
-            aria-label="transactions table"
+            aria-label="surat jalan table"
             color="primary"
             selectionMode="single"
             classNames={customStyleTable}
             className="scrollbar-hide"
           >
-            <TableHeader columns={columnsTransaksi}>
+            <TableHeader columns={columnsDocuments}>
               {(column) => (
                 <TableColumn key={column.uid}>{column.name}</TableColumn>
               )}
             </TableHeader>
 
             <TableBody items={data}>
-              {(transaction) => (
-                <TableRow key={transaction.id_transaksi}>
+              {(item) => (
+                <TableRow key={item.id_suratjalan}>
                   {(columnKey) => (
                     <TableCell>
-                      {renderCellTransaksi(transaction, columnKey, router)}
+                      {renderCellDocuments(item, columnKey, router)}
                     </TableCell>
                   )}
                 </TableRow>
@@ -130,15 +146,17 @@ function SubComponentHistoriesPage({
 
 export const getServerSideProps = (async () => {
   const result = await fetcher({
-    url: "/transaksi",
+    url: "/suratjalan",
     method: "GET",
   });
 
-  const transaksi: GlobalResponse<TransaksiType[]> = result.data;
+  const documents: GlobalResponse<DocumentType[]> = result as GlobalResponse<
+    DocumentType[]
+  >;
 
   return {
     props: {
-      transaksi,
+      documents,
     },
   };
-}) satisfies GetServerSideProps<{ transaksi: GlobalResponse<TransaksiType[]> }>;
+}) satisfies GetServerSideProps<{ documents: GlobalResponse<DocumentType[]> }>;

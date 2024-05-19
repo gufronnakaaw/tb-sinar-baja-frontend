@@ -74,7 +74,11 @@ export default function Navbar({ sidebarOpen, setSidebarOpen }: NavbarProps) {
                 key="logout"
                 color="danger"
                 startContent={<SignOut weight="bold" size={18} />}
-                onClick={() => confirm("apakah anda yakin?")}
+                onClick={() => {
+                  if (confirm("apakah anda yakin?")) {
+                    return router.push("/");
+                  }
+                }}
                 className="font-bold text-danger-600"
               >
                 Keluar
