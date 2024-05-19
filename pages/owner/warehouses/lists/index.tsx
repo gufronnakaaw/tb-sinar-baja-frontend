@@ -149,7 +149,7 @@ function SubComponentWarehousesPage({
         <div className="grid gap-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <InputSearchBar
-              placeholder="Cari gudang..."
+              placeholder="Cari Kode Gudang"
               className="w-full sm:max-w-[500px]"
               onChange={(e) => setSearch(e.target.value)}
             />

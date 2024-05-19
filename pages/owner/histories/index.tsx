@@ -81,7 +81,7 @@ function SubComponentHistoriesPage({
 
         <div className="grid gap-4">
           <InputSearchBar
-            placeholder="Cari ID Transaksi..."
+            placeholder="Cari ID Transaksi"
             className="w-full sm:max-w-[500px]"
             onChange={(e) => setSearch(e.target.value)}
           />
