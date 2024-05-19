@@ -117,11 +117,11 @@ function SubComponentDocumentsPage({
             </TableHeader>
 
             <TableBody items={data}>
-              {(document) => (
-                <TableRow key={document.id_suratjalan}>
+              {(item) => (
+                <TableRow key={item.id_suratjalan}>
                   {(columnKey) => (
                     <TableCell>
-                      {renderCellDocuments(document, columnKey, router)}
+                      {renderCellDocuments(item, columnKey, router)}
                     </TableCell>
                   )}
                 </TableRow>
@@ -150,11 +150,13 @@ export const getServerSideProps = (async () => {
     method: "GET",
   });
 
-  const documents: DocumentType[] = result.data as DocumentType[];
+  const documents: GlobalResponse<DocumentType[]> = result as GlobalResponse<
+    DocumentType[]
+  >;
 
   return {
     props: {
       documents,
     },
   };
-}) satisfies GetServerSideProps<{ documents: DocumentType[] }>;
+}) satisfies GetServerSideProps<{ documents: GlobalResponse<DocumentType[]> }>;

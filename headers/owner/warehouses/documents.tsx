@@ -44,10 +44,9 @@ export const renderCellDocuments = (
       return <div className="text-default-900">{document.transaksi_id}</div>;
     case "penerima":
       return (
-        <div className="line-clamp-1 w-max max-w-[250px] text-default-900">
-          {document.transaksi.penerima}
-        </div>
+        <div className="text-default-900">{document.transaksi.penerima}</div>
       );
+
     case "nama_driver":
       return (
         <div className="line-clamp-1 w-max max-w-[250px] text-default-900">
