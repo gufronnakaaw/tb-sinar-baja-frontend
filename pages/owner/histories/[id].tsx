@@ -57,32 +57,16 @@ export default function HistoriesPage({
 }
 
 export const getServerSideProps = (async ({ params }) => {
-  if (!params) {
-    return {
-      redirect: {
-        destination: "/owner/histories",
-      },
-    };
-  }
-
   const result = await fetcher({
-    url: ("/transaksi?id=" + params.id) as string,
+    url: "/transaksi?id=" + params?.id,
     method: "GET",
   });
 
-  if (result.success) {
-    const transaksi: TransaksiType = result.data as TransaksiType;
-
-    return {
-      props: {
-        transaksi,
-      },
-    };
-  }
+  const transaksi: TransaksiType = result.data as TransaksiType;
 
   return {
-    redirect: {
-      destination: "/owner/histories",
+    props: {
+      transaksi,
     },
   };
 }) satisfies GetServerSideProps<{ transaksi: TransaksiType }>;

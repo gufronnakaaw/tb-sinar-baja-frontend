@@ -21,14 +21,55 @@ import {
 
 // utils
 import usePagination from "@/hooks/usepagination";
+import { GlobalResponse } from "@/types/global.type";
 import { TransaksiType } from "@/types/transactions.type";
 import { customStyleTable } from "@/utils/customStyleTable";
 import { fetcher } from "@/utils/fetcher";
+import React, { useState } from "react";
+import useSWR from "swr";
 
-export default function HistoriesPage({
+export default function HistoriesPage(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>,
+) {
+  const [search, setSearch] = useState("");
+  const swr = useSWR<GlobalResponse<TransaksiType[]>>(
+    {
+      url: "/transaksi",
+      method: "GET",
+    },
+    fetcher,
+    {
+      fallbackData: props.transaksi,
+      refreshInterval: 15000,
+    },
+  );
+
+  if (swr.isLoading) {
+    return;
+  }
+
+  if (swr.error) {
+    console.log(swr.error);
+  }
+
+  const filter = swr.data?.data.filter((item) => {
+    return item.id_transaksi.toLowerCase().includes(search.toLowerCase());
+  });
+
+  return <SubComponentHistoriesPage {...{ transaksi: filter, setSearch }} />;
+}
+
+function SubComponentHistoriesPage({
   transaksi,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { page, pages, data, setPage } = usePagination(transaksi, 10);
+  setSearch,
+}: {
+  transaksi: TransaksiType[] | undefined;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
+}) {
+  const { page, pages, data, setPage } = usePagination(
+    transaksi ? transaksi : [],
+    10,
+  );
   const router = useRouter();
 
   return (
@@ -40,8 +81,9 @@ export default function HistoriesPage({
 
         <div className="grid gap-4">
           <InputSearchBar
-            placeholder="Cari transaksi..."
+            placeholder="Cari ID Transaksi..."
             className="w-full sm:max-w-[500px]"
+            onChange={(e) => setSearch(e.target.value)}
           />
 
           <Table
@@ -92,11 +134,11 @@ export const getServerSideProps = (async () => {
     method: "GET",
   });
 
-  const transaksi: TransaksiType[] = result.data as TransaksiType[];
+  const transaksi: GlobalResponse<TransaksiType[]> = result.data;
 
   return {
     props: {
       transaksi,
     },
   };
-}) satisfies GetServerSideProps<{ transaksi: TransaksiType[] }>;
+}) satisfies GetServerSideProps<{ transaksi: GlobalResponse<TransaksiType[]> }>;
