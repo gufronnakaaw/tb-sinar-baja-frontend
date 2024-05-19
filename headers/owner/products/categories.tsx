@@ -1,5 +1,5 @@
 import { Button } from "@nextui-org/react";
-import { Eye, Pencil, Trash } from "@phosphor-icons/react";
+import { Eye, Pencil } from "@phosphor-icons/react";
 import { NextRouter } from "next/router";
 import React from "react";
 
@@ -57,14 +57,12 @@ export function renderCellKategori(
           </CustomTooltip>
 
           <CustomTooltip content="Edit">
-            <Button isIconOnly variant="light" size="sm">
+            <Button isIconOnly variant="light" size="sm" onClick={() =>
+                router.push(
+                  `/owner/products/categories/edit?id_kategori=${kategori.id_kategori}&nama=${kategori.nama}`,
+                )
+              }>
               <Pencil weight="bold" size={20} className="text-default-600" />
-            </Button>
-          </CustomTooltip>
-
-          <CustomTooltip content="Hapus">
-            <Button isIconOnly variant="light" color="danger" size="sm">
-              <Trash weight="bold" size={20} />
             </Button>
           </CustomTooltip>
         </div>

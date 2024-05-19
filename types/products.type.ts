@@ -31,6 +31,7 @@ export type ProdukType = {
     kategori: string;
     status_stok: string;
   }[];
-  total_produk: number;
+  page: number;
+  total_items: number;
   total_page: number;
 };

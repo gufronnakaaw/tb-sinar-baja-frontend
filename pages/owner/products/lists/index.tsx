@@ -10,7 +10,7 @@ import {
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import useSWR from "swr";
+import useSWR, { KeyedMutator } from "swr";
 
 // components
 import InputSearchBar from "@/components/input/InputSearchBar";
@@ -23,40 +23,98 @@ import {
 } from "@/headers/owner/products/lists";
 
 // utils
+import usePagination from "@/hooks/usepagination";
+import { GlobalResponse } from "@/types/global.type";
 import { ProdukType } from "@/types/products.type";
 import { customStyleTable } from "@/utils/customStyleTable";
 import { fetcher } from "@/utils/fetcher";
 
+type ProdukTypeSubComponent = {
+  kode_item: string;
+  barcode?: any;
+  kode_pabrik?: any;
+  kode_toko?: any;
+  kode_supplier?: any;
+  nama_produk: string;
+  nama_produk_asli?: string;
+  nama_produk_sebutan?: any;
+  merk?: any;
+  tipe?: any;
+  satuan_besar?: any;
+  satuan_kecil?: string;
+  isi_satuan_besar?: any;
+  konversi?: any;
+  harga_pokok?: number;
+  harga_1?: number;
+  harga_2?: number;
+  harga_3?: number;
+  harga_4: number;
+  harga_5?: any;
+  harga_6?: any;
+  stok?: number;
+  created_at: string;
+  updated_at?: string;
+  rak?: string;
+  stok_aman: number;
+  subkategori?: string;
+  gudang?: string;
+  kategori: string;
+  status_stok: string;
+}[];
+
 export default function ProductsListsPage(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
-  const [page, setPage] = useState(1);
-  const router = useRouter();
+  const [search, setSearch] = useState("");
 
-  const {
-    data: produk,
-    error,
-    isLoading,
-    mutate,
-  } = useSWR(
+  const swr = useSWR<GlobalResponse<ProdukType>>(
     {
-      url: "/produk?page=" + page,
+      url: `/produk?size=5000`,
       method: "GET",
     },
     fetcher,
     {
       fallbackData: props.produk,
-      revalidateOnFocus: false,
     },
   );
 
-  if (isLoading) {
+  if (swr.isLoading) {
     return;
   }
 
-  if (error) {
-    console.log(error);
+  if (swr.error) {
+    console.log(swr.error);
   }
+
+  const filter = swr.data?.data.produk.filter((item) => {
+    return (
+      item.nama_produk.toLowerCase().includes(search.toLowerCase()) ||
+      item.kode_item.toLowerCase().includes(search.toLowerCase())
+    );
+  });
+
+  return (
+    <SubComponentProductsListsPage
+      {...{ produk: filter, setSearch, mutate: swr.mutate }}
+    />
+  );
+}
+
+function SubComponentProductsListsPage({
+  produk,
+  setSearch,
+  mutate,
+}: {
+  produk: ProdukTypeSubComponent | undefined;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
+  mutate: KeyedMutator<any>;
+}) {
+  const { page, pages, data, setPage } = usePagination(
+    produk ? produk : [],
+    10,
+  );
+
+  const router = useRouter();
 
   return (
     <Layout title="Daftar Produk">
@@ -68,8 +126,9 @@ export default function ProductsListsPage(
         <div className="grid gap-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <InputSearchBar
-              placeholder="Cari produk..."
+              placeholder="Cari Kode Item atau Nama Produk"
               className="w-full sm:max-w-[500px]"
+              onChange={(e) => setSearch(e.target.value)}
             />
 
             <PopupImportProducts {...{ mutate }} />
@@ -89,7 +148,7 @@ export default function ProductsListsPage(
               )}
             </TableHeader>
 
-            <TableBody items={produk.data.produk}>
+            <TableBody items={data}>
               {(item) => (
                 <TableRow key={item.kode_item}>
                   {(columnKey) => (
@@ -106,9 +165,9 @@ export default function ProductsListsPage(
             isCompact
             showControls
             color="primary"
-            page={produk.data.page}
-            total={produk.data.total_page}
-            onChange={(e) => setPage(e)}
+            page={page}
+            total={pages}
+            onChange={setPage}
             className="justify-self-center"
           />
         </div>
@@ -123,11 +182,11 @@ export const getServerSideProps = (async () => {
     method: "GET",
   });
 
-  const produk: ProdukType = result.data as ProdukType;
+  const produk: GlobalResponse<ProdukType> = result;
 
   return {
     props: {
       produk,
     },
   };
-}) satisfies GetServerSideProps<{ produk: ProdukType }>;
+}) satisfies GetServerSideProps<{ produk: GlobalResponse<ProdukType> }>;

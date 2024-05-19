@@ -6,43 +6,34 @@ import ButtonBack from "@/components/button/ButtonBack";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 import { fetcher } from "@/utils/fetcher";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-export default function WarehousesUpdate({
-  kode_gudang,
+export default function CategoriesUpdate({
+  id_kategori,
   nama,
 }: {
-  kode_gudang: string;
+  id_kategori: string;
   nama: string;
 }) {
   const router = useRouter();
-  const [namaGudang, setNamaGudang] = useState(nama);
-  const [client, setClient] = useState(false);
+  const [namaKategori, setNamaKategori] = useState(nama);
 
-  useEffect(() => {
-    setClient(true);
-  }, [router]);
-
-  if (!client) {
-    return;
-  }
-
-  if (!kode_gudang) {
-    return router.push("/owner/warehouses/lists");
+  if (!id_kategori) {
+    return router.push("/owner/products/categories");
   }
 
   async function handleUpdate() {
     try {
       await fetcher({
-        url: "/gudang",
+        url: "/kategori",
         method: "PATCH",
         data: {
-          kode_gudang,
-          nama: namaGudang,
+          id_kategori: parseInt(id_kategori),
+          nama: namaKategori,
         },
       });
       alert("update berhasil");
-      return router.push("/owner/warehouses/lists");
+      return router.push("/owner/products/categories");
     } catch (error) {
       alert("ups sepertinya ada masalah pada server");
       console.log(error);
@@ -50,24 +41,24 @@ export default function WarehousesUpdate({
   }
 
   return (
-    <Layout title={`Update Gudang ${kode_gudang}`}>
+    <Layout title={`Update kategori ${nama}`}>
       <Container className="gap-8">
         <div className="flex items-center justify-between gap-4">
-          <ButtonBack onClick={() => router.push("/owner/warehouses/lists")}>
+          <ButtonBack onClick={() => router.push("/owner/products/categories")}>
             Kembali
           </ButtonBack>
         </div>
 
         <div className="grid gap-5">
           <Input
-            defaultValue={namaGudang as string}
+            defaultValue={namaKategori as string}
             isRequired
             variant="flat"
             color="default"
             labelPlacement="outside"
-            label="Nama Gudang"
-            placeholder="Masukan nama gudang..."
-            onChange={(e) => setNamaGudang(e.target.value)}
+            label="Nama Kategori"
+            placeholder="Masukan nama kategori..."
+            onChange={(e) => setNamaKategori(e.target.value)}
           />
 
           <div>
@@ -90,7 +81,7 @@ export default function WarehousesUpdate({
 export const getServerSideProps = ({ query }) => {
   return {
     props: {
-      kode_gudang: query?.kode_gudang,
+      id_kategori: query?.id_kategori,
       nama: query?.nama,
     },
   };

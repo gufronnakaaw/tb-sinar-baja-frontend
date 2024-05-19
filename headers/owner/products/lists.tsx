@@ -1,5 +1,3 @@
-import { Button } from "@nextui-org/react";
-import { Eye, Pencil, Trash } from "@phosphor-icons/react";
 import { NextRouter } from "next/router";
 
 // components & utils
@@ -24,7 +22,7 @@ export const columnsProduk = [
   { name: "Kategori", uid: "kategori" },
   { name: "Harga Umum", uid: "harga_umum" },
   { name: "Dibuat Pada", uid: "created_at" },
-  { name: "Aksi", uid: "action" },
+  // { name: "Aksi", uid: "action" },
 ];
 
 export function renderCellProduk(
@@ -65,44 +63,32 @@ export function renderCellProduk(
           {formatDate(produk.created_at)}
         </div>
       );
-    case "action":
-      return (
-        <div className="flex max-w-[110px] items-center gap-1">
-          <CustomTooltip content="Detail">
-            <Button
-              onClick={() => router.push("/owner/products/lists")}
-              isIconOnly
-              variant="light"
-              size="sm"
-            >
-              <Eye weight="bold" size={20} className="text-default-600" />
-            </Button>
-          </CustomTooltip>
+    // case "action":
+    //   return (
+    //     <div className="flex max-w-[110px] items-center gap-1">
+    //       <CustomTooltip content="Detail">
+    //         <Button
+    //           onClick={() => router.push("/owner/products/lists")}
+    //           isIconOnly
+    //           variant="light"
+    //           size="sm"
+    //         >
+    //           <Eye weight="bold" size={20} className="text-default-600" />
+    //         </Button>
+    //       </CustomTooltip>
 
-          <CustomTooltip content="Edit">
-            <Button
-              onClick={() => alert("dalam tahap pengembangan")}
-              isIconOnly
-              variant="light"
-              size="sm"
-            >
-              <Pencil weight="bold" size={20} className="text-default-600" />
-            </Button>
-          </CustomTooltip>
-
-          <CustomTooltip content="Hapus">
-            <Button
-              onClick={() => alert("dalam tahap pengembangan")}
-              isIconOnly
-              variant="light"
-              color="danger"
-              size="sm"
-            >
-              <Trash weight="bold" size={20} />
-            </Button>
-          </CustomTooltip>
-        </div>
-      );
+    //       <CustomTooltip content="Edit">
+    //         <Button
+    //           onClick={() => alert("dalam tahap pengembangan")}
+    //           isIconOnly
+    //           variant="light"
+    //           size="sm"
+    //         >
+    //           <Pencil weight="bold" size={20} className="text-default-600" />
+    //         </Button>
+    //       </CustomTooltip>
+    //     </div>
+    //   );
 
     default:
       return cellValue;

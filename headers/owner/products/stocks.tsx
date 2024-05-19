@@ -13,7 +13,7 @@ type ProductsStocksTable = {
   kategori: string;
   subkategori?: string;
   status_stok: string;
-  stok_aman: string;
+  stok_aman: number;
   stok?: number;
   created_at: string;
 };
@@ -63,7 +63,16 @@ export function renderCellProductsStocks(
       return (
         <div className="flex max-w-[110px] items-center gap-1">
           <CustomTooltip content="Edit Stok">
-            <Button isIconOnly variant="light" size="sm">
+            <Button
+              isIconOnly
+              variant="light"
+              size="sm"
+              onClick={() =>
+                router.push(
+                  `/owner/products/stocks/edit?kode_item=${produk.kode_item}&stok=${produk.stok}&stok_aman=${produk.stok_aman}`,
+                )
+              }
+            >
               <Pencil weight="bold" size={20} className="text-default-600" />
             </Button>
           </CustomTooltip>
