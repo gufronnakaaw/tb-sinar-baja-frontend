@@ -55,8 +55,7 @@ export default function Navbar({ sidebarOpen, setSidebarOpen }: NavbarProps) {
               <div className="-space-y-1">
                 <h6 className="mb-1 text-sm font-bold text-default-900">
                   {router.pathname.startsWith("/owner") ? "Owner" : null}
-                  {router.pathname.startsWith("/admin") ? "Admin" : null}
-                  {router.pathname.startsWith("/cashier") ? "Kasir" : null}
+                  {router.pathname.startsWith("/admin") ? "Winda" : null}
                 </h6>
                 <p className="text-[12px] font-medium uppercase text-default-500">
                   TB Sinar Baja

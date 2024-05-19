@@ -24,7 +24,7 @@ import Layout from "@/components/wrapper/DashboardLayout";
 import {
   columnsKategori,
   renderCellKategori,
-} from "@/headers/owner/products/categories";
+} from "@/headers/admin/products/categories";
 
 // utils
 import usePagination from "@/hooks/usepagination";

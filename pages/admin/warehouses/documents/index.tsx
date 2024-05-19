@@ -20,7 +20,7 @@ import InputSearchBar from "@/components/input/InputSearchBar";
 import {
   columnsDocuments,
   renderCellDocuments,
-} from "@/headers/owner/warehouses/documents";
+} from "@/headers/admin/warehouses/documents";
 import { GlobalResponse } from "@/types/global.type";
 import { customStyleTable } from "@/utils/customStyleTable";
 import { fetcher } from "@/utils/fetcher";

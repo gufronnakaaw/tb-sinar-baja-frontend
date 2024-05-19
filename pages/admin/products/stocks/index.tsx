@@ -16,7 +16,7 @@ import Layout from "@/components/wrapper/DashboardLayout";
 import {
   columnsProductsStocks,
   renderCellProductsStocks,
-} from "@/headers/owner/products/stocks";
+} from "@/headers/admin/products/stocks";
 
 // utils
 import { customStyleTable } from "@/utils/customStyleTable";

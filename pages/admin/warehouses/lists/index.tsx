@@ -24,7 +24,7 @@ import Layout from "@/components/wrapper/DashboardLayout";
 import {
   columnsGudang,
   renderCellGudang,
-} from "@/headers/owner/warehouses/lists";
+} from "@/headers/admin/warehouses/lists";
 
 // utils
 import usePagination from "@/hooks/usepagination";

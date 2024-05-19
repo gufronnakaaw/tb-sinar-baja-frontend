@@ -20,7 +20,7 @@ import Layout from "@/components/wrapper/DashboardLayout";
 import {
   columnsProduk,
   renderCellProduk,
-} from "@/headers/owner/products/lists";
+} from "@/headers/admin/products/lists";
 
 // utils
 import usePagination from "@/hooks/usepagination";

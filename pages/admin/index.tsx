@@ -2,9 +2,19 @@ import { Button, Input } from "@nextui-org/react";
 import { ArrowLeft, Key, User } from "@phosphor-icons/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 export default function LoginPage() {
   const router = useRouter();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  function handleLogin() {
+    if (username == "sbkasir" && password == "sb3257") {
+      return router.push("/admin/dashboard");
+    }
+    alert("username atau password salah");
+  }
 
   return (
     <>
@@ -34,6 +44,7 @@ export default function LoginPage() {
               endContent={
                 <User weight="bold" size={18} className="text-gray-600" />
               }
+              onChange={(e) => setUsername(e.target.value)}
             />
 
             <Input
@@ -46,11 +57,12 @@ export default function LoginPage() {
               endContent={
                 <Key weight="bold" size={18} className="text-gray-600" />
               }
+              onChange={(e) => setPassword(e.target.value)}
             />
 
             <div className="mt-4 grid gap-2">
               <Button
-                onClick={() => router.push("/admin/dashboard")}
+                onClick={handleLogin}
                 className="bg-lime-500 font-semibold text-white"
               >
                 Login
