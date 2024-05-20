@@ -64,10 +64,10 @@ const Nota = (props: TransaksiType, ref: any) => {
   };
 
   return (
-    <div className="container grid gap-8 px-20 pt-12 font-inter" ref={ref}>
+    <div className="container grid gap-4 px-20 pt-8 font-inter" ref={ref}>
       <div className="grid grid-cols-3 gap-4">
         <div className="grid gap-1">
-          <h1 className="font-bold text-default-900">TB. Sinar Baja</h1>
+          <h1 className="font-bold text-default-900">TB. SINAR BAJA</h1>
           <p className="max-w-[400px] text-[10px] font-medium text-default-600">
             Jl. Letjend Sutoyo No.67, Burengan, Kec. Pesantren, Kabupaten
             Kediri, Jawa Timur 64131
