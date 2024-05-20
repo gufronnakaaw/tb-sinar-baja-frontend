@@ -1,4 +1,4 @@
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input, Textarea } from "@nextui-org/react";
 import { useRouter } from "next/router";
 
 // components
@@ -19,6 +19,9 @@ export type DocumentResponse = {
     id_transaksi: string;
     created_at: string;
     penerima: string;
+    alamat: string;
+    keterangan: string;
+    no_telp: string;
     transaksidetail: TransaksiDetail[];
   };
 };
@@ -38,6 +41,9 @@ export default function DocumentsUpdate({
   const [namaDriver, setNamaDriver] = useState(documents.nama_driver);
   const [kendaraan, setKendaraan] = useState(documents.kendaraan);
   const [platKendaraan, setPlatKendaraan] = useState(documents.plat_kendaraan);
+  const [alamat, setAlamat] = useState(documents.transaksi.alamat);
+  const [keterangan, setKeterangan] = useState(documents.transaksi.keterangan);
+  const [noTelp, setNoTelp] = useState(documents.transaksi.no_telp);
 
   async function handleUpdate() {
     try {
@@ -46,9 +52,12 @@ export default function DocumentsUpdate({
         method: "PATCH",
         data: {
           id_suratjalan: documents.id_suratjalan,
-          nama_driver: namaDriver,
-          kendaraan,
-          plat_kendaraan: platKendaraan,
+          nama_driver: !namaDriver ? "" : namaDriver,
+          kendaraan: !kendaraan ? "" : kendaraan,
+          plat_kendaraan: !platKendaraan ? "" : platKendaraan,
+          alamat,
+          keterangan,
+          no_telp: noTelp,
         },
       });
       alert("update berhasil");
@@ -102,6 +111,48 @@ export default function DocumentsUpdate({
             label="Plat Kendaraan"
             placeholder="Masukan plat kendaraan..."
             onChange={(e) => setPlatKendaraan(e.target.value)}
+          />
+
+          <Textarea
+            value={alamat}
+            type="text"
+            size="sm"
+            variant="flat"
+            maxRows={3}
+            labelPlacement="outside"
+            label={<span className="text-[12px] text-default-900">Alamat</span>}
+            placeholder="Masukan alamat lengkap..."
+            className="w-full text-black"
+            onChange={(e) => setAlamat(e.target.value)}
+          />
+
+          <Textarea
+            value={keterangan}
+            type="text"
+            size="sm"
+            variant="flat"
+            maxRows={3}
+            labelPlacement="outside"
+            label={
+              <span className="text-[12px] text-default-900">Keterangan</span>
+            }
+            placeholder="Masukan keterangan..."
+            className="w-full text-black"
+            onChange={(e) => setKeterangan(e.target.value)}
+          />
+
+          <Input
+            value={noTelp}
+            type="text"
+            size="sm"
+            variant="flat"
+            labelPlacement="outside"
+            label={
+              <span className="text-[12px] text-default-900">No. Telp</span>
+            }
+            placeholder="Masukan no. telp..."
+            className="w-full text-black"
+            onChange={(e) => setNoTelp(e.target.value)}
           />
 
           <div>

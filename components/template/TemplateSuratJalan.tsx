@@ -21,6 +21,10 @@ const SuratJalan = (props: DocumentResponse, ref: any) => {
     { name: "Lokasi", uid: "lokasi" },
   ];
 
+  const warehouses = Array.from(
+    new Set(props.transaksi.transaksidetail.map((item) => item.gudang)),
+  );
+
   const renderCell = (item: TransaksiDetail, columnKey: React.Key) => {
     const cellValue = item[columnKey as keyof TransaksiDetail];
 
@@ -76,6 +80,12 @@ const SuratJalan = (props: DocumentResponse, ref: any) => {
             </div>
 
             <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-black">
+              <div className="font-semibold">No. Surat Jalan</div>
+              <div className="font-semibold">:</div>
+              <p className="font-semibold">{props.id_suratjalan}</p>
+            </div>
+
+            <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-black">
               <div className="font-semibold">Tanggal</div>
               <div className="font-semibold">:</div>
               <p className="font-semibold">
@@ -84,10 +94,19 @@ const SuratJalan = (props: DocumentResponse, ref: any) => {
             </div>
 
             <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-black">
-              <div className="font-semibold">No. Surat Jalan</div>
+              <div className="font-semibold">No. Telpon</div>
               <div className="font-semibold">:</div>
-              <p className="font-semibold">{props.id_suratjalan}</p>
+              <p className="font-semibold">
+                {!props.transaksi.no_telp ? "-" : props.transaksi.no_telp}
+              </p>
             </div>
+
+            <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-black">
+              <div className="font-semibold">Keterangan</div>
+              <div className="font-semibold">:</div>
+              <p className="font-semibold">{props.transaksi.keterangan}</p>
+            </div>
+
             <div className="grid grid-cols-[100px_6px_1fr] gap-1 text-[10px] text-black">
               <div className="font-semibold">Nama Driver</div>
               <div className="font-semibold">:</div>
@@ -97,12 +116,15 @@ const SuratJalan = (props: DocumentResponse, ref: any) => {
             </div>
           </div>
 
-          <div>
+          <div className="mt-2">
             <h5 className="text-[12px] font-semibold text-black">
               Kepada Yth,
             </h5>
             <h5 className="text-[12px] font-semibold text-black">
               {props.transaksi.penerima}
+            </h5>
+            <h5 className="text-[12px] font-semibold text-black">
+              {props.transaksi.alamat}
             </h5>
           </div>
         </div>
@@ -166,22 +188,25 @@ const SuratJalan = (props: DocumentResponse, ref: any) => {
           </div>
         </div>
 
-        <div className="grid gap-12 text-center">
-          <h4 className="text-[12px] font-semibold text-black">Gudang 1,</h4>
-          <div className="text-sm font-semibold text-black">
-            (..................................)
-          </div>
-        </div>
+        {warehouses.map((warehouse) => {
+          return (
+            <>
+              <div className="grid gap-12 text-center">
+                <h4 className="text-[12px] font-semibold text-black">
+                  {warehouse},
+                </h4>
+                <div className="text-sm font-semibold text-black">
+                  (..................................)
+                </div>
+              </div>
+            </>
+          );
+        })}
 
         <div className="grid gap-12 text-center">
-          <h4 className="text-[12px] font-semibold text-black">Gudang 2,</h4>
-          <div className="text-sm font-semibold text-black">
-            (..................................)
-          </div>
-        </div>
-
-        <div className="grid gap-12 text-center">
-          <h4 className="text-[12px] font-semibold text-black">Hormat Kami,</h4>
+          <h4 className="text-[12px] font-semibold text-black">
+            Diterima oleh,
+          </h4>
           <div className="text-sm font-semibold text-black">
             (..................................)
           </div>

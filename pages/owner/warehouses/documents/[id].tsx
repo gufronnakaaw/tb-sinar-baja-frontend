@@ -22,6 +22,9 @@ export type DocumentResponse = {
     id_transaksi: string;
     created_at: string;
     penerima: string;
+    alamat: string;
+    keterangan: string;
+    no_telp: string;
     transaksidetail: TransaksiDetail[];
   };
 };

@@ -37,6 +37,9 @@ type DocumentType = {
   verifikasi: boolean;
   transaksi: {
     penerima: string;
+    alamat: string;
+    keterangan: string;
+    no_telp: string;
   };
 };
 

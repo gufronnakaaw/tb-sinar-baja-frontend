@@ -16,6 +16,9 @@ type DocumentsTable = {
   verifikasi: boolean;
   transaksi: {
     penerima: string;
+    alamat: string;
+    keterangan: string;
+    no_telp: string;
   };
 };
 
@@ -27,6 +30,9 @@ export const columnsDocuments = [
   { name: "Kendaraan", uid: "kendaraan" },
   { name: "Plat Kendaraan", uid: "plat_kendaraan" },
   { name: "Verifikasi", uid: "verifikasi" },
+  { name: "Alamat", uid: "alamat" },
+  { name: "Keterangan", uid: "keterangan" },
+  { name: "No Telpon", uid: "no_telp" },
   { name: "Aksi", uid: "action" },
 ];
 
@@ -75,6 +81,24 @@ export const renderCellDocuments = (
           ) : (
             document.plat_kendaraan
           )}
+        </div>
+      );
+    case "alamat":
+      return (
+        <div className="line-clamp-1 w-max max-w-[250px] text-default-900">
+          {document.transaksi.alamat}
+        </div>
+      );
+    case "keterangan":
+      return (
+        <div className="line-clamp-1 w-max max-w-[250px] text-default-900">
+          {document.transaksi.keterangan}
+        </div>
+      );
+    case "no_telp":
+      return (
+        <div className="line-clamp-1 w-max max-w-[250px] text-default-900">
+          {document.transaksi.no_telp}
         </div>
       );
     case "verifikasi":
