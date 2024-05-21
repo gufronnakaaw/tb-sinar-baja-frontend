@@ -26,6 +26,7 @@ import Layout from "@/components/wrapper/DashboardLayout";
 import usePagination from "@/hooks/usepagination";
 import { customStyleTable } from "@/utils/customStyleTable";
 
+import LoadingScreen from "@/components/LoadingScreen";
 import {
   columnsSubKategori,
   renderCellSubKategori,
@@ -65,7 +66,7 @@ export default function ProductsSubCategoriesPage(
     },
   );
   if (swr.isLoading) {
-    return;
+    return <LoadingScreen role="owner" />;
   }
 
   if (swr.error) {

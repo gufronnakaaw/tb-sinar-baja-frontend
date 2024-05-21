@@ -23,6 +23,7 @@ import {
 } from "@/headers/owner/products/lists";
 
 // utils
+import LoadingScreen from "@/components/LoadingScreen";
 import usePagination from "@/hooks/usepagination";
 import { GlobalResponse } from "@/types/global.type";
 import { ProdukType } from "@/types/products.type";
@@ -79,7 +80,7 @@ export default function ProductsListsPage(
   );
 
   if (swr.isLoading) {
-    return;
+    return <LoadingScreen role="owner" />;
   }
 
   if (swr.error) {

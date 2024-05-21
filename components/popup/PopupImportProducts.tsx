@@ -7,12 +7,23 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
+  Spinner,
   useDisclosure,
 } from "@nextui-org/react";
 import { UploadSimple } from "@phosphor-icons/react";
 import { useState } from "react";
 import { KeyedMutator } from "swr";
 import * as xlsx from "xlsx";
+
+type ErrorResponse = {
+  success: boolean;
+  status_code: number;
+  error: {
+    name: string;
+    message: string;
+    errors: unknown;
+  };
+};
 
 export default function PopupImportProducts({
   mutate,
@@ -22,26 +33,27 @@ export default function PopupImportProducts({
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [file, setFile] = useState<File | null>(null);
   const [sheet, setSheet] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function handleCreateProduk() {
     if (!file) return;
 
+    setLoading(true);
     const data = await file.arrayBuffer();
 
     const workbook = xlsx.read(data);
 
-    console.log(workbook.SheetNames);
-
     if (!workbook.SheetNames.includes(sheet)) {
+      setLoading(false);
       return alert("Sheet tidak ditemukan");
     }
 
     const headers = xlsx.utils.sheet_to_json(workbook.Sheets[sheet], {
       raw: true,
       header: 1,
-    })[0];
+    })[0] as string[];
 
-    const rows = xlsx.utils.sheet_to_json(workbook.Sheets[sheet]);
+    const rows = xlsx.utils.sheet_to_json(workbook.Sheets[sheet]) as any[];
 
     const results = [];
 
@@ -94,10 +106,27 @@ export default function PopupImportProducts({
       });
 
       alert(`${results.length} data berhasil masuk ke database`);
+      setLoading(false);
       mutate();
       onClose();
     } catch (error) {
+      setLoading(false);
+      const response = error as ErrorResponse;
+
+      if (response.status_code >= 500) {
+        console.log(error);
+        return alert("kode error 500. terjadi masalah pada server");
+      }
+
+      if (response.status_code >= 400) {
+        console.log(error);
+        return alert(
+          `kode error ${response.status_code}. terjadi kesalahan saat input data. periksa kembali file excel anda.`,
+        );
+      }
+
       console.log(error);
+      return alert("kode error tidak diketahui. terjadi masalah pada aplikasi");
     }
   }
 
@@ -166,15 +195,25 @@ export default function PopupImportProducts({
                   Batal
                 </Button>
 
-                <Button
-                  color="primary"
-                  variant="solid"
-                  startContent={<UploadSimple weight="bold" size={18} />}
-                  className="font-semibold"
-                  onClick={handleCreateProduk}
-                >
-                  Unggah Produk
-                </Button>
+                {loading ? (
+                  <Button
+                    color="primary"
+                    variant="solid"
+                    className="font-semibold"
+                  >
+                    <Spinner color="default" size="sm" />
+                  </Button>
+                ) : (
+                  <Button
+                    color="primary"
+                    variant="solid"
+                    startContent={<UploadSimple weight="bold" size={18} />}
+                    className="font-semibold"
+                    onClick={handleCreateProduk}
+                  >
+                    Unggah Produk
+                  </Button>
+                )}
               </ModalFooter>
             </>
           )}

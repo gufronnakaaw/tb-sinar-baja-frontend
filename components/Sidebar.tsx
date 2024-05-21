@@ -157,7 +157,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
           }`}
         />
 
-        <div className="font-bold text-default-900">TB Sinar Baja</div>
+        <div className="font-bold text-default-900">TB. SINAR BAJA</div>
       </Link>
 
       <div className="flex flex-1 flex-col overflow-y-scroll scrollbar-hide">
@@ -512,7 +512,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                 </span>
 
                 <div className="mt-1 grid gap-1">
-                <Accordion
+                  <Accordion
                     isCompact
                     itemClasses={{
                       ...itemClasses,

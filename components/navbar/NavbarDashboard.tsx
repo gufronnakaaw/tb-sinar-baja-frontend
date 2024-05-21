@@ -58,7 +58,7 @@ export default function Navbar({ sidebarOpen, setSidebarOpen }: NavbarProps) {
                   {router.pathname.startsWith("/admin") ? "Winda" : null}
                 </h6>
                 <p className="text-[12px] font-medium uppercase text-default-500">
-                  TB Sinar Baja
+                  TB. SINAR BAJA
                 </p>
               </div>
             </div>

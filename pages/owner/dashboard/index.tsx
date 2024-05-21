@@ -10,6 +10,7 @@ import {
 } from "@phosphor-icons/react";
 
 // components
+import LoadingScreen from "@/components/LoadingScreen";
 import StatusStock from "@/components/status/StatusStock";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
@@ -39,7 +40,7 @@ export default function DashboardPage(
   );
 
   if (isLoading) {
-    return;
+    return <LoadingScreen role="owner" />;
   }
 
   if (error) {

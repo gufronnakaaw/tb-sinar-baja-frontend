@@ -18,7 +18,7 @@ export default function NavbarCashier() {
         >
           <div className="h-6 w-6 rounded-full bg-rose-500" />
 
-          <div className="font-bold text-default-900">TB Sinar Baja</div>
+          <div className="font-bold text-default-900">TB. SINAR BAJA</div>
         </Link>
 
         <Dropdown>
@@ -37,7 +37,7 @@ export default function NavbarCashier() {
                   Winda
                 </h6>
                 <p className="text-[12px] font-medium uppercase text-default-500">
-                  TB Sinar Baja
+                  TB. SINAR BAJA
                 </p>
               </div>
             </div>

@@ -21,6 +21,7 @@ import {
 // utils
 import { customStyleTable } from "@/utils/customStyleTable";
 
+import LoadingScreen from "@/components/LoadingScreen";
 import usePagination from "@/hooks/usepagination";
 import { GlobalResponse } from "@/types/global.type";
 import { ProdukType } from "@/types/products.type";
@@ -79,7 +80,7 @@ export default function ProductsStocksPage(
   );
 
   if (swr.isLoading) {
-    return;
+    return <LoadingScreen role="owner" />;
   }
 
   if (swr.error) {

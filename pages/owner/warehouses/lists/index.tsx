@@ -27,6 +27,7 @@ import {
 } from "@/headers/owner/warehouses/lists";
 
 // utils
+import LoadingScreen from "@/components/LoadingScreen";
 import usePagination from "@/hooks/usepagination";
 import { GlobalResponse } from "@/types/global.type";
 import { customStyleTable } from "@/utils/customStyleTable";
@@ -59,7 +60,7 @@ export default function WarehousesListsPage(
     },
   );
   if (swr.isLoading) {
-    return;
+    return <LoadingScreen role="owner" />;
   }
 
   if (swr.error) {

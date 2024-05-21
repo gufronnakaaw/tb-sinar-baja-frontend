@@ -30,6 +30,7 @@ import {
 import usePagination from "@/hooks/usepagination";
 import { customStyleTable } from "@/utils/customStyleTable";
 
+import LoadingScreen from "@/components/LoadingScreen";
 import { GlobalResponse } from "@/types/global.type";
 import { fetcher } from "@/utils/fetcher";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
@@ -59,7 +60,7 @@ export default function ProductsCategoriesPage(
     },
   );
   if (swr.isLoading) {
-    return;
+    return <LoadingScreen role="owner" />;
   }
 
   if (swr.error) {

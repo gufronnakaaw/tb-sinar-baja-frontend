@@ -16,6 +16,7 @@ import Layout from "@/components/wrapper/DashboardLayout";
 // utils
 import usePagination from "@/hooks/usepagination";
 
+import LoadingScreen from "@/components/LoadingScreen";
 import InputSearchBar from "@/components/input/InputSearchBar";
 import {
   columnsDocuments,
@@ -59,7 +60,7 @@ export default function WarehousesDocumentsPage(
     },
   );
   if (swr.isLoading) {
-    return;
+    return <LoadingScreen role="owner" />;
   }
 
   if (swr.error) {

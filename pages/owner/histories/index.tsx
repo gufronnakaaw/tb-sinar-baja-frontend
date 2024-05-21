@@ -20,6 +20,7 @@ import {
 } from "@/headers/owner/histories";
 
 // utils
+import LoadingScreen from "@/components/LoadingScreen";
 import usePagination from "@/hooks/usepagination";
 import { GlobalResponse } from "@/types/global.type";
 import { TransaksiType } from "@/types/transactions.type";
@@ -45,7 +46,7 @@ export default function HistoriesPage(
   );
 
   if (swr.isLoading) {
-    return;
+    return <LoadingScreen role="owner" />;
   }
 
   if (swr.error) {
