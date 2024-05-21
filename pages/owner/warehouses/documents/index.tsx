@@ -7,26 +7,25 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
+import React, { useState } from "react";
+import useSWR from "swr";
 
 // components
+import InputSearchBar from "@/components/input/InputSearchBar";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
-
-// utils
-import usePagination from "@/hooks/usepagination";
-
-import InputSearchBar from "@/components/input/InputSearchBar";
 import {
   columnsDocuments,
   renderCellDocuments,
 } from "@/headers/owner/warehouses/documents";
+import usePagination from "@/hooks/usepagination";
+
+// utils
 import { GlobalResponse } from "@/types/global.type";
 import { customStyleTable } from "@/utils/customStyleTable";
 import { fetcher } from "@/utils/fetcher";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import React, { useState } from "react";
-import useSWR from "swr";
 
 type DocumentType = {
   id_suratjalan: string;
@@ -97,13 +96,11 @@ function SubComponentDocumentsPage({
         <h4 className="text-lg font-semibold text-default-900">Surat Jalan</h4>
 
         <div className="grid gap-4">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <InputSearchBar
-              placeholder="Cari ID Surat Jalan atau ID Transaksi atau penerima"
-              className="w-full sm:max-w-[500px]"
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </div>
+          <InputSearchBar
+            placeholder="Cari ID Surat Jalan atau ID Transaksi atau penerima"
+            className="w-full sm:max-w-[500px]"
+            onChange={(e) => setSearch(e.target.value)}
+          />
 
           <Table
             isHeaderSticky

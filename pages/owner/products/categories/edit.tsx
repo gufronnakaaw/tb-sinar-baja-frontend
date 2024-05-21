@@ -1,12 +1,12 @@
 import { Button, Input } from "@nextui-org/react";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
-// components
+// components & utils
 import ButtonBack from "@/components/button/ButtonBack";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 import { fetcher } from "@/utils/fetcher";
-import { useState } from "react";
 
 export default function CategoriesUpdate({
   id_kategori,
@@ -42,14 +42,12 @@ export default function CategoriesUpdate({
 
   return (
     <Layout title={`Update kategori ${nama}`}>
-      <Container className="gap-8">
-        <div className="flex items-center justify-between gap-4">
-          <ButtonBack onClick={() => router.push("/owner/products/categories")}>
-            Kembali
-          </ButtonBack>
-        </div>
+      <Container className="gap-12">
+        <ButtonBack onClick={() => router.push("/owner/products/categories")}>
+          Kembali
+        </ButtonBack>
 
-        <div className="grid gap-5">
+        <div className="grid gap-6">
           <Input
             defaultValue={namaKategori as string}
             isRequired
@@ -61,17 +59,15 @@ export default function CategoriesUpdate({
             onChange={(e) => setNamaKategori(e.target.value)}
           />
 
-          <div>
-            <Button
-              variant="solid"
-              color="primary"
-              className="px-6 py-4 font-semibold text-white"
-              size="md"
-              onClick={handleUpdate}
-            >
-              Update
-            </Button>
-          </div>
+          <Button
+            variant="solid"
+            color="primary"
+            size="md"
+            onClick={handleUpdate}
+            className="justify-self-end font-semibold"
+          >
+            Update Kategori
+          </Button>
         </div>
       </Container>
     </Layout>

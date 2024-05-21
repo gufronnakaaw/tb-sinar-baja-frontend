@@ -4,8 +4,8 @@ import { ArrowLeft } from "@phosphor-icons/react";
 export default function ButtonBack(props: ButtonProps) {
   return (
     <Button
-      variant="bordered"
-      color="default"
+      variant="light"
+      color="primary"
       startContent={<ArrowLeft weight="bold" size={17} />}
       className="w-max font-semibold"
       {...props}

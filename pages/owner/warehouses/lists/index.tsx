@@ -16,6 +16,8 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import React, { useState } from "react";
+import useSWR, { KeyedMutator } from "swr";
 
 // components
 import InputSearchBar from "@/components/input/InputSearchBar";
@@ -32,8 +34,6 @@ import { GlobalResponse } from "@/types/global.type";
 import { customStyleTable } from "@/utils/customStyleTable";
 import { fetcher } from "@/utils/fetcher";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
-import useSWR, { KeyedMutator } from "swr";
 
 type GudangType = {
   kode_gudang: string;
@@ -58,6 +58,7 @@ export default function WarehousesListsPage(
       refreshInterval: 15000,
     },
   );
+
   if (swr.isLoading) {
     return;
   }

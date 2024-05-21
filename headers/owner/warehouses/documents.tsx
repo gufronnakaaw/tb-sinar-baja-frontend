@@ -5,8 +5,6 @@ import { NextRouter } from "next/router";
 // components
 import CustomTooltip from "@/components/tooltip";
 
-// utils
-
 type DocumentsTable = {
   id_suratjalan: string;
   transaksi_id: string;
@@ -107,7 +105,12 @@ export const renderCellDocuments = (
           {!document.verifikasi ? (
             <XCircle className="text-danger" weight="fill" size={20} />
           ) : (
-            <CheckCircle className="text-success" weight="fill" size={20} />
+            <div className="flex items-center gap-1">
+              <CheckCircle className="text-success" weight="fill" size={20} />
+              <span className="text-sm font-medium text-default-600">
+                Terverifikasi
+              </span>
+            </div>
           )}
         </div>
       );
