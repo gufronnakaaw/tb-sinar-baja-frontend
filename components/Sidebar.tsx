@@ -6,6 +6,8 @@ import {
   ClockCounterClockwise,
   House,
   Package,
+  Truck,
+  Users,
 } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -217,19 +219,17 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                       className="grid gap-1"
                     >
                       <ButtonSidebar
-                        label="In"
+                        label="Masuk"
                         path="/owner/invoices/in"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
-                        isDev={true}
                       />
 
                       <ButtonSidebar
-                        label="Out"
+                        label="Keluar"
                         path="/owner/invoices/out"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
-                        isDev={true}
                       />
                     </AccordionItem>
                   </Accordion> */}
@@ -306,7 +306,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                     </AccordionItem>
                   </Accordion>
 
-                  {/* <Accordion
+                  <Accordion
                     isCompact
                     itemClasses={{
                       ...itemClasses,
@@ -339,18 +339,16 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                         path="/owner/suppliers/lists"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
-                        isDev={true}
                       />
 
-                      <ButtonSidebar
+                      {/* <ButtonSidebar
                         label="Harga Supplier"
                         path="/owner/suppliers/pricelists"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
-                        isDev={true}
-                      />
+                      /> */}
                     </AccordionItem>
-                  </Accordion> */}
+                  </Accordion>
 
                   {/* <Accordion
                     isCompact
@@ -456,11 +454,11 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                     </AccordionItem>
                   </Accordion>
 
-                  {/* <ButtonSidebar
+                  <ButtonSidebar
                     label="Pengguna"
                     path="/owner/users"
-                    icon={<User weight="bold" size={20} />}
-                  /> */}
+                    icon={<Users weight="bold" size={20} />}
+                  />
                 </div>
               </div>
             </>
