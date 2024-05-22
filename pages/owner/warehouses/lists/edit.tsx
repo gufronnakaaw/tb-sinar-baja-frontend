@@ -1,12 +1,12 @@
 import { Button, Input } from "@nextui-org/react";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
-// components
+// components & utils
 import ButtonBack from "@/components/button/ButtonBack";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 import { fetcher } from "@/utils/fetcher";
-import { useEffect, useState } from "react";
 
 export default function WarehousesUpdate({
   kode_gudang,
@@ -51,14 +51,12 @@ export default function WarehousesUpdate({
 
   return (
     <Layout title={`Update Gudang ${kode_gudang}`}>
-      <Container className="gap-8">
-        <div className="flex items-center justify-between gap-4">
-          <ButtonBack onClick={() => router.push("/owner/warehouses/lists")}>
-            Kembali
-          </ButtonBack>
-        </div>
+      <Container className="gap-12">
+        <ButtonBack onClick={() => router.push("/owner/warehouses/lists")}>
+          Kembali
+        </ButtonBack>
 
-        <div className="grid gap-5">
+        <div className="grid gap-6">
           <Input
             defaultValue={namaGudang as string}
             isRequired
@@ -70,17 +68,15 @@ export default function WarehousesUpdate({
             onChange={(e) => setNamaGudang(e.target.value)}
           />
 
-          <div>
-            <Button
-              variant="solid"
-              color="primary"
-              className="px-6 py-4 font-semibold text-white"
-              size="md"
-              onClick={handleUpdate}
-            >
-              Update
-            </Button>
-          </div>
+          <Button
+            variant="solid"
+            color="primary"
+            size="md"
+            onClick={handleUpdate}
+            className="justify-self-end font-semibold"
+          >
+            Update Gudang
+          </Button>
         </div>
       </Container>
     </Layout>

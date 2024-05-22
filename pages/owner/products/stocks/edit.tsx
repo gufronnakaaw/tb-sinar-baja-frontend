@@ -1,12 +1,14 @@
 import { Button, Input } from "@nextui-org/react";
+import { WarningCircle } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
-// components
+// components & utils
 import ButtonBack from "@/components/button/ButtonBack";
+import CustomTooltip from "@/components/tooltip";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 import { fetcher } from "@/utils/fetcher";
-import { useEffect, useState } from "react";
 
 export default function StockUpdate({
   kode_item,
@@ -69,56 +71,77 @@ export default function StockUpdate({
 
   return (
     <Layout title="Update Produk">
-      <Container className="gap-8">
-        <div className="flex items-center justify-between gap-4">
-          <ButtonBack onClick={() => router.push("/owner/products/stocks")}>
-            Kembali
-          </ButtonBack>
-        </div>
+      <Container className="gap-12">
+        <ButtonBack onClick={() => router.push("/owner/products/stocks")}>
+          Kembali
+        </ButtonBack>
 
         <div className="grid gap-8">
-          <div>
-            <p>Stok Sekarang : {stok}</p>
-            <p>Stok Aman Sekarang : {stok_aman}</p>
+          <div className="grid w-max gap-2 border-l-4 border-primary p-[1rem_0_1rem_1rem]">
+            <h4 className="text-[18px] font-bold text-default-900">
+              Informasi Stok Produk
+            </h4>
+
+            <div className="grid gap-[2px]">
+              <p className="text-sm font-medium text-default-600">
+                Stok Sekarang :{" "}
+                <span className="font-bold text-primary">{stok}</span>
+              </p>
+              <p className="text-sm font-medium text-default-600">
+                Stok Aman Sekarang :{" "}
+                <span className="font-bold text-primary">{stok_aman}</span>
+              </p>
+            </div>
           </div>
 
-          <Input
-            defaultValue={stokSekarang as string}
-            isRequired
-            variant="flat"
-            color="default"
-            labelPlacement="outside"
-            label="Jumlah stok yang akan ditambah"
-            placeholder="Stok"
-            onChange={(e) => setStokSekarang(e.target.value)}
-            type="number"
-            className="mt-5"
-          />
+          <div className="flex flex-wrap gap-4 md:grid md:grid-cols-2">
+            <Input
+              isRequired
+              type="number"
+              variant="flat"
+              color="default"
+              labelPlacement="outside"
+              label="Jumlah stok yang akan ditambah"
+              placeholder="Stok"
+              defaultValue={stokSekarang as string}
+              onChange={(e) => setStokSekarang(e.target.value)}
+            />
 
-          <Input
-            defaultValue={stokAmanSekarang as string}
-            isRequired
-            variant="flat"
-            color="default"
-            labelPlacement="outside"
-            label="Ubah stok aman (hiraukan jika tidak ingin merubah)"
-            placeholder="Stok Aman"
-            onChange={(e) => setStokAmanSekarang(e.target.value)}
-            type="number"
-            className="mt-5"
-          />
-
-          <div>
-            <Button
-              variant="solid"
-              color="primary"
-              className="px-6 py-4 font-semibold text-white"
-              size="md"
-              onClick={handleUpdate}
-            >
-              Update
-            </Button>
+            <Input
+              isRequired
+              type="number"
+              variant="flat"
+              color="default"
+              labelPlacement="outside"
+              label={
+                <span className="inline-flex items-center">
+                  Ubah stok aman{" "}
+                  {
+                    <CustomTooltip content="Hiraukan jika tidak ingin merubah!">
+                      <WarningCircle
+                        weight="bold"
+                        size={16}
+                        className="ml-1 cursor-pointer text-default-600"
+                      />
+                    </CustomTooltip>
+                  }
+                </span>
+              }
+              placeholder="Stok Aman"
+              defaultValue={stokAmanSekarang as string}
+              onChange={(e) => setStokAmanSekarang(e.target.value)}
+            />
           </div>
+
+          <Button
+            variant="solid"
+            color="primary"
+            size="md"
+            onClick={handleUpdate}
+            className="w-max justify-self-end font-semibold"
+          >
+            Update Produk
+          </Button>
         </div>
       </Container>
     </Layout>

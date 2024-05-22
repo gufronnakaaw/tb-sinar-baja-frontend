@@ -1,16 +1,16 @@
 import { Button } from "@nextui-org/react";
-import { Check, CheckCircle, Printer } from "@phosphor-icons/react";
+import { Check, Printer, SealCheck } from "@phosphor-icons/react";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
+import { useRef } from "react";
+import { useReactToPrint } from "react-to-print";
 
-// components
+// components & utils
 import ButtonBack from "@/components/button/ButtonBack";
 import { TemplateSuratJalan } from "@/components/template/TemplateSuratJalan";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 import { fetcher } from "@/utils/fetcher";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { useRef } from "react";
-import { useReactToPrint } from "react-to-print";
 
 export type DocumentResponse = {
   id_suratjalan: string;
@@ -79,7 +79,7 @@ export default function DocumentDetails({
             Kembali
           </ButtonBack>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="flex items-center gap-4 justify-self-end">
             {!documents.verifikasi ? (
               <Button
                 variant="solid"
@@ -91,20 +91,22 @@ export default function DocumentDetails({
                 Verifikasi
               </Button>
             ) : (
-              <div className="flex items-center text-default-600">
-                <CheckCircle className="text-success" weight="fill" size={20} />
-                Terverifikasi
+              <div className="flex items-center gap-1">
+                <SealCheck className="text-success" weight="fill" size={20} />
+                <span className="text-sm font-medium text-default-600">
+                  Terverifikasi
+                </span>
               </div>
             )}
 
             <Button
               variant="solid"
               color="primary"
-              endContent={<Printer weight="bold" size={17} />}
+              endContent={<Printer weight="bold" size={16} />}
               onClick={handlePrint}
               className="font-semibold"
             >
-              Cetak
+              Cetak Dokumen
             </Button>
           </div>
         </div>

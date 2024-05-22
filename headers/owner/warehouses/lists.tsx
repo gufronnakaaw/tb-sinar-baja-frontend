@@ -1,5 +1,5 @@
 import CustomTooltip from "@/components/tooltip";
-import { Button } from "@nextui-org/react";
+import { Button, Chip } from "@nextui-org/react";
 import { CheckCircle, Pencil, Trash, XCircle } from "@phosphor-icons/react";
 
 import { formatDate } from "@/utils/formatDate";
@@ -42,19 +42,23 @@ export function renderCellGudang(
       );
     case "status":
       return (
-        <div className="w-max text-default-900">
-          {gudang.can_delete ? (
-            <p className="flex text-success">
-              <CheckCircle className="text-success" weight="fill" size={20} />
-              Bisa
-            </p>
-          ) : (
-            <p className="flex text-danger">
-              <XCircle className="text-danger" weight="fill" size={20} />
-              Tidak
-            </p>
-          )}
-        </div>
+        <Chip
+          variant="flat"
+          color={gudang.can_delete ? "success" : "danger"}
+          size="sm"
+          startContent={
+            gudang.can_delete ? (
+              <CheckCircle className="text-success" weight="fill" size={18} />
+            ) : (
+              <XCircle className="text-danger" weight="fill" size={18} />
+            )
+          }
+          classNames={{
+            content: "font-medium capitalize",
+          }}
+        >
+          {gudang.can_delete ? "Bisa" : "Tidak"}
+        </Chip>
       );
     case "action":
       return (
@@ -73,15 +77,17 @@ export function renderCellGudang(
               <Pencil weight="bold" size={20} className="text-default-600" />
             </Button>
           </CustomTooltip>
+
           {gudang.can_delete ? (
             <CustomTooltip content="Hapus">
               <Button
                 isIconOnly
+                color="danger"
                 variant="light"
                 size="sm"
                 onClick={() => handleDelete(gudang.kode_gudang)}
               >
-                <Trash weight="bold" size={20} className="text-default-600" />
+                <Trash weight="bold" size={20} />
               </Button>
             </CustomTooltip>
           ) : null}
