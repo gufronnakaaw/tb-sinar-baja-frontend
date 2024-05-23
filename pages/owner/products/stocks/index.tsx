@@ -7,9 +7,13 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import useSWR, { KeyedMutator } from "swr";
 
 // components
+import LoadingScreen from "@/components/LoadingScreen";
 import InputSearchBar from "@/components/input/InputSearchBar";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
@@ -19,16 +23,11 @@ import {
 } from "@/headers/owner/products/stocks";
 
 // utils
-import { customStyleTable } from "@/utils/customStyleTable";
-
-import LoadingScreen from "@/components/LoadingScreen";
 import usePagination from "@/hooks/usepagination";
 import { GlobalResponse } from "@/types/global.type";
 import { ProdukType } from "@/types/products.type";
+import { customStyleTable } from "@/utils/customStyleTable";
 import { fetcher } from "@/utils/fetcher";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { useState } from "react";
-import useSWR, { KeyedMutator } from "swr";
 
 type ProdukTypeSubComponent = {
   kode_item: string;
@@ -122,13 +121,11 @@ function SubComponentProductsStocksPage({
         <h4 className="text-lg font-semibold text-default-900">Stok Produk</h4>
 
         <div className="grid gap-4">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <InputSearchBar
-              placeholder="Cari Kode Item atau Nama Produk"
-              className="w-full sm:max-w-[500px]"
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </div>
+          <InputSearchBar
+            placeholder="Cari Kode Item atau Nama Produk"
+            className="w-full sm:max-w-[500px]"
+            onChange={(e) => setSearch(e.target.value)}
+          />
 
           <Table
             isHeaderSticky

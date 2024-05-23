@@ -20,11 +20,9 @@ export default function LoadingScreen({
   }
 
   return (
-    <div className="absolute bottom-0 left-0 right-0 top-0 z-[9999] bg-white">
-      <div className="align-center relative top-[50%] flex translate-y-[-50%] flex-col items-center">
-        <div className="flex items-center gap-5">
-          <p className="text-[20px] font-bold text-black">TB. SINAR BAJA</p>
-        </div>
+    <div className="absolute inset-0 z-[9999] flex items-center justify-center bg-white">
+      <div className="grid gap-4">
+        <p className="text-[20px] font-bold text-default-900">TB. SINAR BAJA</p>
         <Spinner color={getColor(role)} size="lg" />
       </div>
     </div>

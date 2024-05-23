@@ -15,28 +15,27 @@ import {
   TableRow,
   useDisclosure,
 } from "@nextui-org/react";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import useSWR, { KeyedMutator } from "swr";
 
 // components
+import LoadingScreen from "@/components/LoadingScreen";
 import InputSearchBar from "@/components/input/InputSearchBar";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
-
-// utils
-import usePagination from "@/hooks/usepagination";
-import { customStyleTable } from "@/utils/customStyleTable";
-
-import LoadingScreen from "@/components/LoadingScreen";
 import {
   columnsSubKategori,
   renderCellSubKategori,
 } from "@/headers/admin/subkategori";
+
+// utils
+import ButtonBack from "@/components/button/ButtonBack";
+import usePagination from "@/hooks/usepagination";
 import { GlobalResponse } from "@/types/global.type";
+import { customStyleTable } from "@/utils/customStyleTable";
 import { fetcher } from "@/utils/fetcher";
-import { ArrowLeft } from "@phosphor-icons/react";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { useState } from "react";
-import useSWR, { KeyedMutator } from "swr";
 
 type SubKategoriType = {
   id_subkategori: number;
@@ -65,6 +64,7 @@ export default function ProductsSubCategoriesPage(
       refreshInterval: 15000,
     },
   );
+
   if (swr.isLoading) {
     return <LoadingScreen role="owner" />;
   }
@@ -136,16 +136,9 @@ function SubComponentSubCategoriesPage({
     <Layout title="Sub Produk Kategori">
       <Container className="gap-20">
         <div className="grid gap-8">
-          <Button
-            variant="light"
-            color="primary"
-            size="sm"
-            startContent={<ArrowLeft weight="bold" size={16} />}
-            onClick={() => router.push("/owner/products/categories")}
-            className="w-max font-semibold"
-          >
+          <ButtonBack onClick={() => router.push("/owner/products/categories")}>
             Kembali
-          </Button>
+          </ButtonBack>
 
           <h4 className="text-lg font-semibold text-default-900">
             Sub Kategori {kategori?.nama}

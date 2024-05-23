@@ -1,19 +1,19 @@
-// components
-import Container from "@/components/wrapper/DashboardContainer";
-import Layout from "@/components/wrapper/DashboardLayout";
-
-// utils
-
-// dummy data
-import { TemplateNota } from "@/components/template/TemplateNota";
-import { TransaksiType } from "@/types/transactions.type";
-import { fetcher } from "@/utils/fetcher";
 import { Button } from "@nextui-org/react";
-import { ArrowLeft, Printer } from "@phosphor-icons/react";
+import { Printer } from "@phosphor-icons/react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
+
+// components
+import ButtonBack from "@/components/button/ButtonBack";
+import { TemplateNota } from "@/components/template/TemplateNota";
+import Container from "@/components/wrapper/DashboardContainer";
+import Layout from "@/components/wrapper/DashboardLayout";
+
+// utils
+import { TransaksiType } from "@/types/transactions.type";
+import { fetcher } from "@/utils/fetcher";
 
 export default function HistoriesPage({
   transaksi,
@@ -29,23 +29,15 @@ export default function HistoriesPage({
     <Layout title={`Detail Transaksi ${transaksi.id_transaksi}`}>
       <Container className="gap-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <Button
-            variant="light"
-            color="primary"
-            size="sm"
-            startContent={<ArrowLeft weight="bold" size={16} />}
-            onClick={() => router.push("/owner/histories")}
-            className="w-max font-semibold"
-          >
-            Kembali ke Menu
-          </Button>
+          <ButtonBack onClick={() => router.push("/owner/histories")}>
+            Kembali
+          </ButtonBack>
 
           <Button
             color="primary"
-            size="sm"
             startContent={<Printer weight="bold" size={17} />}
             onClick={handlePrint}
-            className="w-max font-semibold"
+            className="w-max font-medium"
           >
             Cetak Nota
           </Button>

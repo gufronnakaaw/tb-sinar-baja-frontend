@@ -161,8 +161,8 @@ export default function PopupImportProducts({
                     isRequired
                     variant="flat"
                     color="default"
-                    labelPlacement="outside"
                     label="Nama Sheet"
+                    labelPlacement="outside"
                     placeholder="Masukan nama sheet..."
                     onChange={(e) => setSheet(e.target.value)}
                   />
@@ -187,7 +187,7 @@ export default function PopupImportProducts({
 
               <ModalFooter>
                 <Button
-                  color="primary"
+                  color="danger"
                   variant="light"
                   onPress={onClose}
                   className="font-medium"
@@ -197,19 +197,20 @@ export default function PopupImportProducts({
 
                 {loading ? (
                   <Button
-                    color="primary"
                     variant="solid"
-                    className="font-semibold"
+                    color="primary"
+                    startContent={<Spinner color="white" size="sm" />}
+                    className={`${loading ? "cursor-not-allowed justify-self-end font-medium" : ""}`}
                   >
-                    <Spinner color="default" size="sm" />
+                    Tunggu
                   </Button>
                 ) : (
                   <Button
                     color="primary"
                     variant="solid"
                     startContent={<UploadSimple weight="bold" size={18} />}
-                    className="font-semibold"
                     onClick={handleCreateProduk}
+                    className="font-medium"
                   >
                     Unggah Produk
                   </Button>

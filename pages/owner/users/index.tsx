@@ -1,6 +1,7 @@
 import {
   Button,
   Checkbox,
+  CheckboxGroup,
   Input,
   Modal,
   ModalBody,
@@ -17,9 +18,13 @@ import {
   TableRow,
   useDisclosure,
 } from "@nextui-org/react";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import useSWR, { KeyedMutator } from "swr";
 
 // components
+import LoadingScreen from "@/components/LoadingScreen";
 import InputSearchBar from "@/components/input/InputSearchBar";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
@@ -27,14 +32,9 @@ import { columnsUsers, renderCellUsers } from "@/headers/owner/users";
 
 // utils
 import usePagination from "@/hooks/usepagination";
-import { customStyleTable } from "@/utils/customStyleTable";
-
-import LoadingScreen from "@/components/LoadingScreen";
 import { GlobalResponse } from "@/types/global.type";
+import { customStyleTable } from "@/utils/customStyleTable";
 import { fetcher } from "@/utils/fetcher";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { useState } from "react";
-import useSWR, { KeyedMutator } from "swr";
 
 type PenggunaType = {
   username: string;
@@ -254,10 +254,10 @@ function SubComponentUsersPage({
                           isRequired
                           variant="flat"
                           color="default"
-                          labelPlacement="outside"
                           label="Username"
-                          placeholder="Masukan username"
+                          labelPlacement="outside"
                           name="username"
+                          placeholder="Masukan username"
                           onChange={(e) => {
                             setInput({
                               ...input,
@@ -270,10 +270,10 @@ function SubComponentUsersPage({
                           isRequired
                           variant="flat"
                           color="default"
-                          labelPlacement="outside"
                           label="Nama"
-                          placeholder="Masukan nama"
+                          labelPlacement="outside"
                           name="nama"
+                          placeholder="Masukan nama"
                           onChange={(e) => {
                             setInput({
                               ...input,
@@ -286,10 +286,10 @@ function SubComponentUsersPage({
                           isRequired
                           variant="flat"
                           color="default"
-                          labelPlacement="outside"
                           label="Kata Sandi"
-                          placeholder="Masukan kata sandi"
+                          labelPlacement="outside"
                           name="password"
+                          placeholder="Masukan kata sandi"
                           onChange={(e) => {
                             setInput({
                               ...input,
@@ -298,7 +298,14 @@ function SubComponentUsersPage({
                           }}
                         />
 
-                        <div className="grid grid-cols-3 gap-1">
+                        <CheckboxGroup
+                          orientation="horizontal"
+                          label={
+                            <span className="inline-flex text-sm text-default-900 after:ml-[1px] after:text-danger after:content-['*']">
+                              Pilih Role
+                            </span>
+                          }
+                        >
                           <Checkbox
                             value="owner"
                             onChange={(e) => {
@@ -315,6 +322,7 @@ function SubComponentUsersPage({
                           >
                             Owner
                           </Checkbox>
+
                           <Checkbox
                             value="admin"
                             onChange={(e) => {
@@ -348,12 +356,13 @@ function SubComponentUsersPage({
                           >
                             Kasir
                           </Checkbox>
-                        </div>
+                        </CheckboxGroup>
                       </div>
                     </ModalBody>
+
                     <ModalFooter>
                       <Button
-                        color="primary"
+                        color="danger"
                         variant="light"
                         onPress={createDisclosure.onClose}
                         className="font-medium"
@@ -363,19 +372,20 @@ function SubComponentUsersPage({
 
                       {loading ? (
                         <Button
-                          color="primary"
                           variant="solid"
-                          className="font-semibold"
+                          color="primary"
+                          startContent={<Spinner color="white" size="sm" />}
+                          className={`${loading ? "cursor-not-allowed justify-self-end font-medium" : ""}`}
                         >
-                          <Spinner color="default" size="sm" />
+                          Tunggu
                         </Button>
                       ) : (
                         <Button
                           color="primary"
                           variant="solid"
-                          className="font-semibold"
                           onClick={createPengguna}
                           disabled={Object.keys(input).length < 3}
+                          className="font-medium"
                         >
                           Tambah
                         </Button>
@@ -403,17 +413,16 @@ function SubComponentUsersPage({
                   </ModalHeader>
 
                   <ModalBody>
-                    <div className="grid gap-6">
-                      <Input
-                        isRequired
-                        variant="flat"
-                        color="default"
-                        labelPlacement="outside"
-                        defaultValue={password}
-                        disabled={true}
-                      />
-                    </div>
+                    <Input
+                      isRequired
+                      variant="flat"
+                      color="default"
+                      labelPlacement="outside"
+                      defaultValue={password}
+                      disabled={true}
+                    />
                   </ModalBody>
+
                   <ModalFooter></ModalFooter>
                 </>
               )}

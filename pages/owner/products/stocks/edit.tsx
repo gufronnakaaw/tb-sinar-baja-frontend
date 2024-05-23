@@ -1,4 +1,4 @@
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input, Spinner } from "@nextui-org/react";
 import { WarningCircle } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -22,6 +22,7 @@ export default function StockUpdate({
   const [stokSekarang, setStokSekarang] = useState("0");
   const [stokAmanSekarang, setStokAmanSekarang] = useState(stok_aman);
   const [client, setClient] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
@@ -38,6 +39,8 @@ export default function StockUpdate({
   }
 
   async function handleUpdate() {
+    setLoading(true);
+
     const data = {
       kode_item,
     };
@@ -153,15 +156,26 @@ export default function StockUpdate({
             />
           </div>
 
-          <Button
-            variant="solid"
-            color="primary"
-            size="md"
-            onClick={handleUpdate}
-            className="w-max justify-self-end font-semibold"
-          >
-            Update Produk
-          </Button>
+          {loading ? (
+            <Button
+              variant="solid"
+              color="primary"
+              startContent={<Spinner color="white" size="sm" />}
+              className={`${loading ? "cursor-not-allowed justify-self-end font-medium" : ""}`}
+            >
+              Tunggu
+            </Button>
+          ) : (
+            <Button
+              variant="solid"
+              color="primary"
+              size="md"
+              onClick={handleUpdate}
+              className="w-max justify-self-end font-medium"
+            >
+              Update Produk
+            </Button>
+          )}
         </div>
       </Container>
     </Layout>

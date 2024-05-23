@@ -7,6 +7,7 @@ import {
   ModalFooter,
   ModalHeader,
   Pagination,
+  Spinner,
   Table,
   TableBody,
   TableCell,
@@ -16,10 +17,12 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import useSWR, { KeyedMutator } from "swr";
 
 // components
+import LoadingScreen from "@/components/LoadingScreen";
 import InputSearchBar from "@/components/input/InputSearchBar";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
@@ -29,12 +32,10 @@ import {
 } from "@/headers/owner/warehouses/lists";
 
 // utils
-import LoadingScreen from "@/components/LoadingScreen";
 import usePagination from "@/hooks/usepagination";
 import { GlobalResponse } from "@/types/global.type";
 import { customStyleTable } from "@/utils/customStyleTable";
 import { fetcher } from "@/utils/fetcher";
-import { useRouter } from "next/router";
 
 type GudangType = {
   kode_gudang: string;
@@ -100,8 +101,11 @@ function SubComponentWarehousesPage({
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [kodeGudang, setKodeGudang] = useState("");
   const [namaGudang, setNamaGudang] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function createGudang() {
+    setLoading(true);
+
     if (!kodeGudang || !namaGudang) {
       return alert("tidak boleh kosong");
     }
@@ -205,7 +209,7 @@ function SubComponentWarehousesPage({
 
                     <ModalFooter>
                       <Button
-                        color="primary"
+                        color="danger"
                         variant="light"
                         onPress={onClose}
                         className="font-medium"
@@ -213,14 +217,26 @@ function SubComponentWarehousesPage({
                         Batal
                       </Button>
 
-                      <Button
-                        color="primary"
-                        variant="solid"
-                        className="font-semibold"
-                        onClick={createGudang}
-                      >
-                        Buat
-                      </Button>
+                      {loading ? (
+                        <Button
+                          variant="solid"
+                          color="primary"
+                          startContent={<Spinner color="white" size="sm" />}
+                          className={`${loading ? "cursor-not-allowed justify-self-end font-medium" : ""}`}
+                        >
+                          Tunggu
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="solid"
+                          color="primary"
+                          size="md"
+                          onClick={createGudang}
+                          className="w-max justify-self-end font-medium"
+                        >
+                          Buat
+                        </Button>
+                      )}
                     </ModalFooter>
                   </>
                 )}

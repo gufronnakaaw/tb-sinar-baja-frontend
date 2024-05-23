@@ -1,13 +1,22 @@
+import {
+  Button,
+  Checkbox,
+  CheckboxGroup,
+  Input,
+  Spinner,
+} from "@nextui-org/react";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { useRouter } from "next/router";
+import { useState } from "react";
+
+// components
 import ButtonBack from "@/components/button/ButtonBack";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
+
+// utils
 import { GlobalResponse } from "@/types/global.type";
 import { fetcher } from "@/utils/fetcher";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { useRouter } from "next/router";
-
-import { Button, Checkbox, Input } from "@nextui-org/react";
-import { useState } from "react";
 
 type PenggunaType = {
   username: string;
@@ -24,7 +33,6 @@ export default function EditUser({
   const router = useRouter();
   const [input, setInput] = useState({});
   const [role, setRole] = useState<string[] | any>(pengguna?.role.split(","));
-
   const [loading, setLoading] = useState(false);
 
   async function handleUpdate() {
@@ -67,21 +75,22 @@ export default function EditUser({
 
   return (
     <Layout title="Edit Pengguna">
-      <Container className="gap-8">
+      <Container className="gap-12">
         <ButtonBack onClick={() => router.push("/owner/users")}>
           Kembali
         </ButtonBack>
 
-        <div className="grid gap-4">
+        <div className="grid gap-6">
           <div className="grid grid-cols-2 gap-4">
             <Input
-              defaultValue={pengguna?.username}
+              isRequired
               variant="flat"
               color="default"
-              labelPlacement="outside"
               label="Username"
-              placeholder="Masukan username"
+              labelPlacement="outside"
               name="username"
+              placeholder="Masukan username"
+              defaultValue={pengguna?.username}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -91,13 +100,14 @@ export default function EditUser({
             />
 
             <Input
-              defaultValue={pengguna?.nama}
+              isRequired
               variant="flat"
               color="default"
-              labelPlacement="outside"
               label="Nama"
-              placeholder="Masukan nama"
+              labelPlacement="outside"
               name="nama"
+              placeholder="Masukan nama"
+              defaultValue={pengguna?.nama}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -109,12 +119,13 @@ export default function EditUser({
 
           <div className="grid grid-cols-2 gap-4">
             <Input
+              isRequired
               variant="flat"
               color="default"
-              labelPlacement="outside"
               label="Kata Sandi Lama"
-              placeholder="Masukan kata sandi lama"
+              labelPlacement="outside"
               name="password_old"
+              placeholder="Masukan kata sandi lama"
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -124,12 +135,13 @@ export default function EditUser({
             />
 
             <Input
+              isRequired
               variant="flat"
               color="default"
-              labelPlacement="outside"
               label="Kata Sandi Baru"
-              placeholder="Masukan kata sandi baru"
+              labelPlacement="outside"
               name="password_new"
+              placeholder="Masukan kata sandi baru"
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -139,7 +151,15 @@ export default function EditUser({
             />
           </div>
 
-          <div className="grid gap-2">
+          <CheckboxGroup
+            orientation="horizontal"
+            label={
+              <span className="inline-flex text-sm text-default-900 after:ml-[1px] after:text-danger after:content-['*']">
+                Pilih Role
+              </span>
+            }
+            defaultValue={role}
+          >
             <Checkbox
               value="owner"
               onChange={(e) => {
@@ -192,18 +212,29 @@ export default function EditUser({
             >
               Kasir
             </Checkbox>
-          </div>
+          </CheckboxGroup>
+        </div>
 
+        {loading ? (
+          <Button
+            variant="solid"
+            color="primary"
+            startContent={<Spinner color="white" size="sm" />}
+            className={`${loading ? "cursor-not-allowed justify-self-end font-medium" : ""}`}
+          >
+            Tunggu
+          </Button>
+        ) : (
           <Button
             variant="solid"
             color="primary"
             size="md"
             onClick={handleUpdate}
-            className="w-max justify-self-end font-semibold"
+            className="w-max justify-self-end font-medium"
           >
             Update Pengguna
           </Button>
-        </div>
+        )}
       </Container>
     </Layout>
   );

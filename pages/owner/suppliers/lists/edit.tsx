@@ -76,122 +76,17 @@ export default function SupplierEdit({
           Kembali
         </ButtonBack>
 
-        <div className="grid gap-8">
-          <div className="grid gap-4">
-            <div className="grid grid-cols-3 gap-2">
-              <Input
-                defaultValue={supplier?.nama}
-                isRequired
-                variant="flat"
-                color="default"
-                labelPlacement="outside"
-                label="Nama Supplier"
-                name="nama"
-                placeholder="Ex: Supplier 1"
-                onChange={(e) => {
-                  setInput({
-                    ...input,
-                    [e.target.name]: e.target.value,
-                  });
-                }}
-              />
-
-              <Input
-                defaultValue={supplier?.email}
-                isRequired
-                variant="flat"
-                color="default"
-                labelPlacement="outside"
-                label="Email"
-                name="email"
-                placeholder="Ex: sup1@mail.com"
-                onChange={(e) => {
-                  setInput({
-                    ...input,
-                    [e.target.name]: e.target.value,
-                  });
-                }}
-              />
-
-              <Input
-                defaultValue={supplier?.no_telp}
-                isRequired
-                variant="flat"
-                color="default"
-                labelPlacement="outside"
-                label="No Telpon"
-                name="no_telp"
-                placeholder="Ex: 081122334455"
-                onChange={(e) => {
-                  setInput({
-                    ...input,
-                    [e.target.name]: e.target.value,
-                  });
-                }}
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-2">
-              <Textarea
-                defaultValue={supplier?.alamat_kantor}
-                type="text"
-                size="sm"
-                variant="flat"
-                maxRows={3}
-                labelPlacement="outside"
-                label={
-                  <span className="text-[12px] text-default-900">
-                    Alamat Kantor
-                  </span>
-                }
-                placeholder="Ex: Jln Mawar"
-                className="w-full text-black"
-                name="alamat_kantor"
-                onChange={(e) => {
-                  setInput({
-                    ...input,
-                    [e.target.name]: e.target.value,
-                  });
-                }}
-              />
-
-              <Textarea
-                defaultValue={supplier?.alamat_gudang}
-                type="text"
-                size="sm"
-                variant="flat"
-                maxRows={3}
-                labelPlacement="outside"
-                label={
-                  <span className="text-[12px] text-default-900">
-                    Alamat Gudang
-                  </span>
-                }
-                placeholder="Ex: Jln Melati"
-                className="w-full text-black"
-                name="alamat_gudang"
-                onChange={(e) => {
-                  setInput({
-                    ...input,
-                    [e.target.name]: e.target.value,
-                  });
-                }}
-              />
-            </div>
-
-            <Textarea
-              defaultValue={supplier?.keterangan}
-              type="text"
-              size="sm"
+        <div className="grid gap-4">
+          <div className="grid grid-cols-3 gap-4">
+            <Input
+              isRequired
               variant="flat"
-              maxRows={3}
+              color="default"
+              label="Nama Supplier"
               labelPlacement="outside"
-              label={
-                <span className="text-[12px] text-default-900">Keterangan</span>
-              }
-              name="keterangan"
-              placeholder="Ex: Supplier Aluminium"
-              className="w-full text-black"
+              name="nama"
+              placeholder="Ex: Supplier 1"
+              defaultValue={supplier?.nama}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -200,81 +95,168 @@ export default function SupplierEdit({
               }}
             />
 
-            <div className="grid grid-cols-3 gap-2">
-              <Input
-                defaultValue={supplier?.bank}
-                isRequired
-                variant="flat"
-                color="default"
-                labelPlacement="outside"
-                label="Bank"
-                name="bank"
-                placeholder="Ex: BCA"
-                onChange={(e) => {
-                  setInput({
-                    ...input,
-                    [e.target.name]: e.target.value,
-                  });
-                }}
-              />
+            <Input
+              isRequired
+              variant="flat"
+              color="default"
+              label="Email"
+              labelPlacement="outside"
+              name="email"
+              placeholder="Ex: sup1@mail.com"
+              defaultValue={supplier?.email}
+              onChange={(e) => {
+                setInput({
+                  ...input,
+                  [e.target.name]: e.target.value,
+                });
+              }}
+            />
 
-              <Input
-                defaultValue={supplier?.atas_nama}
-                isRequired
-                variant="flat"
-                color="default"
-                labelPlacement="outside"
-                label="Atas Nama"
-                name="atas_nama"
-                placeholder="Ex: John Doe"
-                onChange={(e) => {
-                  setInput({
-                    ...input,
-                    [e.target.name]: e.target.value,
-                  });
-                }}
-              />
-
-              <Input
-                defaultValue={supplier?.no_rekening}
-                isRequired
-                variant="flat"
-                color="default"
-                labelPlacement="outside"
-                label="Nomor Rekening"
-                name="no_rekening"
-                placeholder="Ex: 09090808"
-                onChange={(e) => {
-                  setInput({
-                    ...input,
-                    [e.target.name]: e.target.value,
-                  });
-                }}
-              />
-            </div>
+            <Input
+              isRequired
+              variant="flat"
+              color="default"
+              label="No Telpon"
+              labelPlacement="outside"
+              name="no_telp"
+              placeholder="Ex: 081122334455"
+              defaultValue={supplier?.no_telp}
+              onChange={(e) => {
+                setInput({
+                  ...input,
+                  [e.target.name]: e.target.value,
+                });
+              }}
+            />
           </div>
 
-          {loading ? (
-            <Button
-              color="primary"
-              variant="solid"
-              size="md"
-              className="w-max justify-self-end font-semibold"
-            >
-              <Spinner color="default" size="sm" />
-            </Button>
-          ) : (
-            <Button
-              variant="solid"
-              color="primary"
-              size="md"
-              onClick={handleUpdate}
-              className="w-max justify-self-end font-semibold"
-            >
-              Update Supplier
-            </Button>
-          )}
+          <div className="grid grid-cols-2 gap-4">
+            <Textarea
+              isRequired
+              variant="flat"
+              maxRows={3}
+              label="Alamat Kantor"
+              labelPlacement="outside"
+              name="alamat_kantor"
+              placeholder="Ex: Jln Mawar"
+              defaultValue={supplier?.alamat_kantor}
+              onChange={(e) => {
+                setInput({
+                  ...input,
+                  [e.target.name]: e.target.value,
+                });
+              }}
+            />
+
+            <Textarea
+              isRequired
+              variant="flat"
+              maxRows={3}
+              label="Alamat Gudang"
+              labelPlacement="outside"
+              name="alamat_gudang"
+              placeholder="Ex: Jln Melati"
+              defaultValue={supplier?.alamat_gudang}
+              onChange={(e) => {
+                setInput({
+                  ...input,
+                  [e.target.name]: e.target.value,
+                });
+              }}
+            />
+          </div>
+
+          <Textarea
+            isRequired
+            variant="flat"
+            maxRows={3}
+            label="Keterangan"
+            labelPlacement="outside"
+            name="keterangan"
+            placeholder="Ex: Supplier Aluminium"
+            defaultValue={supplier?.keterangan}
+            onChange={(e) => {
+              setInput({
+                ...input,
+                [e.target.name]: e.target.value,
+              });
+            }}
+          />
+
+          <div className="grid grid-cols-3 gap-4">
+            <Input
+              isRequired
+              variant="flat"
+              color="default"
+              label="Bank"
+              labelPlacement="outside"
+              name="bank"
+              placeholder="Ex: BCA"
+              defaultValue={supplier?.bank}
+              onChange={(e) => {
+                setInput({
+                  ...input,
+                  [e.target.name]: e.target.value,
+                });
+              }}
+            />
+
+            <Input
+              isRequired
+              variant="flat"
+              color="default"
+              label="Atas Nama"
+              labelPlacement="outside"
+              name="atas_nama"
+              placeholder="Ex: John Doe"
+              defaultValue={supplier?.atas_nama}
+              onChange={(e) => {
+                setInput({
+                  ...input,
+                  [e.target.name]: e.target.value,
+                });
+              }}
+            />
+
+            <Input
+              isRequired
+              variant="flat"
+              color="default"
+              label="Nomor Rekening"
+              labelPlacement="outside"
+              name="no_rekening"
+              placeholder="Ex: 09090808"
+              defaultValue={supplier?.no_rekening}
+              onChange={(e) => {
+                setInput({
+                  ...input,
+                  [e.target.name]: e.target.value,
+                });
+              }}
+            />
+          </div>
         </div>
+
+        {loading ? (
+          <Button
+            variant="solid"
+            color="primary"
+            startContent={<Spinner color="white" size="sm" />}
+            className={`${loading ? "cursor-not-allowed justify-self-end font-medium" : ""}`}
+          >
+            Tunggu
+          </Button>
+        ) : (
+          <Button
+            variant="solid"
+            color="primary"
+            size="md"
+            onClick={handleUpdate}
+            className="w-max justify-self-end font-medium"
+          >
+            Update Supplier
+          </Button>
+        )}
       </Container>
     </Layout>
   );
