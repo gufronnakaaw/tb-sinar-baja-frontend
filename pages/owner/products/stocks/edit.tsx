@@ -62,11 +62,27 @@ export default function StockUpdate({
         method: "PATCH",
         data,
       });
-      alert("update berhasil");
+      alert("update stok berhasil");
       return router.push("/owner/products/stocks");
     } catch (error) {
-      alert("ups sepertinya ada masalah pada server");
-      console.log(error);
+      const response = error as {
+        success: boolean;
+        status_code: number;
+        error: { name: string; message: string };
+      };
+
+      if (response.status_code >= 500) {
+        console.log(response.error);
+        return alert("terjadi masalah pada server");
+      }
+
+      if (response.status_code >= 400) {
+        console.log(response.error);
+        return alert(response.error.message);
+      }
+
+      console.log(response.error);
+      return alert("terjadi error tidak diketahui pada aplikasi");
     }
   }
 
@@ -84,14 +100,20 @@ export default function StockUpdate({
             </h4>
 
             <div className="grid gap-[2px]">
-              <p className="text-sm font-medium text-default-600">
-                Stok Sekarang :{" "}
-                <span className="font-bold text-primary">{stok}</span>
-              </p>
-              <p className="text-sm font-medium text-default-600">
-                Stok Aman Sekarang :{" "}
-                <span className="font-bold text-primary">{stok_aman}</span>
-              </p>
+              <div className="grid grid-cols-[170px_10px_10fr]  gap-1 text-sm text-default-900">
+                <div className="text-sm font-medium text-default-600">
+                  Stok Sekarang
+                </div>
+                <div className="font-medium">:</div>
+                <p className="font-bold text-primary">{stok}</p>
+              </div>
+              <div className="grid grid-cols-[170px_10px_10fr]  gap-1 text-sm text-default-900">
+                <div className="grid text-sm font-medium text-default-600">
+                  Stok Aman Sekarang
+                </div>
+                <div className="font-medium">:</div>
+                <p className="font-bold text-primary">{stok_aman}</p>
+              </div>
             </div>
           </div>
 
@@ -160,7 +182,11 @@ export default function StockUpdate({
   );
 }
 
-export const getServerSideProps = ({ query }) => {
+export const getServerSideProps = ({
+  query,
+}: {
+  query: { kode_item: string; stok: string; stok_aman: string };
+}) => {
   return {
     props: {
       kode_item: query?.kode_item,

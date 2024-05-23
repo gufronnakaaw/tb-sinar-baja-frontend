@@ -1,5 +1,5 @@
 import { Button } from "@nextui-org/react";
-import { Eye, Trash } from "@phosphor-icons/react";
+import { Eye, Pencil, Trash } from "@phosphor-icons/react";
 import { NextRouter } from "next/router";
 import React from "react";
 
@@ -78,7 +78,7 @@ export function renderCellUsers(
     case "action":
       return (
         <div className="flex max-w-[110px] items-center gap-1">
-          {/* <CustomTooltip content="Edit">
+          <CustomTooltip content="Edit">
             <Button
               isIconOnly
               variant="light"
@@ -89,7 +89,7 @@ export function renderCellUsers(
             >
               <Pencil weight="bold" size={20} className="text-default-600" />
             </Button>
-          </CustomTooltip> */}
+          </CustomTooltip>
 
           <CustomTooltip content="Hapus">
             <Button
