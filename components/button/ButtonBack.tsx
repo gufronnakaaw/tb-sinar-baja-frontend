@@ -6,6 +6,7 @@ export default function ButtonBack(props: ButtonProps) {
     <Button
       variant="light"
       color="primary"
+      size="sm"
       startContent={<ArrowLeft weight="bold" size={17} />}
       className="w-max font-semibold"
       {...props}

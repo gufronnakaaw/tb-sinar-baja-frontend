@@ -17,9 +17,13 @@ import {
   Textarea,
   useDisclosure,
 } from "@nextui-org/react";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import useSWR, { KeyedMutator } from "swr";
 
 // components
+import LoadingScreen from "@/components/LoadingScreen";
 import InputSearchBar from "@/components/input/InputSearchBar";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
@@ -30,14 +34,9 @@ import {
 
 // utils
 import usePagination from "@/hooks/usepagination";
-import { customStyleTable } from "@/utils/customStyleTable";
-
-import LoadingScreen from "@/components/LoadingScreen";
 import { GlobalResponse } from "@/types/global.type";
+import { customStyleTable } from "@/utils/customStyleTable";
 import { fetcher } from "@/utils/fetcher";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { useState } from "react";
-import useSWR, { KeyedMutator } from "swr";
 
 type SupplierType = {
   id_supplier: string;
@@ -210,7 +209,7 @@ function SubComponentSuppliersPage({
               onClose={() => {
                 setInput({});
               }}
-              size="xl"
+              size="2xl"
             >
               <ModalContent>
                 {(onClose) => (
@@ -226,8 +225,8 @@ function SubComponentSuppliersPage({
                             isRequired
                             variant="flat"
                             color="default"
-                            labelPlacement="outside"
                             label="Nama Supplier"
+                            labelPlacement="outside"
                             name="nama"
                             placeholder="Ex: Supplier 1"
                             onChange={(e) => {
@@ -242,8 +241,8 @@ function SubComponentSuppliersPage({
                             isRequired
                             variant="flat"
                             color="default"
-                            labelPlacement="outside"
                             label="Email"
+                            labelPlacement="outside"
                             name="email"
                             placeholder="Ex: sup1@mail.com"
                             onChange={(e) => {
@@ -258,8 +257,8 @@ function SubComponentSuppliersPage({
                             isRequired
                             variant="flat"
                             color="default"
-                            labelPlacement="outside"
                             label="No Telpon"
+                            labelPlacement="outside"
                             name="no_telp"
                             placeholder="Ex: 081122334455"
                             onChange={(e) => {
@@ -273,19 +272,13 @@ function SubComponentSuppliersPage({
 
                         <div className="grid grid-cols-2 gap-2">
                           <Textarea
-                            type="text"
-                            size="sm"
+                            isRequired
                             variant="flat"
                             maxRows={3}
+                            label="Alamat Kantor"
                             labelPlacement="outside"
-                            label={
-                              <span className="text-[12px] text-default-900">
-                                Alamat Kantor
-                              </span>
-                            }
-                            placeholder="Ex: Jln Mawar"
-                            className="w-full text-black"
                             name="alamat_kantor"
+                            placeholder="Ex: Jln Mawar"
                             onChange={(e) => {
                               setInput({
                                 ...input,
@@ -295,19 +288,13 @@ function SubComponentSuppliersPage({
                           />
 
                           <Textarea
-                            type="text"
-                            size="sm"
+                            isRequired
                             variant="flat"
                             maxRows={3}
+                            label="Alamat Gudang"
                             labelPlacement="outside"
-                            label={
-                              <span className="text-[12px] text-default-900">
-                                Alamat Gudang
-                              </span>
-                            }
-                            placeholder="Ex: Jln Melati"
-                            className="w-full text-black"
                             name="alamat_gudang"
+                            placeholder="Ex: Jln Melati"
                             onChange={(e) => {
                               setInput({
                                 ...input,
@@ -318,19 +305,13 @@ function SubComponentSuppliersPage({
                         </div>
 
                         <Textarea
-                          type="text"
-                          size="sm"
+                          isRequired
                           variant="flat"
                           maxRows={3}
+                          label="Keterangan"
                           labelPlacement="outside"
-                          label={
-                            <span className="text-[12px] text-default-900">
-                              Keterangan
-                            </span>
-                          }
                           name="keterangan"
                           placeholder="Ex: Supplier Aluminium"
-                          className="w-full text-black"
                           onChange={(e) => {
                             setInput({
                               ...input,
@@ -344,8 +325,8 @@ function SubComponentSuppliersPage({
                             isRequired
                             variant="flat"
                             color="default"
-                            labelPlacement="outside"
                             label="Bank"
+                            labelPlacement="outside"
                             name="bank"
                             placeholder="Ex: BCA"
                             onChange={(e) => {
@@ -360,8 +341,8 @@ function SubComponentSuppliersPage({
                             isRequired
                             variant="flat"
                             color="default"
-                            labelPlacement="outside"
                             label="Atas Nama"
+                            labelPlacement="outside"
                             name="atas_nama"
                             placeholder="Ex: John Doe"
                             onChange={(e) => {
@@ -376,8 +357,8 @@ function SubComponentSuppliersPage({
                             isRequired
                             variant="flat"
                             color="default"
-                            labelPlacement="outside"
                             label="Nomor Rekening"
+                            labelPlacement="outside"
                             name="no_rekening"
                             placeholder="Ex: 09090808"
                             onChange={(e) => {
@@ -393,7 +374,7 @@ function SubComponentSuppliersPage({
 
                     <ModalFooter>
                       <Button
-                        color="primary"
+                        color="danger"
                         variant="light"
                         onPress={onClose}
                         className="font-medium"
@@ -403,27 +384,28 @@ function SubComponentSuppliersPage({
 
                       {loading ? (
                         <Button
-                          color="primary"
                           variant="solid"
-                          className="font-semibold"
+                          color="primary"
+                          startContent={<Spinner color="white" size="sm" />}
+                          className={`${loading ? "cursor-not-allowed font-medium" : ""}`}
                         >
-                          <Spinner color="default" size="sm" />
+                          Tunggu
                         </Button>
                       ) : (
                         <Button
+                          variant="solid"
                           color={
                             Object.keys(input).length < 9 ||
                             Object.values(input).includes("")
                               ? "default"
                               : "primary"
                           }
-                          variant="solid"
-                          className={`font-semibold ${Object.keys(input).length < 9 || Object.values(input).includes("") ? "text-gray-200" : null}`}
                           onClick={createSupplier}
                           disabled={
                             Object.keys(input).length < 9 ||
                             Object.values(input).includes("")
                           }
+                          className={`font-medium ${Object.keys(input).length < 9 || Object.values(input).includes("") ? "cursor-not-allowed text-gray-400" : null}`}
                         >
                           Tambah
                         </Button>

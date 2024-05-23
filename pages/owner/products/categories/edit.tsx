@@ -1,4 +1,4 @@
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input, Spinner } from "@nextui-org/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -17,12 +17,14 @@ export default function CategoriesUpdate({
 }) {
   const router = useRouter();
   const [namaKategori, setNamaKategori] = useState(nama);
+  const [loading, setLoading] = useState(false);
 
   if (!id_kategori) {
     return router.push("/owner/products/categories");
   }
 
   async function handleUpdate() {
+    setLoading(true);
     try {
       await fetcher({
         url: "/kategori",
@@ -59,15 +61,26 @@ export default function CategoriesUpdate({
             onChange={(e) => setNamaKategori(e.target.value)}
           />
 
-          <Button
-            variant="solid"
-            color="primary"
-            size="md"
-            onClick={handleUpdate}
-            className="justify-self-end font-semibold"
-          >
-            Update Kategori
-          </Button>
+          {loading ? (
+            <Button
+              variant="solid"
+              color="primary"
+              startContent={<Spinner color="white" size="sm" />}
+              className={`${loading ? "cursor-not-allowed justify-self-end font-medium" : ""}`}
+            >
+              Tunggu
+            </Button>
+          ) : (
+            <Button
+              variant="solid"
+              color="primary"
+              size="md"
+              onClick={handleUpdate}
+              className="justify-self-end font-medium"
+            >
+              Update Kategori
+            </Button>
+          )}
         </div>
       </Container>
     </Layout>

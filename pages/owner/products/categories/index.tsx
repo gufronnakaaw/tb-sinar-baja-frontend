@@ -7,6 +7,7 @@ import {
   ModalFooter,
   ModalHeader,
   Pagination,
+  Spinner,
   Table,
   TableBody,
   TableCell,
@@ -15,9 +16,13 @@ import {
   TableRow,
   useDisclosure,
 } from "@nextui-org/react";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
+import React, { useState } from "react";
+import useSWR, { KeyedMutator } from "swr";
 
 // components
+import LoadingScreen from "@/components/LoadingScreen";
 import InputSearchBar from "@/components/input/InputSearchBar";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
@@ -28,14 +33,9 @@ import {
 
 // utils
 import usePagination from "@/hooks/usepagination";
-import { customStyleTable } from "@/utils/customStyleTable";
-
-import LoadingScreen from "@/components/LoadingScreen";
 import { GlobalResponse } from "@/types/global.type";
+import { customStyleTable } from "@/utils/customStyleTable";
 import { fetcher } from "@/utils/fetcher";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import React, { useState } from "react";
-import useSWR, { KeyedMutator } from "swr";
 
 type KategoriType = {
   id_kategori: string;
@@ -59,6 +59,7 @@ export default function ProductsCategoriesPage(
       refreshInterval: 15000,
     },
   );
+
   if (swr.isLoading) {
     return <LoadingScreen role="owner" />;
   }
@@ -93,9 +94,11 @@ function SubComponentCategoriesPage({
   );
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [namaKategori, setNamaKategori] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   async function createKategori() {
+    setLoading(true);
     if (!namaKategori) {
       return alert("tidak boleh kosong");
     }
@@ -157,22 +160,20 @@ function SubComponentCategoriesPage({
                       </ModalHeader>
 
                       <ModalBody>
-                        <div className="grid gap-6">
-                          <Input
-                            isRequired
-                            variant="flat"
-                            color="default"
-                            labelPlacement="outside"
-                            label="Nama Kategori"
-                            placeholder="Masukan nama kategori..."
-                            onChange={(e) => setNamaKategori(e.target.value)}
-                          />
-                        </div>
+                        <Input
+                          isRequired
+                          variant="flat"
+                          color="default"
+                          label="Nama Kategori"
+                          labelPlacement="outside"
+                          placeholder="Masukan nama kategori..."
+                          onChange={(e) => setNamaKategori(e.target.value)}
+                        />
                       </ModalBody>
 
                       <ModalFooter>
                         <Button
-                          color="primary"
+                          color="danger"
                           variant="light"
                           onPress={onClose}
                           className="font-medium"
@@ -180,14 +181,25 @@ function SubComponentCategoriesPage({
                           Batal
                         </Button>
 
-                        <Button
-                          color="primary"
-                          variant="solid"
-                          className="font-semibold"
-                          onClick={createKategori}
-                        >
-                          Buat
-                        </Button>
+                        {loading ? (
+                          <Button
+                            variant="solid"
+                            color="primary"
+                            startContent={<Spinner color="white" size="sm" />}
+                            className={`${loading ? "cursor-not-allowed justify-self-end font-medium" : ""}`}
+                          >
+                            Tunggu
+                          </Button>
+                        ) : (
+                          <Button
+                            color="primary"
+                            variant="solid"
+                            onClick={createKategori}
+                            className="font-medium"
+                          >
+                            Buat
+                          </Button>
+                        )}
                       </ModalFooter>
                     </>
                   )}

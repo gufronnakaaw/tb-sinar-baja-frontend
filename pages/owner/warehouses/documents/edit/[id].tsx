@@ -1,4 +1,4 @@
-import { Button, Input, Textarea } from "@nextui-org/react";
+import { Button, Input, Spinner, Textarea } from "@nextui-org/react";
 import { useRouter } from "next/router";
 
 // components
@@ -44,8 +44,10 @@ export default function DocumentsUpdate({
   const [alamat, setAlamat] = useState(documents.transaksi.alamat);
   const [keterangan, setKeterangan] = useState(documents.transaksi.keterangan);
   const [noTelp, setNoTelp] = useState(documents.transaksi.no_telp);
+  const [loading, setLoading] = useState(false);
 
   async function handleUpdate() {
+    setLoading(true);
     try {
       await fetcher({
         url: "/suratjalan",
@@ -71,102 +73,100 @@ export default function DocumentsUpdate({
   return (
     <Layout title={`Update Dokumen ${documents.id_suratjalan}`}>
       <Container className="gap-8">
-        <div className="flex items-center justify-between gap-4">
-          <ButtonBack
-            onClick={() => router.push("/owner/warehouses/documents")}
-          >
-            Kembali
-          </ButtonBack>
-        </div>
+        <ButtonBack onClick={() => router.push("/owner/warehouses/documents")}>
+          Kembali
+        </ButtonBack>
 
-        <div className="grid gap-5">
-          <Input
-            defaultValue={namaDriver}
-            isRequired
-            variant="flat"
-            color="default"
-            labelPlacement="outside"
-            label="Nama Driver"
-            placeholder="Masukan nama driver..."
-            onChange={(e) => setNamaDriver(e.target.value)}
-          />
+        <div className="grid gap-6">
+          <div className="grid grid-cols-3 gap-4">
+            <Input
+              isRequired
+              variant="flat"
+              color="default"
+              label="Nama Driver"
+              labelPlacement="outside"
+              placeholder="Masukan nama driver..."
+              defaultValue={namaDriver}
+              onChange={(e) => setNamaDriver(e.target.value)}
+            />
 
-          <Input
-            defaultValue={kendaraan}
-            isRequired
-            variant="flat"
-            color="default"
-            labelPlacement="outside"
-            label="Kendaraan"
-            placeholder="Masukan kendaraan..."
-            onChange={(e) => setKendaraan(e.target.value)}
-          />
+            <Input
+              isRequired
+              variant="flat"
+              color="default"
+              label="Kendaraan"
+              labelPlacement="outside"
+              placeholder="Masukan kendaraan..."
+              defaultValue={kendaraan}
+              onChange={(e) => setKendaraan(e.target.value)}
+            />
 
-          <Input
-            defaultValue={platKendaraan}
-            isRequired
-            variant="flat"
-            color="default"
-            labelPlacement="outside"
-            label="Plat Kendaraan"
-            placeholder="Masukan plat kendaraan..."
-            onChange={(e) => setPlatKendaraan(e.target.value)}
-          />
+            <Input
+              isRequired
+              variant="flat"
+              color="default"
+              label="Plat Kendaraan"
+              labelPlacement="outside"
+              placeholder="Masukan plat kendaraan..."
+              defaultValue={platKendaraan}
+              onChange={(e) => setPlatKendaraan(e.target.value)}
+            />
+          </div>
 
           <Textarea
-            value={alamat}
-            type="text"
-            size="sm"
+            isRequired
             variant="flat"
             maxRows={3}
+            label="Alamat"
             labelPlacement="outside"
-            label={<span className="text-[12px] text-default-900">Alamat</span>}
             placeholder="Masukan alamat lengkap..."
-            className="w-full text-black"
+            value={alamat}
             onChange={(e) => setAlamat(e.target.value)}
           />
 
           <Textarea
-            value={keterangan}
-            type="text"
-            size="sm"
+            isRequired
             variant="flat"
             maxRows={3}
+            label="Keterangan"
             labelPlacement="outside"
-            label={
-              <span className="text-[12px] text-default-900">Keterangan</span>
-            }
             placeholder="Masukan keterangan..."
-            className="w-full text-black"
+            value={keterangan}
             onChange={(e) => setKeterangan(e.target.value)}
           />
 
           <Input
-            value={noTelp}
-            type="text"
-            size="sm"
+            isRequired
+            type="number"
             variant="flat"
+            label="No. Telp"
             labelPlacement="outside"
-            label={
-              <span className="text-[12px] text-default-900">No. Telp</span>
-            }
             placeholder="Masukan no. telp..."
-            className="w-full text-black"
+            value={noTelp}
             onChange={(e) => setNoTelp(e.target.value)}
           />
-
-          <div>
-            <Button
-              variant="solid"
-              color="primary"
-              className="px-6 py-4 font-semibold text-white"
-              size="md"
-              onClick={handleUpdate}
-            >
-              Update
-            </Button>
-          </div>
         </div>
+
+        {loading ? (
+          <Button
+            variant="solid"
+            color="primary"
+            startContent={<Spinner color="white" size="sm" />}
+            className={`${loading ? "cursor-not-allowed justify-self-end font-medium" : ""}`}
+          >
+            Tunggu
+          </Button>
+        ) : (
+          <Button
+            variant="solid"
+            color="primary"
+            size="md"
+            onClick={handleUpdate}
+            className="w-max justify-self-end font-medium"
+          >
+            Update Dokumen
+          </Button>
+        )}
       </Container>
     </Layout>
   );

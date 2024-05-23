@@ -86,7 +86,7 @@ export default function DocumentDetails({
                 color="success"
                 endContent={<Check weight="bold" size={17} />}
                 onClick={handleVerifikasi}
-                className="font-semibold text-white"
+                className="font-medium text-white"
               >
                 Verifikasi
               </Button>
@@ -104,7 +104,7 @@ export default function DocumentDetails({
               color="primary"
               endContent={<Printer weight="bold" size={16} />}
               onClick={handlePrint}
-              className="font-semibold"
+              className="font-medium"
             >
               Cetak Dokumen
             </Button>

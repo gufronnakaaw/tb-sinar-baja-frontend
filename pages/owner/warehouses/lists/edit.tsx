@@ -1,4 +1,4 @@
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input, Spinner } from "@nextui-org/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -18,6 +18,7 @@ export default function WarehousesUpdate({
   const router = useRouter();
   const [namaGudang, setNamaGudang] = useState(nama);
   const [client, setClient] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setClient(true);
@@ -32,6 +33,7 @@ export default function WarehousesUpdate({
   }
 
   async function handleUpdate() {
+    setLoading(true);
     try {
       await fetcher({
         url: "/gudang",
@@ -68,15 +70,26 @@ export default function WarehousesUpdate({
             onChange={(e) => setNamaGudang(e.target.value)}
           />
 
-          <Button
-            variant="solid"
-            color="primary"
-            size="md"
-            onClick={handleUpdate}
-            className="justify-self-end font-semibold"
-          >
-            Update Gudang
-          </Button>
+          {loading ? (
+            <Button
+              variant="solid"
+              color="primary"
+              startContent={<Spinner color="white" size="sm" />}
+              className={`${loading ? "cursor-not-allowed justify-self-end font-medium" : ""}`}
+            >
+              Tunggu
+            </Button>
+          ) : (
+            <Button
+              variant="solid"
+              color="primary"
+              size="md"
+              onClick={handleUpdate}
+              className="justify-self-end font-medium"
+            >
+              Update Gudang
+            </Button>
+          )}
         </div>
       </Container>
     </Layout>

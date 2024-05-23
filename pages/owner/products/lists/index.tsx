@@ -13,6 +13,7 @@ import { useState } from "react";
 import useSWR, { KeyedMutator } from "swr";
 
 // components
+import LoadingScreen from "@/components/LoadingScreen";
 import InputSearchBar from "@/components/input/InputSearchBar";
 import PopupImportProducts from "@/components/popup/PopupImportProducts";
 import Container from "@/components/wrapper/DashboardContainer";
@@ -23,7 +24,6 @@ import {
 } from "@/headers/owner/products/lists";
 
 // utils
-import LoadingScreen from "@/components/LoadingScreen";
 import usePagination from "@/hooks/usepagination";
 import { GlobalResponse } from "@/types/global.type";
 import { ProdukType } from "@/types/products.type";

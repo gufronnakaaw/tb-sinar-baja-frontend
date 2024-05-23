@@ -56,7 +56,7 @@ export function renderCellProductsStocks(
     case "status":
       return (
         <div className="text-default-900">
-          <StatusStock text={produk.status_stok} size="sm" />
+          <StatusStock text={produk.status_stok} size="sm" className="gap-1" />
         </div>
       );
     case "action":
