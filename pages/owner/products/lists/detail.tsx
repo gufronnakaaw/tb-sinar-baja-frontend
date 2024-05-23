@@ -1,13 +1,17 @@
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { useRouter } from "next/router";
+
+// components
 import ButtonBack from "@/components/button/ButtonBack";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
+
+// utils
 import { GlobalResponse } from "@/types/global.type";
 import { fetcher } from "@/utils/fetcher";
 import { formatDate } from "@/utils/formatDate";
 import { formatRupiah } from "@/utils/formatRupiah";
 import { PRICENAME } from "@/utils/price";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { useRouter } from "next/router";
 
 type ProdukDetailType = {
   kode_item: string;
@@ -155,13 +159,13 @@ export default function ProductDetail({
           Kembali
         </ButtonBack>
 
-        <div className="grid w-max gap-2 border-l-4 border-primary p-[1rem_0_1rem_1rem]">
-          <h4 className="text-[18px] font-bold text-default-900">
+        <div className="grid gap-6">
+          <h4 className="border-l-4 border-primary pl-4 text-[18px] font-bold text-default-900">
             Detail Produk {produk.data.nama_produk}
           </h4>
 
-          <div className="columns-2 gap-5">
-            <div className="grid gap-1">{detail}</div>
+          <div className="columns-2 gap-6">
+            <div className="grid gap-2">{detail}</div>
           </div>
         </div>
       </Container>
