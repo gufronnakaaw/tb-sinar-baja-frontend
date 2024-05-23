@@ -56,7 +56,7 @@ export default function ProductsSubCategoriesPage(
   const [search, setSearch] = useState("");
   const swr = useSWR<GlobalResponse<KategoriType>>(
     {
-      url: "/kategori?id=" + props.id,
+      url: "/kategori?id_kategori=" + props.id,
       method: "GET",
     },
     fetcher,
@@ -266,7 +266,7 @@ function SubComponentSubCategoriesPage({
 
 export const getServerSideProps = (async ({ params }) => {
   const result = await fetcher({
-    url: "/kategori?id=" + params?.id,
+    url: "/kategori?id_kategori=" + params?.id,
     method: "GET",
   });
 
