@@ -106,7 +106,7 @@ function SubComponentUsersPage({
   async function seePassword(username: string, password_encrypt: string) {
     try {
       const result: { data: { password: string } } = await fetcher({
-        url: `/pengguna/lihat?username=${username}&password_encrypt=${encodeURI(password_encrypt)}`,
+        url: `/pengguna/lihat?username=${username}&password_encrypt=${encodeURIComponent(password_encrypt)}`,
         method: "GET",
       });
 
