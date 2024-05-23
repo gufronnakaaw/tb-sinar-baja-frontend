@@ -1,14 +1,18 @@
-import ButtonBack from "@/components/button/ButtonBack";
-import CustomTooltip from "@/components/tooltip";
-import Container from "@/components/wrapper/DashboardContainer";
-import Layout from "@/components/wrapper/DashboardLayout";
-import { GlobalResponse } from "@/types/global.type";
-import { fetcher } from "@/utils/fetcher";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input, Spinner } from "@nextui-org/react";
 import { WarningCircle } from "@phosphor-icons/react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
+
+// components
+import ButtonBack from "@/components/button/ButtonBack";
+import CustomTooltip from "@/components/tooltip";
+import Container from "@/components/wrapper/DashboardContainer";
+import Layout from "@/components/wrapper/DashboardLayout";
+
+// utils
+import { GlobalResponse } from "@/types/global.type";
+import { fetcher } from "@/utils/fetcher";
 
 type ProdukDetailType = {
   kode_item: string;
@@ -51,8 +55,10 @@ export default function ProductDetail({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
   const [input, setInput] = useState({});
+  const [loading, setLoading] = useState(false);
 
   async function handleUpdate() {
+    setLoading(true);
     try {
       await fetcher({
         url: "/produk",
@@ -88,20 +94,25 @@ export default function ProductDetail({
 
   return (
     <Layout title="Edit Produk">
-      <Container className="gap-8">
+      <Container className="gap-12">
         <ButtonBack onClick={() => router.push("/owner/products/lists")}>
           Kembali
         </ButtonBack>
 
-        <div className="grid gap-10">
-          <div className="grid grid-cols-3 gap-3">
+        <div className="grid gap-12">
+          <div className="grid grid-cols-3 gap-6">
+            <h3 className="col-span-3 border-l-4 border-primary pl-4 text-[18px] font-semibold text-default-900">
+              Informasi Utama Produk
+            </h3>
+
             <Input
-              defaultValue={produk.data.kode_pabrik}
+              isRequired
               variant="flat"
-              color="default"
-              labelPlacement="outside"
               label="Kode Pabrik"
+              labelPlacement="outside"
               name="kode_pabrik"
+              placeholder="Masukan Kode Pabrik"
+              defaultValue={produk.data.kode_pabrik}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -111,12 +122,13 @@ export default function ProductDetail({
             />
 
             <Input
-              defaultValue={produk.data.kode_toko}
+              isRequired
               variant="flat"
-              color="default"
-              labelPlacement="outside"
               label="Kode Toko"
+              labelPlacement="outside"
               name="kode_toko"
+              placeholder="Masukan Kode Toko"
+              defaultValue={produk.data.kode_toko}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -126,12 +138,13 @@ export default function ProductDetail({
             />
 
             <Input
-              defaultValue={produk.data.nama_produk}
+              isRequired
               variant="flat"
-              color="default"
-              labelPlacement="outside"
               label="Nama Produk"
+              labelPlacement="outside"
               name="nama_produk"
+              placeholder="Masukan Kode Produk"
+              defaultValue={produk.data.nama_produk}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -139,16 +152,15 @@ export default function ProductDetail({
                 });
               }}
             />
-          </div>
 
-          <div className="grid grid-cols-4 gap-3">
             <Input
-              defaultValue={produk.data.nama_produk_asli}
+              isRequired
               variant="flat"
-              color="default"
-              labelPlacement="outside"
               label="Nama Produk Asli"
+              labelPlacement="outside"
               name="nama_produk_asli"
+              placeholder="Masukan Nama Produk Asli"
+              defaultValue={produk.data.nama_produk_asli}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -158,12 +170,13 @@ export default function ProductDetail({
             />
 
             <Input
-              defaultValue={produk.data.nama_produk_sebutan}
+              isRequired
               variant="flat"
-              color="default"
-              labelPlacement="outside"
               label="Nama Produk Sebutan"
+              labelPlacement="outside"
               name="nama_produk_sebutan"
+              placeholder="Masukan Produk Sebutan"
+              defaultValue={produk.data.nama_produk_sebutan}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -173,12 +186,13 @@ export default function ProductDetail({
             />
 
             <Input
-              defaultValue={produk.data.merk}
+              isRequired
               variant="flat"
-              color="default"
-              labelPlacement="outside"
               label="Merk"
+              labelPlacement="outside"
               name="merk"
+              placeholder="Masukan Merk"
+              defaultValue={produk.data.merk}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -188,12 +202,13 @@ export default function ProductDetail({
             />
 
             <Input
-              defaultValue={produk.data.tipe}
+              isRequired
               variant="flat"
-              color="default"
-              labelPlacement="outside"
               label="Tipe"
+              labelPlacement="outside"
               name="tipe"
+              placeholder="Masukan Tipe"
+              defaultValue={produk.data.tipe}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -203,14 +218,21 @@ export default function ProductDetail({
             />
           </div>
 
-          <div className="grid grid-cols-4 gap-3">
+          <div className="w-full border-b border-default-200" />
+
+          <div className="grid grid-cols-2 gap-6">
+            <h3 className="col-span-2 border-l-4 border-primary pl-4 text-[18px] font-semibold text-default-900">
+              Satuan Produk
+            </h3>
+
             <Input
-              defaultValue={produk.data.satuan_besar}
+              isRequired
               variant="flat"
-              color="default"
-              labelPlacement="outside"
               label="Satuan Besar"
+              labelPlacement="outside"
               name="satuan_besar"
+              placeholder="Masukan Besaran"
+              defaultValue={produk.data.satuan_besar}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -220,12 +242,13 @@ export default function ProductDetail({
             />
 
             <Input
-              defaultValue={produk.data.satuan_kecil}
+              isRequired
               variant="flat"
-              color="default"
               labelPlacement="outside"
               label="Satuan Kecil"
               name="satuan_kecil"
+              placeholder="Masukan Satuan Kecil"
+              defaultValue={produk.data.satuan_kecil}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -235,12 +258,13 @@ export default function ProductDetail({
             />
 
             <Input
-              defaultValue={produk.data.isi_satuan_besar}
+              isRequired
               variant="flat"
-              color="default"
-              labelPlacement="outside"
               label="Isi Satuan Besar"
+              labelPlacement="outside"
               name="isi_satuan_besar"
+              placeholder="Masukan Satuan Besar"
+              defaultValue={produk.data.isi_satuan_besar}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -250,12 +274,13 @@ export default function ProductDetail({
             />
 
             <Input
-              defaultValue={produk.data.konversi}
+              isRequired
               variant="flat"
-              color="default"
-              labelPlacement="outside"
               label="Konversi"
+              labelPlacement="outside"
               name="konversi"
+              placeholder="Masukan Konversi"
+              defaultValue={produk.data.konversi}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -265,14 +290,21 @@ export default function ProductDetail({
             />
           </div>
 
-          <div className="grid grid-cols-4 gap-3">
+          <div className="w-full border-b border-default-200" />
+
+          <div className="grid grid-cols-3 gap-6">
+            <h3 className="col-span-3 border-l-4 border-primary pl-4 text-[18px] font-semibold text-default-900">
+              Harga Produk
+            </h3>
+
             <Input
-              defaultValue={`${produk.data.harga_pokok}`}
+              isRequired
               variant="flat"
-              color="default"
-              labelPlacement="outside"
               label="Harga Pokok"
+              labelPlacement="outside"
               name="harga_pokok"
+              placeholder="Masukan Harga Pokok"
+              defaultValue={`${produk.data.harga_pokok}`}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -284,12 +316,13 @@ export default function ProductDetail({
             />
 
             <Input
-              defaultValue={`${produk.data.harga_1}`}
+              isRequired
               variant="flat"
-              color="default"
-              labelPlacement="outside"
               label="Harga Distributor"
+              labelPlacement="outside"
               name="harga_1"
+              placeholder="Masukan Harga Distributor"
+              defaultValue={`${produk.data.harga_1}`}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -301,12 +334,13 @@ export default function ProductDetail({
             />
 
             <Input
-              defaultValue={`${produk.data.harga_2}`}
+              isRequired
               variant="flat"
-              color="default"
-              labelPlacement="outside"
               label="Harga Agen"
+              labelPlacement="outside"
               name="harga_2"
+              placeholder="Masukan Harga Agen"
+              defaultValue={`${produk.data.harga_2}`}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -318,12 +352,13 @@ export default function ProductDetail({
             />
 
             <Input
-              defaultValue={`${produk.data.harga_3}`}
+              isRequired
               variant="flat"
-              color="default"
-              labelPlacement="outside"
               label="Harga Grosir"
+              labelPlacement="outside"
               name="harga_3"
+              placeholder="Masukan Harga Grosir"
+              defaultValue={`${produk.data.harga_3}`}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -333,16 +368,15 @@ export default function ProductDetail({
               type="number"
               min={0}
             />
-          </div>
 
-          <div className="grid grid-cols-4 gap-3">
             <Input
-              defaultValue={`${produk.data.harga_4}`}
+              isRequired
               variant="flat"
-              color="default"
-              labelPlacement="outside"
               label="Harga Toko"
+              labelPlacement="outside"
               name="harga_4"
+              placeholder="Masukan Harga Toko"
+              defaultValue={`${produk.data.harga_4}`}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -354,12 +388,13 @@ export default function ProductDetail({
             />
 
             <Input
-              defaultValue={`${produk.data.harga_5}`}
+              isRequired
               variant="flat"
-              color="default"
-              labelPlacement="outside"
               label="Harga Aplikator"
+              labelPlacement="outside"
               name="harga_5"
+              placeholder="Masukan Harga Aplikator"
+              defaultValue={`${produk.data.harga_5}`}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -371,12 +406,13 @@ export default function ProductDetail({
             />
 
             <Input
-              defaultValue={`${produk.data.harga_6}`}
+              isRequired
               variant="flat"
-              color="default"
-              labelPlacement="outside"
               label="Harga Retail"
+              labelPlacement="outside"
               name="harga_6"
+              placeholder="Masukan Harga Retail"
+              defaultValue={`${produk.data.harga_6}`}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -388,12 +424,13 @@ export default function ProductDetail({
             />
 
             <Input
-              defaultValue={`${produk.data.harga_diskon}`}
+              isRequired
               variant="flat"
-              color="default"
-              labelPlacement="outside"
               label="Harga Diskon"
+              labelPlacement="outside"
               name="harga_diskon"
+              placeholder="Masukan Harga Disskon"
+              defaultValue={`${produk.data.harga_diskon}`}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -405,14 +442,21 @@ export default function ProductDetail({
             />
           </div>
 
-          <div className="grid grid-cols-3 gap-3">
+          <div className="w-full border-b border-default-200" />
+
+          <div className="grid grid-cols-3 gap-6">
+            <h3 className="col-span-3 border-l-4 border-primary pl-4 text-[18px] font-semibold text-default-900">
+              Informasi Tambahan
+            </h3>
+
             <Input
-              defaultValue={`${produk.data.berat}`}
+              isRequired
               variant="flat"
-              color="default"
-              labelPlacement="outside"
               label="Berat"
+              labelPlacement="outside"
               name="berat"
+              placeholder="Masukan Berat"
+              defaultValue={`${produk.data.berat}`}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -424,12 +468,13 @@ export default function ProductDetail({
             />
 
             <Input
-              defaultValue={`${produk.data.volume}`}
+              isRequired
               variant="flat"
-              color="default"
-              labelPlacement="outside"
               label="Volume"
+              labelPlacement="outside"
               name="volume"
+              placeholder="Masukan Volume"
+              defaultValue={`${produk.data.volume}`}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -441,12 +486,13 @@ export default function ProductDetail({
             />
 
             <Input
-              defaultValue={produk.data.rak}
+              isRequired
               variant="flat"
-              color="default"
+              label="Lokasi Rak"
               labelPlacement="outside"
-              label="Rak"
               name="rak"
+              placeholder="Masukan Lokasi Rak"
+              defaultValue={produk.data.rak}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -454,14 +500,10 @@ export default function ProductDetail({
                 });
               }}
             />
-          </div>
 
-          <div className="grid grid-cols-2 gap-3">
             <Input
-              defaultValue={produk.data.gudang}
+              isRequired
               variant="flat"
-              color="default"
-              labelPlacement="outside"
               label={
                 <span className="inline-flex items-center">
                   Gudang
@@ -476,7 +518,10 @@ export default function ProductDetail({
                   }
                 </span>
               }
+              labelPlacement="outside"
               name="gudang_id"
+              placeholder="Masukan Gudang"
+              defaultValue={produk.data.gudang}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -486,10 +531,8 @@ export default function ProductDetail({
             />
 
             <Input
-              defaultValue={produk.data.subkategori}
+              isRequired
               variant="flat"
-              color="default"
-              labelPlacement="outside"
               label={
                 <span className="inline-flex items-center">
                   Subkategori
@@ -504,7 +547,10 @@ export default function ProductDetail({
                   }
                 </span>
               }
+              labelPlacement="outside"
               name="subkategori_id"
+              placeholder="Masukan Subkategori"
+              defaultValue={produk.data.subkategori}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -513,17 +559,28 @@ export default function ProductDetail({
               }}
             />
           </div>
+        </div>
 
+        {loading ? (
+          <Button
+            variant="solid"
+            color="primary"
+            startContent={<Spinner color="white" size="sm" />}
+            className={`${loading ? "cursor-not-allowed justify-self-end font-medium" : ""}`}
+          >
+            Tunggu
+          </Button>
+        ) : (
           <Button
             variant="solid"
             color="primary"
             size="md"
             onClick={handleUpdate}
-            className="w-max justify-self-end font-semibold"
+            className="w-max justify-self-end font-medium"
           >
             Update Produk
           </Button>
-        </div>
+        )}
       </Container>
     </Layout>
   );
