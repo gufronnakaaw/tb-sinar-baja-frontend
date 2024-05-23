@@ -29,31 +29,31 @@ const Nota = (props: TransaksiType, ref: any) => {
     switch (columnKey) {
       case "jumlah":
         return (
-          <div className="text-[10px] font-medium text-default-900">
+          <div className="text-[10px] font-medium text-black">
             {transaction.jumlah} {transaction.satuan}
           </div>
         );
       case "kode_item":
         return (
-          <div className="text-[10px] font-medium text-default-900">
+          <div className="text-[10px] font-medium text-black">
             {transaction.kode_item}
           </div>
         );
       case "nama_produk":
         return (
-          <div className="max-w-[300px] text-[10px] font-medium text-default-900">
+          <div className="max-w-[300px] text-[10px] font-medium text-black">
             {transaction.nama_produk}
           </div>
         );
       case "harga":
         return (
-          <div className="text-[10px] font-medium text-default-900">
+          <div className="text-[10px] font-medium text-black">
             {formatRupiah(transaction.harga)}
           </div>
         );
       case "subtotal":
         return (
-          <div className="text-[10px] font-medium text-default-900">
+          <div className="text-[10px] font-medium text-black">
             {formatRupiah(transaction.sub_total)}
           </div>
         );
@@ -67,36 +67,36 @@ const Nota = (props: TransaksiType, ref: any) => {
     <div className="container grid gap-4 px-20 pt-8 font-inter" ref={ref}>
       <div className="grid grid-cols-3 gap-4">
         <div className="grid gap-1">
-          <h1 className="font-bold text-default-900">TB. SINAR BAJA</h1>
-          <p className="max-w-[400px] text-[10px] font-medium text-default-600">
+          <h1 className="font-bold text-black">TB. SINAR BAJA</h1>
+          <p className="max-w-[300px] text-[10px] font-medium text-black">
             Jl. Letjend Sutoyo No.67, Burengan, Kec. Pesantren, Kabupaten
             Kediri, Jawa Timur 64131
           </p>
-          <p className="max-w-[300px] text-[10px] font-medium text-default-600">
+          <p className="max-w-[300px] text-[10px] font-medium text-black">
             082140735711
           </p>
         </div>
 
-        <h4 className="text-center text-xl font-bold uppercase text-black">
+        <h1 className="text-center font-bold uppercase text-black">
           {props.pajak ? "FAKTUR" : "NOTA"}
-        </h4>
+        </h1>
       </div>
 
       <div className="grid w-full grid-cols-2 items-start gap-8">
         <div className="grid">
-          <div className="grid grid-cols-[30px_6px_1fr] gap-1 text-[10px] text-default-900">
+          <div className="grid grid-cols-[30px_6px_1fr] gap-1 text-[10px] text-black">
             <div className="font-medium">No</div>
             <div className="font-medium">:</div>
             <p className="font-medium">{props.id_transaksi}</p>
           </div>
 
-          <div className="grid grid-cols-[30px_6px_1fr] gap-1 text-[10px] text-default-900">
+          <div className="grid grid-cols-[30px_6px_1fr] gap-1 text-[10px] text-black">
             <div className="font-medium">Tgl</div>
             <div className="font-medium">:</div>
             <p className="font-medium">{formatDate(props.created_at)}</p>
           </div>
 
-          <div className="grid w-[250px] grid-cols-[30px_6px_1fr] gap-1 text-[10px] text-default-900">
+          <div className="grid w-[250px] grid-cols-[30px_6px_1fr] gap-1 text-[10px] text-black">
             <div className="font-medium">Ket</div>
             <div className="font-medium">:</div>
             <p className="break-all font-medium">{props.keterangan}</p>
@@ -104,25 +104,25 @@ const Nota = (props: TransaksiType, ref: any) => {
         </div>
 
         <div className="grid">
-          <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-default-900">
+          <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-black">
             <div className="font-medium">Penerima</div>
             <div className="font-medium">:</div>
             <p className="font-medium">{props.penerima}</p>
           </div>
 
-          <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-default-900">
+          <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-black">
             <div className="font-medium">No. Telp</div>
             <div className="font-medium">:</div>
             <p className="font-medium">{props.no_telp}</p>
           </div>
 
-          <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-default-900">
+          <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-black">
             <div className="font-medium">Pengiriman</div>
             <div className="font-medium">:</div>
             <p className="font-medium">{props.pengiriman}</p>
           </div>
 
-          <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-default-900">
+          <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-black">
             <div className="font-medium">Alamat</div>
             <div className="font-medium">:</div>
             <p className="break-all font-medium">{props.alamat}</p>
@@ -141,7 +141,7 @@ const Nota = (props: TransaksiType, ref: any) => {
               "[&>tr]:first:rounded-none [&>tr]:first:shadow-none border-b border-black",
             ],
             th: [
-              "px-5 h-[14px] text-[10px] first:rounded-none last:rounded-none bg-transparent text-default-900",
+              "px-5 h-[14px] text-[10px] first:rounded-none last:rounded-none bg-transparent text-black font-medium",
             ],
             td: ["px-5 py-0 h-[14px]"],
           }}
@@ -166,20 +166,20 @@ const Nota = (props: TransaksiType, ref: any) => {
         </Table>
 
         <div className="grid justify-self-end border border-black p-2">
-          <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-default-900">
+          <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-black">
             <div className="w-24 font-medium">Ongkir</div>
             <div className="font-medium">:</div>
             <p className="font-medium">{formatRupiah(props.ongkir)}</p>
           </div>
 
-          <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-default-900">
+          <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-black">
             <div className="w-24 font-medium">Total</div>
             <div className="font-medium">:</div>
             <p className="font-medium">{formatRupiah(props.total_belanja)}</p>
           </div>
 
           {props.pajak ? (
-            <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-default-900">
+            <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-black">
               <div className="w-24 font-medium">
                 Pajak ({props.persen_pajak}%)
               </div>
@@ -189,7 +189,7 @@ const Nota = (props: TransaksiType, ref: any) => {
           ) : null}
 
           {props.diskon || props.persen_diskon ? (
-            <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-default-900">
+            <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-black">
               <div className="w-24 font-medium">
                 Diskon{" "}
                 {props.persen_diskon ? `(${props.persen_diskon}%)` : null}
@@ -201,7 +201,7 @@ const Nota = (props: TransaksiType, ref: any) => {
             </div>
           ) : null}
 
-          <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-default-900">
+          <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-black">
             <div className="w-24 font-medium">Tagihan</div>
             <div className="font-medium">:</div>
             <p className="font-medium">
