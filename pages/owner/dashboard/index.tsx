@@ -2,11 +2,11 @@ import { Button } from "@nextui-org/react";
 import {
   ArrowRight,
   ChartLineDown,
+  Coins,
   HandCoins,
   HourglassMedium,
   ImageBroken,
   Money,
-  Package,
 } from "@phosphor-icons/react";
 
 // components
@@ -142,15 +142,9 @@ export default function DashboardPage(
               <div className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-6">
                 <div className="inline-flex items-center gap-2">
                   <div className="aspect-square rounded-lg bg-gray-200 p-2">
-                    <HandCoins
-                      weight="bold"
-                      size={20}
-                      className="text-gray-600"
-                    />
+                    <Coins weight="bold" size={20} className="text-gray-600" />
                   </div>
-                  <p className="text-sm font-medium text-default-600">
-                    Pembayaran Lunas
-                  </p>
+                  <p className="text-sm font-medium text-default-600">Hutang</p>
                 </div>
 
                 <h6 className="text-2xl font-semibold text-default-900">
@@ -200,19 +194,19 @@ export default function DashboardPage(
               <div className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-6">
                 <div className="inline-flex items-center gap-2">
                   <div className="aspect-square rounded-lg bg-gray-200 p-2">
-                    <Package
+                    <HandCoins
                       weight="bold"
                       size={20}
                       className="text-gray-600"
                     />
                   </div>
                   <p className="text-sm font-medium text-default-600">
-                    Konsinyasi
+                    Piutang
                   </p>
                 </div>
 
                 <h6 className="text-2xl font-semibold text-default-900">
-                  {dashboard.data.konsinyasi}
+                  {formatRupiah(dashboard.data.konsinyasi)}
                 </h6>
 
                 <Button
