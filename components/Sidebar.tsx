@@ -341,12 +341,12 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                         className="mx-4"
                       />
 
-                      {/* <ButtonSidebar
+                      <ButtonSidebar
                         label="Harga Supplier"
                         path="/owner/suppliers/pricelists"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
-                      /> */}
+                      />
                     </AccordionItem>
                   </Accordion>
 

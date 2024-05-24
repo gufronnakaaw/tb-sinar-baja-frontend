@@ -118,7 +118,16 @@ function SubComponentSuppliersPage({
         return (
           <div className="flex max-w-[110px] items-center gap-1">
             <CustomTooltip content="Detail Harga">
-              <Button isIconOnly variant="light" size="sm">
+              <Button
+                isIconOnly
+                variant="light"
+                size="sm"
+                onClick={() =>
+                  router.push(
+                    `/owner/suppliers/pricelists/detail?id_supplier=${supplier.id_supplier}&nama=${supplier.nama}`,
+                  )
+                }
+              >
                 <Eye weight="bold" size={20} className="text-default-600" />
               </Button>
             </CustomTooltip>
@@ -131,7 +140,7 @@ function SubComponentSuppliersPage({
   }
 
   return (
-    <Layout title="Harga Supplier">
+    <Layout title="Daftar Supplier">
       <Container className="gap-8">
         <h4 className="text-lg font-semibold text-default-900">
           Daftar Supplier
