@@ -29,7 +29,7 @@ export const getServerSideProps = (async () => {
   };
 }) satisfies GetServerSideProps<{ transaksi: GlobalResponse<TransaksiType[]> }>;
 
-export default function AdminHistoriesPage(
+export default function OwnerHistoriesPage(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
   const [search, setSearch] = useState("");
@@ -46,7 +46,7 @@ export default function AdminHistoriesPage(
   );
 
   if (swr.isLoading) {
-    return <LoadingScreen role="owner"/>;
+    return <LoadingScreen role="owner" />;
   }
 
   if (swr.error) {
