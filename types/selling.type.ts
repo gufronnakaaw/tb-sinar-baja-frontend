@@ -1,7 +1,7 @@
 export type ProdukType = {
   kode_item: string;
   nama_produk: string;
-  harga_4: number;
+  harga_6: number;
   gudang: string;
   rak: string;
   stok: number;

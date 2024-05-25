@@ -11,7 +11,7 @@ import { formatRupiah } from "@/utils/formatRupiah";
 type CardSellingProductProps = {
   kode_item: string;
   nama_produk: string;
-  harga_4: number;
+  harga_6: number;
   gudang: string;
   rak: string;
   stok: number;
@@ -22,7 +22,7 @@ type CardSellingProductProps = {
 export default function CardSellingProduct({
   kode_item,
   nama_produk,
-  harga_4,
+  harga_6,
   gudang,
   rak,
   stok,
@@ -44,7 +44,7 @@ export default function CardSellingProduct({
         <div className="flex items-center gap-4">
           <div className="grid">
             <p className="text-[12px] font-medium text-default-600">Harga:</p>
-            <h4 className="font-bold text-rose-500">{formatRupiah(harga_4)}</h4>
+            <h4 className="font-bold text-rose-500">{formatRupiah(harga_6)}</h4>
           </div>
 
           <div className="grid">
@@ -77,12 +77,12 @@ export default function CardSellingProduct({
                   {
                     nama_produk,
                     kode_item,
-                    harga: harga_4,
+                    harga: harga_6,
                     stok,
                     qty: 1,
                     gudang,
                     rak,
-                    subtotal: harga_4 * 1,
+                    subtotal: harga_6 * 1,
                     satuan_kecil,
                   },
                 ];
