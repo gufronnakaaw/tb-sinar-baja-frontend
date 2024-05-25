@@ -147,6 +147,9 @@ export default function PopupImportProducts({
         isDismissable={false}
         isKeyboardDismissDisabled={true}
         size="lg"
+        onClose={() => {
+          setLoading(false);
+        }}
       >
         <ModalContent>
           {(onClose) => (
@@ -189,7 +192,10 @@ export default function PopupImportProducts({
                 <Button
                   color="danger"
                   variant="light"
-                  onPress={onClose}
+                  onPress={() => {
+                    setLoading(false);
+                    onClose();
+                  }}
                   className="font-medium"
                 >
                   Batal
