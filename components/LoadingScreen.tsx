@@ -7,15 +7,15 @@ export default function LoadingScreen({
 }) {
   function getColor(role: string) {
     if (role == "owner") {
-      return "primary";
+      return "border-b-primary";
     }
 
     if (role == "admin") {
-      return "success";
+      return "border-b-lime-500";
     }
 
     if (role == "cashier") {
-      return "danger";
+      return "border-b-rose-500";
     }
   }
 
@@ -23,7 +23,13 @@ export default function LoadingScreen({
     <div className="absolute inset-0 z-[9999] flex items-center justify-center bg-white">
       <div className="grid gap-4">
         <p className="text-[20px] font-bold text-default-900">TB. SINAR BAJA</p>
-        <Spinner color={getColor(role)} size="lg" />
+        <Spinner
+          size="lg"
+          classNames={{
+            circle1: getColor(role),
+            circle2: getColor(role),
+          }}
+        />
       </div>
     </div>
   );
