@@ -1,13 +1,4 @@
-import {
-  Button,
-  Pagination,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import { ArrowLeft } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
 
@@ -16,19 +7,30 @@ import InputSearchBar from "@/components/input/InputSearchBar";
 import Layout from "@/components/wrapper/SecondaryLayout";
 
 // utils
-import {
-  columnsTransaksi,
-  renderCellTransaksi,
-} from "@/headers/cashier/transactions";
-import usePagination from "@/hooks/usepagination";
 import { TransaksiType } from "@/types/transactions.type";
-import { customStyleTable } from "@/utils/customStyleTable";
 import { fetcher } from "@/utils/fetcher";
 
+import LoadingScreen from "@/components/LoadingScreen";
+import HistoriesTable from "@/components/tables/HistoriesTable";
 import { GlobalResponse } from "@/types/global.type";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useState } from "react";
 import useSWR from "swr";
+
+export const getServerSideProps = (async () => {
+  const result = await fetcher({
+    url: "/transaksi",
+    method: "GET",
+  });
+
+  const transaksi: GlobalResponse<TransaksiType[]> = result;
+
+  return {
+    props: {
+      transaksi,
+    },
+  };
+}) satisfies GetServerSideProps<{ transaksi: GlobalResponse<TransaksiType[]> }>;
 
 export default function TransactionsPage(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
@@ -47,7 +49,7 @@ export default function TransactionsPage(
   );
 
   if (swr.isLoading) {
-    return;
+    return <LoadingScreen role="cashier" />;
   }
 
   if (swr.error) {
@@ -69,10 +71,6 @@ function SubComponentTransactionsPage({
   setSearch: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const router = useRouter();
-  const { page, pages, data, setPage } = usePagination(
-    transaksi ? transaksi : [],
-    10,
-  );
 
   return (
     <Layout title="Daftar Transaksi">
@@ -102,41 +100,9 @@ function SubComponentTransactionsPage({
               />
             </div>
 
-            <Table
-              isHeaderSticky
-              aria-label="transactions table"
-              color="danger"
-              selectionMode="single"
-              classNames={customStyleTable}
-              className="scrollbar-hide"
-            >
-              <TableHeader columns={columnsTransaksi}>
-                {(column) => (
-                  <TableColumn key={column.uid}>{column.name}</TableColumn>
-                )}
-              </TableHeader>
-
-              <TableBody items={data}>
-                {(transaksi) => (
-                  <TableRow key={transaksi.id_transaksi}>
-                    {(columnKey) => (
-                      <TableCell>
-                        {renderCellTransaksi(transaksi, columnKey, router)}
-                      </TableCell>
-                    )}
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-
-            <Pagination
-              isCompact
-              showControls
-              color="danger"
-              page={page}
-              total={pages}
-              onChange={setPage}
-              className="justify-self-center"
+            <HistoriesTable
+              transaksi={transaksi}
+              path="/cashier/menu/transactions"
             />
           </div>
         </div>
@@ -144,18 +110,3 @@ function SubComponentTransactionsPage({
     </Layout>
   );
 }
-
-export const getServerSideProps = (async () => {
-  const result = await fetcher({
-    url: "/transaksi",
-    method: "GET",
-  });
-
-  const transaksi: GlobalResponse<TransaksiType[]> = result;
-
-  return {
-    props: {
-      transaksi,
-    },
-  };
-}) satisfies GetServerSideProps<{ transaksi: GlobalResponse<TransaksiType[]> }>;
