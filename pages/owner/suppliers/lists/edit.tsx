@@ -7,22 +7,9 @@ import ButtonBack from "@/components/button/ButtonBack";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 import { GlobalResponse } from "@/types/global.type";
+import { SupplierType } from "@/types/suppliers.type";
 import { fetcher } from "@/utils/fetcher";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-
-type SupplierType = {
-  id_supplier: string;
-  nama: string;
-  email: string;
-  no_telp: string;
-  alamat_kantor: string;
-  alamat_gudang: string;
-  keterangan: string;
-  bank: string;
-  atas_nama: string;
-  no_rekening: string;
-  created_at: string;
-};
 
 export default function SupplierEdit({
   supplier,

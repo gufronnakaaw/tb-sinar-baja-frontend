@@ -6,19 +6,11 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  Pagination,
   Spinner,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
   Textarea,
   useDisclosure,
 } from "@nextui-org/react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR, { KeyedMutator } from "swr";
 
@@ -27,30 +19,27 @@ import LoadingScreen from "@/components/LoadingScreen";
 import InputSearchBar from "@/components/input/InputSearchBar";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
-import {
-  columnsSuppliersLists,
-  renderCellSuppliersLists,
-} from "@/headers/owner/suppliers/lists";
 
 // utils
-import usePagination from "@/hooks/usepagination";
+import SuppliersListTable from "@/components/tables/SuppliersListTable";
 import { GlobalResponse } from "@/types/global.type";
-import { customStyleTable } from "@/utils/customStyleTable";
+import { SupplierType } from "@/types/suppliers.type";
 import { fetcher } from "@/utils/fetcher";
 
-type SupplierType = {
-  id_supplier: string;
-  nama: string;
-  email: string;
-  no_telp: string;
-  alamat_kantor: string;
-  alamat_gudang: string;
-  keterangan: string;
-  bank: string;
-  atas_nama: string;
-  no_rekening: string;
-  created_at: string;
-};
+export const getServerSideProps = (async () => {
+  const result = await fetcher({
+    url: "/supplier",
+    method: "GET",
+  });
+
+  const supplier: GlobalResponse<SupplierType[]> = result;
+
+  return {
+    props: {
+      supplier,
+    },
+  };
+}) satisfies GetServerSideProps<{ supplier: GlobalResponse<SupplierType[]> }>;
 
 export default function SuppliersPage(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
@@ -66,6 +55,7 @@ export default function SuppliersPage(
       fallbackData: props.supplier,
     },
   );
+
   if (swr.isLoading) {
     return <LoadingScreen role="owner" />;
   }
@@ -97,15 +87,9 @@ function SubComponentSuppliersPage({
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   mutate: KeyedMutator<any>;
 }) {
-  const { page, pages, data, setPage } = usePagination(
-    supplier ? supplier : [],
-    10,
-  );
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [input, setInput] = useState({});
   const [loading, setLoading] = useState(false);
-
-  const router = useRouter();
 
   async function createSupplier() {
     setLoading(true);
@@ -128,39 +112,6 @@ function SubComponentSuppliersPage({
         error: { name: string; message: string };
       };
       setLoading(false);
-
-      if (response.status_code >= 500) {
-        console.log(response.error);
-        return alert("terjadi masalah pada server");
-      }
-
-      if (response.status_code >= 400) {
-        console.log(response.error);
-        return alert(response.error.message);
-      }
-
-      console.log(response.error);
-      return alert("terjadi error tidak diketahui pada aplikasi");
-    }
-  }
-
-  async function deleteSupplier(id_supplier: string) {
-    if (!confirm("apakah anda yakin?")) return;
-
-    try {
-      await fetcher({
-        url: "/supplier/" + id_supplier,
-        method: "DELETE",
-      });
-      alert("supplier berhasil dihapus");
-      onClose();
-      mutate();
-    } catch (error) {
-      const response = error as {
-        success: boolean;
-        status_code: number;
-        error: { name: string; message: string };
-      };
 
       if (response.status_code >= 500) {
         console.log(response.error);
@@ -417,64 +368,9 @@ function SubComponentSuppliersPage({
             </Modal>
           </div>
 
-          <Table
-            isHeaderSticky
-            aria-label="suppliers table"
-            color="primary"
-            selectionMode="single"
-            classNames={customStyleTable}
-            className="scrollbar-hide"
-          >
-            <TableHeader columns={columnsSuppliersLists}>
-              {(column) => (
-                <TableColumn key={column.uid}>{column.name}</TableColumn>
-              )}
-            </TableHeader>
-
-            <TableBody items={data}>
-              {(supplier) => (
-                <TableRow key={supplier.id_supplier}>
-                  {(columnKey) => (
-                    <TableCell>
-                      {renderCellSuppliersLists(
-                        supplier,
-                        columnKey,
-                        router,
-                        deleteSupplier,
-                      )}
-                    </TableCell>
-                  )}
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-
-          <Pagination
-            isCompact
-            showControls
-            color="primary"
-            page={page}
-            total={pages}
-            onChange={setPage}
-            className="justify-self-center"
-          />
+          <SuppliersListTable supplier={supplier} mutate={mutate} />
         </div>
       </Container>
     </Layout>
   );
 }
-
-export const getServerSideProps = (async () => {
-  const result = await fetcher({
-    url: "/supplier",
-    method: "GET",
-  });
-
-  const supplier: GlobalResponse<SupplierType[]> = result;
-
-  return {
-    props: {
-      supplier,
-    },
-  };
-}) satisfies GetServerSideProps<{ supplier: GlobalResponse<SupplierType[]> }>;
