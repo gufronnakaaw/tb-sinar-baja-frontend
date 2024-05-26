@@ -8,18 +8,10 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  Pagination,
   Spinner,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
   useDisclosure,
 } from "@nextui-org/react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR, { KeyedMutator } from "swr";
 
@@ -28,22 +20,25 @@ import LoadingScreen from "@/components/LoadingScreen";
 import InputSearchBar from "@/components/input/InputSearchBar";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
-import { columnsUsers, renderCellUsers } from "@/headers/owner/users";
 
 // utils
-import usePagination from "@/hooks/usepagination";
+import UsersTable from "@/components/tables/UsersTable";
 import { GlobalResponse } from "@/types/global.type";
-import { customStyleTable } from "@/utils/customStyleTable";
+import { PenggunaType } from "@/types/users.type";
 import { fetcher } from "@/utils/fetcher";
 
-type PenggunaType = {
-  username: string;
-  nama: string;
-  password_encrypt: string;
-  role: string;
-  created_at: string;
-  updated_at: string;
-};
+export const getServerSideProps = (async () => {
+  const pengguna: GlobalResponse<PenggunaType[]> = await fetcher({
+    url: "/pengguna",
+    method: "GET",
+  });
+
+  return {
+    props: {
+      pengguna,
+    },
+  };
+}) satisfies GetServerSideProps<{ pengguna: GlobalResponse<PenggunaType[]> }>;
 
 export default function UsersPage(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
@@ -91,81 +86,12 @@ function SubComponentUsersPage({
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   mutate: KeyedMutator<any>;
 }) {
-  const { page, pages, data, setPage } = usePagination(
-    pengguna ? pengguna : [],
-    10,
-  );
   const [password, setPassword] = useState("");
-  const router = useRouter();
   const passwordDisclosure = useDisclosure();
   const createDisclosure = useDisclosure();
   const [input, setInput] = useState({});
   const [loading, setLoading] = useState(false);
   const [role, setRole] = useState<string[]>([]);
-
-  async function seePassword(username: string, password_encrypt: string) {
-    try {
-      const result: { data: { password: string } } = await fetcher({
-        url: `/pengguna/lihat?username=${username}&password_encrypt=${encodeURIComponent(password_encrypt)}`,
-        method: "GET",
-      });
-
-      passwordDisclosure.onOpen();
-      setPassword(result.data.password);
-    } catch (error) {
-      const response = error as {
-        success: boolean;
-        status_code: number;
-        error: { name: string; message: string };
-      };
-
-      if (response.status_code >= 500) {
-        console.log(response.error);
-        return alert("terjadi masalah pada server");
-      }
-
-      if (response.status_code >= 400) {
-        console.log(response.error);
-        return alert(response.error.message);
-      }
-
-      console.log(response.error);
-      return alert("terjadi error tidak diketahui pada aplikasi");
-    }
-  }
-
-  async function handleDelete(username: string) {
-    if (!confirm("apakah anda yakin?")) return;
-
-    try {
-      await fetcher({
-        url: "/pengguna/" + username,
-        method: "DELETE",
-      });
-
-      alert("pengguna berhasil dihapus");
-      mutate();
-    } catch (error) {
-      const response = error as {
-        success: boolean;
-        status_code: number;
-        error: { name: string; message: string };
-      };
-
-      if (response.status_code >= 500) {
-        console.log(response.error);
-        return alert("terjadi masalah pada server");
-      }
-
-      if (response.status_code >= 400) {
-        console.log(response.error);
-        return alert(response.error.message);
-      }
-
-      console.log(response.error);
-      return alert("terjadi error tidak diketahui pada aplikasi");
-    }
-  }
 
   async function createPengguna() {
     setLoading(true);
@@ -429,66 +355,14 @@ function SubComponentUsersPage({
             </ModalContent>
           </Modal>
 
-          <Table
-            isHeaderSticky
-            aria-label="users table"
-            color="primary"
-            selectionMode="single"
-            classNames={customStyleTable}
-            className="scrollbar-hide"
-          >
-            <TableHeader columns={columnsUsers}>
-              {(column) => (
-                <TableColumn key={column.uid}>{column.name}</TableColumn>
-              )}
-            </TableHeader>
-
-            <TableBody items={data}>
-              {(user) => (
-                <TableRow key={user.username}>
-                  {(columnKey) => (
-                    <TableCell>
-                      {renderCellUsers(
-                        user,
-                        columnKey,
-                        router,
-                        seePassword,
-                        handleDelete,
-                      )}
-                    </TableCell>
-                  )}
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-
-          <Pagination
-            isCompact
-            showControls
-            showShadow
-            color="primary"
-            page={page}
-            total={pages}
-            onChange={setPage}
-            className="justify-self-center"
+          <UsersTable
+            pengguna={pengguna}
+            setPassword={setPassword}
+            mutate={mutate}
+            onOpen={passwordDisclosure.onOpen}
           />
         </div>
       </Container>
     </Layout>
   );
 }
-
-export const getServerSideProps = (async () => {
-  const result = await fetcher({
-    url: "/pengguna",
-    method: "GET",
-  });
-
-  const pengguna: GlobalResponse<PenggunaType[]> = result;
-
-  return {
-    props: {
-      pengguna,
-    },
-  };
-}) satisfies GetServerSideProps<{ pengguna: GlobalResponse<PenggunaType[]> }>;

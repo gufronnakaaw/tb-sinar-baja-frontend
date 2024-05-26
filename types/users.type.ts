@@ -1,7 +1,8 @@
-export type UserType = {
-  id: number;
-  name: string;
+export type PenggunaType = {
   username: string;
-  password: string;
+  nama: string;
+  password_encrypt: string;
+  role: string;
   created_at: string;
+  updated_at: string;
 };
