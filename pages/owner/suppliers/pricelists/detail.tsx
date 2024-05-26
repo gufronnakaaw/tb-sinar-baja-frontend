@@ -6,52 +6,33 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  Pagination,
   Select,
   SelectItem,
   Spinner,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
   useDisclosure,
 } from "@nextui-org/react";
-import { NextRouter, useRouter } from "next/router";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import useSWR, { KeyedMutator } from "swr";
 
 // components
+import LoadingScreen from "@/components/LoadingScreen";
+import ButtonBack from "@/components/button/ButtonBack";
 import InputSearchBar from "@/components/input/InputSearchBar";
+import SuppliersSubPricelistsTable from "@/components/tables/SuppliersSubPricelistsTable";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 
 // utils
-import usePagination from "@/hooks/usepagination";
-import { customStyleTable } from "@/utils/customStyleTable";
-
-import LoadingScreen from "@/components/LoadingScreen";
-import ButtonBack from "@/components/button/ButtonBack";
-import CustomTooltip from "@/components/tooltip";
 import { GlobalResponse } from "@/types/global.type";
+import { SupplierPricelistProdukType } from "@/types/suppliers.type";
 import { fetcher } from "@/utils/fetcher";
-import { formatRupiah } from "@/utils/formatRupiah";
-import { Trash } from "@phosphor-icons/react";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { useEffect, useState } from "react";
-import useSWR, { KeyedMutator } from "swr";
 
 type PricelistType = {
   id_supplier: string;
   nama: string;
-  produk: PricelistProdukType[];
-};
-
-type PricelistProdukType = {
-  nama: string;
-  kode_item: string;
-  kategori: string;
-  harga: number;
-  created_at: string;
+  produk: SupplierPricelistProdukType[];
 };
 
 type KategoriType = {
@@ -67,11 +48,30 @@ type SubKategoriType = {
   created_at: string;
 };
 
+export const getServerSideProps = (async ({ query }) => {
+  const result = await fetcher({
+    url: "/supplier/pricelist?id_supplier=" + query?.id_supplier,
+    method: "GET",
+  });
+
+  const pricelist: GlobalResponse<SupplierPricelistProdukType[]> = result;
+
+  return {
+    props: {
+      pricelist,
+      id_supplier: query?.id_supplier,
+      nama: query?.nama,
+    },
+  };
+}) satisfies GetServerSideProps<{
+  pricelist: GlobalResponse<SupplierPricelistProdukType[]>;
+}>;
+
 export default function PricelistPage(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
   const [search, setSearch] = useState("");
-  const swr = useSWR<GlobalResponse<PricelistProdukType[]>>(
+  const swr = useSWR<GlobalResponse<SupplierPricelistProdukType[]>>(
     {
       url: "/supplier/pricelist?id_supplier=" + props?.id_supplier,
       method: "GET",
@@ -82,6 +82,7 @@ export default function PricelistPage(
       refreshInterval: 10000,
     },
   );
+
   if (swr.isLoading) {
     return <LoadingScreen role="owner" />;
   }
@@ -115,16 +116,12 @@ function SubComponentSuppliersPage({
   id_supplier,
   nama,
 }: {
-  pricelist: PricelistProdukType[] | undefined;
+  pricelist: SupplierPricelistProdukType[] | undefined;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   mutate: KeyedMutator<any>;
   id_supplier?: string;
   nama?: string;
 }) {
-  const { page, pages, data, setPage } = usePagination(
-    pricelist ? pricelist : [],
-    10,
-  );
   const router = useRouter();
   const [kategori, setKategori] = useState<KategoriType[]>([]);
   const [subKategori, setSubKategori] = useState<SubKategoriType[]>([]);
@@ -138,61 +135,6 @@ function SubComponentSuppliersPage({
 
   const { onOpen, onOpenChange, onClose, isOpen } = useDisclosure();
   const [loading, setLoading] = useState(false);
-
-  const columnsPricelist = [
-    { name: "Kode Item", uid: "kode_item" },
-    { name: "Nama Produk", uid: "nama" },
-    { name: "harga", uid: "harga" },
-    { name: "Aksi", uid: "action" },
-  ];
-
-  function renderPricelist(
-    produk: PricelistProdukType,
-    columnKey: React.Key,
-    router: NextRouter,
-    deletePricelist: (produk_id: string) => void,
-  ) {
-    const cellValue = produk[columnKey as keyof PricelistProdukType];
-
-    switch (columnKey) {
-      case "kode_item":
-        return <div className="w-max text-default-900">{produk.kode_item}</div>;
-      case "nama":
-        return <div className="w-max text-default-900">{produk.nama}</div>;
-      case "harga":
-        return (
-          <div className="w-max text-default-900">
-            {formatRupiah(produk.harga)}
-          </div>
-        );
-      case "action":
-        return (
-          <div className="flex max-w-[110px] items-center gap-1">
-            {/* <CustomTooltip content="Edit">
-              <Button isIconOnly variant="light" size="sm">
-                <Pencil weight="bold" size={20} className="text-default-600" />
-              </Button>
-            </CustomTooltip> */}
-
-            <CustomTooltip content="Hapus">
-              <Button
-                isIconOnly
-                variant="light"
-                size="sm"
-                onClick={() => {
-                  deletePricelist(produk.kode_item);
-                }}
-              >
-                <Trash weight="bold" size={20} className="text-default-600" />
-              </Button>
-            </CustomTooltip>
-          </div>
-        );
-
-      default:
-        return cellValue;
-    }
-  }
 
   useEffect(() => {
     getKategori();
@@ -310,38 +252,6 @@ function SubComponentSuppliersPage({
     }
   }
 
-  async function deletePricelist(produk_id: string) {
-    if (!confirm("apakah anda yakin?")) return;
-    try {
-      await fetcher({
-        url: `/supplier/pricelist/${id_supplier}/${encodeURIComponent(produk_id)}`,
-        method: "DELETE",
-      });
-
-      alert("produk berhasil dihapus");
-      mutate();
-    } catch (error) {
-      const response = error as {
-        success: boolean;
-        status_code: number;
-        error: { name: string; message: string };
-      };
-
-      if (response.status_code >= 500) {
-        console.log(response.error);
-        return alert("terjadi masalah pada server");
-      }
-
-      if (response.status_code >= 400) {
-        console.log(response.error);
-        return alert(response.error.message);
-      }
-
-      console.log(response.error);
-      return alert("terjadi error tidak diketahui pada aplikasi");
-    }
-  }
-
   return (
     <Layout title="Detail Harga Supplier">
       <Container className="gap-8">
@@ -349,13 +259,11 @@ function SubComponentSuppliersPage({
           Kembali
         </ButtonBack>
 
-        <div>
-          <h3 className="col-span-3 border-l-4 border-primary pl-4 text-[18px] font-semibold text-default-900">
+        <div className="grid gap-4">
+          <h3 className="mb-4 border-l-4 border-primary pl-4 text-[18px] font-semibold text-default-900">
             Detail Harga {nama}
           </h3>
-        </div>
 
-        <div className="grid gap-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <InputSearchBar
               placeholder="Cari Kode Item atau Nama"
@@ -396,7 +304,10 @@ function SubComponentSuppliersPage({
                     <ModalBody>
                       <div className="grid gap-6">
                         <Select
-                          label="Pilih Kategori"
+                          isRequired
+                          label="Kategori"
+                          labelPlacement="outside"
+                          placeholder="Pilih Kategori"
                           onChange={(e) => setIdKategori(e.target.value)}
                         >
                           {kategori.map((item) => (
@@ -410,7 +321,10 @@ function SubComponentSuppliersPage({
                         </Select>
 
                         <Select
-                          label="Pilih Sub Kategori"
+                          isRequired
+                          label="Sub Kategori"
+                          labelPlacement="outside"
+                          placeholder="Pilih Sub Kategori"
                           onChange={(e) => setIdSubKategori(e.target.value)}
                         >
                           {subKategori.length != 0
@@ -426,7 +340,10 @@ function SubComponentSuppliersPage({
                         </Select>
 
                         <Select
-                          label="Pilih Produk"
+                          isRequired
+                          label="Produk"
+                          labelPlacement="outside"
+                          placeholder="Pilih Produk"
                           onChange={(e) => setKodeItem(e.target.value)}
                         >
                           {produk.length != 0
@@ -448,7 +365,7 @@ function SubComponentSuppliersPage({
                           label="Harga"
                           labelPlacement="outside"
                           name="harga"
-                          placeholder="Masukan harga"
+                          placeholder="Masukan Harga"
                           type="number"
                           onChange={(e) => setHarga(parseInt(e.target.value))}
                         />
@@ -498,68 +415,13 @@ function SubComponentSuppliersPage({
             </Modal>
           </div>
 
-          <Table
-            isHeaderSticky
-            aria-label="suppliers table"
-            color="primary"
-            selectionMode="single"
-            classNames={customStyleTable}
-            className="scrollbar-hide"
-          >
-            <TableHeader columns={columnsPricelist}>
-              {(column) => (
-                <TableColumn key={column.uid}>{column.name}</TableColumn>
-              )}
-            </TableHeader>
-
-            <TableBody items={data}>
-              {(pricelist) => (
-                <TableRow key={pricelist.kode_item}>
-                  {(columnKey) => (
-                    <TableCell>
-                      {renderPricelist(
-                        pricelist,
-                        columnKey,
-                        router,
-                        deletePricelist,
-                      )}
-                    </TableCell>
-                  )}
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-
-          <Pagination
-            isCompact
-            showControls
-            color="primary"
-            page={page}
-            total={pages}
-            onChange={setPage}
-            className="justify-self-center"
+          <SuppliersSubPricelistsTable
+            pricelist={pricelist}
+            id_supplier={id_supplier}
+            mutate={mutate}
           />
         </div>
       </Container>
     </Layout>
   );
 }
-
-export const getServerSideProps = (async ({ query }) => {
-  const result = await fetcher({
-    url: "/supplier/pricelist?id_supplier=" + query?.id_supplier,
-    method: "GET",
-  });
-
-  const pricelist: GlobalResponse<PricelistProdukType[]> = result;
-
-  return {
-    props: {
-      pricelist,
-      id_supplier: query?.id_supplier,
-      nama: query?.nama,
-    },
-  };
-}) satisfies GetServerSideProps<{
-  pricelist: GlobalResponse<PricelistProdukType[]>;
-}>;

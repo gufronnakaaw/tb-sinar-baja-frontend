@@ -19,3 +19,11 @@ export type SupplierType = {
   no_rekening: string;
   created_at: string;
 };
+
+export type SupplierPricelistProdukType = {
+  nama: string;
+  kode_item: string;
+  kategori: string;
+  harga: number;
+  created_at: string;
+};
