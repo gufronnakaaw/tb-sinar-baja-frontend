@@ -31,21 +31,20 @@ export default function HistoriesPage({
         <div className="flex flex-wrap items-center justify-between gap-4">
           <Button
             variant="light"
-            color="primary"
+            // color="primary"
             size="sm"
             startContent={<ArrowLeft weight="bold" size={16} />}
             onClick={() => router.push("/admin/histories")}
-            className="w-max font-semibold"
+            className="w-max font-semibold text-lime-500"
           >
             Kembali ke Menu
           </Button>
 
           <Button
-            color="primary"
             size="sm"
             startContent={<Printer weight="bold" size={17} />}
             onClick={handlePrint}
-            className="w-max font-semibold"
+            className="w-max bg-lime-500 font-semibold text-white"
           >
             Cetak Nota
           </Button>

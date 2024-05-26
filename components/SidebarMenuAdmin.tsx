@@ -1,13 +1,4 @@
-import { Accordion, AccordionItem } from "@nextui-org/react";
-import {
-  ArchiveBox,
-  CaretRight,
-  Circle,
-  ClockCounterClockwise,
-  House,
-  Package,
-  Truck,
-} from "@phosphor-icons/react";
+import { ClockCounterClockwise, House } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -174,7 +165,7 @@ export default function SidebarMenuAdmin({
         </div>
       </div>
 
-      <div>
+      {/* <div>
         <span className="text-[10px] font-bold uppercase tracking-[2px] text-gray-600">
           Pengaturan
         </span>
@@ -303,19 +294,19 @@ export default function SidebarMenuAdmin({
               }
               className="grid gap-1"
             >
-              {/* <ButtonSidebar
+              <ButtonSidebar
                         label="In"
                         path="/admin/warehouses/in"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
-                      /> */}
+                      />
 
-              {/* <ButtonSidebar
+              <ButtonSidebar
                         label="Out"
                         path="/admin/warehouses/out"
                         icon={<Circle weight="fill" size={6} />}
                         className="mx-4"
-                      /> */}
+                      />
 
               <ButtonSidebar
                 label="Surat Jalan"
@@ -333,7 +324,7 @@ export default function SidebarMenuAdmin({
             </AccordionItem>
           </Accordion>
         </div>
-      </div>
+      </div> */}
     </>
   );
 }

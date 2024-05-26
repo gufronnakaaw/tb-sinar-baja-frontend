@@ -24,12 +24,10 @@ type HistoriesTableProps = {
   path: string;
 };
 
-type TransaksiTable = {
-  id_transaksi: string;
-  created_at: string;
-  total_pembayaran: number;
-  pajak: number;
-};
+type TransaksiTable = Pick<
+  TransaksiType,
+  "id_transaksi" | "created_at" | "total_pembayaran" | "pajak"
+>;
 
 export default function HistoriesTable({
   transaksi,

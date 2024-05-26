@@ -6,13 +6,6 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  Pagination,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
   useDisclosure,
 } from "@nextui-org/react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
@@ -25,35 +18,42 @@ import LoadingScreen from "@/components/LoadingScreen";
 import InputSearchBar from "@/components/input/InputSearchBar";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
-import {
-  columnsSubKategori,
-  renderCellSubKategori,
-} from "@/headers/admin/subkategori";
 
 // utils
 import ButtonBack from "@/components/button/ButtonBack";
-import usePagination from "@/hooks/usepagination";
+import ProductSubCategoriesTable from "@/components/tables/ProductSubCategoriesTable";
 import { GlobalResponse } from "@/types/global.type";
-import { customStyleTable } from "@/utils/customStyleTable";
+import { ProdukSubKategoriType } from "@/types/products.type";
 import { fetcher } from "@/utils/fetcher";
 
-type SubKategoriType = {
-  id_subkategori: number;
-  nama: string;
-  created_at: string;
-};
-
-type KategoriType = {
+type SubKategoriLists = {
   id_kategori: number;
   nama: string;
-  subkategori: SubKategoriType[];
+  subkategori: ProdukSubKategoriType[];
 };
 
-export default function ProductsSubCategoriesPage(
+export const getServerSideProps = (async ({ params }) => {
+  const subkategori: GlobalResponse<SubKategoriLists> = await fetcher({
+    url: "/kategori?id_kategori=" + params?.id,
+    method: "GET",
+  });
+
+  return {
+    props: {
+      subkategori,
+      id: params?.id,
+    },
+  };
+}) satisfies GetServerSideProps<{
+  subkategori: GlobalResponse<SubKategoriLists>;
+  id: string | any;
+}>;
+
+export default function OwnerProductsSubCategoriesPage(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
   const [search, setSearch] = useState("");
-  const swr = useSWR<GlobalResponse<KategoriType>>(
+  const swr = useSWR<GlobalResponse<SubKategoriLists>>(
     {
       url: "/kategori?id_kategori=" + props.id,
       method: "GET",
@@ -95,15 +95,11 @@ function SubComponentSubCategoriesPage({
   setSearch,
   mutate,
 }: {
-  kategori: KategoriType | undefined;
-  subkategori: SubKategoriType[] | undefined;
+  kategori: SubKategoriLists | undefined;
+  subkategori: ProdukSubKategoriType[] | undefined;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   mutate: KeyedMutator<any>;
 }) {
-  const { page, pages, data, setPage } = usePagination(
-    subkategori ? subkategori : [],
-    10,
-  );
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [namaSubKategori, setNamaSubKategori] = useState("");
 
@@ -214,64 +210,10 @@ function SubComponentSubCategoriesPage({
               </Modal>
             </div>
 
-            <Table
-              isHeaderSticky
-              aria-label="products categories table"
-              color="primary"
-              selectionMode="single"
-              classNames={customStyleTable}
-              className="scrollbar-hide"
-            >
-              <TableHeader columns={columnsSubKategori}>
-                {(column) => (
-                  <TableColumn key={column.uid}>{column.name}</TableColumn>
-                )}
-              </TableHeader>
-
-              <TableBody items={data}>
-                {(item) => (
-                  <TableRow key={item.id_subkategori}>
-                    {(columnKey) => (
-                      <TableCell>
-                        {renderCellSubKategori(item, columnKey, router)}
-                      </TableCell>
-                    )}
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-
-            <Pagination
-              isCompact
-              showControls
-              color="primary"
-              page={page}
-              total={pages}
-              onChange={setPage}
-              className="justify-self-center"
-            />
+            <ProductSubCategoriesTable subkategori={subkategori} role="owner" />
           </div>
         </div>
       </Container>
     </Layout>
   );
 }
-
-export const getServerSideProps = (async ({ params }) => {
-  const result = await fetcher({
-    url: "/kategori?id_kategori=" + params?.id,
-    method: "GET",
-  });
-
-  const subkategori: GlobalResponse<KategoriType> = result;
-
-  return {
-    props: {
-      subkategori,
-      id: params?.id,
-    },
-  };
-}) satisfies GetServerSideProps<{
-  subkategori: GlobalResponse<KategoriType>;
-  id: string | undefined;
-}>;

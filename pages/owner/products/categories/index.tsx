@@ -6,18 +6,10 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  Pagination,
   Spinner,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
   useDisclosure,
 } from "@nextui-org/react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { useRouter } from "next/router";
 import React, { useState } from "react";
 import useSWR, { KeyedMutator } from "swr";
 
@@ -26,29 +18,33 @@ import LoadingScreen from "@/components/LoadingScreen";
 import InputSearchBar from "@/components/input/InputSearchBar";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
-import {
-  columnsKategori,
-  renderCellKategori,
-} from "@/headers/owner/products/categories";
 
 // utils
-import usePagination from "@/hooks/usepagination";
+import ProductCategoriesTable from "@/components/tables/ProductCategoriesTable";
 import { GlobalResponse } from "@/types/global.type";
-import { customStyleTable } from "@/utils/customStyleTable";
+import { ProdukKategoriType } from "@/types/products.type";
 import { fetcher } from "@/utils/fetcher";
 
-type KategoriType = {
-  id_kategori: string;
-  nama: string;
-  created_at: string;
-  updated_at: string;
-};
+export const getServerSideProps = (async () => {
+  const kategori: GlobalResponse<ProdukKategoriType[]> = await fetcher({
+    url: "/kategori",
+    method: "GET",
+  });
 
-export default function ProductsCategoriesPage(
+  return {
+    props: {
+      kategori,
+    },
+  };
+}) satisfies GetServerSideProps<{
+  kategori: GlobalResponse<ProdukKategoriType[]>;
+}>;
+
+export default function OwnerProductsCategoriesPage(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
   const [search, setSearch] = useState("");
-  const swr = useSWR<GlobalResponse<KategoriType[]>>(
+  const swr = useSWR<GlobalResponse<ProdukKategoriType[]>>(
     {
       url: "/kategori",
       method: "GET",
@@ -84,18 +80,13 @@ function SubComponentCategoriesPage({
   setSearch,
   mutate,
 }: {
-  kategori: KategoriType[] | undefined;
+  kategori: ProdukKategoriType[] | undefined;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   mutate: KeyedMutator<any>;
 }) {
-  const { page, pages, data, setPage } = usePagination(
-    kategori ? kategori : [],
-    10,
-  );
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [namaKategori, setNamaKategori] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   async function createKategori() {
     setLoading(true);
@@ -207,60 +198,10 @@ function SubComponentCategoriesPage({
               </Modal>
             </div>
 
-            <Table
-              isHeaderSticky
-              aria-label="products categories table"
-              color="primary"
-              selectionMode="single"
-              classNames={customStyleTable}
-              className="scrollbar-hide"
-            >
-              <TableHeader columns={columnsKategori}>
-                {(column) => (
-                  <TableColumn key={column.uid}>{column.name}</TableColumn>
-                )}
-              </TableHeader>
-
-              <TableBody items={data}>
-                {(item) => (
-                  <TableRow key={item.id_kategori}>
-                    {(columnKey) => (
-                      <TableCell>
-                        {renderCellKategori(item, columnKey, router)}
-                      </TableCell>
-                    )}
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-
-            <Pagination
-              isCompact
-              showControls
-              color="primary"
-              page={page}
-              total={pages}
-              onChange={setPage}
-              className="justify-self-center"
-            />
+            <ProductCategoriesTable kategori={kategori} role="owner" />
           </div>
         </div>
       </Container>
     </Layout>
   );
 }
-
-export const getServerSideProps = (async () => {
-  const result = await fetcher({
-    url: "/kategori",
-    method: "GET",
-  });
-
-  const kategori: GlobalResponse<KategoriType[]> = result;
-
-  return {
-    props: {
-      kategori,
-    },
-  };
-}) satisfies GetServerSideProps<{ kategori: GlobalResponse<KategoriType[]> }>;
