@@ -1,5 +1,6 @@
 import { Button, Input } from "@nextui-org/react";
 import { ArrowLeft, Key, User } from "@phosphor-icons/react";
+import { signIn } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -7,14 +8,25 @@ import { useState } from "react";
 export default function LoginPage() {
   const router = useRouter();
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [input, setInput] = useState({});
 
-  function handleLogin() {
-    if (username == "sbowner" && password == "sb3258") {
+  async function handleLogin() {
+    if (Object.keys(input).length < 2) return;
+
+    const result = await signIn("credentials", {
+      ...input,
+      redirect: false,
+    });
+
+    if (result?.error) {
+      const { error } = JSON.parse(result?.error);
+
+      alert(error.message);
+    }
+
+    if (result?.ok) {
       return router.push("/owner/dashboard");
     }
-    alert("username atau password salah");
   }
   return (
     <>
@@ -41,10 +53,16 @@ export default function LoginPage() {
               color="default"
               labelPlacement="outside"
               placeholder="Username"
+              name="username"
               endContent={
                 <User weight="bold" size={18} className="text-gray-600" />
               }
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) =>
+                setInput({
+                  ...input,
+                  [e.target.name]: e.target.value,
+                })
+              }
             />
 
             <Input
@@ -54,10 +72,16 @@ export default function LoginPage() {
               color="default"
               labelPlacement="outside"
               placeholder="Password"
+              name="password"
               endContent={
                 <Key weight="bold" size={18} className="text-gray-600" />
               }
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) =>
+                setInput({
+                  ...input,
+                  [e.target.name]: e.target.value,
+                })
+              }
             />
 
             <div className="mt-4 grid gap-2">

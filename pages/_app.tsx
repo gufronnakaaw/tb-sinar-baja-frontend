@@ -1,10 +1,14 @@
 import "@/styles/globals.css";
 import { NextUIProvider } from "@nextui-org/react";
+import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import NextNProgress from "nextjs-progressbar";
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppProps) {
   const router = useRouter();
 
   function setColor() {
@@ -31,7 +35,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <NextUIProvider>
       <NextNProgress color={setColor()} />
-      <Component {...pageProps} />
+      <SessionProvider session={session} refetchOnWindowFocus={false}>
+        <Component {...pageProps} />
+      </SessionProvider>
     </NextUIProvider>
   );
 }

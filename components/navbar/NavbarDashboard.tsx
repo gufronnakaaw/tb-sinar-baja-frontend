@@ -8,6 +8,7 @@ import {
   DropdownTrigger,
 } from "@nextui-org/react";
 import { List, SignOut } from "@phosphor-icons/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React from "react";
 
@@ -18,6 +19,7 @@ interface NavbarProps {
 
 export default function Navbar({ sidebarOpen, setSidebarOpen }: NavbarProps) {
   const router = useRouter();
+  const { status, data } = useSession();
 
   const toggleSidebar = () => {
     if (setSidebarOpen) {
@@ -54,8 +56,7 @@ export default function Navbar({ sidebarOpen, setSidebarOpen }: NavbarProps) {
 
               <div className="-space-y-1">
                 <h6 className="mb-1 text-sm font-bold text-default-900">
-                  {router.pathname.startsWith("/owner") ? "Owner" : null}
-                  {router.pathname.startsWith("/admin") ? "Winda" : null}
+                  {status == "authenticated" ? data?.user.nama : null}
                 </h6>
                 <p className="text-[12px] font-medium uppercase text-default-500">
                   TB. SINAR BAJA
@@ -75,7 +76,9 @@ export default function Navbar({ sidebarOpen, setSidebarOpen }: NavbarProps) {
                 startContent={<SignOut weight="bold" size={18} />}
                 onClick={() => {
                   if (confirm("apakah anda yakin?")) {
-                    return router.push("/");
+                    return signOut({
+                      callbackUrl: `/${router.pathname.split("/")[1]}`,
+                    });
                   }
                 }}
                 className="font-bold text-danger-600"

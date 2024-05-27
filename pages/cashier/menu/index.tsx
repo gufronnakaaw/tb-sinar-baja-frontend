@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 
 // components
 import Layout from "@/components/wrapper/SecondaryLayout";
+import { signOut } from "next-auth/react";
 
 export default function MenuPage() {
   const router = useRouter();
@@ -51,7 +52,9 @@ export default function MenuPage() {
             endContent={<XCircle weight="bold" size={24} />}
             onClick={() => {
               if (confirm("Apakah anda ingin melakukan penutupan?")) {
-                router.push("/cashier");
+                return signOut({
+                  callbackUrl: `/${router.pathname.split("/")[1]}`,
+                });
               }
             }}
             className="col-span-2 py-10 text-base font-semibold"
