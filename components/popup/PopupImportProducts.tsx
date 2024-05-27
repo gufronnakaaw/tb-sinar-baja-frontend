@@ -105,7 +105,7 @@ export default function PopupImportProducts({
         },
       });
 
-      alert(`${results.length} data berhasil masuk ke database`);
+      alert(`${results.length} data berhasil diunggah ke database`);
       setLoading(false);
       mutate();
       onClose();
@@ -138,7 +138,7 @@ export default function PopupImportProducts({
         color="primary"
         className="w-full font-medium sm:w-max"
       >
-        Buat Produk
+        Unggah Produk
       </Button>
 
       <Modal

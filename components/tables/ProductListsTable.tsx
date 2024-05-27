@@ -41,6 +41,7 @@ export default function ProductListsTable({
     { name: "Kategori", uid: "kategori" },
     { name: "Harga Retail", uid: "harga_retail" },
     { name: "Dibuat Pada", uid: "created_at" },
+    { name: "Diubah Pada", uid: "updated_at" },
     { name: "Aksi", uid: "action" },
   ];
 
@@ -78,6 +79,12 @@ export default function ProductListsTable({
         return (
           <div className="w-max text-default-900">
             {formatDate(produk.created_at)}
+          </div>
+        );
+      case "updated_at":
+        return (
+          <div className="w-max text-default-900">
+            {formatDate(produk.updated_at)}
           </div>
         );
       case "action":

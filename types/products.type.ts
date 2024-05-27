@@ -22,7 +22,7 @@ export type ProdukType = {
   harga_6?: any;
   stok?: number;
   created_at: string;
-  updated_at?: string;
+  updated_at: string;
   rak?: string;
   stok_aman: number;
   subkategori?: string;
