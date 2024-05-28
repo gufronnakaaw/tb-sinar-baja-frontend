@@ -81,54 +81,51 @@ export default function CashierPricePage(
   return (
     <Layout title="Pengaturan Harga Kasir">
       <Container className="gap-8">
-        <div className="grid gap-4">
-          <div className="grid w-max gap-2 border-l-4 border-primary p-[1rem_0_1rem_1rem]">
-            <h4 className="text-[18px] font-bold text-default-900">
-              Informasi
-            </h4>
+        <div className="grid w-max gap-1 border-l-4 border-primary p-[1rem_0_1rem_1rem]">
+          <h4 className="text-[18px] font-bold text-default-900">Informasi</h4>
 
-            <div className="grid gap-[2px]">
-              <div className="grid grid-cols-[220px_10px_5fr]  gap-1 text-sm text-default-900">
-                <div className="text-sm font-medium text-default-600">
-                  Harga yang saat ini digunakan
-                </div>
-                <div className="font-medium">:</div>
-                <p className="font-bold text-primary">
-                  {harga[props.field as keyof Harga]} {`(${props.field})`}
-                </p>
-              </div>
+          <div className="grid grid-cols-[220px_10px_5fr] gap-1 text-sm text-default-900">
+            <div className="text-sm font-medium text-default-600">
+              Harga yang saat ini digunakan
             </div>
+            <div className="font-medium">:</div>
+            <p className="font-bold text-primary">
+              {harga[props.field as keyof Harga]} {`(${props.field})`}
+            </p>
           </div>
-
-          <Select
-            label="Pilih Harga"
-            defaultSelectedKeys={[field]}
-            onChange={(e) => setField(e.target.value)}
-          >
-            {result}
-          </Select>
-
-          {loading ? (
-            <Button
-              variant="solid"
-              color="primary"
-              startContent={<Spinner color="white" size="sm" />}
-              className={`${loading ? "cursor-not-allowed justify-self-end font-medium" : ""}`}
-            >
-              Tunggu
-            </Button>
-          ) : (
-            <Button
-              variant="solid"
-              color="primary"
-              size="md"
-              onClick={handleUpdate}
-              className="w-max justify-self-end font-medium"
-            >
-              Update
-            </Button>
-          )}
         </div>
+
+        <Select
+          isRequired
+          label="Harga"
+          labelPlacement="outside"
+          placeholder="Pilih Harga"
+          defaultSelectedKeys={[field]}
+          onChange={(e) => setField(e.target.value)}
+        >
+          {result}
+        </Select>
+
+        {loading ? (
+          <Button
+            variant="solid"
+            color="primary"
+            startContent={<Spinner color="white" size="sm" />}
+            className={`${loading ? "cursor-not-allowed justify-self-end font-medium" : ""}`}
+          >
+            Tunggu
+          </Button>
+        ) : (
+          <Button
+            variant="solid"
+            color="primary"
+            size="md"
+            onClick={handleUpdate}
+            className="w-max justify-self-end font-medium"
+          >
+            Update Harga
+          </Button>
+        )}
       </Container>
     </Layout>
   );
