@@ -65,17 +65,7 @@ const Nota = (props: TransaksiType, ref: any) => {
 
   return (
     <>
-      <style media="print">
-        {
-          "\
-      @page { size: 210mm 148.5mm; }\
-    "
-        }
-      </style>
-      <div
-        className="container h-[148.5mm] w-[210mm] pt-4 font-inter"
-        ref={ref}
-      >
+      <div className="container grid gap-1 pt-4 font-inter" ref={ref}>
         <div className="grid grid-cols-3 gap-4">
           <div className="grid gap-1">
             <h1 className="font-bold text-black">TB. SINAR BAJA</h1>
@@ -93,7 +83,7 @@ const Nota = (props: TransaksiType, ref: any) => {
           </h1>
         </div>
 
-        <div className="grid w-full grid-cols-2 items-start gap-8 py-1">
+        <div className="grid w-full grid-cols-2 items-start gap-8">
           <div className="grid">
             <div className="grid grid-cols-[30px_6px_1fr] gap-1 text-[10px] text-black">
               <div className="font-medium">No</div>

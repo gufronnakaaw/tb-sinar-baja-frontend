@@ -55,17 +55,7 @@ const SuratJalan = (props: DocumentResponse, ref: any) => {
 
   return (
     <>
-      <style media="print">
-        {
-          "\
-      @page { size: 210mm 148.5mm; }\
-    "
-        }
-      </style>
-      <div
-        className="container h-[148.5mm] w-[210mm] pt-4 font-inter"
-        ref={ref}
-      >
+      <div className="container grid gap-1 pt-4 font-inter" ref={ref}>
         <div className="grid grid-cols-3 gap-4">
           <div className="grid gap-1">
             <h1 className="font-bold text-black">TB. SINAR BAJA</h1>
@@ -141,7 +131,7 @@ const SuratJalan = (props: DocumentResponse, ref: any) => {
           </div>
         </div>
 
-        <div className="grid gap-2">
+        <div className="grid gap-1">
           <div className="grid grid-cols-[1fr_100px] gap-4">
             <div className="grid gap-1 text-[10px]">
               <p className="font-medium text-black">
