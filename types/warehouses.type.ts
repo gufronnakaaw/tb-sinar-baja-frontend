@@ -19,9 +19,24 @@ export type WarehouseOutType = {
   created_at: string;
 };
 
-export type WarehouseDocuments = {
-  invoice: string;
-  to: string;
+// export type WarehouseDocuments = {
+//   invoice: string;
+//   to: string;
+// };
+
+export type WarehouseDocumentsType = {
+  id_suratjalan: string;
+  transaksi_id: string;
+  nama_driver: string;
+  kendaraan: string;
+  plat_kendaraan: string;
+  verifikasi: boolean;
+  transaksi: {
+    penerima: string;
+    alamat: string;
+    keterangan: string;
+    no_telp: string;
+  };
 };
 
 export type WarehouseLists = {
