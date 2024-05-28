@@ -1,6 +1,7 @@
 import {
   Avatar,
   Button,
+  Chip,
   Dropdown,
   DropdownItem,
   DropdownMenu,
@@ -11,7 +12,7 @@ import {
   RadioGroup,
   Textarea,
 } from "@nextui-org/react";
-import { ArrowLeft, CaretUp } from "@phosphor-icons/react";
+import { ArrowLeft, CaretUp, Circle } from "@phosphor-icons/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
@@ -25,15 +26,49 @@ import InputSearchBar from "@/components/input/InputSearchBar";
 import CustomTooltip from "@/components/tooltip";
 
 // utils
+import LoadingScreen from "@/components/LoadingScreen";
 import { TemplateNota } from "@/components/template/TemplateNota";
-import { ListProdukType, ProdukType } from "@/types/selling.type";
+import { GlobalResponse } from "@/types/global.type";
+import { ProdukType } from "@/types/products.type";
+import { ListProdukType } from "@/types/selling.type";
 import { TransaksiType } from "@/types/transactions.type";
 import { fetcher } from "@/utils/fetcher";
 import { formatRupiah } from "@/utils/formatRupiah";
+import { useSession } from "next-auth/react";
+import useSWR from "swr";
 
 const unique_key = (Math.random() + 1).toString(36).substring(7);
 
+const harga = {
+  harga_1: "Harga Distributor",
+  harga_2: "Harga Agen",
+  harga_3: "Harga Grosir",
+  harga_4: "Harga Toko",
+  harga_5: "Harga Aplikator",
+  harga_6: "Harga Retail",
+};
+
+type Harga = {
+  harga_1: string;
+  harga_2: string;
+  harga_3: string;
+  harga_4: string;
+  harga_5: string;
+  harga_6: string;
+};
+
 export default function SellingPage() {
+  const swr = useSWR<GlobalResponse<{ field: string }>>(
+    {
+      url: "/setting",
+      method: "GET",
+    },
+    fetcher,
+    {
+      refreshInterval: 5000,
+    },
+  );
+
   const router = useRouter();
 
   const [noTelp, setNoTelp] = useState<string>("");
@@ -67,6 +102,7 @@ export default function SellingPage() {
   const [listProduk, setListProduk] = useState<ListProdukType[]>([]);
   const [totalPembayaran, setTotalPembayaran] = useState<number>(0);
   const [totalBelanja, setTotalBelanja] = useState<number>(0);
+  const { status, data } = useSession();
 
   async function createTransaksi() {
     try {
@@ -232,6 +268,15 @@ export default function SellingPage() {
     }
   }, [tunai, totalPembayaran]);
 
+  if (swr.isLoading) {
+    return <LoadingScreen role="cashier" />;
+  }
+
+  if (swr.error) {
+    console.log(swr.error);
+    return alert("error saat mendapatkan harga");
+  }
+
   return (
     <>
       <div className="hidden">
@@ -255,47 +300,63 @@ export default function SellingPage() {
             Kambali ke Menu
           </Button>
 
-          <Dropdown>
-            <DropdownTrigger>
-              <div className="inline-flex items-center gap-2 hover:cursor-pointer">
-                <Avatar
-                  isBordered
-                  size="sm"
-                  color="default"
-                  showFallback
-                  src="https://images.unsplash.com/broken"
-                />
+          <div className="flex items-center gap-4">
+            <Chip
+              variant="flat"
+              color="danger"
+              size="lg"
+              startContent={
+                <Circle weight="fill" size={8} className="animate-ping" />
+              }
+              classNames={{
+                base: "px-3",
+                content: "font-semibold",
+              }}
+            >
+              {harga[swr.data?.data.field as keyof Harga]}
+            </Chip>
+            <Dropdown>
+              <DropdownTrigger>
+                <div className="inline-flex items-center gap-2 hover:cursor-pointer">
+                  <Avatar
+                    isBordered
+                    size="sm"
+                    color="default"
+                    showFallback
+                    src="https://images.unsplash.com/broken"
+                  />
 
-                <div className="-space-y-1">
-                  <h6 className="mb-1 text-sm font-bold text-default-900">
-                    Winda
-                  </h6>
-                  <p className="text-[12px] font-medium uppercase text-default-500">
-                    TB Sinar Baja
-                  </p>
+                  <div className="-space-y-1">
+                    <h6 className="mb-1 text-sm font-bold text-default-900">
+                      {status == "authenticated" ? data.user.nama : null}
+                    </h6>
+                    <p className="text-[12px] font-medium uppercase text-default-500">
+                      TB Sinar Baja
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </DropdownTrigger>
+              </DropdownTrigger>
 
-            <DropdownMenu aria-label="profile actions">
-              <DropdownSection
-                aria-label="danger zone section"
-                title="Navigasi"
-              >
-                <DropdownItem
-                  key="navigation"
-                  color="danger"
-                  onClick={() => window.open("/admin/dashboard")}
-                  className="font-bold text-danger-600"
+              <DropdownMenu aria-label="profile actions">
+                <DropdownSection
+                  aria-label="danger zone section"
+                  title="Navigasi"
                 >
-                  Admin Menu
-                </DropdownItem>
-              </DropdownSection>
-            </DropdownMenu>
-          </Dropdown>
+                  <DropdownItem
+                    key="navigation"
+                    color="danger"
+                    onClick={() => window.open("/admin/dashboard")}
+                    className="font-bold text-danger-600"
+                  >
+                    Admin Menu
+                  </DropdownItem>
+                </DropdownSection>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
         </div>
 
-        <div className="grid h-[calc(100vh-64px)] grid-cols-[480px_auto_1fr] overflow-hidden">
+        <div className="grid h-[calc(100vh-64px)] grid-cols-[400px_auto_1fr] overflow-hidden">
           {/* ==== left content ==== */}
           <div className="flex flex-col gap-6 overflow-scroll p-4 scrollbar-hide">
             <div className="sticky left-0 top-0 grid gap-4">
@@ -327,8 +388,7 @@ export default function SellingPage() {
                 return (
                   <CardSellingProduct
                     key={item.kode_item}
-                    {...item}
-                    setListProduk={setListProduk}
+                    {...{ ...item, setListProduk, field: swr.data?.data.field }}
                   />
                 );
               })}
@@ -362,8 +422,7 @@ export default function SellingPage() {
                   return (
                     <CardSellingQuantityProduct
                       key={item.kode_item}
-                      {...item}
-                      setListProduk={setListProduk}
+                      {...{ ...item, setListProduk }}
                     />
                   );
                 })}

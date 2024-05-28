@@ -6,6 +6,7 @@ import {
   ClockCounterClockwise,
   House,
   Package,
+  Tag,
   Truck,
   Users,
 } from "@phosphor-icons/react";
@@ -429,6 +430,12 @@ export default function SidebarMenuOwner({
             label="Pengguna"
             path="/owner/users"
             icon={<Users weight="bold" size={20} />}
+          />
+
+          <ButtonSidebar
+            label="Harga Kasir"
+            path="/owner/cashierprice"
+            icon={<Tag weight="bold" size={20} />}
           />
         </div>
       </div>

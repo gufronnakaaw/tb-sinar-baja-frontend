@@ -5,14 +5,7 @@ import { Minus, Plus, Trash } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import CustomTooltip from "../tooltip";
 
-type CardSellingQuantityProductProps = {
-  kode_item: string;
-  nama_produk: string;
-  harga: number;
-  stok: number;
-  qty: number;
-  subtotal: number;
-  satuan_kecil: string;
+type CardSellingQuantityProductProps = ListProdukType & {
   setListProduk: React.Dispatch<React.SetStateAction<ListProdukType[]>>;
 };
 
