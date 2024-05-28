@@ -461,7 +461,7 @@ export default function SellingPage() {
                     color="danger"
                     className="w-full px-8 py-6 font-semibold"
                     onClick={createTransaksi}
-                    disabled={listProduk.length == 0}
+                    disabled={listProduk.length == 0 || tunai < totalPembayaran}
                   >
                     Cetak
                   </Button>
