@@ -58,11 +58,14 @@ const SuratJalan = (props: DocumentResponse, ref: any) => {
       <style media="print">
         {
           "\
-      @page { size: 21cm 14.85cm; }\
+      @page { size: 210mm 148.5mm; }\
     "
         }
       </style>
-      <div className="container grid gap-2 px-8 pt-4 font-inter" ref={ref}>
+      <div
+        className="container h-[148.5mm] w-[210mm] pt-4 font-inter"
+        ref={ref}
+      >
         <div className="grid grid-cols-3 gap-4">
           <div className="grid gap-1">
             <h1 className="font-bold text-black">TB. SINAR BAJA</h1>
