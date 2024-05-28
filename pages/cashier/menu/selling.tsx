@@ -105,6 +105,10 @@ export default function SellingPage() {
   const { status, data } = useSession();
 
   async function createTransaksi() {
+    if (listProduk.length > 8) {
+      return alert("maksimal 8 item");
+    }
+
     try {
       const response = await fetcher({
         url: "/transaksi",
