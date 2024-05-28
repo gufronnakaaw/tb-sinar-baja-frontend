@@ -158,7 +158,8 @@ const Penawaran = (props: any, ref: any) => {
           <div className="grid grid-cols-[1fr_100px] gap-4">
             <div className="grid gap-1 text-[10px]">
               <p className="font-medium text-black">
-                Berikut adalah data item yang kami pesan
+                Mohon dapat diberikan penawaran, harga, dan ketersediaan stok
+                untuk item sebagai berikut :
               </p>
             </div>
           </div>
