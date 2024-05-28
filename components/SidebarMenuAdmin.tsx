@@ -1,4 +1,4 @@
-import { ClockCounterClockwise, House } from "@phosphor-icons/react";
+import { ClockCounterClockwise, House, Tag } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -161,6 +161,12 @@ export default function SidebarMenuAdmin({
             label="Riwayat"
             path="/admin/histories"
             icon={<ClockCounterClockwise weight="bold" size={20} />}
+          />
+
+          <ButtonSidebar
+            label="Harga Kasir"
+            path="/admin/cashierprice"
+            icon={<Tag weight="bold" size={20} />}
           />
         </div>
       </div>
