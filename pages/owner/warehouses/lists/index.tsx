@@ -6,50 +6,30 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  Pagination,
   Spinner,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
   useDisclosure,
 } from "@nextui-org/react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { useRouter } from "next/router";
 import React, { useState } from "react";
 import useSWR, { KeyedMutator } from "swr";
 
 // components
 import LoadingScreen from "@/components/LoadingScreen";
 import InputSearchBar from "@/components/input/InputSearchBar";
+import WarehousesListsTable from "@/components/tables/WarehousesListsTable";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
-import {
-  columnsGudang,
-  renderCellGudang,
-} from "@/headers/owner/warehouses/lists";
 
 // utils
-import usePagination from "@/hooks/usepagination";
 import { GlobalResponse } from "@/types/global.type";
-import { customStyleTable } from "@/utils/customStyleTable";
+import { WarehouseListType } from "@/types/warehouses.type";
 import { fetcher } from "@/utils/fetcher";
-
-type GudangType = {
-  kode_gudang: string;
-  nama: string;
-  can_delete: boolean;
-  created_at: string;
-  updated_at: string;
-};
 
 export default function WarehousesListsPage(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
   const [search, setSearch] = useState("");
-  const swr = useSWR<GlobalResponse<GudangType[]>>(
+  const swr = useSWR<GlobalResponse<WarehouseListType[]>>(
     {
       url: "/gudang",
       method: "GET",
@@ -88,16 +68,10 @@ function SubComponentWarehousesPage({
   setSearch,
   mutate,
 }: {
-  gudang: GudangType[] | undefined;
+  gudang: WarehouseListType[] | undefined;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   mutate: KeyedMutator<any>;
 }) {
-  const router = useRouter();
-
-  const { page, pages, data, setPage } = usePagination(
-    gudang ? gudang : [],
-    10,
-  );
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [kodeGudang, setKodeGudang] = useState("");
   const [namaGudang, setNamaGudang] = useState("");
@@ -191,7 +165,7 @@ function SubComponentWarehousesPage({
                           color="default"
                           labelPlacement="outside"
                           label="Kode Gudang"
-                          placeholder="Masukan kode gudang..."
+                          placeholder="Masukan kode gudang"
                           onChange={(e) => setKodeGudang(e.target.value)}
                         />
 
@@ -201,7 +175,7 @@ function SubComponentWarehousesPage({
                           color="default"
                           labelPlacement="outside"
                           label="Nama Gudang"
-                          placeholder="Masukan kode gudang..."
+                          placeholder="Masukan nama gudang"
                           onChange={(e) => setNamaGudang(e.target.value)}
                         />
                       </div>
@@ -244,42 +218,7 @@ function SubComponentWarehousesPage({
             </Modal>
           </div>
 
-          <Table
-            isHeaderSticky
-            aria-label="warehouseLists table"
-            color="primary"
-            selectionMode="single"
-            classNames={customStyleTable}
-            className="scrollbar-hide"
-          >
-            <TableHeader columns={columnsGudang}>
-              {(column) => (
-                <TableColumn key={column.uid}>{column.name}</TableColumn>
-              )}
-            </TableHeader>
-
-            <TableBody items={data}>
-              {(item) => (
-                <TableRow key={item.kode_gudang}>
-                  {(columnKey) => (
-                    <TableCell>
-                      {renderCellGudang(item, columnKey, handleDelete, router)}
-                    </TableCell>
-                  )}
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-
-          <Pagination
-            isCompact
-            showControls
-            color="primary"
-            page={page}
-            total={pages}
-            onChange={setPage}
-            className="justify-self-center"
-          />
+          <WarehousesListsTable gudang={gudang} handleDelete={handleDelete} />
         </div>
       </Container>
     </Layout>
@@ -292,11 +231,13 @@ export const getServerSideProps = (async () => {
     method: "GET",
   });
 
-  const gudang: GlobalResponse<GudangType[]> = result;
+  const gudang: GlobalResponse<WarehouseListType[]> = result;
 
   return {
     props: {
       gudang,
     },
   };
-}) satisfies GetServerSideProps<{ gudang: GlobalResponse<GudangType[]> }>;
+}) satisfies GetServerSideProps<{
+  gudang: GlobalResponse<WarehouseListType[]>;
+}>;

@@ -39,6 +39,14 @@ export type WarehouseDocumentsType = {
   };
 };
 
+export type WarehouseListType = {
+  kode_gudang: string;
+  nama: string;
+  can_delete: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
 export type WarehouseLists = {
   code: string;
   name: string;
