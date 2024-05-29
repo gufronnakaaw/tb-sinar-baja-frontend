@@ -32,7 +32,7 @@ const SuratJalan = (props: DocumentResponse, ref: any) => {
       case "jumlah":
         return (
           <div className="text-[10px] font-medium text-black">
-            {item.jumlah} btl
+            {item.jumlah} {item.satuan}
           </div>
         );
       case "nama_produk":
