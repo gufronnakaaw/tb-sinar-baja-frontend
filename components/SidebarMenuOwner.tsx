@@ -8,6 +8,7 @@ import {
   Package,
   Tag,
   Truck,
+  User,
   Users,
 } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
@@ -322,51 +323,49 @@ export default function SidebarMenuOwner({
             </AccordionItem>
           </Accordion>
 
-          {/* <Accordion
-                    isCompact
-                    itemClasses={{
-                      ...itemClasses,
-                      trigger: `${itemClasses.trigger} ${membersActive.trigger}`,
-                      title: `${itemClasses.title} ${membersActive.title}`,
-                    }}
-                    className="p-0"
-                  >
-                    <AccordionItem
-                      aria-label="button"
-                      title="Member"
-                      indicator={
-                        <CaretRight
-                          weight="bold"
-                          size={16}
-                          className={`${membersActive.title ? membersActive.title : "text-gray-600"}`}
-                        />
-                      }
-                      startContent={
-                        <Users
-                          weight="bold"
-                          size={20}
-                          className={`${membersActive.title ? membersActive.title : "text-gray-600"}`}
-                        />
-                      }
-                      className="grid gap-1"
-                    >
-                      <ButtonSidebar
-                        label="Daftar Member"
-                        path="/owner/members/lists"
-                        icon={<Circle weight="fill" size={6} />}
-                        className="mx-4"
-                        isDev={true}
-                      />
+          <Accordion
+            isCompact
+            itemClasses={{
+              ...itemClasses,
+              trigger: `${itemClasses.trigger} ${membersActive.trigger}`,
+              title: `${itemClasses.title} ${membersActive.title}`,
+            }}
+            className="p-0"
+          >
+            <AccordionItem
+              aria-label="button"
+              title="Member"
+              indicator={
+                <CaretRight
+                  weight="bold"
+                  size={16}
+                  className={`${membersActive.title ? membersActive.title : "text-gray-600"}`}
+                />
+              }
+              startContent={
+                <Users
+                  weight="bold"
+                  size={20}
+                  className={`${membersActive.title ? membersActive.title : "text-gray-600"}`}
+                />
+              }
+              className="grid gap-1"
+            >
+              <ButtonSidebar
+                label="Daftar Member"
+                path="/owner/members/lists"
+                icon={<Circle weight="fill" size={6} />}
+                className="mx-4"
+              />
 
-                      <ButtonSidebar
-                        label="Level Member"
-                        path="/owner/members/levels"
-                        icon={<Circle weight="fill" size={6} />}
-                        className="mx-4"
-                        isDev={true}
-                      />
-                    </AccordionItem>
-                  </Accordion> */}
+              <ButtonSidebar
+                label="Level Member"
+                path="/owner/members/levels"
+                icon={<Circle weight="fill" size={6} />}
+                className="mx-4"
+              />
+            </AccordionItem>
+          </Accordion>
 
           <Accordion
             isCompact
@@ -429,7 +428,7 @@ export default function SidebarMenuOwner({
           <ButtonSidebar
             label="Pengguna"
             path="/owner/users"
-            icon={<Users weight="bold" size={20} />}
+            icon={<User weight="bold" size={20} />}
           />
 
           <ButtonSidebar

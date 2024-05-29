@@ -1,34 +1,72 @@
-import {
-  Button,
-  Pagination,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from "@nextui-org/react";
-import { useRouter } from "next/router";
+import { Button } from "@nextui-org/react";
 
 // components
 import InputSearchBar from "@/components/input/InputSearchBar";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
-import {
-  columnsMembersLevels,
-  renderCellMembersLevels,
-} from "@/headers/owner/members/levels";
 
-// utils
-import usePagination from "@/hooks/usepagination";
-import { customStyleTable } from "@/utils/customStyleTable";
+import LoadingScreen from "@/components/LoadingScreen";
+import LevelsTable from "@/components/tables/LevelsTable";
+import { GlobalResponse } from "@/types/global.type";
+import { LevelType } from "@/types/members";
+import { fetcher } from "@/utils/fetcher";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { useState } from "react";
+import useSWR from "swr";
 
-import { memberLevels } from "@/_dummy/members";
+export const getServerSideProps = (async () => {
+  const level: GlobalResponse<LevelType[]> = await fetcher({
+    url: "/level",
+    method: "GET",
+  });
 
-export default function MembersLevelsPage() {
-  const { page, pages, data, setPage } = usePagination(memberLevels, 10);
-  const router = useRouter();
+  return {
+    props: {
+      level,
+    },
+  };
+}) satisfies GetServerSideProps<{ level: GlobalResponse<LevelType[]> }>;
 
+export default function LevelsPage(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>,
+) {
+  const [search, setSearch] = useState("");
+  const swr = useSWR<GlobalResponse<LevelType[]>>(
+    {
+      url: "/level",
+      method: "GET",
+    },
+    fetcher,
+    {
+      fallbackData: props.level,
+    },
+  );
+
+  if (swr.isLoading) {
+    return <LoadingScreen role="owner" />;
+  }
+
+  if (swr.error) {
+    console.log(swr.error);
+  }
+
+  const filter = swr.data?.data.filter((item) => {
+    return (
+      item.id_level.toLowerCase().includes(search.toLowerCase()) ||
+      item.nama.toLowerCase().includes(search.toLowerCase())
+    );
+  });
+
+  return <SubComponentLevelsPage {...{ level: filter, setSearch }} />;
+}
+
+function SubComponentLevelsPage({
+  level,
+  setSearch,
+}: {
+  level: LevelType[] | undefined;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
+}) {
   return (
     <Layout title="Level Member">
       <Container className="gap-8">
@@ -37,8 +75,9 @@ export default function MembersLevelsPage() {
         <div className="grid gap-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <InputSearchBar
-              placeholder="Cari level..."
+              placeholder="Cari ID Level atau Nama"
               className="w-full sm:max-w-[500px]"
+              onChange={(e) => setSearch(e.target.value)}
             />
 
             <Button
@@ -50,42 +89,7 @@ export default function MembersLevelsPage() {
             </Button>
           </div>
 
-          <Table
-            isHeaderSticky
-            aria-label="members level table"
-            color="primary"
-            selectionMode="single"
-            classNames={customStyleTable}
-            className="scrollbar-hide"
-          >
-            <TableHeader columns={columnsMembersLevels}>
-              {(column) => (
-                <TableColumn key={column.uid}>{column.name}</TableColumn>
-              )}
-            </TableHeader>
-
-            <TableBody items={data}>
-              {(member) => (
-                <TableRow key={member.id}>
-                  {(columnKey) => (
-                    <TableCell>
-                      {renderCellMembersLevels(member, columnKey, router)}
-                    </TableCell>
-                  )}
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-
-          <Pagination
-            isCompact
-            showControls
-            color="primary"
-            page={page}
-            total={pages}
-            onChange={setPage}
-            className="justify-self-center"
-          />
+          <LevelsTable level={level} role="owner" />
         </div>
       </Container>
     </Layout>
