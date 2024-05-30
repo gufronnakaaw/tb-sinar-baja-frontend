@@ -4,6 +4,7 @@ import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import NextNProgress from "nextjs-progressbar";
+import { Toaster } from "react-hot-toast";
 
 export default function App({
   Component,
@@ -36,6 +37,7 @@ export default function App({
     <NextUIProvider>
       <NextNProgress color={setColor()} />
       <SessionProvider session={session} refetchOnWindowFocus={false}>
+        <Toaster />
         <Component {...pageProps} />
       </SessionProvider>
     </NextUIProvider>
