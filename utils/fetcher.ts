@@ -14,7 +14,7 @@ export async function fetcher({
   token,
 }: FetcherParams) {
   const options = {
-    url: "http://api.sinarbajakediri.my.id/api" + url,
+    url: "http://sinarbajakediri.my.id:3434/api" + url,
     method,
   };
 
