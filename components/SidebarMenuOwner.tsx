@@ -351,12 +351,12 @@ export default function SidebarMenuOwner({
               }
               className="grid gap-1"
             >
-              <ButtonSidebar
+              {/* <ButtonSidebar
                 label="Daftar Member"
                 path="/owner/members/lists"
                 icon={<Circle weight="fill" size={6} />}
                 className="mx-4"
-              />
+              /> */}
 
               <ButtonSidebar
                 label="Level Member"

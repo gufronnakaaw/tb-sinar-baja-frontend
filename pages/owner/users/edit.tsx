@@ -81,41 +81,22 @@ export default function EditUser({
         </ButtonBack>
 
         <div className="grid gap-6">
-          <div className="grid grid-cols-2 gap-4">
-            <Input
-              isRequired
-              variant="flat"
-              color="default"
-              label="Username"
-              labelPlacement="outside"
-              name="username"
-              placeholder="Masukan username"
-              defaultValue={pengguna?.username}
-              onChange={(e) => {
-                setInput({
-                  ...input,
-                  [e.target.name]: e.target.value,
-                });
-              }}
-            />
-
-            <Input
-              isRequired
-              variant="flat"
-              color="default"
-              label="Nama"
-              labelPlacement="outside"
-              name="nama"
-              placeholder="Masukan nama"
-              defaultValue={pengguna?.nama}
-              onChange={(e) => {
-                setInput({
-                  ...input,
-                  [e.target.name]: e.target.value,
-                });
-              }}
-            />
-          </div>
+          <Input
+            isRequired
+            variant="flat"
+            color="default"
+            label="Nama"
+            labelPlacement="outside"
+            name="nama"
+            placeholder="Masukan nama"
+            defaultValue={pengguna?.nama}
+            onChange={(e) => {
+              setInput({
+                ...input,
+                [e.target.name]: e.target.value,
+              });
+            }}
+          />
 
           <div className="grid grid-cols-2 gap-4">
             <Input

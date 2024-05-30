@@ -1,4 +1,14 @@
-import { Button } from "@nextui-org/react";
+import {
+  Button,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Spinner,
+  useDisclosure,
+} from "@nextui-org/react";
 
 // components
 import InputSearchBar from "@/components/input/InputSearchBar";
@@ -12,7 +22,7 @@ import { LevelType } from "@/types/members";
 import { fetcher } from "@/utils/fetcher";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useState } from "react";
-import useSWR from "swr";
+import useSWR, { KeyedMutator } from "swr";
 
 export const getServerSideProps = (async () => {
   const level: GlobalResponse<LevelType[]> = await fetcher({
@@ -57,16 +67,74 @@ export default function LevelsPage(
     );
   });
 
-  return <SubComponentLevelsPage {...{ level: filter, setSearch }} />;
+  return (
+    <SubComponentLevelsPage
+      {...{ level: filter, setSearch, mutate: swr.mutate }}
+    />
+  );
 }
 
 function SubComponentLevelsPage({
   level,
   setSearch,
+  mutate,
 }: {
   level: LevelType[] | undefined;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
+  mutate: KeyedMutator<any>;
 }) {
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+
+  const [nama, setNama] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function handleCreateLevel() {
+    setLoading(true);
+    if (!nama) {
+      setLoading(false);
+      return alert("Nama tidak boleh kosong");
+    }
+
+    try {
+      await fetcher({
+        url: "/level",
+        method: "POST",
+        data: {
+          nama,
+        },
+      });
+      alert("level berhasil dibuat");
+      mutate();
+
+      setNama("");
+      setLoading(false);
+      onClose();
+    } catch (error) {
+      setLoading(false);
+      setNama("");
+      onClose();
+
+      const response = error as {
+        success: boolean;
+        status_code: number;
+        error: { name: string; message: string };
+      };
+
+      if (response.status_code >= 500) {
+        console.log(response.error);
+        return alert("terjadi masalah pada server");
+      }
+
+      if (response.status_code >= 400) {
+        console.log(response.error);
+        return alert(response.error.message);
+      }
+
+      console.log(response.error);
+      return alert("terjadi error tidak diketahui pada aplikasi");
+    }
+  }
+
   return (
     <Layout title="Level Member">
       <Container className="gap-8">
@@ -84,12 +152,83 @@ function SubComponentLevelsPage({
               variant="solid"
               color="primary"
               className="w-full font-medium sm:w-max"
+              onClick={onOpen}
             >
               Tambah Level
             </Button>
+
+            <Modal
+              isOpen={isOpen}
+              onOpenChange={onOpenChange}
+              isDismissable={false}
+              isKeyboardDismissDisabled={true}
+              size="lg"
+              onClose={() => {
+                setNama("");
+                setLoading(false);
+              }}
+            >
+              <ModalContent>
+                {(onClose) => (
+                  <>
+                    <ModalHeader className="font-semibold text-default-900">
+                      Buat Level
+                    </ModalHeader>
+
+                    <ModalBody>
+                      <div className="grid gap-6">
+                        <Input
+                          variant="flat"
+                          color="default"
+                          label="Nama Level"
+                          labelPlacement="outside"
+                          placeholder="Masukan nama level..."
+                          onChange={(e) => setNama(e.target.value)}
+                        />
+                      </div>
+                    </ModalBody>
+
+                    <ModalFooter>
+                      <Button
+                        color="danger"
+                        variant="light"
+                        onPress={() => {
+                          setNama("");
+                          setLoading(false);
+                          onClose();
+                        }}
+                        className="font-medium"
+                      >
+                        Batal
+                      </Button>
+
+                      {loading ? (
+                        <Button
+                          variant="solid"
+                          color="primary"
+                          startContent={<Spinner color="white" size="sm" />}
+                          className={`${loading ? "cursor-not-allowed justify-self-end font-medium" : ""}`}
+                        >
+                          Tunggu
+                        </Button>
+                      ) : (
+                        <Button
+                          color="primary"
+                          variant="solid"
+                          onClick={handleCreateLevel}
+                          className="font-medium"
+                        >
+                          Buat
+                        </Button>
+                      )}
+                    </ModalFooter>
+                  </>
+                )}
+              </ModalContent>
+            </Modal>
           </div>
 
-          <LevelsTable level={level} role="owner" />
+          <LevelsTable level={level} role="owner" mutate={mutate} />
         </div>
       </Container>
     </Layout>
