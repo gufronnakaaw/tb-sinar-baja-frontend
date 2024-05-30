@@ -1,3 +1,4 @@
+import { ZodError } from "@/types/zod.error";
 import { fetcher } from "@/utils/fetcher";
 import {
   Button,
@@ -30,9 +31,14 @@ export default function PopupImportProducts({
 }: {
   mutate: KeyedMutator<any>;
 }) {
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const uploadDisclosure = useDisclosure();
+  const errorDisclosure = useDisclosure();
+
   const [file, setFile] = useState<File | null>(null);
-  const [sheet, setSheet] = useState("");
+  const [sheet, setSheet] = useState("Pricelist");
+  const [errors, setErrors] = useState<
+    { baris: number; kolom: string; pesan: string }[] | null
+  >([]);
   const [loading, setLoading] = useState(false);
 
   async function handleCreateProduk() {
@@ -106,19 +112,65 @@ export default function PopupImportProducts({
       });
 
       alert(`${results.length} data berhasil diunggah ke database`);
-      setLoading(false);
       mutate();
-      onClose();
+
+      setLoading(false);
+      setFile(null);
+      setSheet("Pricelist");
+      uploadDisclosure.onClose();
     } catch (error) {
       setLoading(false);
+      setFile(null);
+      setSheet("Pricelist");
+      uploadDisclosure.onClose();
+
       const response = error as ErrorResponse;
 
       if (response.status_code >= 500) {
+        if (response.error.name == "PrismaClientKnownRequestError") {
+          const prisma = response.error as {
+            name: string;
+            message: string;
+            errors: {
+              code: string;
+              meta?: string[];
+              stack: string;
+            };
+          };
+
+          console.log(error);
+
+          if (prisma.errors.code == "P2002") {
+            return alert(`kode ${prisma.errors.code}. ada kolom yang duplikat`);
+          }
+
+          if (prisma.errors.code == "P2003") {
+            return alert(
+              `kode ${prisma.errors.code}. periksa kode gudang/subkategori id karena kode gudang/subkategori id tidak ada dalam database`,
+            );
+          }
+        }
+
         console.log(error);
         return alert("kode error 500. terjadi masalah pada server");
       }
 
       if (response.status_code >= 400) {
+        if (response.error.name == "ZodError") {
+          const zod = response.error as ZodError;
+
+          const mapping = zod.errors.map((item) => {
+            return {
+              baris: item.field[1] + 2,
+              kolom: item.field[2],
+              pesan: item.message,
+            };
+          });
+
+          setErrors(mapping);
+          return errorDisclosure.onOpen();
+        }
+
         console.log(error);
         return alert(
           `kode error ${response.status_code}. terjadi kesalahan saat input data. periksa kembali file excel anda.`,
@@ -133,7 +185,7 @@ export default function PopupImportProducts({
   return (
     <>
       <Button
-        onPress={onOpen}
+        onPress={uploadDisclosure.onOpen}
         variant="solid"
         color="primary"
         className="w-full font-medium sm:w-max"
@@ -142,13 +194,15 @@ export default function PopupImportProducts({
       </Button>
 
       <Modal
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
+        isOpen={uploadDisclosure.isOpen}
+        onOpenChange={uploadDisclosure.onOpenChange}
         isDismissable={false}
         isKeyboardDismissDisabled={true}
         size="lg"
         onClose={() => {
           setLoading(false);
+          setFile(null);
+          setSheet("Pricelist");
         }}
       >
         <ModalContent>
@@ -161,10 +215,9 @@ export default function PopupImportProducts({
               <ModalBody>
                 <div className="grid gap-6">
                   <Input
-                    isRequired
                     variant="flat"
                     color="default"
-                    label="Nama Sheet"
+                    label="Nama Sheet (Default Pricelist)"
                     labelPlacement="outside"
                     placeholder="Masukan nama sheet..."
                     onChange={(e) => setSheet(e.target.value)}
@@ -194,6 +247,8 @@ export default function PopupImportProducts({
                   variant="light"
                   onPress={() => {
                     setLoading(false);
+                    setFile(null);
+                    setSheet("Pricelist");
                     onClose();
                   }}
                   className="font-medium"
@@ -222,6 +277,56 @@ export default function PopupImportProducts({
                   </Button>
                 )}
               </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+      <Modal
+        isOpen={errorDisclosure.isOpen}
+        onOpenChange={errorDisclosure.onOpenChange}
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        size="lg"
+        onClose={() => {
+          setErrors(null);
+        }}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="font-semibold text-default-900">
+                Rincian Error
+              </ModalHeader>
+
+              <ModalBody>
+                <div className="grid gap-6">
+                  <table>
+                    <thead>
+                      <th>Baris</th>
+                      <th>Kolom</th>
+                      <th>Pesan</th>
+                    </thead>
+                    <tbody>
+                      {errors?.map((error, index) => {
+                        return (
+                          <tr key={index}>
+                            <td>{error.baris}</td>
+                            <td>
+                              <p className="capitalize">
+                                {error.kolom.split("_").join(" ")}
+                              </p>
+                            </td>
+                            <td>{error.pesan}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </ModalBody>
+
+              <ModalFooter></ModalFooter>
             </>
           )}
         </ModalContent>

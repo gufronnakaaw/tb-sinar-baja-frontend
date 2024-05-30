@@ -1,5 +1,5 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useSWR, { KeyedMutator } from "swr";
 
 // components
@@ -12,8 +12,10 @@ import Layout from "@/components/wrapper/DashboardLayout";
 // utils
 import ProductListsTable from "@/components/tables/ProductListsTable";
 import { GlobalResponse } from "@/types/global.type";
-import { ProdukType } from "@/types/products.type";
+import { ProdukKategoriType, ProdukType } from "@/types/products.type";
 import { fetcher } from "@/utils/fetcher";
+import { Select, SelectItem } from "@nextui-org/react";
+import * as xlsx from "xlsx";
 
 type ProdukLists = {
   produk: ProdukType[];
@@ -78,6 +80,63 @@ function SubComponentProductsListsPage({
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   mutate: KeyedMutator<any>;
 }) {
+  const [kategori, setKategori] = useState<ProdukKategoriType[]>([]);
+
+  useEffect(() => {
+    getKategori();
+
+    async function getKategori() {
+      try {
+        const kategori: GlobalResponse<ProdukKategoriType[]> = await fetcher({
+          url: "/kategori",
+          method: "GET",
+        });
+
+        setKategori(kategori.data);
+      } catch (error) {
+        alert("terjadi kesalahan saat mendapatkan kategori");
+      }
+    }
+  }, []);
+
+  async function handleExport(kategori: ProdukKategoriType | undefined) {
+    try {
+      const produk: GlobalResponse<ProdukType[]> = await fetcher({
+        url: "/produk/export?id_kategori=" + kategori?.id_kategori,
+        method: "GET",
+      });
+
+      const mapping = [];
+
+      for (const item of produk.data) {
+        const mappingObject = {};
+        for (const key in item) {
+          Object.assign(mappingObject, {
+            [key.split("_").join(" ").toUpperCase()]:
+              item[key as keyof ProdukType],
+          });
+        }
+
+        mapping.push(mappingObject);
+      }
+
+      const workbook = xlsx.utils.book_new();
+      const worksheet = xlsx.utils.json_to_sheet(mapping);
+
+      xlsx.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        `${kategori?.id_kategori}_${kategori?.nama}`,
+      );
+      xlsx.writeFile(
+        workbook,
+        !kategori?.nama ? "Produk.xlsx" : `${kategori.nama}.xlsx`,
+      );
+    } catch (error) {
+      alert("terjadi kesalahan pada saat export produk");
+    }
+  }
+
   return (
     <Layout title="Daftar Produk">
       <Container className="gap-8">
@@ -93,7 +152,31 @@ function SubComponentProductsListsPage({
               onChange={(e) => setSearch(e.target.value)}
             />
 
-            <PopupImportProducts {...{ mutate }} />
+            <div className="grid grid-cols-2 items-center gap-2">
+              <PopupImportProducts {...{ mutate }} />
+
+              <Select
+                label="Export Produk"
+                size="sm"
+                onChange={(e) => {
+                  if (!e.target.value) return;
+
+                  handleExport(
+                    kategori.find(
+                      (element) =>
+                        parseInt(element.id_kategori) ==
+                        parseInt(e.target.value),
+                    ),
+                  );
+                }}
+              >
+                {kategori.map((item) => (
+                  <SelectItem key={item.id_kategori} value={item.id_kategori}>
+                    {item.nama}
+                  </SelectItem>
+                ))}
+              </Select>
+            </div>
           </div>
 
           <ProductListsTable produk={produk} role="owner" />
