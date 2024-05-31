@@ -1,3 +1,4 @@
+import { ProdukType } from "@/types/products.type";
 import { ZodError } from "@/types/zod.error";
 import { fetcher } from "@/utils/fetcher";
 import {
@@ -100,6 +101,37 @@ export default function PopupImportProducts({
       }
 
       results.push(defaultObj);
+    }
+
+    const seen = new Set();
+    const duplicateIndexes: number[] = [];
+
+    results.forEach((result, index) => {
+      const produk = result as ProdukType;
+      if (seen.has(produk.kode_item)) {
+        duplicateIndexes.push(index);
+      } else {
+        seen.add(produk.kode_item);
+      }
+    });
+
+    if (duplicateIndexes.length != 0) {
+      setLoading(false);
+      setFile(null);
+      setSheet("Pricelist");
+      uploadDisclosure.onClose();
+
+      setErrors(
+        duplicateIndexes.map((element) => {
+          return {
+            baris: element + 2,
+            kolom: "-",
+            pesan: "Duplikat",
+          };
+        }),
+      );
+
+      return errorDisclosure.onOpen();
     }
 
     try {
@@ -215,9 +247,10 @@ export default function PopupImportProducts({
               <ModalBody>
                 <div className="grid gap-6">
                   <Input
+                    defaultValue={sheet}
                     variant="flat"
                     color="default"
-                    label="Nama Sheet (Default Pricelist)"
+                    label="Nama Sheet"
                     labelPlacement="outside"
                     placeholder="Masukan nama sheet..."
                     onChange={(e) => setSheet(e.target.value)}
@@ -311,13 +344,17 @@ export default function PopupImportProducts({
                       {errors?.map((error, index) => {
                         return (
                           <tr key={index}>
-                            <td>{error.baris}</td>
                             <td>
-                              <p className="capitalize">
+                              <p className="text-center">{error.baris}</p>
+                            </td>
+                            <td>
+                              <p className="text-center capitalize">
                                 {error.kolom.split("_").join(" ")}
                               </p>
                             </td>
-                            <td>{error.pesan}</td>
+                            <td>
+                              <p className="text-center">{error.pesan}</p>
+                            </td>
                           </tr>
                         );
                       })}
