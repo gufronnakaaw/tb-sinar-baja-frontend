@@ -3,6 +3,7 @@ import {
   ArchiveBox,
   CaretRight,
   Circle,
+  ClockClockwise,
   ClockCounterClockwise,
   House,
   Package,
@@ -30,7 +31,16 @@ export default function SidebarMenuOwner({
   itemClasses,
 }: SidebarMenuOwnerProps) {
   const router = useRouter();
+  
   const [invoicesActive, setInvoicesActive] = useState<{
+    trigger: string;
+    title: string;
+  }>({
+    trigger: "",
+    title: "",
+  });
+
+  const [preordersActive, setPreordersActive] = useState<{
     trigger: string;
     title: string;
   }>({
@@ -77,6 +87,17 @@ export default function SidebarMenuOwner({
       const trigger = "bg-primary data-[hover=true]:bg-primary/90";
       const title = "text-white";
 
+      if (
+        (router.pathname.startsWith("/owner/preorders") &&
+          router.pathname.includes("/owner/preorders/offers")) ||
+        router.pathname.includes("/owner/preorders/finals")
+      ) {
+        setPreordersActive({
+          trigger,
+          title,
+        });
+      }
+      
       if (
         (router.pathname.startsWith("/owner/invoices") &&
           router.pathname.includes("/owner/invoices/in")) ||
@@ -151,17 +172,58 @@ export default function SidebarMenuOwner({
         </span>
 
         <div className="mt-1 grid gap-1">
-          {/* <ButtonSidebar
-                    label="Pre Order"
-                    path="/owner/preorders"
-                    icon={<ClockClockwise weight="bold" size={20} />}
-                  /> */}
+          <Accordion
+            isCompact
+            itemClasses={{
+              ...itemClasses,
+              trigger: `${itemClasses.trigger} ${preordersActive.trigger}`,
+              title: `${itemClasses.title} ${preordersActive.title}`,
+            }}
+            className="p-0"
+          >
+            <AccordionItem
+              aria-label="button"
+              title="Preorder"
+              indicator={
+                <CaretRight
+                  weight="bold"
+                  size={16}
+                  className={`${preordersActive.title ? preordersActive.title : "text-gray-600"}`}
+                />
+              }
+              startContent={
+                <ClockClockwise
+                  weight="bold"
+                  size={20}
+                  className={`${preordersActive.title ? preordersActive.title : "text-gray-600"}`}
+                />
+              }
+              className="grid gap-1"
+            >
+              <ButtonSidebar
+                label="Penawaran"
+                path="/owner/preorders/offers"
+                icon={<Circle weight="fill" size={6} />}
+                className="mx-4"
+                isDev={true}
+              />
+
+              <ButtonSidebar
+                label="Final"
+                path="/owner/preorders/finals"
+                icon={<Circle weight="fill" size={6} />}
+                className="mx-4"
+                isDev={true}
+              />
+            </AccordionItem>
+          </Accordion>
 
           {/* <ButtonSidebar
-                    label="Order"
-                    path="/owner/orders"
-                    icon={<ClipboardText weight="bold" size={20} />}
-                  /> */}
+                    label="Pembayaran"
+                    path="/owner/payments"
+                    icon={<Wallet weight="bold" size={20} />}
+                    isDev={true}
+                  />
 
           {/* <Accordion
                     isCompact
@@ -351,12 +413,12 @@ export default function SidebarMenuOwner({
               }
               className="grid gap-1"
             >
-              {/* <ButtonSidebar
+              <ButtonSidebar
                 label="Daftar Member"
                 path="/owner/members/lists"
                 icon={<Circle weight="fill" size={6} />}
                 className="mx-4"
-              /> */}
+              />
 
               <ButtonSidebar
                 label="Level Member"
