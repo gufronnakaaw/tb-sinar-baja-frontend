@@ -8,42 +8,15 @@ import LoadingScreen from "@/components/LoadingScreen";
 import HistoriesTable from "@/components/tables/HistoriesTable";
 import { GlobalResponse } from "@/types/global.type";
 import { TransaksiType } from "@/types/transactions.type";
-import { fetcher } from "@/utils/fetcher";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useState } from "react";
 import useSWR from "swr";
 
-// main function
-export const getServerSideProps = (async () => {
-  const result = await fetcher({
+export default function OwnerHistoriesPage() {
+  const [search, setSearch] = useState("");
+  const swr = useSWR<GlobalResponse<TransaksiType[]>>({
     url: "/transaksi",
     method: "GET",
   });
-
-  const transaksi: GlobalResponse<TransaksiType[]> = result;
-
-  return {
-    props: {
-      transaksi,
-    },
-  };
-}) satisfies GetServerSideProps<{ transaksi: GlobalResponse<TransaksiType[]> }>;
-
-export default function OwnerHistoriesPage(
-  props: InferGetServerSidePropsType<typeof getServerSideProps>,
-) {
-  const [search, setSearch] = useState("");
-  const swr = useSWR<GlobalResponse<TransaksiType[]>>(
-    {
-      url: "/transaksi",
-      method: "GET",
-    },
-    fetcher,
-    {
-      fallbackData: props.transaksi,
-      refreshInterval: 15000,
-    },
-  );
 
   if (swr.isLoading) {
     return <LoadingScreen role="owner" />;

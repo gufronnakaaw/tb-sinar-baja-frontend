@@ -9,7 +9,6 @@ import {
   Spinner,
   useDisclosure,
 } from "@nextui-org/react";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import React, { useState } from "react";
 import useSWR, { KeyedMutator } from "swr";
 
@@ -25,36 +24,12 @@ import { GlobalResponse } from "@/types/global.type";
 import { ProdukKategoriType } from "@/types/products.type";
 import { fetcher } from "@/utils/fetcher";
 
-export const getServerSideProps = (async () => {
-  const kategori: GlobalResponse<ProdukKategoriType[]> = await fetcher({
+export default function OwnerProductsCategoriesPage() {
+  const [search, setSearch] = useState("");
+  const swr = useSWR<GlobalResponse<ProdukKategoriType[]>>({
     url: "/kategori",
     method: "GET",
   });
-
-  return {
-    props: {
-      kategori,
-    },
-  };
-}) satisfies GetServerSideProps<{
-  kategori: GlobalResponse<ProdukKategoriType[]>;
-}>;
-
-export default function OwnerProductsCategoriesPage(
-  props: InferGetServerSidePropsType<typeof getServerSideProps>,
-) {
-  const [search, setSearch] = useState("");
-  const swr = useSWR<GlobalResponse<ProdukKategoriType[]>>(
-    {
-      url: "/kategori",
-      method: "GET",
-    },
-    fetcher,
-    {
-      fallbackData: props.kategori,
-      refreshInterval: 15000,
-    },
-  );
 
   if (swr.isLoading) {
     return <LoadingScreen role="owner" />;

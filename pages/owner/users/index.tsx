@@ -11,7 +11,6 @@ import {
   Spinner,
   useDisclosure,
 } from "@nextui-org/react";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useState } from "react";
 import useSWR, { KeyedMutator } from "swr";
 
@@ -27,33 +26,12 @@ import { GlobalResponse } from "@/types/global.type";
 import { PenggunaType } from "@/types/users.type";
 import { fetcher } from "@/utils/fetcher";
 
-export const getServerSideProps = (async () => {
-  const pengguna: GlobalResponse<PenggunaType[]> = await fetcher({
+export default function UsersPage() {
+  const [search, setSearch] = useState("");
+  const swr = useSWR<GlobalResponse<PenggunaType[]>>({
     url: "/pengguna",
     method: "GET",
   });
-
-  return {
-    props: {
-      pengguna,
-    },
-  };
-}) satisfies GetServerSideProps<{ pengguna: GlobalResponse<PenggunaType[]> }>;
-
-export default function UsersPage(
-  props: InferGetServerSidePropsType<typeof getServerSideProps>,
-) {
-  const [search, setSearch] = useState("");
-  const swr = useSWR<GlobalResponse<PenggunaType[]>>(
-    {
-      url: "/pengguna",
-      method: "GET",
-    },
-    fetcher,
-    {
-      fallbackData: props.pengguna,
-    },
-  );
 
   if (swr.isLoading) {
     return <LoadingScreen role="owner" />;

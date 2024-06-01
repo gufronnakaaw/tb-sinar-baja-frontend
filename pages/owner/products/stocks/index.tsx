@@ -1,4 +1,3 @@
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useState } from "react";
 import useSWR from "swr";
 
@@ -12,39 +11,18 @@ import Layout from "@/components/wrapper/DashboardLayout";
 import ProductStocksTable from "@/components/tables/ProductStocksTable";
 import { GlobalResponse } from "@/types/global.type";
 import { ProdukType } from "@/types/products.type";
-import { fetcher } from "@/utils/fetcher";
 
 type ProdukLists = {
   produk: ProdukType[];
 };
 
-export const getServerSideProps = (async () => {
-  const produk: GlobalResponse<ProdukLists> = await fetcher({
-    url: "/produk",
-    method: "GET",
-  });
-  return {
-    props: {
-      produk,
-    },
-  };
-}) satisfies GetServerSideProps<{ produk: GlobalResponse<ProdukLists> }>;
-
-export default function OwnerProductsStocksPage(
-  props: InferGetServerSidePropsType<typeof getServerSideProps>,
-) {
+export default function OwnerProductsStocksPage() {
   const [search, setSearch] = useState("");
 
-  const swr = useSWR<GlobalResponse<ProdukLists>>(
-    {
-      url: `/produk?size=5000`,
-      method: "GET",
-    },
-    fetcher,
-    {
-      fallbackData: props.produk,
-    },
-  );
+  const swr = useSWR<GlobalResponse<ProdukLists>>({
+    url: `/produk?size=5000`,
+    method: "GET",
+  });
 
   if (swr.isLoading) {
     return <LoadingScreen role="owner" />;

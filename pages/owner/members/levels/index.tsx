@@ -20,37 +20,15 @@ import LevelsTable from "@/components/tables/LevelsTable";
 import { GlobalResponse } from "@/types/global.type";
 import { LevelType } from "@/types/members";
 import { fetcher } from "@/utils/fetcher";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useState } from "react";
 import useSWR, { KeyedMutator } from "swr";
 
-export const getServerSideProps = (async () => {
-  const level: GlobalResponse<LevelType[]> = await fetcher({
+export default function LevelsPage() {
+  const [search, setSearch] = useState("");
+  const swr = useSWR<GlobalResponse<LevelType[]>>({
     url: "/level",
     method: "GET",
   });
-
-  return {
-    props: {
-      level,
-    },
-  };
-}) satisfies GetServerSideProps<{ level: GlobalResponse<LevelType[]> }>;
-
-export default function LevelsPage(
-  props: InferGetServerSidePropsType<typeof getServerSideProps>,
-) {
-  const [search, setSearch] = useState("");
-  const swr = useSWR<GlobalResponse<LevelType[]>>(
-    {
-      url: "/level",
-      method: "GET",
-    },
-    fetcher,
-    {
-      fallbackData: props.level,
-    },
-  );
 
   if (swr.isLoading) {
     return <LoadingScreen role="owner" />;

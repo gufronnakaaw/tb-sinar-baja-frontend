@@ -9,7 +9,6 @@ import {
   Spinner,
   useDisclosure,
 } from "@nextui-org/react";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import React, { useState } from "react";
 import useSWR, { KeyedMutator } from "swr";
 
@@ -25,21 +24,12 @@ import { GlobalResponse } from "@/types/global.type";
 import { WarehouseListType } from "@/types/warehouses.type";
 import { fetcher } from "@/utils/fetcher";
 
-export default function WarehousesListsPage(
-  props: InferGetServerSidePropsType<typeof getServerSideProps>,
-) {
+export default function WarehousesListsPage() {
   const [search, setSearch] = useState("");
-  const swr = useSWR<GlobalResponse<WarehouseListType[]>>(
-    {
-      url: "/gudang",
-      method: "GET",
-    },
-    fetcher,
-    {
-      fallbackData: props.gudang,
-      refreshInterval: 15000,
-    },
-  );
+  const swr = useSWR<GlobalResponse<WarehouseListType[]>>({
+    url: "/gudang",
+    method: "GET",
+  });
 
   if (swr.isLoading) {
     return <LoadingScreen role="owner" />;
@@ -224,20 +214,3 @@ function SubComponentWarehousesPage({
     </Layout>
   );
 }
-
-export const getServerSideProps = (async () => {
-  const result = await fetcher({
-    url: "/gudang",
-    method: "GET",
-  });
-
-  const gudang: GlobalResponse<WarehouseListType[]> = result;
-
-  return {
-    props: {
-      gudang,
-    },
-  };
-}) satisfies GetServerSideProps<{
-  gudang: GlobalResponse<WarehouseListType[]>;
-}>;

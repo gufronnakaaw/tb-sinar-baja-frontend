@@ -14,30 +14,18 @@ import LoadingScreen from "@/components/LoadingScreen";
 import StatusStock from "@/components/status/StatusStock";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
-import { DashboardType } from "@/types/dashboard.type";
-import { fetcher } from "@/utils/fetcher";
 import { formatRupiah } from "@/utils/formatRupiah";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import useSWR from "swr";
 
-export default function DashboardPage(
-  props: InferGetServerSidePropsType<typeof getServerSideProps>,
-) {
+export default function DashboardPage() {
   const {
     data: dashboard,
     error,
     isLoading,
-  } = useSWR(
-    {
-      url: "/dashboard",
-      method: "GET",
-    },
-    fetcher,
-    {
-      fallbackData: props.dashboard,
-      refreshInterval: 30 * 1000,
-    },
-  );
+  } = useSWR({
+    url: "/dashboard",
+    method: "GET",
+  });
 
   if (isLoading) {
     return <LoadingScreen role="owner" />;
@@ -226,18 +214,3 @@ export default function DashboardPage(
     </Layout>
   );
 }
-
-export const getServerSideProps = (async () => {
-  const result = await fetcher({
-    url: "/dashboard",
-    method: "GET",
-  });
-
-  const dashboard: DashboardType = result.data as DashboardType;
-
-  return {
-    props: {
-      dashboard,
-    },
-  };
-}) satisfies GetServerSideProps<{ dashboard: DashboardType }>;

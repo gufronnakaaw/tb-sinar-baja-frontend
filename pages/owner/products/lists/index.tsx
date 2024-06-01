@@ -1,4 +1,3 @@
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useEffect, useState } from "react";
 import useSWR, { KeyedMutator } from "swr";
 
@@ -21,33 +20,13 @@ type ProdukLists = {
   produk: ProdukType[];
 };
 
-export const getServerSideProps = (async () => {
-  const produk: GlobalResponse<ProdukLists> = await fetcher({
-    url: "/produk",
-    method: "GET",
-  });
-  return {
-    props: {
-      produk,
-    },
-  };
-}) satisfies GetServerSideProps<{ produk: GlobalResponse<ProdukLists> }>;
-
-export default function ProductsListsPage(
-  props: InferGetServerSidePropsType<typeof getServerSideProps>,
-) {
+export default function ProductsListsPage() {
   const [search, setSearch] = useState("");
 
-  const swr = useSWR<GlobalResponse<ProdukLists>>(
-    {
-      url: `/produk?size=5000`,
-      method: "GET",
-    },
-    fetcher,
-    {
-      fallbackData: props.produk,
-    },
-  );
+  const swr = useSWR<GlobalResponse<ProdukLists>>({
+    url: `/produk?size=5000`,
+    method: "GET",
+  });
 
   if (swr.isLoading) {
     return <LoadingScreen role="owner" />;

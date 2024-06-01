@@ -10,7 +10,6 @@ import {
   Textarea,
   useDisclosure,
 } from "@nextui-org/react";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useState } from "react";
 import useSWR, { KeyedMutator } from "swr";
 
@@ -26,35 +25,12 @@ import { GlobalResponse } from "@/types/global.type";
 import { SupplierType } from "@/types/suppliers.type";
 import { fetcher } from "@/utils/fetcher";
 
-export const getServerSideProps = (async () => {
-  const result = await fetcher({
+export default function SuppliersPage() {
+  const [search, setSearch] = useState("");
+  const swr = useSWR<GlobalResponse<SupplierType[]>>({
     url: "/supplier",
     method: "GET",
   });
-
-  const supplier: GlobalResponse<SupplierType[]> = result;
-
-  return {
-    props: {
-      supplier,
-    },
-  };
-}) satisfies GetServerSideProps<{ supplier: GlobalResponse<SupplierType[]> }>;
-
-export default function SuppliersPage(
-  props: InferGetServerSidePropsType<typeof getServerSideProps>,
-) {
-  const [search, setSearch] = useState("");
-  const swr = useSWR<GlobalResponse<SupplierType[]>>(
-    {
-      url: "/supplier",
-      method: "GET",
-    },
-    fetcher,
-    {
-      fallbackData: props.supplier,
-    },
-  );
 
   if (swr.isLoading) {
     return <LoadingScreen role="owner" />;

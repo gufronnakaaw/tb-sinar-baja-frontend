@@ -1,4 +1,3 @@
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import React, { useState } from "react";
 import useSWR, { mutate } from "swr";
 
@@ -12,23 +11,13 @@ import Layout from "@/components/wrapper/DashboardLayout";
 import WarehousesDocumentsTable from "@/components/tables/WarehousesDocumentsTable";
 import { GlobalResponse } from "@/types/global.type";
 import { WarehouseDocumentsType } from "@/types/warehouses.type";
-import { fetcher } from "@/utils/fetcher";
 
-export default function WarehousesDocumentsPage(
-  props: InferGetServerSidePropsType<typeof getServerSideProps>,
-) {
+export default function WarehousesDocumentsPage() {
   const [search, setSearch] = useState("");
-  const swr = useSWR<GlobalResponse<WarehouseDocumentsType[]>>(
-    {
-      url: "/suratjalan",
-      method: "GET",
-    },
-    fetcher,
-    {
-      fallbackData: props.documents,
-      refreshInterval: 15000,
-    },
-  );
+  const swr = useSWR<GlobalResponse<WarehouseDocumentsType[]>>({
+    url: "/suratjalan",
+    method: "GET",
+  });
 
   if (swr.isLoading) {
     return <LoadingScreen role="owner" />;
@@ -74,21 +63,3 @@ function SubComponentDocumentsPage({
     </Layout>
   );
 }
-
-export const getServerSideProps = (async () => {
-  const result = await fetcher({
-    url: "/suratjalan",
-    method: "GET",
-  });
-
-  const documents: GlobalResponse<WarehouseDocumentsType[]> =
-    result as GlobalResponse<WarehouseDocumentsType[]>;
-
-  return {
-    props: {
-      documents,
-    },
-  };
-}) satisfies GetServerSideProps<{
-  documents: GlobalResponse<WarehouseDocumentsType[]>;
-}>;
