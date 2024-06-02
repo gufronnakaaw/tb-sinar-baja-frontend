@@ -1,6 +1,7 @@
 import usePagination from "@/hooks/usepagination";
 import { MemberType } from "@/types/members";
 import { customStyleTable } from "@/utils/customStyleTable";
+import { fetcher } from "@/utils/fetcher";
 import { formatDate } from "@/utils/formatDate";
 import {
   Button,
@@ -14,14 +15,17 @@ import {
 } from "@nextui-org/react";
 import { Pencil, Trash } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
+import { KeyedMutator } from "swr";
 import CustomTooltip from "../tooltip";
 
 export default function MembersTable({
   member,
   role,
+  mutate,
 }: {
   member: MemberType[] | undefined;
   role: string;
+  mutate: KeyedMutator<any>;
 }) {
   const { page, pages, data, setPage } = usePagination(
     member ? member : [],
@@ -78,7 +82,7 @@ export default function MembersTable({
                 size="sm"
                 onClick={() =>
                   router.push(
-                    `/${role}/members/levels/edit?id_level=${member.id_member}`,
+                    `/${role}/members/lists/edit?id_member=${member.id_member}`,
                   )
                 }
               >
@@ -104,7 +108,21 @@ export default function MembersTable({
     }
   }
 
-  async function handleDeleteMember(id_member: string) {}
+  async function handleDeleteMember(id_member: string) {
+    if (!confirm("apakah anda yakin?")) return;
+
+    try {
+      await fetcher({
+        url: "/member/" + id_member,
+        method: "DELETE",
+      });
+
+      alert("berhasil hapus member");
+      mutate();
+    } catch (error) {
+      alert("terjadi kesalahan saat menghapus data");
+    }
+  }
 
   return (
     <>
