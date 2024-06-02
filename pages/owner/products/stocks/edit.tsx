@@ -14,10 +14,12 @@ export default function StockUpdate({
   kode_item,
   stok,
   stok_aman,
+  nama_produk,
 }: {
   kode_item: string;
   stok: string;
   stok_aman: string;
+  nama_produk: string;
 }) {
   const [stokSekarang, setStokSekarang] = useState("0");
   const [stokAmanSekarang, setStokAmanSekarang] = useState(stok_aman);
@@ -100,6 +102,13 @@ export default function StockUpdate({
             </h4>
 
             <div className="grid gap-[2px]">
+              <div className="grid grid-cols-[170px_10px_10fr]  gap-1 text-sm text-default-900">
+                <div className="text-sm font-medium text-default-600">
+                  Nama Produk
+                </div>
+                <div className="font-medium">:</div>
+                <p className="font-bold text-primary">{nama_produk}</p>
+              </div>
               <div className="grid grid-cols-[170px_10px_10fr]  gap-1 text-sm text-default-900">
                 <div className="text-sm font-medium text-default-600">
                   Stok Sekarang
@@ -185,13 +194,19 @@ export default function StockUpdate({
 export const getServerSideProps = ({
   query,
 }: {
-  query: { kode_item: string; stok: string; stok_aman: string };
+  query: {
+    kode_item: string;
+    stok: string;
+    stok_aman: string;
+    nama_produk: string;
+  };
 }) => {
   return {
     props: {
       kode_item: query?.kode_item,
       stok: query?.stok,
       stok_aman: query?.stok_aman,
+      nama_produk: query?.nama_produk,
     },
   };
 };

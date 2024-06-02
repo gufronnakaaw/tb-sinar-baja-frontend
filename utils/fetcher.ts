@@ -7,12 +7,7 @@ type FetcherParams = {
   token?: string;
 };
 
-export async function fetcher({
-  url,
-  method,
-  data,
-  token,
-}: FetcherParams) {
+export async function fetcher({ url, method, data, token }: FetcherParams) {
   const options = {
     url: "http://sinarbajakediri.my.id:3434/api" + url,
     method,
