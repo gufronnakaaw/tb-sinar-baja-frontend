@@ -34,6 +34,7 @@ export default function SuppliersPricelistsTable({
   const columnsSupplier = [
     { name: "ID Supplier", uid: "id_supplier" },
     { name: "Nama", uid: "nama" },
+    { name: "Keterangan", uid: "keterangan" },
     { name: "Aksi", uid: "action" },
   ];
 
@@ -48,6 +49,10 @@ export default function SuppliersPricelistsTable({
         return <div className="text-default-900">{supplier.id_supplier}</div>;
       case "nama":
         return <div className="w-max text-default-900">{supplier.nama}</div>;
+      case "keterangan":
+        return (
+          <div className="w-max text-default-900">{supplier.keterangan}</div>
+        );
       case "action":
         return (
           <div className="flex max-w-[110px] items-center gap-1">

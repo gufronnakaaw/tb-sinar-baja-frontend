@@ -25,7 +25,9 @@ import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 
 // utils
+import ProductTable from "@/components/tables/ProductTable";
 import { GlobalResponse } from "@/types/global.type";
+import { ProdukType } from "@/types/products.type";
 import { SupplierPricelistProdukType } from "@/types/suppliers.type";
 import { fetcher } from "@/utils/fetcher";
 
@@ -119,26 +121,21 @@ function SubComponentSuppliersPage({
   pricelist: SupplierPricelistProdukType[] | undefined;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   mutate: KeyedMutator<any>;
-  id_supplier?: string;
-  nama?: string;
+  id_supplier: any;
+  nama: any;
 }) {
   const router = useRouter();
   const [kategori, setKategori] = useState<KategoriType[]>([]);
-  const [subKategori, setSubKategori] = useState<SubKategoriType[]>([]);
   const [idKategori, setIdKategori] = useState("");
-  const [produk, setProduk] = useState<
-    { kode_item: string; nama_produk: string }[]
-  >([]);
-  const [idSubKategori, setIdSubKategori] = useState("");
-  const [kodeItem, setKodeItem] = useState("");
+  const [produk, setProduk] = useState<ProdukType[]>([]);
   const [harga, setHarga] = useState(0);
 
   const { onOpen, onOpenChange, onClose, isOpen } = useDisclosure();
   const [loading, setLoading] = useState(false);
+  const [loadingProduk, setLoadingProduk] = useState(false);
+  const [selection, setSelection] = useState(new Set([]));
 
   useEffect(() => {
-    getKategori();
-
     async function getKategori() {
       try {
         const response = await fetcher({
@@ -153,61 +150,43 @@ function SubComponentSuppliersPage({
         console.log(error);
       }
     }
+
+    getKategori();
   }, []);
 
   useEffect(() => {
     if (!idKategori) {
-      setSubKategori([]);
       setProduk([]);
+      setSelection(new Set([]));
     } else {
-      getSubKategori();
+      getProduk();
+      setSelection(new Set([]));
     }
 
-    async function getSubKategori() {
+    async function getProduk() {
+      setLoadingProduk(true);
+
       try {
-        const response = await fetcher({
-          url: "/kategori?id_kategori=" + idKategori,
+        const result: GlobalResponse<ProdukType[]> = await fetcher({
+          url: "/produk/export?id_kategori=" + idKategori,
           method: "GET",
         });
 
-        const result = response as GlobalResponse<{
-          subkategori: SubKategoriType[];
-        }>;
-        setSubKategori(result.data.subkategori);
+        setLoadingProduk(false);
+        setProduk(result.data);
       } catch (error) {
-        alert("terjadi kesalahan saat mendapatkan data kategori");
+        setLoadingProduk(false);
+        alert("terjadi kesalahan saat mendapatkan data produk");
         console.log(error);
       }
     }
   }, [idKategori]);
 
-  useEffect(() => {
-    if (!idSubKategori) {
-      setProduk([]);
-    } else {
-      getProduk();
-    }
-
-    async function getProduk() {
-      try {
-        const response = await fetcher({
-          url: "/produk?id_subkategori=" + idSubKategori,
-          method: "GET",
-        });
-
-        const result = response as GlobalResponse<
-          { kode_item: string; nama_produk: string }[]
-        >;
-
-        setProduk(result.data);
-      } catch (error) {
-        alert("terjadi kesalahan saat mendapatkan data kategori");
-        console.log(error);
-      }
-    }
-  }, [idSubKategori]);
-
   async function createPricelist() {
+    if (!selection.values().next().value) {
+      return alert("silahkan klik salah satu produk");
+    }
+
     setLoading(true);
     try {
       await fetcher({
@@ -216,18 +195,17 @@ function SubComponentSuppliersPage({
         data: {
           supplier_id: id_supplier,
           harga,
-          produk_id: kodeItem,
+          produk_id: selection.values().next().value,
         },
       });
 
       setLoading(false);
       alert("produk berhasil dibuat");
       onClose();
-      setSubKategori([]);
       setIdKategori("");
       setProduk([]);
-      setKodeItem("");
       setHarga(0);
+      setSelection(new Set([]));
       mutate();
     } catch (error) {
       setLoading(false);
@@ -285,13 +263,12 @@ function SubComponentSuppliersPage({
               onOpenChange={onOpenChange}
               isDismissable={false}
               isKeyboardDismissDisabled={true}
-              size="lg"
+              size="4xl"
               onClose={() => {
-                setSubKategori([]);
                 setIdKategori("");
                 setProduk([]);
-                setKodeItem("");
                 setHarga(0);
+                setSelection(new Set([]));
               }}
             >
               <ModalContent>
@@ -320,43 +297,12 @@ function SubComponentSuppliersPage({
                           ))}
                         </Select>
 
-                        <Select
-                          isRequired
-                          label="Sub Kategori"
-                          labelPlacement="outside"
-                          placeholder="Pilih Sub Kategori"
-                          onChange={(e) => setIdSubKategori(e.target.value)}
-                        >
-                          {subKategori.length != 0
-                            ? subKategori.map((item) => (
-                                <SelectItem
-                                  key={item.id_subkategori}
-                                  value={item.id_subkategori}
-                                >
-                                  {item.nama}
-                                </SelectItem>
-                              ))
-                            : []}
-                        </Select>
-
-                        <Select
-                          isRequired
-                          label="Produk"
-                          labelPlacement="outside"
-                          placeholder="Pilih Produk"
-                          onChange={(e) => setKodeItem(e.target.value)}
-                        >
-                          {produk.length != 0
-                            ? produk.map((item) => (
-                                <SelectItem
-                                  key={item.kode_item}
-                                  value={item.kode_item}
-                                >
-                                  {item.nama_produk}
-                                </SelectItem>
-                              ))
-                            : []}
-                        </Select>
+                        <ProductTable
+                          produk={produk}
+                          role="owner"
+                          isLoading={loadingProduk}
+                          selectionChange={setSelection}
+                        />
 
                         <Input
                           isRequired
@@ -377,12 +323,11 @@ function SubComponentSuppliersPage({
                         color="danger"
                         variant="light"
                         onPress={() => {
-                          setSubKategori([]);
                           setIdKategori("");
                           setProduk([]);
-                          setKodeItem("");
                           setHarga(0);
                           onClose();
+                          setSelection(new Set([]));
                         }}
                         className="font-medium"
                       >
