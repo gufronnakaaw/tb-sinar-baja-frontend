@@ -27,36 +27,15 @@ import Layout from "@/components/wrapper/DashboardLayout";
 // utils
 import ProductTable from "@/components/tables/ProductTable";
 import { GlobalResponse } from "@/types/global.type";
-import { ProdukType } from "@/types/products.type";
-import { SupplierPricelistProdukType } from "@/types/suppliers.type";
+import { ProdukKategoriType, ProdukType } from "@/types/products.type";
+import { PricelistType } from "@/types/suppliers.type";
 import { fetcher } from "@/utils/fetcher";
 
-type PricelistType = {
-  id_supplier: string;
-  nama: string;
-  produk: SupplierPricelistProdukType[];
-};
-
-type KategoriType = {
-  id_kategori: string;
-  nama: string;
-  created_at: string;
-  updated_at: string;
-};
-
-type SubKategoriType = {
-  id_subkategori: number;
-  nama: string;
-  created_at: string;
-};
-
 export const getServerSideProps = (async ({ query }) => {
-  const result = await fetcher({
+  const pricelist: GlobalResponse<PricelistType[]> = await fetcher({
     url: "/supplier/pricelist?id_supplier=" + query?.id_supplier,
     method: "GET",
   });
-
-  const pricelist: GlobalResponse<SupplierPricelistProdukType[]> = result;
 
   return {
     props: {
@@ -66,14 +45,14 @@ export const getServerSideProps = (async ({ query }) => {
     },
   };
 }) satisfies GetServerSideProps<{
-  pricelist: GlobalResponse<SupplierPricelistProdukType[]>;
+  pricelist: GlobalResponse<PricelistType[]>;
 }>;
 
 export default function PricelistPage(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
   const [search, setSearch] = useState("");
-  const swr = useSWR<GlobalResponse<SupplierPricelistProdukType[]>>(
+  const swr = useSWR<GlobalResponse<PricelistType[]>>(
     {
       url: "/supplier/pricelist?id_supplier=" + props?.id_supplier,
       method: "GET",
@@ -96,7 +75,7 @@ export default function PricelistPage(
   const filter = swr.data?.data.filter((item) => {
     return (
       item.kode_item.toLowerCase().includes(search.toLowerCase()) ||
-      item.nama.toLowerCase().includes(search.toLowerCase())
+      item.nama_produk.toLowerCase().includes(search.toLowerCase())
     );
   });
 
@@ -118,14 +97,14 @@ function SubComponentSuppliersPage({
   id_supplier,
   nama,
 }: {
-  pricelist: SupplierPricelistProdukType[] | undefined;
+  pricelist: PricelistType[] | undefined;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   mutate: KeyedMutator<any>;
   id_supplier: any;
   nama: any;
 }) {
   const router = useRouter();
-  const [kategori, setKategori] = useState<KategoriType[]>([]);
+  const [kategori, setKategori] = useState<ProdukKategoriType[]>([]);
   const [idKategori, setIdKategori] = useState("");
   const [produk, setProduk] = useState<ProdukType[]>([]);
   const [harga, setHarga] = useState(0);
@@ -143,7 +122,7 @@ function SubComponentSuppliersPage({
           method: "GET",
         });
 
-        const result = response as GlobalResponse<KategoriType[]>;
+        const result = response as GlobalResponse<ProdukKategoriType[]>;
         setKategori(result.data);
       } catch (error) {
         alert("terjadi kesalahan saat mendapatkan data kategori");

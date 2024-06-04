@@ -1,11 +1,3 @@
-export type SuppliersType = {
-  code: string;
-  name: string;
-  price: number;
-  product: string;
-  created_at: string;
-};
-
 export type SupplierType = {
   id_supplier: string;
   nama: string;
@@ -20,10 +12,18 @@ export type SupplierType = {
   created_at: string;
 };
 
-export type SupplierPricelistProdukType = {
-  nama: string;
+export type PricelistType = {
+  nama_produk: string;
   kode_item: string;
+  satuan_besar: any;
+  satuan_kecil: string;
+  isi_satuan_besar: any;
+  kode_pabrik: any;
+  merk: any;
+  nama_produk_asli: string;
+  nama_produk_sebutan: any;
   kategori: string;
   harga: number;
   created_at: string;
+  updated_at: string;
 };

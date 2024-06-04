@@ -24,3 +24,12 @@ export function formatDate(dateProp: string) {
 
   return `${day} ${months[month]} ${year} ${hours}:${minutes}`;
 }
+
+export function formatDateWithoutTime(dateProp: string) {
+  const date = new Date(dateProp);
+  const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+  const month = date.getMonth();
+  const year = date.getFullYear();
+
+  return `${day} ${months[month]} ${year}`;
+}

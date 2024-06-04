@@ -1,3 +1,5 @@
+import { PenawaranDetail, ProdukPenawaran } from "@/types/preorders.type";
+import { formatDateWithoutTime } from "@/utils/formatDate";
 import { formatRupiah } from "@/utils/formatRupiah";
 import {
   Table,
@@ -9,29 +11,7 @@ import {
 } from "@nextui-org/react";
 import React, { forwardRef } from "react";
 
-type TemplatePenawaran = {
-  no: number;
-  kode_pabrik: string;
-  nama_produk: string;
-  qty: number;
-  satuan: string;
-  harga: number;
-  jumlah: number;
-};
-
-const dummy: TemplatePenawaran[] = [
-  {
-    no: 1,
-    kode_pabrik: "TEST",
-    nama_produk: "Test Produk",
-    qty: 1,
-    satuan: "dus",
-    harga: 150000000,
-    jumlah: 150000000,
-  },
-];
-
-const Penawaran = (props: any, ref: any) => {
+const Penawaran = (props: PenawaranDetail, ref: any) => {
   const columns = [
     { name: "No", uid: "no" },
     { name: "Kode Pabrik", uid: "kode_pabrik" },
@@ -41,13 +21,17 @@ const Penawaran = (props: any, ref: any) => {
     { name: "Jumlah", uid: "jumlah" },
   ];
 
-  const renderCell = (item: TemplatePenawaran, columnKey: React.Key) => {
-    const cellValue = item[columnKey as keyof TemplatePenawaran];
+  const renderCell = (
+    index: number,
+    item: ProdukPenawaran,
+    columnKey: React.Key,
+  ) => {
+    const cellValue = item[columnKey as keyof ProdukPenawaran];
 
     switch (columnKey) {
       case "no":
         return (
-          <div className="text-[10px] font-medium text-black">{item.no}</div>
+          <div className="text-[10px] font-medium text-black">{index}</div>
         );
       case "kode_pabrik":
         return (
@@ -107,9 +91,11 @@ const Penawaran = (props: any, ref: any) => {
             </p>
             <div className="mt-2">
               <h5 className="text-[10px] font-medium text-black">Kepada</h5>
-              <h5 className="text-[10px] font-medium text-black">Yth. Sup 1</h5>
               <h5 className="text-[10px] font-medium text-black">
-                Texas, United State of America
+                Yth. {props.nama}
+              </h5>
+              <h5 className="text-[10px] font-medium text-black">
+                {props.alamat_kantor}
               </h5>
             </div>
           </div>
@@ -124,29 +110,31 @@ const Penawaran = (props: any, ref: any) => {
                   <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
                     <div className="font-medium">Nomor</div>
                     <div className="font-medium">:</div>
-                    <p className="font-medium">OFFER19012902901</p>
+                    <p className="font-medium">{props.id_penawaran}</p>
                   </div>
 
                   <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
                     <div className="font-medium">Tanggal</div>
                     <div className="font-medium">:</div>
-                    <p className="font-medium">23 Mei 2024</p>
+                    <p className="font-medium">
+                      {formatDateWithoutTime(props.created_at)}
+                    </p>
                   </div>
 
                   <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
                     <div className="font-medium">ID Supplier</div>
                     <div className="font-medium">:</div>
-                    <p className="font-medium">SUP-1</p>
+                    <p className="font-medium">{props.id_supplier}</p>
                   </div>
                   <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
                     <div className="font-medium">Email</div>
                     <div className="font-medium">:</div>
-                    <p className="font-medium">sup1@mail.com</p>
+                    <p className="font-medium">{props.email}</p>
                   </div>
                   <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
                     <div className="font-medium">No. Telpon</div>
                     <div className="font-medium">:</div>
-                    <p className="font-medium">081234345656</p>
+                    <p className="font-medium">{props.no_telp}</p>
                   </div>
                 </div>
               </div>
@@ -187,14 +175,18 @@ const Penawaran = (props: any, ref: any) => {
               )}
             </TableHeader>
 
-            <TableBody items={dummy}>
-              {(item) => (
-                <TableRow key={item.kode_pabrik}>
-                  {(columnKey) => (
-                    <TableCell>{renderCell(item, columnKey)}</TableCell>
-                  )}
-                </TableRow>
-              )}
+            <TableBody items={props.produk}>
+              {props.produk.map((item, index) => {
+                return (
+                  <TableRow key={item.kode_pabrik}>
+                    {(columnKey) => (
+                      <TableCell>
+                        {renderCell(index + 1, item, columnKey)}
+                      </TableCell>
+                    )}
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </div>

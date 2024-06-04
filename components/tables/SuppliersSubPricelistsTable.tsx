@@ -14,7 +14,7 @@ import { KeyedMutator } from "swr";
 
 import CustomTooltip from "@/components/tooltip";
 import usePagination from "@/hooks/usepagination";
-import { SupplierPricelistProdukType } from "@/types/suppliers.type";
+import { PricelistType } from "@/types/suppliers.type";
 import { customStyleTable } from "@/utils/customStyleTable";
 import { fetcher } from "@/utils/fetcher";
 import { formatRupiah } from "@/utils/formatRupiah";
@@ -24,7 +24,7 @@ export default function SuppliersSubPricelistsTable({
   id_supplier,
   mutate,
 }: {
-  pricelist: SupplierPricelistProdukType[] | undefined;
+  pricelist: PricelistType[] | undefined;
   id_supplier?: string;
   mutate: KeyedMutator<any>;
 }) {
@@ -37,22 +37,24 @@ export default function SuppliersSubPricelistsTable({
 
   const columnsSuppliersPricelists = [
     { name: "Kode Item", uid: "kode_item" },
-    { name: "Nama Produk", uid: "nama" },
+    { name: "Nama Produk", uid: "nama_produk" },
     { name: "Harga", uid: "harga" },
     { name: "Aksi", uid: "action" },
   ];
 
   function renderCellSuppliersPricelists(
-    produk: SupplierPricelistProdukType,
+    produk: PricelistType,
     columnKey: React.Key,
   ) {
-    const cellValue = produk[columnKey as keyof SupplierPricelistProdukType];
+    const cellValue = produk[columnKey as keyof PricelistType];
 
     switch (columnKey) {
       case "kode_item":
         return <div className="w-max text-default-900">{produk.kode_item}</div>;
-      case "nama":
-        return <div className="w-max text-default-900">{produk.nama}</div>;
+      case "nama_produk":
+        return (
+          <div className="w-max text-default-900">{produk.nama_produk}</div>
+        );
       case "harga":
         return (
           <div className="w-max text-default-900">

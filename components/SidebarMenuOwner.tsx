@@ -31,7 +31,7 @@ export default function SidebarMenuOwner({
   itemClasses,
 }: SidebarMenuOwnerProps) {
   const router = useRouter();
-  
+
   const [invoicesActive, setInvoicesActive] = useState<{
     trigger: string;
     title: string;
@@ -97,7 +97,7 @@ export default function SidebarMenuOwner({
           title,
         });
       }
-      
+
       if (
         (router.pathname.startsWith("/owner/invoices") &&
           router.pathname.includes("/owner/invoices/in")) ||
@@ -205,7 +205,6 @@ export default function SidebarMenuOwner({
                 path="/owner/preorders/offers"
                 icon={<Circle weight="fill" size={6} />}
                 className="mx-4"
-                isDev={true}
               />
 
               <ButtonSidebar
