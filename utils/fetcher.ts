@@ -8,8 +8,10 @@ type FetcherParams = {
 };
 
 export async function fetcher({ url, method, data, token }: FetcherParams) {
+  const port = process.env.NEXT_PUBLIC_MODE == "prod" ? 2424 : 3434;
+
   const options = {
-    url: "http://sinarbajakediri.my.id:3434/api" + url,
+    url: `http://sinarbajakediri.my.id:${port}/api` + url,
     method,
   };
 
