@@ -12,7 +12,7 @@ import {
 import CustomTooltip from "@/components/tooltip";
 
 import usePagination from "@/hooks/usepagination";
-import { ProdukType } from "@/types/products.type";
+import { FilterProduk } from "@/types/filter.type";
 import { customStyleTable } from "@/utils/customStyleTable";
 import React, { useState } from "react";
 import InputSearchBar from "../input/InputSearchBar";
@@ -23,7 +23,7 @@ export default function ProductTable({
   isLoading,
   selectionChange,
 }: {
-  produk: ProdukType[] | undefined;
+  produk: FilterProduk[] | undefined;
   role: "owner" | "admin";
   isLoading: boolean;
   selectionChange: any;
@@ -43,8 +43,8 @@ export default function ProductTable({
     { name: "Nama Produk", uid: "nama_produk" },
   ];
 
-  function renderCellProduk(produk: ProdukType, columnKey: React.Key) {
-    const cellValue = produk[columnKey as keyof ProdukType];
+  function renderCellProduk(produk: FilterProduk, columnKey: React.Key) {
+    const cellValue = produk[columnKey as keyof FilterProduk];
 
     switch (columnKey) {
       case "kode_item":
