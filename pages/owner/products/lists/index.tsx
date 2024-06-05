@@ -137,12 +137,13 @@ function SubComponentProductsListsPage({
               onChange={(e) => setSearch(e.target.value)}
             />
 
-            <div className="grid grid-cols-2 items-center gap-2">
+            <div className="flex items-center gap-2">
               <PopupImportProducts {...{ mutate }} />
 
               <Select
                 label="Export Produk"
                 size="sm"
+                className="w-[230px]"
                 onChange={(e) => {
                   if (!e.target.value) return;
 
