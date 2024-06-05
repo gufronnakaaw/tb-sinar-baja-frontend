@@ -1,0 +1,21 @@
+name: SBKFE
+on:
+  push:
+    branches: ["main"]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy SBFE using ssh
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /home/rodaharapansemesta/tb-sinar-baja-frontend/
+            git pull
+            git status
+            npm run build
+            pm2 restart sb-fe
