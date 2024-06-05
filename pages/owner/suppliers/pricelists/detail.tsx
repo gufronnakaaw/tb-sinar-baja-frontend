@@ -26,8 +26,9 @@ import Layout from "@/components/wrapper/DashboardLayout";
 
 // utils
 import ProductTable from "@/components/tables/ProductTable";
+import { FilterApi, FilterProduk } from "@/types/filter.type";
 import { GlobalResponse } from "@/types/global.type";
-import { ProdukKategoriType, ProdukType } from "@/types/products.type";
+import { ProdukKategoriType } from "@/types/products.type";
 import { PricelistType } from "@/types/suppliers.type";
 import { fetcher } from "@/utils/fetcher";
 
@@ -106,7 +107,7 @@ function SubComponentSuppliersPage({
   const router = useRouter();
   const [kategori, setKategori] = useState<ProdukKategoriType[]>([]);
   const [idKategori, setIdKategori] = useState("");
-  const [produk, setProduk] = useState<ProdukType[]>([]);
+  const [produk, setProduk] = useState<FilterProduk[]>([]);
   const [harga, setHarga] = useState(0);
 
   const { onOpen, onOpenChange, onClose, isOpen } = useDisclosure();
@@ -146,13 +147,13 @@ function SubComponentSuppliersPage({
       setLoadingProduk(true);
 
       try {
-        const result: GlobalResponse<ProdukType[]> = await fetcher({
-          url: "/produk/export?id_kategori=" + idKategori,
+        const result: GlobalResponse<FilterApi> = await fetcher({
+          url: "/produk/filter?id_kategori=" + idKategori,
           method: "GET",
         });
 
         setLoadingProduk(false);
-        setProduk(result.data);
+        setProduk(result.data.produk);
       } catch (error) {
         setLoadingProduk(false);
         alert("terjadi kesalahan saat mendapatkan data produk");

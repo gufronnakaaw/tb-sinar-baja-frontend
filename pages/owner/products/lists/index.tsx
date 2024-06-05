@@ -10,9 +10,12 @@ import Layout from "@/components/wrapper/DashboardLayout";
 
 // utils
 import ProductListsTable from "@/components/tables/ProductListsTable";
+import { FilterApi, FilterProduk } from "@/types/filter.type";
 import { GlobalResponse } from "@/types/global.type";
 import { ProdukKategoriType, ProdukType } from "@/types/products.type";
+import { capitalize } from "@/utils/capitalize";
 import { fetcher } from "@/utils/fetcher";
+import { formatDateWithoutTime } from "@/utils/formatDate";
 import { Select, SelectItem } from "@nextui-org/react";
 import * as xlsx from "xlsx";
 
@@ -80,19 +83,18 @@ function SubComponentProductsListsPage({
 
   async function handleExport(kategori: ProdukKategoriType | undefined) {
     try {
-      const produk: GlobalResponse<ProdukType[]> = await fetcher({
-        url: "/produk/export?id_kategori=" + kategori?.id_kategori,
+      const produk: GlobalResponse<FilterApi> = await fetcher({
+        url: "/produk/filter?id_kategori=" + kategori?.id_kategori,
         method: "GET",
       });
 
       const mapping = [];
 
-      for (const item of produk.data) {
+      for (const item of produk.data.produk) {
         const mappingObject = {};
         for (const key in item) {
           Object.assign(mappingObject, {
-            [key.split("_").join(" ").toUpperCase()]:
-              item[key as keyof ProdukType],
+            [capitalize(key, "_")]: item[key as keyof FilterProduk],
           });
         }
 
@@ -102,6 +104,8 @@ function SubComponentProductsListsPage({
       const workbook = xlsx.utils.book_new();
       const worksheet = xlsx.utils.json_to_sheet(mapping);
 
+      const date = new Date();
+
       xlsx.utils.book_append_sheet(
         workbook,
         worksheet,
@@ -109,7 +113,9 @@ function SubComponentProductsListsPage({
       );
       xlsx.writeFile(
         workbook,
-        !kategori?.nama ? "Produk.xlsx" : `${kategori.nama}.xlsx`,
+        !kategori?.nama
+          ? "Produk.xlsx"
+          : `${kategori.nama} - ${formatDateWithoutTime(date.toISOString())}.xlsx`,
       );
     } catch (error) {
       alert("terjadi kesalahan pada saat export produk");
