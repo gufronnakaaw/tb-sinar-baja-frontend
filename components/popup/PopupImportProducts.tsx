@@ -73,24 +73,12 @@ export default function PopupImportProducts({
         switch (key) {
           case "sub_kategori_produk":
             Object.assign(defaultObj, {
-              [key]: !rows[i][headers[j]] ? null : rows[i][headers[j]],
+              subkategori_id: !rows[i][headers[j]] ? null : rows[i][headers[j]],
             });
             break;
           case "gudang":
             Object.assign(defaultObj, {
               gudang_id: !rows[i][headers[j]] ? null : rows[i][headers[j]],
-            });
-            break;
-          case "stock_aman":
-            Object.assign(defaultObj, {
-              stok_aman: !rows[i][headers[j]] ? 0 : rows[i][headers[j]],
-            });
-            break;
-          case "nama_sebutan":
-            Object.assign(defaultObj, {
-              nama_produk_sebutan: !rows[i][headers[j]]
-                ? null
-                : rows[i][headers[j]],
             });
             break;
           default:
