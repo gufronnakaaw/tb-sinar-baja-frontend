@@ -433,7 +433,7 @@ export default function SellingPage() {
               </div>
             </div>
 
-            <div className="sticky bottom-0 z-20 grid grid-cols-2 items-center gap-16 border-t border-gray-300 bg-white p-[2rem_1rem_1rem_1rem]">
+            <div className="sticky bottom-0 z-20 grid grid-cols-2 items-center gap-16 border-t border-gray-300 bg-white p-[1rem]">
               <div className="flex items-center justify-between gap-2">
                 <p className="font-bold text-gray-600">Total Pembayaran :</p>
                 <h5 className="text-[24px] font-semibold text-rose-500">
@@ -491,9 +491,9 @@ export default function SellingPage() {
 
             {/* --- menu additional information --- */}
             <div
-              className={`absolute left-0 z-10 h-[calc(100%-97px)] w-full bg-white text-white transition-all duration-500 ${
+              className={`absolute left-0 z-10 h-[calc(100%-90px)] w-full bg-white text-white transition-all duration-500 ${
                 menuOpen ? "bottom-24" : "-bottom-full"
-              }`}
+              } overflow-y-scroll`}
             >
               <div className="flex h-full w-full flex-col gap-4 bg-white p-4">
                 <h5 className="font-semibold text-default-900">
