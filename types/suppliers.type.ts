@@ -6,10 +6,16 @@ export type SupplierType = {
   alamat_kantor: string;
   alamat_gudang: string;
   keterangan: string;
-  bank: string;
+  created_at: string;
+};
+
+export type SupplierBank = {
+  id_table: number;
+  nama: string;
   atas_nama: string;
   no_rekening: string;
   created_at: string;
+  updated_at: string;
 };
 
 export type PricelistType = {
@@ -24,6 +30,7 @@ export type PricelistType = {
   nama_produk_sebutan: any;
   kategori: string;
   harga: number;
+  harga_grosir: number;
   created_at: string;
   updated_at: string;
 };
