@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { Trash } from "@phosphor-icons/react";
+import { Pencil, Trash } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
 import { KeyedMutator } from "swr";
 
@@ -23,10 +23,14 @@ export default function SuppliersSubPricelistsTable({
   pricelist,
   id_supplier,
   mutate,
+  role,
+  nama,
 }: {
   pricelist: PricelistType[] | undefined;
   id_supplier?: string;
   mutate: KeyedMutator<any>;
+  role: string;
+  nama: string;
 }) {
   const { page, pages, data, setPage } = usePagination(
     pricelist ? pricelist : [],
@@ -39,6 +43,7 @@ export default function SuppliersSubPricelistsTable({
     { name: "Kode Item", uid: "kode_item" },
     { name: "Nama Produk", uid: "nama_produk" },
     { name: "Harga", uid: "harga" },
+    { name: "Harga Grosir", uid: "harga_grosir" },
     { name: "Aksi", uid: "action" },
   ];
 
@@ -61,14 +66,29 @@ export default function SuppliersSubPricelistsTable({
             {formatRupiah(produk.harga)}
           </div>
         );
+      case "harga_grosir":
+        return (
+          <div className="w-max text-default-900">
+            {formatRupiah(produk.harga_grosir)}
+          </div>
+        );
       case "action":
         return (
           <div className="flex max-w-[110px] items-center gap-1">
-            {/* <CustomTooltip content="Edit">
-              <Button isIconOnly variant="light" size="sm">
+            <CustomTooltip content="Edit">
+              <Button
+                isIconOnly
+                variant="light"
+                size="sm"
+                onClick={() =>
+                  router.push(
+                    `/${role}/suppliers/pricelists/edit?id_supplier=${id_supplier}&nama=${nama}&nama_produk=${produk.nama_produk}&kode_item=${produk.kode_item}&harga=${produk.harga}&harga_grosir=${produk.harga_grosir}`,
+                  )
+                }
+              >
                 <Pencil weight="bold" size={20} className="text-default-600" />
               </Button>
-            </CustomTooltip> */}
+            </CustomTooltip>
 
             <CustomTooltip content="Hapus">
               <Button
@@ -129,7 +149,7 @@ export default function SuppliersSubPricelistsTable({
         isHeaderSticky
         aria-label="suppliers table"
         color="primary"
-        selectionMode="single"
+        selectionMode="none"
         classNames={customStyleTable}
         className="scrollbar-hide"
       >
@@ -160,6 +180,9 @@ export default function SuppliersSubPricelistsTable({
         total={pages}
         onChange={setPage}
         className="justify-self-center"
+        classNames={{
+          cursor: role == "owner" ? "bg-primary" : "bg-lime-500",
+        }}
       />
     </>
   );

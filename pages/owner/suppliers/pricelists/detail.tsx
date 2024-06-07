@@ -11,7 +11,7 @@ import {
   Spinner,
   useDisclosure,
 } from "@nextui-org/react";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import useSWR, { KeyedMutator } from "swr";
@@ -32,38 +32,30 @@ import { ProdukKategoriType } from "@/types/products.type";
 import { PricelistType } from "@/types/suppliers.type";
 import { fetcher } from "@/utils/fetcher";
 
-export const getServerSideProps = (async ({ query }) => {
-  const pricelist: GlobalResponse<PricelistType[]> = await fetcher({
-    url: "/supplier/pricelist?id_supplier=" + query?.id_supplier,
-    method: "GET",
-  });
+type DetailQuery = {
+  query: {
+    id_supplier: string;
+    nama: string;
+  };
+};
 
+export const getServerSideProps = ({ query }: DetailQuery) => {
   return {
     props: {
-      pricelist,
       id_supplier: query?.id_supplier,
       nama: query?.nama,
     },
   };
-}) satisfies GetServerSideProps<{
-  pricelist: GlobalResponse<PricelistType[]>;
-}>;
+};
 
 export default function PricelistPage(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
   const [search, setSearch] = useState("");
-  const swr = useSWR<GlobalResponse<PricelistType[]>>(
-    {
-      url: "/supplier/pricelist?id_supplier=" + props?.id_supplier,
-      method: "GET",
-    },
-    fetcher,
-    {
-      fallbackData: props.pricelist,
-      refreshInterval: 10000,
-    },
-  );
+  const swr = useSWR<GlobalResponse<PricelistType[]>>({
+    url: "/supplier/pricelist?id_supplier=" + props?.id_supplier,
+    method: "GET",
+  });
 
   if (swr.isLoading) {
     return <LoadingScreen role="owner" />;
@@ -101,14 +93,15 @@ function SubComponentSuppliersPage({
   pricelist: PricelistType[] | undefined;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   mutate: KeyedMutator<any>;
-  id_supplier: any;
-  nama: any;
+  id_supplier: string;
+  nama: string;
 }) {
   const router = useRouter();
   const [kategori, setKategori] = useState<ProdukKategoriType[]>([]);
   const [idKategori, setIdKategori] = useState("");
   const [produk, setProduk] = useState<FilterProduk[]>([]);
   const [harga, setHarga] = useState(0);
+  const [hargaGrosir, setHargaGrosir] = useState(0);
 
   const { onOpen, onOpenChange, onClose, isOpen } = useDisclosure();
   const [loading, setLoading] = useState(false);
@@ -175,16 +168,18 @@ function SubComponentSuppliersPage({
         data: {
           supplier_id: id_supplier,
           harga,
+          harga_grosir: hargaGrosir,
           produk_id: selection.values().next().value,
         },
       });
 
       setLoading(false);
-      alert("produk berhasil dibuat");
+      alert("produk berhasil ditambahkan");
       onClose();
       setIdKategori("");
       setProduk([]);
       setHarga(0);
+      setHargaGrosir(0);
       setSelection(new Set([]));
       mutate();
     } catch (error) {
@@ -248,6 +243,7 @@ function SubComponentSuppliersPage({
                 setIdKategori("");
                 setProduk([]);
                 setHarga(0);
+                setHargaGrosir(0);
                 setSelection(new Set([]));
               }}
             >
@@ -295,6 +291,20 @@ function SubComponentSuppliersPage({
                           type="number"
                           onChange={(e) => setHarga(parseInt(e.target.value))}
                         />
+
+                        <Input
+                          isRequired
+                          variant="flat"
+                          color="default"
+                          label="Harga Grosir"
+                          labelPlacement="outside"
+                          name="harga_grosir"
+                          placeholder="Masukan Harga Grosir"
+                          type="number"
+                          onChange={(e) =>
+                            setHargaGrosir(parseInt(e.target.value))
+                          }
+                        />
                       </div>
                     </ModalBody>
 
@@ -306,8 +316,9 @@ function SubComponentSuppliersPage({
                           setIdKategori("");
                           setProduk([]);
                           setHarga(0);
-                          onClose();
+                          setHargaGrosir(0);
                           setSelection(new Set([]));
+                          onClose();
                         }}
                         className="font-medium"
                       >
@@ -341,9 +352,13 @@ function SubComponentSuppliersPage({
           </div>
 
           <SuppliersSubPricelistsTable
-            pricelist={pricelist}
-            id_supplier={id_supplier}
-            mutate={mutate}
+            {...{
+              pricelist,
+              id_supplier,
+              mutate,
+              role: "owner",
+              nama,
+            }}
           />
         </div>
       </Container>
