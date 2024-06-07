@@ -1,6 +1,5 @@
 import { PenawaranDetail, ProdukPenawaran } from "@/types/preorders.type";
 import { formatDateWithoutTime } from "@/utils/formatDate";
-import { formatRupiah } from "@/utils/formatRupiah";
 import {
   Table,
   TableBody,
@@ -17,8 +16,6 @@ const Penawaran = (props: PenawaranDetail, ref: any) => {
     { name: "Kode Pabrik", uid: "kode_pabrik" },
     { name: "Nama Produk", uid: "nama_produk" },
     { name: "Qty", uid: "qty" },
-    { name: "Harga", uid: "harga" },
-    { name: "Jumlah", uid: "jumlah" },
   ];
 
   const renderCell = (
@@ -36,7 +33,7 @@ const Penawaran = (props: PenawaranDetail, ref: any) => {
       case "kode_pabrik":
         return (
           <div className="text-[10px] font-medium text-black">
-            {item.kode_pabrik}
+            {!item.kode_pabrik ? "-" : item.kode_pabrik}
           </div>
         );
       case "nama_produk":
@@ -51,19 +48,6 @@ const Penawaran = (props: PenawaranDetail, ref: any) => {
             {item.qty} {item.satuan}
           </div>
         );
-      case "harga":
-        return (
-          <div className="w-max text-[10px] font-medium text-black">
-            {formatRupiah(item.harga)}
-          </div>
-        );
-      case "jumlah":
-        return (
-          <div className="w-max text-[10px] font-medium text-black">
-            {formatRupiah(item.jumlah)}
-          </div>
-        );
-
       default:
         return cellValue;
     }
@@ -92,10 +76,10 @@ const Penawaran = (props: PenawaranDetail, ref: any) => {
             <div className="mt-2">
               <h5 className="text-[10px] font-medium text-black">Kepada</h5>
               <h5 className="text-[10px] font-medium text-black">
-                Yth. {props.nama}
+                Yth. {props.nama_supplier}
               </h5>
               <h5 className="text-[10px] font-medium text-black">
-                {props.alamat_kantor}
+                {props.alamat}
               </h5>
             </div>
           </div>
@@ -124,12 +108,12 @@ const Penawaran = (props: PenawaranDetail, ref: any) => {
                   <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
                     <div className="font-medium">ID Supplier</div>
                     <div className="font-medium">:</div>
-                    <p className="font-medium">{props.id_supplier}</p>
+                    <p className="font-medium">{props.supplier_id}</p>
                   </div>
                   <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
                     <div className="font-medium">Email</div>
                     <div className="font-medium">:</div>
-                    <p className="font-medium">{props.email}</p>
+                    <p className="font-medium">{props.email_supplier}</p>
                   </div>
                   <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
                     <div className="font-medium">No. Telpon</div>

@@ -8,7 +8,6 @@ import { ProdukPenawaran } from "@/types/preorders.type";
 import { PricelistType, SupplierType } from "@/types/suppliers.type";
 import { customStyleTable } from "@/utils/customStyleTable";
 import { fetcher } from "@/utils/fetcher";
-import { formatRupiah } from "@/utils/formatRupiah";
 import {
   Button,
   Divider,
@@ -84,7 +83,6 @@ export default function CreateOffers(
   const columnsPricelist = [
     { name: "Kode Pabrik", uid: "kode_pabrik" },
     { name: "Nama Produk", uid: "nama_produk" },
-    { name: "Harga", uid: "harga" },
     { name: "Aksi", uid: "action" },
   ];
 
@@ -96,12 +94,6 @@ export default function CreateOffers(
         return <div className="text-default-900">{item.kode_pabrik}</div>;
       case "nama_produk":
         return <div className="w-max text-default-900">{item.nama_produk}</div>;
-      case "harga":
-        return (
-          <div className="w-max text-default-900">
-            {formatRupiah(item.harga)}
-          </div>
-        );
       case "action":
         return (
           <div className="flex max-w-[110px] items-center gap-1">
@@ -123,6 +115,7 @@ export default function CreateOffers(
                     return [
                       ...prev,
                       {
+                        kode_item: item.kode_item,
                         kode_pabrik: item.kode_pabrik,
                         nama_produk: item.nama_produk,
                         harga: item.harga,
@@ -150,8 +143,6 @@ export default function CreateOffers(
     { name: "Nama Produk", uid: "nama_produk" },
     { name: "Qty", uid: "qty" },
     { name: "Satuan", uid: "satuan" },
-    { name: "Harga", uid: "harga" },
-    { name: "Jumlah", uid: "jumlah" },
     { name: "Aksi", uid: "action" },
   ];
 
@@ -268,18 +259,6 @@ export default function CreateOffers(
                 return <SelectItem key={item}>{item}</SelectItem>;
               })}
             </Select>
-          </div>
-        );
-      case "harga":
-        return (
-          <div className="w-max text-default-900">
-            {formatRupiah(item.harga)}
-          </div>
-        );
-      case "jumlah":
-        return (
-          <div className="w-max text-default-900">
-            {formatRupiah(item.jumlah)}
           </div>
         );
       case "action":

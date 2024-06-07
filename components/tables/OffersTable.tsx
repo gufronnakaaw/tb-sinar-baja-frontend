@@ -47,7 +47,9 @@ export default function OffersTable({
         return <div className="text-default-900">{penawaran.id_penawaran}</div>;
       case "tujuan":
         return (
-          <div className="w-max text-default-900">{penawaran.supplier}</div>
+          <div className="w-max text-default-900">
+            {penawaran.nama_supplier}
+          </div>
         );
       case "status":
         return (
@@ -104,9 +106,9 @@ export default function OffersTable({
     <>
       <Table
         isHeaderSticky
-        aria-label="level table"
+        aria-label="offers table"
         color="primary"
-        selectionMode="single"
+        selectionMode="none"
         classNames={customStyleTable}
         className="scrollbar-hide"
       >

@@ -32,8 +32,7 @@ export default function OffersPage() {
   const filter = swr.data?.data.filter((item) => {
     return (
       item.id_penawaran.toLowerCase().includes(search.toLowerCase()) ||
-      item.id_supplier.toLowerCase().includes(search.toLowerCase()) ||
-      item.supplier.toLowerCase().includes(search.toLowerCase())
+      item.nama_supplier.toLowerCase().includes(search.toLowerCase())
     );
   });
 
