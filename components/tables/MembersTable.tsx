@@ -130,7 +130,7 @@ export default function MembersTable({
         isHeaderSticky
         aria-label="member table"
         color="primary"
-        selectionMode="single"
+        selectionMode="none"
         classNames={customStyleTable}
         className="scrollbar-hide"
       >

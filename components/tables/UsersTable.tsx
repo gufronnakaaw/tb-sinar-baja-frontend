@@ -197,7 +197,7 @@ export default function UsersTable({
         isHeaderSticky
         aria-label="users table"
         color="primary"
-        selectionMode="single"
+        selectionMode="none"
         classNames={customStyleTable}
         className="scrollbar-hide"
       >

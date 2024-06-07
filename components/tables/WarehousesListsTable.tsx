@@ -124,7 +124,7 @@ export default function WarehousesListsTable({
         isHeaderSticky
         aria-label="warehouseLists table"
         color="primary"
-        selectionMode="single"
+        selectionMode="none"
         classNames={customStyleTable}
         className="scrollbar-hide"
       >

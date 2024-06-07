@@ -133,7 +133,7 @@ export default function ProductListsTable({
         isHeaderSticky
         aria-label="products table"
         color="primary"
-        selectionMode="single"
+        selectionMode="none"
         classNames={customStyleTable}
         className="scrollbar-hide"
       >

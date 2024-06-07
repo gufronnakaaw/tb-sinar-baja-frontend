@@ -122,7 +122,7 @@ export default function HistoriesTable({
         isHeaderSticky
         aria-label="transactions table"
         color="primary"
-        selectionMode="single"
+        selectionMode="none"
         classNames={customStyleTable}
         className="scrollbar-hide"
       >
