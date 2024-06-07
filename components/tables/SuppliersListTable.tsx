@@ -8,23 +8,31 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { Pencil, Trash } from "@phosphor-icons/react";
+import { Eye, Pencil, Trash } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
 import { KeyedMutator } from "swr";
 
 import CustomTooltip from "@/components/tooltip";
 import usePagination from "@/hooks/usepagination";
-import { SupplierType } from "@/types/suppliers.type";
+import { GlobalResponse } from "@/types/global.type";
+import { SupplierBank, SupplierType } from "@/types/suppliers.type";
 import { customStyleTable } from "@/utils/customStyleTable";
 import { fetcher } from "@/utils/fetcher";
 import { formatDate } from "@/utils/formatDate";
+import React from "react";
 
 export default function SuppliersListTable({
   supplier,
   mutate,
+  role,
+  onOpen,
+  setBank,
 }: {
   supplier: SupplierType[] | undefined;
   mutate: KeyedMutator<any>;
+  role: string;
+  onOpen: () => void;
+  setBank: React.Dispatch<React.SetStateAction<SupplierBank[]>>;
 }) {
   const { page, pages, data, setPage } = usePagination(
     supplier ? supplier : [],
@@ -42,8 +50,6 @@ export default function SuppliersListTable({
     { name: "Alamat Kantor", uid: "alamat_kantor" },
     { name: "Keterangan", uid: "keterangan" },
     { name: "Bank", uid: "bank" },
-    { name: "Atas Nama", uid: "atas_nama" },
-    { name: "No Rekening", uid: "no_rekening" },
     { name: "Dibuat Pada", uid: "created_at" },
     { name: "Aksi", uid: "action" },
   ];
@@ -76,14 +82,21 @@ export default function SuppliersListTable({
           <div className="w-max text-default-900">{supplier.keterangan}</div>
         );
       case "bank":
-        return <div className="w-max text-default-900">{supplier.bank}</div>;
-      case "atas_nama":
         return (
-          <div className="w-max text-default-900">{supplier.atas_nama}</div>
-        );
-      case "no_rekening":
-        return (
-          <div className="w-max text-default-900">{supplier.no_rekening}</div>
+          <div className="w-max text-default-900">
+            <CustomTooltip content="Lihat Daftar Bank">
+              <Button
+                isIconOnly
+                variant="light"
+                size="sm"
+                onClick={() => {
+                  handleBank(supplier.id_supplier);
+                }}
+              >
+                <Eye weight="bold" size={20} className="text-default-600" />
+              </Button>
+            </CustomTooltip>
+          </div>
         );
       case "created_at":
         return (
@@ -101,7 +114,7 @@ export default function SuppliersListTable({
                 size="sm"
                 onClick={() => {
                   router.push(
-                    `/owner/suppliers/lists/edit?id_supplier=${supplier.id_supplier}`,
+                    `/${role}/suppliers/lists/edit?id_supplier=${supplier.id_supplier}`,
                   );
                 }}
               >
@@ -127,6 +140,38 @@ export default function SuppliersListTable({
 
       default:
         return cellValue;
+    }
+  }
+
+  async function handleBank(id_supplier: string) {
+    try {
+      const response: GlobalResponse<SupplierBank[]> = await fetcher({
+        url: "/supplier/bank?id_supplier=" + id_supplier,
+        method: "GET",
+      });
+
+      setBank(response.data);
+      onOpen();
+    } catch (error) {
+      setBank([]);
+      const response = error as {
+        success: boolean;
+        status_code: number;
+        error: { name: string; message: string };
+      };
+
+      if (response.status_code >= 500) {
+        console.log(response.error);
+        return alert("terjadi masalah pada server");
+      }
+
+      if (response.status_code >= 400) {
+        console.log(response.error);
+        return alert(response.error.message);
+      }
+
+      console.log(response.error);
+      return alert("terjadi error tidak diketahui pada aplikasi");
     }
   }
 
@@ -168,7 +213,7 @@ export default function SuppliersListTable({
         isHeaderSticky
         aria-label="suppliers table"
         color="primary"
-        selectionMode="single"
+        selectionMode="none"
         classNames={customStyleTable}
         className="scrollbar-hide"
       >
@@ -199,6 +244,9 @@ export default function SuppliersListTable({
         total={pages}
         onChange={setPage}
         className="justify-self-center"
+        classNames={{
+          cursor: role == "owner" ? "bg-primary" : "bg-lime-500",
+        }}
       />
     </>
   );

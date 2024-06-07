@@ -22,7 +22,7 @@ import Layout from "@/components/wrapper/DashboardLayout";
 // utils
 import SuppliersListTable from "@/components/tables/SuppliersListTable";
 import { GlobalResponse } from "@/types/global.type";
-import { SupplierType } from "@/types/suppliers.type";
+import { SupplierBank, SupplierType } from "@/types/suppliers.type";
 import { fetcher } from "@/utils/fetcher";
 
 export default function SuppliersPage() {
@@ -64,17 +64,49 @@ function SubComponentSuppliersPage({
   mutate: KeyedMutator<any>;
 }) {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const bankDisclosure = useDisclosure();
   const [input, setInput] = useState({});
   const [loading, setLoading] = useState(false);
+  const [bank, setBank] = useState<SupplierBank[]>([]);
 
   async function createSupplier() {
     setLoading(true);
+
+    const bank = [];
+    const objectAssign = {};
+
+    for (const key in input) {
+      const objectInput = input as any;
+
+      switch (key) {
+        case "bank":
+          Object.assign(objectAssign, {
+            nama: objectInput[key],
+          });
+          break;
+        case "atas_nama":
+          Object.assign(objectAssign, {
+            atas_nama: objectInput[key],
+          });
+          break;
+        case "no_rekening":
+          Object.assign(objectAssign, {
+            no_rekening: objectInput[key],
+          });
+          break;
+      }
+    }
+
+    bank.push(objectAssign);
 
     try {
       await fetcher({
         url: "/supplier",
         method: "POST",
-        data: input,
+        data: {
+          ...input,
+          bank,
+        },
       });
 
       setLoading(false);
@@ -342,9 +374,84 @@ function SubComponentSuppliersPage({
                 )}
               </ModalContent>
             </Modal>
+
+            <Modal
+              isOpen={bankDisclosure.isOpen}
+              onOpenChange={bankDisclosure.onOpenChange}
+              isDismissable={false}
+              isKeyboardDismissDisabled={true}
+              size="lg"
+              onClose={() => {
+                setBank([]);
+              }}
+            >
+              <ModalContent>
+                {() => (
+                  <>
+                    <ModalHeader className="font-semibold text-default-900">
+                      Daftar Bank
+                    </ModalHeader>
+
+                    <ModalBody>
+                      <div className="grid gap-[2px]">
+                        {bank.length > 0
+                          ? bank.map((item, index) => {
+                              return (
+                                <div key={item.id_table}>
+                                  <p className="text-md font-semibold text-default-900">
+                                    Bank {index + 1}
+                                  </p>
+
+                                  <div className="grid grid-cols-[100px_10px_10fr]  gap-1 text-sm text-default-900">
+                                    <div className="text-sm font-medium text-default-600">
+                                      Nama Bank
+                                    </div>
+                                    <div className="font-medium">:</div>
+                                    <p className="font-bold text-primary">
+                                      {item.nama}
+                                    </p>
+                                  </div>
+                                  <div className="grid grid-cols-[100px_10px_10fr]  gap-1 text-sm text-default-900">
+                                    <div className="text-sm font-medium text-default-600">
+                                      Atas Nama
+                                    </div>
+                                    <div className="font-medium">:</div>
+                                    <p className="font-bold text-primary">
+                                      {item.atas_nama}
+                                    </p>
+                                  </div>
+                                  <div className="grid grid-cols-[100px_10px_10fr]  gap-1 text-sm text-default-900">
+                                    <div className="grid text-sm font-medium text-default-600">
+                                      No Rekening
+                                    </div>
+                                    <div className="font-medium">:</div>
+                                    <p className="font-bold text-primary">
+                                      {item.no_rekening}
+                                    </p>
+                                  </div>
+                                </div>
+                              );
+                            })
+                          : null}
+                      </div>
+                    </ModalBody>
+
+                    <ModalFooter></ModalFooter>
+                  </>
+                )}
+              </ModalContent>
+            </Modal>
           </div>
 
-          <SuppliersListTable supplier={supplier} mutate={mutate} />
+          <SuppliersListTable
+            {...{
+              supplier,
+              mutate,
+              role: "owner",
+              onOpen: bankDisclosure.onOpen,
+              setBank,
+            }}
+          />
         </div>
       </Container>
     </Layout>

@@ -169,59 +169,6 @@ export default function SupplierEdit({
               });
             }}
           />
-
-          <div className="grid grid-cols-3 gap-4">
-            <Input
-              isRequired
-              variant="flat"
-              color="default"
-              label="Bank"
-              labelPlacement="outside"
-              name="bank"
-              placeholder="Ex: BCA"
-              defaultValue={supplier?.bank}
-              onChange={(e) => {
-                setInput({
-                  ...input,
-                  [e.target.name]: e.target.value,
-                });
-              }}
-            />
-
-            <Input
-              isRequired
-              variant="flat"
-              color="default"
-              label="Atas Nama"
-              labelPlacement="outside"
-              name="atas_nama"
-              placeholder="Ex: John Doe"
-              defaultValue={supplier?.atas_nama}
-              onChange={(e) => {
-                setInput({
-                  ...input,
-                  [e.target.name]: e.target.value,
-                });
-              }}
-            />
-
-            <Input
-              isRequired
-              variant="flat"
-              color="default"
-              label="Nomor Rekening"
-              labelPlacement="outside"
-              name="no_rekening"
-              placeholder="Ex: 09090808"
-              defaultValue={supplier?.no_rekening}
-              onChange={(e) => {
-                setInput({
-                  ...input,
-                  [e.target.name]: e.target.value,
-                });
-              }}
-            />
-          </div>
         </div>
 
         {loading ? (
