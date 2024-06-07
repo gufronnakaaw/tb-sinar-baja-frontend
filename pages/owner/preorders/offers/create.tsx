@@ -116,10 +116,12 @@ export default function CreateOffers(
                       ...prev,
                       {
                         kode_item: item.kode_item,
-                        kode_pabrik: item.kode_pabrik,
+                        kode_pabrik: !item.kode_pabrik
+                          ? null
+                          : item.kode_pabrik,
                         nama_produk: item.nama_produk,
-                        harga: item.harga,
-                        jumlah: item.harga * 1,
+                        harga: null,
+                        jumlah: null,
                         qty: 1,
                         satuan: "",
                       },
@@ -176,7 +178,6 @@ export default function CreateOffers(
                         prev[index] = {
                           ...prev[index],
                           qty: 0,
-                          jumlah: 0,
                         };
 
                         return [...prev];
@@ -195,7 +196,6 @@ export default function CreateOffers(
                         prev[index] = {
                           ...prev[index],
                           qty: parseInt(e.target.value),
-                          jumlah: parseInt(e.target.value) * prev[index].harga,
                         };
 
                         return [...prev];
