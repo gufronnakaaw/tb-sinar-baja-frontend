@@ -2,7 +2,7 @@ import { ListProdukType } from "@/types/selling.type";
 import { formatRupiah } from "@/utils/formatRupiah";
 import { Button, Input } from "@nextui-org/react";
 import { Minus, Plus, Trash } from "@phosphor-icons/react";
-import { useEffect, useState } from "react";
+import { ChangeEvent } from "react";
 import CustomTooltip from "../tooltip";
 
 type CardSellingQuantityProductProps = ListProdukType & {
@@ -18,22 +18,16 @@ export default function CardSellingQuantityProduct({
   setListProduk,
   stok,
 }: CardSellingQuantityProductProps) {
-  const [quantity, setQuantity] = useState(qty);
-  const [kodeItem, setKodeItem] = useState("");
-
-  useEffect(() => {
+  function handleMinus(kode_item: string) {
     setListProduk((prev) => {
       if (prev.length != 0) {
-        const index = prev.findIndex((produk) => produk.kode_item == kodeItem);
+        const index = prev.findIndex((produk) => produk.kode_item == kode_item);
 
         if (index != -1) {
           prev[index] = {
             ...prev[index],
-            qty: quantity > prev[index].stok ? prev[index].stok : quantity,
-            subtotal:
-              quantity > prev[index].stok
-                ? prev[index].subtotal
-                : prev[index].harga * quantity,
+            qty: qty - 1 < 1 ? 0 : qty - 1,
+            subtotal: qty - 1 < 1 ? 0 : (qty - 1) * prev[index].harga,
           };
 
           return [...prev];
@@ -41,20 +35,94 @@ export default function CardSellingQuantityProduct({
       }
       return [...prev];
     });
-  }, [quantity, setListProduk, kodeItem]);
-
-  function handleMinus(kode_item: string) {
-    setKodeItem(kode_item);
-    setQuantity((prev) => (prev - 1 < 1 ? 0 : prev - 1));
   }
 
   function handlePlus(kode_item: string) {
-    setKodeItem(kode_item);
-    setQuantity((prev) => prev + 1);
+    setListProduk((prev) => {
+      if (prev.length != 0) {
+        const index = prev.findIndex((produk) => produk.kode_item == kode_item);
+
+        if (index != -1) {
+          prev[index] = {
+            ...prev[index],
+            qty: qty + 1,
+            subtotal: (qty + 1) * prev[index].harga,
+          };
+
+          return [...prev];
+        }
+      }
+      return [...prev];
+    });
+  }
+
+  function handleInputQuantity(e: ChangeEvent<HTMLInputElement>) {
+    const quantity = e.target.value;
+
+    if (!quantity) {
+      setListProduk((prev) => {
+        if (prev.length != 0) {
+          const index = prev.findIndex(
+            (produk) => produk.kode_item == kode_item,
+          );
+
+          if (index != -1) {
+            prev[index] = {
+              ...prev[index],
+              qty: 0,
+              subtotal: 0,
+            };
+
+            return [...prev];
+          }
+        }
+        return [...prev];
+      });
+    } else {
+      if (parseFloat(quantity) > stok) {
+        setListProduk((prev) => {
+          if (prev.length != 0) {
+            const index = prev.findIndex(
+              (produk) => produk.kode_item == kode_item,
+            );
+
+            if (index != -1) {
+              prev[index] = {
+                ...prev[index],
+                qty: stok,
+                subtotal: stok * prev[index].harga,
+              };
+
+              return [...prev];
+            }
+          }
+          return [...prev];
+        });
+      } else {
+        setListProduk((prev) => {
+          if (prev.length != 0) {
+            const index = prev.findIndex(
+              (produk) => produk.kode_item == kode_item,
+            );
+
+            if (index != -1) {
+              prev[index] = {
+                ...prev[index],
+                qty: parseFloat(quantity),
+                subtotal: parseFloat(quantity) * prev[index].harga,
+              };
+
+              return [...prev];
+            }
+          }
+          return [...prev];
+        });
+      }
+    }
   }
 
   return (
-    <div className="grid grid-cols-[1fr_repeat(3,140px)_42px] items-center gap-10 border-b border-gray-300 p-4">
+    <div className="grid grid-cols-[1fr_repeat(3,140px)_42px] items-center gap-11 border-b border-gray-300 p-4">
       <div className="grid font-semibold text-default-600">
         <h4 className="line-clamp-2 font-semibold text-default-900">
           {nama_produk}
@@ -62,7 +130,7 @@ export default function CardSellingQuantityProduct({
         <p className="font-medium text-rose-500">{formatRupiah(harga)}</p>
       </div>
 
-      <div className="flex items-center gap-2 text-sm font-semibold text-default-600">
+      <div className="flex w-[155px] items-center gap-2 text-sm font-semibold text-default-600">
         <Button
           isIconOnly
           color="danger"
@@ -79,21 +147,9 @@ export default function CardSellingQuantityProduct({
           variant="flat"
           size="sm"
           min={0}
+          step=".01"
           labelPlacement="outside"
-          onChange={(e) => {
-            if (e.target.value == "") {
-              setKodeItem(kode_item);
-              setQuantity(0);
-            } else {
-              if (parseInt(e.target.value) > stok) {
-                setKodeItem(kode_item);
-                setQuantity(stok);
-              } else {
-                setKodeItem(kode_item);
-                setQuantity(parseInt(e.target.value));
-              }
-            }
-          }}
+          onChange={handleInputQuantity}
         />
         <Button
           isIconOnly

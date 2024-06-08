@@ -40,14 +40,14 @@ export default function CardSellingProduct(props: CardSellingProductProps) {
           <div className="grid">
             <p className="text-[12px] font-medium text-default-600">Stok:</p>
             <h4 className="text-sm font-semibold text-default-900">
-              {props.stok}
+              {props.stok} {props.satuan_kecil}
             </h4>
           </div>
 
           <div className="grid">
             <p className="text-[12px] font-medium text-default-600">Lokasi:</p>
             <h4 className="line-clamp-1 text-sm font-semibold capitalize text-default-900">
-              {props.gudang}, {props.rak}
+              {props.gudang} - {props.rak}
             </h4>
           </div>
         </div>
@@ -70,14 +70,18 @@ export default function CardSellingProduct(props: CardSellingProductProps) {
                   return [
                     ...prev,
                     {
-                      nama_produk: props.nama_produk_asli,
+                      nama_produk: !props.nama_produk_asli
+                        ? "-"
+                        : props.nama_produk_asli,
                       kode_item: props.kode_item,
-                      stok: props.stok,
+                      stok: !props.stok ? 0 : props.stok,
                       qty: 1,
-                      satuan_kecil: props.satuan_kecil,
+                      satuan_kecil: !props.satuan_kecil
+                        ? "-"
+                        : props.satuan_kecil,
                       harga: props[props.field as keyof ProdukType],
-                      gudang: props.gudang,
-                      rak: props.rak,
+                      gudang: !props.gudang ? "-" : props.gudang,
+                      rak: !props.rak ? "-" : props.rak,
                       subtotal: props[props.field as keyof ProdukType] * 1,
                     },
                   ];

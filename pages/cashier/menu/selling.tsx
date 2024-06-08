@@ -360,7 +360,7 @@ export default function SellingPage() {
           </div>
         </div>
 
-        <div className="grid h-[calc(100vh-64px)] grid-cols-[400px_auto_1fr] overflow-hidden">
+        <div className="grid h-[calc(100vh-64px)] grid-cols-[435px_auto_1fr] overflow-hidden">
           {/* ==== left content ==== */}
           <div className="flex flex-col gap-6 overflow-scroll p-4 scrollbar-hide">
             <div className="sticky left-0 top-0 grid gap-4">
@@ -415,7 +415,7 @@ export default function SellingPage() {
                 Harga
               </div>
               <div className="text-sm font-semibold text-default-600">
-                Sub Total
+                Subtotal
               </div>
               <div className="text-sm font-semibold text-default-600">Aksi</div>
             </div>
