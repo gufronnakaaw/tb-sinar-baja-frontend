@@ -55,7 +55,6 @@ export default function CreateOffers(
   const [loadingPricelist, setLoadingPricelist] = useState(false);
   const [pesanan, setPesanan] = useState<ProdukPenawaran[]>([]);
   const { page, pages, data, setPage } = usePagination(pricelist, 3);
-  const [satuan, setSatuan] = useState("");
 
   useEffect(() => {
     if (supplier) {
@@ -166,6 +165,7 @@ export default function CreateOffers(
               size="sm"
               min={0}
               labelPlacement="outside"
+              step="0.01"
               onChange={(e) => {
                 if (!e.target.value) {
                   setPesanan((prev) => {
@@ -195,7 +195,7 @@ export default function CreateOffers(
                       if (index != -1) {
                         prev[index] = {
                           ...prev[index],
-                          qty: parseInt(e.target.value),
+                          qty: parseFloat(e.target.value),
                         };
 
                         return [...prev];
@@ -395,7 +395,7 @@ export default function CreateOffers(
 
         <Divider className="my-4" />
 
-        <h4 className="text-lg font-semibold text-default-900">
+        <h4 className="border-l-4 border-primary pl-4 text-[18px] font-semibold text-default-900">
           Daftar Pesanan
         </h4>
 
