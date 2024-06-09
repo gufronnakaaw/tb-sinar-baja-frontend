@@ -6,6 +6,7 @@ import {
   ClockClockwise,
   ClockCounterClockwise,
   House,
+  Invoice,
   Package,
   Tag,
   Truck,
@@ -90,7 +91,8 @@ export default function SidebarMenuOwner({
       if (
         (router.pathname.startsWith("/owner/preorders") &&
           router.pathname.includes("/owner/preorders/offers")) ||
-        router.pathname.includes("/owner/preorders/finals")
+        router.pathname.includes("/owner/preorders/out") ||
+        router.pathname.includes("/owner/preorders/in")
       ) {
         setPreordersActive({
           trigger,
@@ -208,8 +210,61 @@ export default function SidebarMenuOwner({
               />
 
               <ButtonSidebar
-                label="Final"
-                path="/owner/preorders/finals"
+                label="Keluar"
+                path="/owner/preorders/out"
+                icon={<Circle weight="fill" size={6} />}
+                className="mx-4"
+              />
+
+              <ButtonSidebar
+                label="Masuk"
+                path="/owner/preorders/in"
+                icon={<Circle weight="fill" size={6} />}
+                className="mx-4"
+                isDev={true}
+              />
+            </AccordionItem>
+          </Accordion>
+
+          <Accordion
+            isCompact
+            itemClasses={{
+              ...itemClasses,
+              trigger: `${itemClasses.trigger} ${invoicesActive.trigger}`,
+              title: `${itemClasses.title} ${invoicesActive.title}`,
+            }}
+            className="p-0"
+          >
+            <AccordionItem
+              aria-label="button"
+              title="Invoice"
+              indicator={
+                <CaretRight
+                  weight="bold"
+                  size={16}
+                  className={`${invoicesActive.title ? invoicesActive.title : "text-gray-600"}`}
+                />
+              }
+              startContent={
+                <Invoice
+                  weight="bold"
+                  size={20}
+                  className={`${invoicesActive.title ? invoicesActive.title : "text-gray-600"}`}
+                />
+              }
+              className="grid gap-1"
+            >
+              <ButtonSidebar
+                label="Masuk"
+                path="/owner/invoices/in"
+                icon={<Circle weight="fill" size={6} />}
+                className="mx-4"
+                isDev={true}
+              />
+
+              <ButtonSidebar
+                label="Keluar"
+                path="/owner/invoices/out"
                 icon={<Circle weight="fill" size={6} />}
                 className="mx-4"
                 isDev={true}
