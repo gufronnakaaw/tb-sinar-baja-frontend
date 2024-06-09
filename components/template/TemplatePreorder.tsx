@@ -1,5 +1,7 @@
-import { PenawaranDetail, ProdukPenawaran } from "@/types/preorders.type";
+import { FinalDetail, ProdukFinal } from "@/types/preorders.type";
 import { formatDateWithoutTime } from "@/utils/formatDate";
+import { formatRupiah } from "@/utils/formatRupiah";
+import { angkaTerbilang } from "@/utils/terbilang";
 import {
   Table,
   TableBody,
@@ -10,20 +12,22 @@ import {
 } from "@nextui-org/react";
 import React, { forwardRef } from "react";
 
-const Penawaran = (props: PenawaranDetail, ref: any) => {
+const Preorder = (props: FinalDetail, ref: any) => {
   const columns = [
     { name: "No", uid: "no" },
     { name: "Kode Pabrik", uid: "kode_pabrik" },
     { name: "Nama Produk", uid: "nama_produk" },
     { name: "Qty", uid: "qty" },
+    { name: "Harga", uid: "harga" },
+    { name: "Jumlah", uid: "jumlah" },
   ];
 
   const renderCell = (
     index: number,
-    item: ProdukPenawaran,
+    item: ProdukFinal,
     columnKey: React.Key,
   ) => {
-    const cellValue = item[columnKey as keyof ProdukPenawaran];
+    const cellValue = item[columnKey as keyof ProdukFinal];
 
     switch (columnKey) {
       case "no":
@@ -46,6 +50,18 @@ const Penawaran = (props: PenawaranDetail, ref: any) => {
         return (
           <div className="w-max text-[10px] font-medium text-black">
             {item.qty} {item.satuan}
+          </div>
+        );
+      case "harga":
+        return (
+          <div className="w-max text-[10px] font-medium text-black">
+            {formatRupiah(item.harga)}
+          </div>
+        );
+      case "jumlah":
+        return (
+          <div className="w-max text-[10px] font-medium text-black">
+            {formatRupiah(item.jumlah)}
           </div>
         );
       default:
@@ -86,15 +102,13 @@ const Penawaran = (props: PenawaranDetail, ref: any) => {
 
           <div className="grid justify-end">
             <div className="flex flex-col">
-              <h1 className="font-bold uppercase text-black">
-                Surat Permintaan Penawaran
-              </h1>
+              <h1 className="font-bold uppercase text-black">PURCHASE ORDER</h1>
               <div className="grid h-3">
                 <div className="grid">
                   <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
                     <div className="font-medium">Nomor</div>
                     <div className="font-medium">:</div>
-                    <p className="font-medium">{props.id_penawaran}</p>
+                    <p className="font-medium">{props.id_preorder}</p>
                   </div>
 
                   <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
@@ -108,7 +122,9 @@ const Penawaran = (props: PenawaranDetail, ref: any) => {
                   <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
                     <div className="font-medium">ID Supplier</div>
                     <div className="font-medium">:</div>
-                    <p className="font-medium">{props.supplier_id}</p>
+                    <p className="font-medium">
+                      {!props.supplier_id ? "-" : props.supplier_id}
+                    </p>
                   </div>
                   <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
                     <div className="font-medium">Email</div>
@@ -130,8 +146,7 @@ const Penawaran = (props: PenawaranDetail, ref: any) => {
           <div className="grid grid-cols-[1fr_100px] gap-4">
             <div className="grid gap-1 text-[10px]">
               <p className="font-medium text-black">
-                Mohon dapat diberikan penawaran, harga, dan ketersediaan stok
-                untuk item sebagai berikut :
+                Berikut adalah data item yang kami pesan :
               </p>
             </div>
           </div>
@@ -139,7 +154,7 @@ const Penawaran = (props: PenawaranDetail, ref: any) => {
           <Table
             removeWrapper
             isHeaderSticky
-            aria-label="offer table"
+            aria-label="preorder table"
             classNames={{
               base: ["max-h-[calc(100vh-100px)] overflow-scroll"],
               table: ["border border-black"],
@@ -162,7 +177,7 @@ const Penawaran = (props: PenawaranDetail, ref: any) => {
             <TableBody items={props.produk}>
               {props.produk.map((item, index) => {
                 return (
-                  <TableRow key={item.kode_pabrik}>
+                  <TableRow key={item.nama_produk}>
                     {(columnKey) => (
                       <TableCell>
                         {renderCell(index + 1, item, columnKey)}
@@ -174,7 +189,24 @@ const Penawaran = (props: PenawaranDetail, ref: any) => {
             </TableBody>
           </Table>
         </div>
-        <div className="mr-6 mt-2 grid justify-self-end">
+        <div className="flex items-center justify-between">
+          <div className="grid grid-cols-[45px_2px_1fr] gap-1 text-[10px] text-black">
+            <div className="w-24 font-bold italic">Terbilang</div>
+            <div className="font-bold italic">:</div>
+            <p className="font-bold capitalize italic">
+              {angkaTerbilang(props.total)}
+            </p>
+          </div>
+          <div className="grid w-[135px] border border-black p-2">
+            <div className="grid grid-cols-[25px_6px_1fr] gap-1 text-[10px] text-black">
+              <div className="w-24 font-medium">Total</div>
+              <div className="font-medium">:</div>
+              <p className="font-medium">{formatRupiah(props.total)}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="mr-5 mt-2 grid justify-self-end">
           <h1 className="text-[10px] font-normal text-black">
             Kediri, {formatDateWithoutTime(props.created_at)}
           </h1>
@@ -187,4 +219,4 @@ const Penawaran = (props: PenawaranDetail, ref: any) => {
   );
 };
 
-export const TemplatePenawaran = forwardRef(Penawaran);
+export const TemplatePreorder = forwardRef(Preorder);
