@@ -8,6 +8,7 @@ import { ProdukPenawaran } from "@/types/preorders.type";
 import { PricelistType, SupplierType } from "@/types/suppliers.type";
 import { customStyleTable } from "@/utils/customStyleTable";
 import { fetcher } from "@/utils/fetcher";
+import { SATUANLIST } from "@/utils/satuan";
 import {
   Button,
   Divider,
@@ -25,26 +26,6 @@ import { Plus, Trash } from "@phosphor-icons/react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-
-const satuanList = [
-  "pcs",
-  "btg",
-  "lbr",
-  "klg",
-  "m",
-  "ltr",
-  "btl",
-  "ons",
-  "gr",
-  "kg",
-  "m3",
-  "dus",
-  "sack",
-  "koli",
-  "karung",
-  "ikat",
-  "ton",
-];
 
 export default function CreateOffers(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
@@ -255,7 +236,7 @@ export default function CreateOffers(
                 }
               }}
             >
-              {satuanList.map((item) => {
+              {SATUANLIST.map((item) => {
                 return <SelectItem key={item}>{item}</SelectItem>;
               })}
             </Select>
