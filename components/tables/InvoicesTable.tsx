@@ -45,14 +45,14 @@ export default function InvoiceTable({
   function getStatus(status: string) {
     if (status == "hutang") {
       return {
-        text: "Tertunggak",
+        text: "Unpaid",
         classname: "bg-danger-100 text-danger",
       };
     }
 
     if (status == "pembayaran") {
       return {
-        text: "Dalam Proses",
+        text: "Paid",
         classname: "bg-warning-100 text-warning",
       };
     }
