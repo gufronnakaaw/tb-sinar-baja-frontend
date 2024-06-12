@@ -1,5 +1,5 @@
 import usePagination from "@/hooks/usepagination";
-import { FinalType } from "@/types/preorders.type";
+import { InvoiceType } from "@/types/invoice.type";
 import { customStyleTable } from "@/utils/customStyleTable";
 import { formatDate } from "@/utils/formatDate";
 import { formatRupiah } from "@/utils/formatRupiah";
@@ -14,39 +14,35 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { Eye } from "@phosphor-icons/react";
+import { Eye, HandCoins } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
 import CustomTooltip from "../tooltip";
 
-export default function FinalTable({
-  final,
+export default function InvoiceTable({
+  invoice,
   role,
 }: {
-  final: FinalType[] | undefined;
+  invoice: InvoiceType[] | undefined;
   role: string;
 }) {
-  const { page, pages, data, setPage } = usePagination(final ? final : [], 10);
+  const { page, pages, data, setPage } = usePagination(
+    invoice ? invoice : [],
+    10,
+  );
 
   const router = useRouter();
 
-  const columnsFinal = [
-    { name: "ID Preorder", uid: "id_preorder" },
-    { name: "Tujuan", uid: "tujuan" },
-    { name: "Sumber", uid: "sumber" },
+  const columnsInvoice = [
+    { name: "Nomor Invoice", uid: "nomor_invoice" },
+    { name: "Jatuh Tempo", uid: "jatuh_tempo" },
     { name: "Status", uid: "status" },
-    { name: "Total", uid: "total" },
+    { name: "Tagihan", uid: "tagihan" },
+    { name: "Sisa", uid: "sisa" },
     { name: "Dibuat Pada", uid: "created_at" },
     { name: "Aksi", uid: "action" },
   ];
 
   function getStatus(status: string) {
-    if (status == "kosong") {
-      return {
-        text: "Invoice Kosong",
-        classname: "bg-danger-100 text-danger",
-      };
-    }
-
     if (status == "hutang") {
       return {
         text: "Tertunggak",
@@ -69,22 +65,16 @@ export default function FinalTable({
     }
   }
 
-  function renderCellFinal(item: FinalType, columnKey: React.Key) {
-    const cellValue = item[columnKey as keyof FinalType];
+  function renderCellInvoice(item: InvoiceType, columnKey: React.Key) {
+    const cellValue = item[columnKey as keyof InvoiceType];
 
     switch (columnKey) {
-      case "id_preorder":
-        return <div className="text-default-900">{item.id_preorder}</div>;
-      case "tujuan":
+      case "nomor_invoice":
         return (
-          <div className="w-max text-default-900">{item.nama_supplier}</div>
+          <div className="w-max text-default-900">{item.nomor_invoice}</div>
         );
-      case "sumber":
-        return (
-          <div className="w-max capitalize text-default-900">
-            {item.sumber.split("_").join(" ")}
-          </div>
-        );
+      case "jatuh_tempo":
+        return <div className="w-max text-default-900">{item.jatuh_tempo}</div>;
       case "status":
         return (
           <div className="w-max text-default-900">
@@ -101,10 +91,16 @@ export default function FinalTable({
             </Chip>
           </div>
         );
-      case "total":
+      case "tagihan":
         return (
           <div className="w-max text-default-900">
-            {formatRupiah(item.total)}
+            {formatRupiah(item.tagihan)}
+          </div>
+        );
+      case "sisa":
+        return (
+          <div className="w-max text-default-900">
+            {formatRupiah(item.sisa)}
           </div>
         );
       case "created_at":
@@ -116,20 +112,41 @@ export default function FinalTable({
       case "action":
         return (
           <div className="flex max-w-[110px] items-center gap-1">
-            <CustomTooltip content="Detail">
+            <CustomTooltip content="Riwayat Pembayaran">
               <Button
                 isIconOnly
                 variant="light"
                 size="sm"
                 onClick={() =>
                   router.push(
-                    `/${role}/preorders/out/detail?id_preorder=${item.id_preorder}`,
+                    `/${role}/invoices/in/histories?id_invoice=${item.id_invoice}`,
                   )
                 }
               >
                 <Eye weight="bold" size={20} className="text-default-600" />
               </Button>
             </CustomTooltip>
+
+            {item.status != "lunas" ? (
+              <CustomTooltip content="Bayar">
+                <Button
+                  isIconOnly
+                  variant="light"
+                  size="sm"
+                  onClick={() =>
+                    router.push(
+                      `/${role}/invoices/in/payments?id_invoice=${item.id_invoice}`,
+                    )
+                  }
+                >
+                  <HandCoins
+                    weight="bold"
+                    size={20}
+                    className="text-default-600"
+                  />
+                </Button>
+              </CustomTooltip>
+            ) : null}
           </div>
         );
 
@@ -142,23 +159,23 @@ export default function FinalTable({
     <>
       <Table
         isHeaderSticky
-        aria-label="po table"
+        aria-label="invoice table"
         color="primary"
         selectionMode="none"
         classNames={customStyleTable}
         className="scrollbar-hide"
       >
-        <TableHeader columns={columnsFinal}>
+        <TableHeader columns={columnsInvoice}>
           {(column) => (
             <TableColumn key={column.uid}>{column.name}</TableColumn>
           )}
         </TableHeader>
 
-        <TableBody items={data} emptyContent="Preorder tidak ditemukan!">
+        <TableBody items={data} emptyContent="Invoice tidak ditemukan!">
           {(item) => (
-            <TableRow key={item.id_preorder}>
+            <TableRow key={item.id_invoice}>
               {(columnKey) => (
-                <TableCell>{renderCellFinal(item, columnKey)}</TableCell>
+                <TableCell>{renderCellInvoice(item, columnKey)}</TableCell>
               )}
             </TableRow>
           )}

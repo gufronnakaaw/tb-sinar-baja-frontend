@@ -62,6 +62,8 @@ export type FinalType = {
   tipe: string;
   total: number;
   created_at: string;
+  sumber: string;
+  status: string;
 };
 
 export type FinalDetail = {
@@ -76,4 +78,5 @@ export type FinalDetail = {
   total: number;
   created_at: string;
   produk: ProdukFinal[];
+  sumber: string;
 };
