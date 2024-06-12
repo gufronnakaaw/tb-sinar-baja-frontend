@@ -17,6 +17,5 @@ jobs:
             cd /home/rodaharapansemesta/tb-sinar-baja-frontend/
             git pull
             git status
-            npm install
             npm run build
             pm2 restart sb-fe
