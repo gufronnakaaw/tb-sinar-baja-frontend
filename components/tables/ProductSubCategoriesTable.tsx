@@ -105,7 +105,7 @@ export default function ProductSubCategoriesTable({
         onChange={setPage}
         className="justify-self-center"
         classNames={{
-          cursor: role == "owner" ? "bg-primary" : "bg-lime-500",
+          cursor: role == "owner" ? "bg-primary" : "bg-teal-500",
         }}
       />
     </>

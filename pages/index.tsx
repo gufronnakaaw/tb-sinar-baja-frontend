@@ -29,7 +29,7 @@ export default function HomePage() {
             <Button
               size="lg"
               onClick={() => router.push("/admin")}
-              className="bg-lime-500 font-semibold text-white sm:w-40"
+              className="bg-teal-500 font-semibold text-white sm:w-40"
             >
               Admin
             </Button>

@@ -16,7 +16,7 @@ export default function App({
 
   function setColor() {
     const ownerColor = "#006FEE";
-    const adminColor = "#84cc16";
+    const adminColor = "#14b8a6";
     const cashierColor = "#f43f5e";
     const defaultColor = "#000";
 

@@ -62,7 +62,7 @@ export default function SidebarMenuAdmin({
     setColor();
 
     function setColor() {
-      const trigger = "bg-lime-500 data-[hover=true]:bg-lime-500/90";
+      const trigger = "bg-teal-500 data-[hover=true]:bg-teal-500/90";
       const title = "text-white";
 
       if (

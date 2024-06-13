@@ -11,7 +11,7 @@ export default function LoadingScreen({
     }
 
     if (role == "admin") {
-      return "border-b-lime-500";
+      return "border-b-teal-500";
     }
 
     if (role == "cashier") {

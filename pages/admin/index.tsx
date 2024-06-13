@@ -39,7 +39,7 @@ export default function LoginPage() {
           <div className="text-center">
             <h1 className="text-[24px] font-bold leading-[140%] text-default-900">
               Selamat Datang Admin{" "}
-              <span className="text-lime-500">TB. Sinar Baja</span>
+              <span className="text-teal-500">TB. Sinar Baja</span>
             </h1>
             <p className="font-medium text-default-500">
               Silahkan login untuk melakukan transaksi.
@@ -87,7 +87,7 @@ export default function LoginPage() {
             <div className="mt-4 grid gap-2">
               <Button
                 onClick={handleLogin}
-                className="bg-lime-500 font-semibold text-white"
+                className="bg-teal-500 font-semibold text-white"
               >
                 Login
               </Button>

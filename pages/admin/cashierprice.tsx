@@ -82,7 +82,7 @@ export default function CashierPricePage(
     <Layout title="Pengaturan Harga Kasir">
       <Container className="gap-8">
         <div className="grid gap-4">
-          <div className="grid w-max gap-2 border-l-4 border-lime-500 p-[1rem_0_1rem_1rem]">
+          <div className="grid w-max gap-2 border-l-4 border-teal-500 p-[1rem_0_1rem_1rem]">
             <h4 className="text-[18px] font-bold text-default-900">
               Informasi
             </h4>
@@ -93,7 +93,7 @@ export default function CashierPricePage(
                   Harga yang saat ini digunakan
                 </div>
                 <div className="font-medium">:</div>
-                <p className="font-bold text-lime-500">
+                <p className="font-bold text-teal-500">
                   {harga[props.field as keyof Harga]} {`(${props.field})`}
                 </p>
               </div>
@@ -112,7 +112,7 @@ export default function CashierPricePage(
             <Button
               variant="solid"
               startContent={<Spinner color="white" size="sm" />}
-              className={`${loading ? "cursor-not-allowed justify-self-end bg-lime-500 font-medium text-white" : ""}`}
+              className={`${loading ? "cursor-not-allowed justify-self-end bg-teal-500 font-medium text-white" : ""}`}
             >
               Tunggu
             </Button>
@@ -121,7 +121,7 @@ export default function CashierPricePage(
               variant="solid"
               size="md"
               onClick={handleUpdate}
-              className="w-max justify-self-end bg-lime-500 font-medium text-white"
+              className="w-max justify-self-end bg-teal-500 font-medium text-white"
             >
               Update
             </Button>

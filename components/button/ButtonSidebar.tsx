@@ -20,7 +20,7 @@ export default function ButtonSidebar({
 
   function setActive(path: string) {
     const ownerColor = "bg-primary text-white hover:bg-primary/90";
-    const adminColor = "bg-lime-500 text-white hover:bg-lime-500/90";
+    const adminColor = "bg-teal-500 text-white hover:bg-teal-500/90";
     const cashierColor = "bg-rose-500 text-white hover:bg-rose-500/90";
     const defaultColor = "bg-transparent hover:bg-gray-200";
 
@@ -51,7 +51,7 @@ export default function ButtonSidebar({
   return (
     <Link
       href={path}
-      className={`flex h-10 items-center justify-between rounded-xl px-3 py-2 ${setActive(path)} ${className} ${isDev ? "text-gray-300" : 'text-gray-600'}`}
+      className={`flex h-10 items-center justify-between rounded-xl px-3 py-2 ${setActive(path)} ${className} ${isDev ? "text-gray-300" : "text-gray-600"}`}
       onClick={(e) => {
         if (isDev) {
           e.preventDefault();

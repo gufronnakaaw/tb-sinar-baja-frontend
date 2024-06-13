@@ -108,7 +108,7 @@ export default function HistoriesTable({
     }
 
     if (role == "admin") {
-      return "bg-lime-500";
+      return "bg-teal-500";
     }
 
     if (role == "cashier") {

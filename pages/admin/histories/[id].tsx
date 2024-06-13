@@ -35,7 +35,7 @@ export default function HistoriesPage({
             size="sm"
             startContent={<ArrowLeft weight="bold" size={16} />}
             onClick={() => router.push("/admin/histories")}
-            className="w-max font-semibold text-lime-500"
+            className="w-max font-semibold text-teal-500"
           >
             Kembali ke Menu
           </Button>
@@ -44,7 +44,7 @@ export default function HistoriesPage({
             size="sm"
             startContent={<Printer weight="bold" size={17} />}
             onClick={handlePrint}
-            className="w-max bg-lime-500 font-semibold text-white"
+            className="w-max bg-teal-500 font-semibold text-white"
           >
             Cetak Nota
           </Button>

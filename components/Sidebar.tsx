@@ -26,7 +26,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
     }
 
     if (router.pathname.startsWith("/admin")) {
-      return "bg-lime-500";
+      return "bg-teal-500";
     }
 
     if (router.pathname.startsWith("/cashier")) {
