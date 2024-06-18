@@ -14,6 +14,7 @@ import CustomTooltip from "@/components/tooltip";
 import usePagination from "@/hooks/usepagination";
 import { FilterProduk } from "@/types/filter.type";
 import { customStyleTable } from "@/utils/customStyleTable";
+import { formatRupiah } from "@/utils/formatRupiah";
 import React, { useState } from "react";
 import InputSearchBar from "../input/InputSearchBar";
 
@@ -28,7 +29,7 @@ export default function ProductTable({
   isLoading: boolean;
   selectionChange: any;
 }) {
-  const { page, pages, data, setPage } = usePagination(produk ? produk : [], 3);
+  const { page, pages, data, setPage } = usePagination(produk ? produk : [], 2);
   const [search, setSearch] = useState("");
 
   const filter = data.filter((item) => {
@@ -41,6 +42,12 @@ export default function ProductTable({
   const columnsProduk = [
     { name: "Kode Item", uid: "kode_item" },
     { name: "Nama Produk", uid: "nama_produk" },
+    { name: "Harga Distributor", uid: "harga_1" },
+    { name: "Harga Agen", uid: "harga_2" },
+    { name: "Harga Grosir", uid: "harga_3" },
+    { name: "Harga Toko", uid: "harga_4" },
+    { name: "Harga Aplikator", uid: "harga_5" },
+    { name: "Harga Retail", uid: "harga_6" },
   ];
 
   function renderCellProduk(produk: FilterProduk, columnKey: React.Key) {
@@ -48,12 +55,42 @@ export default function ProductTable({
 
     switch (columnKey) {
       case "kode_item":
-        return <div className="text-default-900">{produk.kode_item}</div>;
+        return (
+          <div className="w-max max-w-[250px] text-default-900">
+            {produk.kode_item}
+          </div>
+        );
       case "nama_produk":
         return (
           <CustomTooltip content={produk.nama_produk}>
-            <div className="text-default-900">{produk.nama_produk}</div>
+            <div className="w-max max-w-[250px] text-default-900">
+              {produk.nama_produk}
+            </div>
           </CustomTooltip>
+        );
+      case "harga_1":
+        return (
+          <div className="text-default-900">{formatRupiah(produk.harga_1)}</div>
+        );
+      case "harga_2":
+        return (
+          <div className="text-default-900">{formatRupiah(produk.harga_2)}</div>
+        );
+      case "harga_3":
+        return (
+          <div className="text-default-900">{formatRupiah(produk.harga_3)}</div>
+        );
+      case "harga_4":
+        return (
+          <div className="text-default-900">{formatRupiah(produk.harga_4)}</div>
+        );
+      case "harga_5":
+        return (
+          <div className="text-default-900">{formatRupiah(produk.harga_5)}</div>
+        );
+      case "harga_6":
+        return (
+          <div className="text-default-900">{formatRupiah(produk.harga_6)}</div>
         );
       default:
         return cellValue;

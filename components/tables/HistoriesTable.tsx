@@ -14,14 +14,16 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { Eye } from "@phosphor-icons/react";
+import { Eye, HandCoins } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
-import StatusDocument from "../status/StatusDocument";
+import StatusMetode from "../status/StatusMetode";
+import StatusPayment from "../status/StatusPayment";
 import CustomTooltip from "../tooltip";
 
 type HistoriesTableProps = {
   transaksi: TransaksiType[] | undefined;
   path: string;
+  role?: string;
 };
 
 type TransaksiTable = Pick<
@@ -32,6 +34,7 @@ type TransaksiTable = Pick<
 export default function HistoriesTable({
   transaksi,
   path,
+  role,
 }: HistoriesTableProps) {
   const router = useRouter();
 
@@ -40,13 +43,35 @@ export default function HistoriesTable({
     10,
   );
 
-  const columnsTransaksi = [
-    { name: "ID Transaksi", uid: "id_transaksi" },
-    { name: "Tanggal", uid: "tanggal" },
-    { name: "Total", uid: "total_pembayaran" },
-    { name: "Tipe", uid: "tipe" },
-    { name: "Aksi", uid: "action" },
-  ];
+  const columnsTransaksi = [];
+
+  if (role == "admin") {
+    columnsTransaksi.push(
+      ...[
+        { name: "ID Transaksi", uid: "id_transaksi" },
+        { name: "Tanggal", uid: "tanggal" },
+        { name: "Tipe", uid: "tipe" },
+        { name: "Metode", uid: "metode" },
+        { name: "Total", uid: "total_pembayaran" },
+        { name: "Diterima", uid: "pembayaran" },
+        { name: "Estimasi Barang", uid: "estimasi" },
+        { name: "Status", uid: "status" },
+        { name: "Aksi", uid: "action" },
+      ],
+    );
+  } else {
+    columnsTransaksi.push(
+      ...[
+        { name: "ID Transaksi", uid: "id_transaksi" },
+        { name: "Tanggal", uid: "tanggal" },
+        { name: "Tipe", uid: "tipe" },
+        { name: "Metode", uid: "metode" },
+        { name: "Total", uid: "total_pembayaran" },
+        { name: "Status", uid: "status" },
+        { name: "Aksi", uid: "action" },
+      ],
+    );
+  }
 
   function renderCellTransaksi(
     transaction: TransaksiType,
@@ -65,34 +90,80 @@ export default function HistoriesTable({
             {formatDate(transaction.created_at)}
           </div>
         );
+      case "tipe":
+        return (
+          <div className="text-default-900">
+            {transaction.pajak ? "Faktur" : "Nota"}
+          </div>
+        );
+      case "metode":
+        return (
+          <div className="flex justify-center capitalize text-default-900">
+            <StatusMetode text={transaction.metode} />
+          </div>
+        );
       case "total_pembayaran":
         return (
           <div className="text-default-900">
             {formatRupiah(transaction.total_pembayaran)}
           </div>
         );
-      case "tipe":
+      case "pembayaran":
         return (
-          <div className="text-default-900">
-            {transaction.pajak ? (
-              <StatusDocument text="Faktur" />
-            ) : (
-              <StatusDocument text="Nota" />
-            )}
+          <div className="capitalize text-default-900">
+            {transaction.metode == "tempo"
+              ? formatRupiah(transaction.pembayaran)
+              : "-"}
+          </div>
+        );
+      case "estimasi":
+        return (
+          <div className="capitalize text-default-900">
+            {transaction.metode == "tempo" ? transaction.estimasi : "-"}
+          </div>
+        );
+      case "status":
+        return (
+          <div className="flex justify-center capitalize text-default-900">
+            <StatusPayment text={transaction.status} />
           </div>
         );
       case "action":
         return (
-          <CustomTooltip content="Detail">
-            <Button
-              isIconOnly
-              variant="light"
-              size="sm"
-              onClick={() => router.push(`${path}/${transaction.id_transaksi}`)}
-            >
-              <Eye weight="bold" size={20} className="text-default-600" />
-            </Button>
-          </CustomTooltip>
+          <div className="flex max-w-[110px] items-center gap-1">
+            {transaction.status == "piutang" ? (
+              <CustomTooltip content="Bayar">
+                <Button
+                  isIconOnly
+                  variant="light"
+                  size="sm"
+                  onClick={() =>
+                    router.push(
+                      `/${role}/histories/payment?id_transaksi=${transaction.id_transaksi}&total_pembayaran=${transaction.total_pembayaran}&sisa=${transaction.total_pembayaran - transaction.pembayaran}`,
+                    )
+                  }
+                >
+                  <HandCoins
+                    weight="bold"
+                    size={20}
+                    className="text-default-600"
+                  />
+                </Button>
+              </CustomTooltip>
+            ) : null}
+            <CustomTooltip content="Detail">
+              <Button
+                isIconOnly
+                variant="light"
+                size="sm"
+                onClick={() =>
+                  router.push(`${path}/${transaction.id_transaksi}`)
+                }
+              >
+                <Eye weight="bold" size={20} className="text-default-600" />
+              </Button>
+            </CustomTooltip>
+          </div>
         );
 
       default:

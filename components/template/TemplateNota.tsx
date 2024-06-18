@@ -13,6 +13,7 @@ import { formatRupiah } from "@/utils/formatRupiah";
 
 import { ListProduk, TransaksiType } from "@/types/transactions.type";
 import { formatDate } from "@/utils/formatDate";
+import { angkaTerbilang } from "@/utils/terbilang";
 
 const Nota = (props: TransaksiType, ref: any) => {
   const columns = [
@@ -20,8 +21,23 @@ const Nota = (props: TransaksiType, ref: any) => {
     { name: "Kode Item", uid: "kode_item" },
     { name: "Nama Produk", uid: "nama_produk" },
     { name: "Harga", uid: "harga" },
-    { name: "Sub Total", uid: "subtotal" },
+    { name: "Potongan", uid: "pot" },
+    { name: "Subtotal", uid: "subtotal" },
   ];
+
+  function checkDiskon(item: ListProduk) {
+    if (!item.diskon_langsung_item && !item.diskon_persen_item) {
+      return 0;
+    }
+
+    if (item.diskon_langsung_item) {
+      return formatRupiah(item.diskon_langsung_item);
+    }
+
+    if (item.diskon_persen_item) {
+      return `${item.diskon_persen_item}%`;
+    }
+  }
 
   const renderCell = (transaction: ListProduk, columnKey: React.Key) => {
     const cellValue = transaction[columnKey as keyof ListProduk];
@@ -49,6 +65,12 @@ const Nota = (props: TransaksiType, ref: any) => {
         return (
           <div className="text-[10px] font-medium text-black">
             {formatRupiah(transaction.harga)}
+          </div>
+        );
+      case "pot":
+        return (
+          <div className="text-[10px] font-medium text-black">
+            {checkDiskon(transaction)}
           </div>
         );
       case "subtotal":
@@ -166,48 +188,70 @@ const Nota = (props: TransaksiType, ref: any) => {
             </TableBody>
           </Table>
 
-          <div className="grid justify-self-end border border-black p-2">
-            <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-black">
-              <div className="w-24 font-medium">Ongkir</div>
-              <div className="font-medium">:</div>
-              <p className="font-medium">{formatRupiah(props.ongkir)}</p>
-            </div>
-
-            <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-black">
-              <div className="w-24 font-medium">Total</div>
-              <div className="font-medium">:</div>
-              <p className="font-medium">{formatRupiah(props.total_belanja)}</p>
-            </div>
-
-            {props.pajak ? (
-              <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-black">
-                <div className="w-24 font-medium">
-                  Pajak ({props.persen_pajak}%)
-                </div>
-                <div className="font-medium">:</div>
-                <p className="font-medium">{formatRupiah(props.pajak)}</p>
-              </div>
-            ) : null}
-
-            {props.diskon || props.persen_diskon ? (
-              <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-black">
-                <div className="w-24 font-medium">
-                  Diskon{" "}
-                  {props.persen_diskon ? `(${props.persen_diskon}%)` : null}
-                </div>
-                <div className="font-medium">:</div>
-                <p className="font-medium">
-                  {formatRupiah(props.diskon ? props.diskon : 0)}
+          <div className="flex items-center justify-between">
+            <div className="grid">
+              <div className="grid grid-cols-[45px_2px_1fr] gap-1 text-[10px] text-black">
+                <div className="w-24 font-bold italic">Terbilang</div>
+                <div className="font-bold italic">:</div>
+                <p className="font-bold capitalize italic">
+                  {angkaTerbilang(props.total_pembayaran)}
                 </p>
               </div>
-            ) : null}
+              <div className="grid grid-cols-[45px_2px_1fr] gap-1 text-[10px] text-black">
+                <div className="w-24 font-bold italic">Status</div>
+                <div className="font-bold italic">:</div>
+                <p className="font-bold capitalize italic">
+                  {props.metode == "tempo" ? "Preorder" : props.metode},{" "}
+                  {props.status == "piutang" ? "Belum Lunas" : props.status}
+                </p>
+              </div>
+            </div>
 
-            <div className="grid grid-cols-[60px_6px_1fr] gap-1 text-[10px] text-black">
-              <div className="w-24 font-medium">Tagihan</div>
-              <div className="font-medium">:</div>
-              <p className="font-medium">
-                {formatRupiah(props.total_pembayaran)}
-              </p>
+            <div className="grid justify-self-end border border-black p-2">
+              <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-black">
+                <div className="w-24 font-medium">Ongkir</div>
+                <div className="font-medium">:</div>
+                <p className="font-medium">{formatRupiah(props.ongkir)}</p>
+              </div>
+
+              <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-black">
+                <div className="w-24 font-medium">Subtotal</div>
+                <div className="font-medium">:</div>
+                <p className="font-medium">
+                  {formatRupiah(props.total_belanja)}
+                </p>
+              </div>
+
+              {props.pajak ? (
+                <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-black">
+                  <div className="w-24 font-medium">
+                    Pajak ({props.persen_pajak}%)
+                  </div>
+                  <div className="font-medium">:</div>
+                  <p className="font-medium">{formatRupiah(props.pajak)}</p>
+                </div>
+              ) : null}
+
+              {props.diskon || props.persen_diskon ? (
+                <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-black">
+                  <div className="w-24 font-medium">
+                    Diskon{" "}
+                    {props.persen_diskon ? `(${props.persen_diskon}%)` : null}
+                  </div>
+                  <div className="font-medium">:</div>
+                  <p className="font-medium">
+                    {formatRupiah(props.diskon ? props.diskon : 0)}
+                  </p>
+                </div>
+              ) : null}
+
+              <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-black">
+                <div className="w-24 font-medium">Total</div>
+                <div className="font-medium">:</div>
+                <p className="font-medium">
+                  {formatRupiah(props.total_pembayaran)}
+                </p>
+              </div>
             </div>
           </div>
         </div>

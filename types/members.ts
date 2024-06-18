@@ -6,6 +6,7 @@ export type MemberType = {
   alamat: string;
   email: string;
   no_telp: string;
+  field: string;
   created_at: string;
   updated_at: string;
 };

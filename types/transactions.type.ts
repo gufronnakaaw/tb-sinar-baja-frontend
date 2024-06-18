@@ -18,6 +18,12 @@ export interface TransaksiType {
   created_at: string;
   updated_at: string;
   list_produk?: ListProduk[];
+  status: string;
+  metode: string;
+  dp: number;
+  pembayaran: number;
+  estimasi: string;
+  asal_transaksi: string;
 }
 
 export interface ListProduk {
@@ -29,4 +35,6 @@ export interface ListProduk {
   rak: string;
   harga: number;
   sub_total: number;
+  diskon_langsung_item: number;
+  diskon_persen_item: number;
 }

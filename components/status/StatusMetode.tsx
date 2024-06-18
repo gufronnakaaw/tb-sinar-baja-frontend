@@ -1,10 +1,6 @@
 import { Chip } from "@nextui-org/react";
 
-interface StatusDocumentProps {
-  text: string;
-}
-
-export default function StatusDocument({ text }: StatusDocumentProps) {
+export default function StatusMetode({ text }: { text: string }) {
   return (
     <Chip
       variant="flat"
@@ -14,12 +10,10 @@ export default function StatusDocument({ text }: StatusDocumentProps) {
         content: "font-normal capitalize",
       }}
       className={
-        text === "Faktur"
-          ? "bg-green-500 text-white"
-          : "bg-amber-500 text-white"
+        text == "tempo" ? "bg-amber-500 text-white" : "bg-green-500 text-white"
       }
     >
-      {text}
+      {text == "tempo" ? "Preorder" : text}
     </Chip>
   );
 }

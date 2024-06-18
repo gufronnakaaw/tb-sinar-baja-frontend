@@ -31,13 +31,12 @@ export default function HistoriesPage({
         <div className="flex flex-wrap items-center justify-between gap-4">
           <Button
             variant="light"
-            // color="primary"
             size="sm"
             startContent={<ArrowLeft weight="bold" size={16} />}
-            onClick={() => router.push("/admin/histories")}
+            onClick={() => router.back()}
             className="w-max font-semibold text-teal-500"
           >
-            Kembali ke Menu
+            Kembali
           </Button>
 
           <Button

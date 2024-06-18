@@ -32,8 +32,9 @@ export default function ButtonSidebar({
     }
 
     if (
-      router.pathname.startsWith("/admin") &&
-      router.pathname.includes(path)
+      (router.pathname.startsWith("/admin") &&
+        router.pathname.includes(path)) ||
+      router.asPath.includes(path)
     ) {
       return adminColor;
     }

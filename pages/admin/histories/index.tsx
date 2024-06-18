@@ -8,42 +8,32 @@ import LoadingScreen from "@/components/LoadingScreen";
 import HistoriesTable from "@/components/tables/HistoriesTable";
 import { GlobalResponse } from "@/types/global.type";
 import { TransaksiType } from "@/types/transactions.type";
-import { fetcher } from "@/utils/fetcher";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { InferGetServerSidePropsType } from "next";
 import { useState } from "react";
 import useSWR from "swr";
 
-// main function
-export const getServerSideProps = (async () => {
-  const result = await fetcher({
-    url: "/transaksi",
-    method: "GET",
-  });
+function getRole(role: string) {
+  if (!role) return "kasir";
+  if (role == "kasir") return "kasir";
+  if (role == "admin") return "admin";
+}
 
-  const transaksi: GlobalResponse<TransaksiType[]> = result;
-
+export const getServerSideProps = ({ query }: { query: { role: string } }) => {
   return {
     props: {
-      transaksi,
+      role: getRole(query.role),
     },
   };
-}) satisfies GetServerSideProps<{ transaksi: GlobalResponse<TransaksiType[]> }>;
+};
 
 export default function AdminHistoriesPage(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
   const [search, setSearch] = useState("");
-  const swr = useSWR<GlobalResponse<TransaksiType[]>>(
-    {
-      url: "/transaksi",
-      method: "GET",
-    },
-    fetcher,
-    {
-      fallbackData: props.transaksi,
-      refreshInterval: 15000,
-    },
-  );
+  const swr = useSWR<GlobalResponse<TransaksiType[]>>({
+    url: `/transaksi?role=${props.role}`,
+    method: "GET",
+  });
 
   if (swr.isLoading) {
     return <LoadingScreen role="admin" />;
@@ -57,21 +47,11 @@ export default function AdminHistoriesPage(
     return item.id_transaksi.toLowerCase().includes(search.toLowerCase());
   });
 
-  return <SubComponentHistoriesPage {...{ transaksi: filter, setSearch }} />;
-}
-
-function SubComponentHistoriesPage({
-  transaksi,
-  setSearch,
-}: {
-  transaksi: TransaksiType[] | undefined;
-  setSearch: React.Dispatch<React.SetStateAction<string>>;
-}) {
   return (
     <Layout title="Daftar Transaksi">
       <Container className="gap-8">
-        <h4 className="text-lg font-semibold text-default-900">
-          Riwayat Transaksi
+        <h4 className="text-lg font-semibold capitalize text-default-900">
+          Riwayat Transaksi {props.role}
         </h4>
 
         <div className="grid gap-4">
@@ -81,7 +61,11 @@ function SubComponentHistoriesPage({
             onChange={(e) => setSearch(e.target.value)}
           />
 
-          <HistoriesTable transaksi={transaksi} path="/admin/histories" />
+          <HistoriesTable
+            transaksi={filter}
+            path="/admin/histories"
+            role={props.role}
+          />
         </div>
       </Container>
     </Layout>

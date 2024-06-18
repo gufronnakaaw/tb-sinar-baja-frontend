@@ -17,7 +17,7 @@ export default function StatusPayment({ text }: StatusPaymentProps) {
         content: "font-medium capitalize",
       }}
     >
-      {text}
+      {text == "piutang" ? "Belum Lunas" : text}
     </Chip>
   );
 }
