@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { SWRConfig } from "swr";
 
-const routeLogin = ["/owner", "/admin", "/cashier"];
+const routeLogin = ["/", "/owner", "/admin", "/cashier"];
 
 export default function App({
   Component,
