@@ -3,7 +3,7 @@ export type DashboardType = {
   omzet: number;
   laba_kotor: number;
   barang_rusak: number;
-  pembayaran_lunas: number;
+  hutang: number;
   estimasi_rugi: number;
-  konsinyasi: number;
+  piutang: number;
 };

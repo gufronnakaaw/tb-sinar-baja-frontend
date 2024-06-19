@@ -14,6 +14,8 @@ import LoadingScreen from "@/components/LoadingScreen";
 import StatusStock from "@/components/status/StatusStock";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
+import { DashboardType } from "@/types/dashboard.type";
+import { GlobalResponse } from "@/types/global.type";
 import { formatRupiah } from "@/utils/formatRupiah";
 import useSWR from "swr";
 
@@ -22,7 +24,7 @@ export default function DashboardPage() {
     data: dashboard,
     error,
     isLoading,
-  } = useSWR({
+  } = useSWR<GlobalResponse<DashboardType>>({
     url: "/dashboard",
     method: "GET",
   });
@@ -33,12 +35,14 @@ export default function DashboardPage() {
 
   if (error) {
     console.log(error);
+    return alert("terjadi kesalahan saat mendapatkan data dashboard");
   }
+
   return (
     <Layout title="Dashboard Owner">
       <Container>
         <section className="grid gap-12">
-          <StatusStock text={dashboard.data.status_stok} />
+          <StatusStock text={dashboard?.data.status_stok as string} />
 
           <div className="grid gap-4">
             <h4 className="text-lg font-semibold text-default-900">
@@ -55,7 +59,7 @@ export default function DashboardPage() {
                 </div>
 
                 <h6 className="text-2xl font-semibold text-default-900">
-                  {formatRupiah(dashboard.data.omzet)}
+                  {formatRupiah(dashboard?.data.omzet as number)}
                 </h6>
 
                 <Button
@@ -84,7 +88,7 @@ export default function DashboardPage() {
                 </div>
 
                 <h6 className="text-2xl font-semibold text-default-900">
-                  {formatRupiah(dashboard.data.laba_kotor)}
+                  {formatRupiah(dashboard?.data.laba_kotor as number)}
                 </h6>
 
                 <Button
@@ -113,7 +117,7 @@ export default function DashboardPage() {
                 </div>
 
                 <h6 className="text-2xl font-semibold text-default-900">
-                  {dashboard.data.barang_rusak}
+                  {dashboard?.data.barang_rusak}
                 </h6>
 
                 <Button
@@ -136,7 +140,7 @@ export default function DashboardPage() {
                 </div>
 
                 <h6 className="text-2xl font-semibold text-default-900">
-                  {formatRupiah(dashboard.data.pembayaran_lunas)}
+                  {formatRupiah(dashboard?.data.hutang as number)}
                 </h6>
 
                 <Button
@@ -165,7 +169,7 @@ export default function DashboardPage() {
                 </div>
 
                 <h6 className="text-2xl font-semibold text-default-900">
-                  {formatRupiah(dashboard.data.estimasi_rugi)}
+                  {formatRupiah(dashboard?.data.estimasi_rugi as number)}
                 </h6>
 
                 <Button
@@ -194,7 +198,7 @@ export default function DashboardPage() {
                 </div>
 
                 <h6 className="text-2xl font-semibold text-default-900">
-                  {formatRupiah(dashboard.data.konsinyasi)}
+                  {formatRupiah(dashboard?.data.piutang as number)}
                 </h6>
 
                 <Button

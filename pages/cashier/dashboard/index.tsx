@@ -7,41 +7,34 @@ import {
 } from "@phosphor-icons/react";
 
 // components
+import LoadingScreen from "@/components/LoadingScreen";
 import StatusStock from "@/components/status/StatusStock";
 import Layout from "@/components/wrapper/SecondaryLayout";
 import { DashboardType } from "@/types/dashboard.type";
-import { fetcher } from "@/utils/fetcher";
+import { GlobalResponse } from "@/types/global.type";
 import { formatRupiah } from "@/utils/formatRupiah";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
-export default function DashboardPage(
-  props: InferGetServerSidePropsType<typeof getServerSideProps>,
-) {
+export default function DashboardPage() {
   const router = useRouter();
+
   const {
     data: dashboard,
     error,
     isLoading,
-  } = useSWR(
-    {
-      url: "/dashboard",
-      method: "GET",
-    },
-    fetcher,
-    {
-      fallbackData: props.dashboard,
-      refreshInterval: 30 * 1000,
-    },
-  );
+  } = useSWR<GlobalResponse<DashboardType>>({
+    url: "/dashboard",
+    method: "GET",
+  });
 
   if (isLoading) {
-    return;
+    return <LoadingScreen role="cashier" />;
   }
 
   if (error) {
     console.log(error);
+    return alert("terjadi kesalahan saat mendapatkan data dashboard");
   }
 
   return (
@@ -53,13 +46,13 @@ export default function DashboardPage(
             color="danger"
             size="sm"
             startContent={<ArrowLeft weight="bold" size={16} />}
-            onClick={() => router.push("/cashier/menu")}
+            onClick={() => router.back()}
             className="w-max font-semibold"
           >
             Kembali ke Menu
           </Button>
 
-          <StatusStock text={dashboard.data.status_stok} />
+          <StatusStock text={dashboard?.data.status_stok as string} />
 
           <div className="grid gap-4">
             <h4 className="text-lg font-semibold text-default-900">
@@ -76,7 +69,7 @@ export default function DashboardPage(
                 </div>
 
                 <h6 className="text-2xl font-semibold text-default-900">
-                  {formatRupiah(dashboard.data.omzet)}
+                  {formatRupiah(dashboard?.data.omzet as number)}
                 </h6>
 
                 <Button
@@ -105,7 +98,7 @@ export default function DashboardPage(
                 </div>
 
                 <h6 className="text-2xl font-semibold text-default-900">
-                  {dashboard.data.barang_rusak}
+                  {dashboard?.data.barang_rusak}
                 </h6>
 
                 <Button
@@ -125,18 +118,3 @@ export default function DashboardPage(
     </Layout>
   );
 }
-
-export const getServerSideProps = (async () => {
-  const result = await fetcher({
-    url: "/dashboard?role=cashier",
-    method: "GET",
-  });
-
-  const dashboard: DashboardType = result.data as DashboardType;
-
-  return {
-    props: {
-      dashboard,
-    },
-  };
-}) satisfies GetServerSideProps<{ dashboard: DashboardType }>;
