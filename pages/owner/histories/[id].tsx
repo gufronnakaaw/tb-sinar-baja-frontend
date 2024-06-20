@@ -29,9 +29,7 @@ export default function HistoriesPage({
     <Layout title={`Detail Transaksi ${transaksi.id_transaksi}`}>
       <Container className="gap-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <ButtonBack onClick={() => router.push("/owner/histories")}>
-            Kembali
-          </ButtonBack>
+          <ButtonBack onClick={() => router.back()}>Kembali</ButtonBack>
 
           <Button
             color="primary"

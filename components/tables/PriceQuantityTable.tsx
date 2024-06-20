@@ -54,7 +54,11 @@ export default function PriceQuantityTable({
       case "produk_id":
         return <div className="text-default-900">{item.produk_id}</div>;
       case "nama_produk_asli":
-        return <div className="text-default-900">{item.nama_produk_asli}</div>;
+        return (
+          <div className="w-max max-w-[250px] text-default-900">
+            {item.nama_produk_asli}
+          </div>
+        );
       case "harga":
         return (
           <div className="text-default-900">{formatRupiah(item.harga)}</div>

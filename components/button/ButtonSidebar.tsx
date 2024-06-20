@@ -25,8 +25,9 @@ export default function ButtonSidebar({
     const defaultColor = "bg-transparent hover:bg-gray-200";
 
     if (
-      router.pathname.startsWith("/owner") &&
-      router.pathname.includes(path)
+      (router.pathname.startsWith("/owner") &&
+        router.pathname.includes(path)) ||
+      router.asPath.includes(path)
     ) {
       return ownerColor;
     }

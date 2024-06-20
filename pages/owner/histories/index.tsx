@@ -8,18 +8,35 @@ import LoadingScreen from "@/components/LoadingScreen";
 import HistoriesTable from "@/components/tables/HistoriesTable";
 import { GlobalResponse } from "@/types/global.type";
 import { TransaksiType } from "@/types/transactions.type";
+import { InferGetServerSidePropsType } from "next";
 import { useState } from "react";
 import useSWR from "swr";
 
-export default function OwnerHistoriesPage() {
+function getRole(role: string) {
+  if (!role) return "kasir";
+  if (role == "kasir") return "kasir";
+  if (role == "admin") return "admin";
+}
+
+export const getServerSideProps = ({ query }: { query: { role: string } }) => {
+  return {
+    props: {
+      role: getRole(query.role),
+    },
+  };
+};
+
+export default function OwnerHistoriesPage(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>,
+) {
   const [search, setSearch] = useState("");
   const swr = useSWR<GlobalResponse<TransaksiType[]>>({
-    url: "/transaksi",
+    url: `/transaksi?role=${props.role}`,
     method: "GET",
   });
 
   if (swr.isLoading) {
-    return <LoadingScreen role="owner" />;
+    return <LoadingScreen role="admin" />;
   }
 
   if (swr.error) {
@@ -30,21 +47,11 @@ export default function OwnerHistoriesPage() {
     return item.id_transaksi.toLowerCase().includes(search.toLowerCase());
   });
 
-  return <SubComponentHistoriesPage {...{ transaksi: filter, setSearch }} />;
-}
-
-function SubComponentHistoriesPage({
-  transaksi,
-  setSearch,
-}: {
-  transaksi: TransaksiType[] | undefined;
-  setSearch: React.Dispatch<React.SetStateAction<string>>;
-}) {
   return (
     <Layout title="Daftar Transaksi">
       <Container className="gap-8">
-        <h4 className="text-lg font-semibold text-default-900">
-          Riwayat Transaksi
+        <h4 className="text-lg font-semibold capitalize text-default-900">
+          Riwayat Transaksi {props.role}
         </h4>
 
         <div className="grid gap-4">
@@ -54,7 +61,11 @@ function SubComponentHistoriesPage({
             onChange={(e) => setSearch(e.target.value)}
           />
 
-          <HistoriesTable transaksi={transaksi} path="/owner/histories" />
+          <HistoriesTable
+            transaksi={filter}
+            path="/owner/histories"
+            role={props.role}
+          />
         </div>
       </Container>
     </Layout>

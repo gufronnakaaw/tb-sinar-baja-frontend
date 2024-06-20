@@ -139,7 +139,7 @@ export default function HistoriesTable({
                   size="sm"
                   onClick={() =>
                     router.push(
-                      `/${role}/histories/payment?id_transaksi=${transaction.id_transaksi}&total_pembayaran=${transaction.total_pembayaran}&sisa=${transaction.total_pembayaran - transaction.pembayaran}`,
+                      `/${path.split("/")[1]}/histories/payment?id_transaksi=${transaction.id_transaksi}&total_pembayaran=${transaction.total_pembayaran}&sisa=${transaction.total_pembayaran - transaction.pembayaran}`,
                     )
                   }
                 >
