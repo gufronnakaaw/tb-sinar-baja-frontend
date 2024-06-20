@@ -53,22 +53,20 @@ export default function MembersTable({
       case "id_member":
         return <div className="text-default-900">{member.id_member}</div>;
       case "nama":
-        return <div className="w-max text-default-900">{member.nama}</div>;
+        return <div className="text-default-900">{member.nama}</div>;
       case "level":
-        return <div className="w-max text-default-900">{member.level}</div>;
+        return <div className="text-default-900">{member.level}</div>;
       case "perusahaan":
-        return (
-          <div className="w-max text-default-900">{member.perusahaan}</div>
-        );
+        return <div className="text-default-900">{member.perusahaan}</div>;
       case "alamat":
-        return <div className="w-max text-default-900">{member.alamat}</div>;
+        return <div className="text-default-900">{member.alamat}</div>;
       case "email":
-        return <div className="w-max text-default-900">{member.email}</div>;
+        return <div className="text-default-900">{member.email}</div>;
       case "no_telp":
-        return <div className="w-max text-default-900">{member.no_telp}</div>;
+        return <div className="text-default-900">{member.no_telp}</div>;
       case "created_at":
         return (
-          <div className="w-max text-default-900">
+          <div className="text-default-900">
             {formatDate(member.created_at)}
           </div>
         );
@@ -82,7 +80,7 @@ export default function MembersTable({
                 size="sm"
                 onClick={() =>
                   router.push(
-                    `/${role}/members/lists/edit?id_member=${member.id_member}`,
+                    `/${role}/settings/members/lists/edit?id_member=${member.id_member}`,
                   )
                 }
               >

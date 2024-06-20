@@ -10,7 +10,6 @@ import {
 } from "@nextui-org/react";
 import { CheckCircle, Eye, Pencil, XCircle } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
-import { KeyedMutator } from "swr";
 
 // components & utils
 import CustomTooltip from "@/components/tooltip";
@@ -20,10 +19,10 @@ import { customStyleTable } from "@/utils/customStyleTable";
 
 export default function WarehousesDocumentsTable({
   document,
-  mutate,
+  role,
 }: {
   document: WarehouseDocumentsType[] | undefined;
-  mutate: KeyedMutator<any>;
+  role: string;
 }) {
   const { page, pages, data, setPage } = usePagination(
     document ? document : [],
@@ -134,7 +133,7 @@ export default function WarehousesDocumentsTable({
                 size="sm"
                 onClick={() =>
                   router.push(
-                    `/owner/warehouses/documents/${document.id_suratjalan}`,
+                    `/${role}/selling/documents/${document.id_suratjalan}`,
                   )
                 }
               >
@@ -149,7 +148,7 @@ export default function WarehousesDocumentsTable({
                 size="sm"
                 onClick={() =>
                   router.push(
-                    `/owner/warehouses/documents/edit/${document.id_suratjalan}`,
+                    `/${role}/selling/documents/edit/${document.id_suratjalan}`,
                   )
                 }
               >
@@ -204,6 +203,9 @@ export default function WarehousesDocumentsTable({
         total={pages}
         onChange={setPage}
         className="justify-self-center"
+        classNames={{
+          cursor: role == "owner" ? "bg-primary" : "bg-teal-500",
+        }}
       />
     </>
   );

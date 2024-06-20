@@ -47,12 +47,10 @@ export default function LevelsTable({
       case "id_level":
         return <div className="text-default-900">{level.id_level}</div>;
       case "nama":
-        return <div className="w-max text-default-900">{level.nama}</div>;
+        return <div className="text-default-900">{level.nama}</div>;
       case "created_at":
         return (
-          <div className="w-max text-default-900">
-            {formatDate(level.created_at)}
-          </div>
+          <div className="text-default-900">{formatDate(level.created_at)}</div>
         );
       case "action":
         return (
@@ -64,7 +62,7 @@ export default function LevelsTable({
                 size="sm"
                 onClick={() =>
                   router.push(
-                    `/${role}/members/levels/edit?id_level=${level.id_level}`,
+                    `/${role}/settings/members/levels/edit?id_level=${level.id_level}`,
                   )
                 }
               >
