@@ -31,7 +31,7 @@ export default function WarehousesUpdate(
         },
       });
       alert("update berhasil");
-      return router.push("/admin/members/levels");
+      return router.back();
     } catch (error) {
       alert("ups sepertinya ada masalah pada server");
       console.log(error);

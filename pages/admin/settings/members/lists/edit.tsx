@@ -71,7 +71,7 @@ export default function MemberUpdate(
         data,
       });
       alert("update member berhasil");
-      return router.push("/admin/members/lists");
+      return router.back();
     } catch (error) {
       const response = error as {
         success: boolean;
