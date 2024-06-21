@@ -94,7 +94,7 @@ export default function ProductListsTable({
               <Button
                 onClick={() =>
                   router.push(
-                    `/${role}/products/lists/detail?kode_item=${encodeURIComponent(produk.kode_item)}`,
+                    `/${role}/warehouses/products/detail?kode_item=${encodeURIComponent(produk.kode_item)}`,
                   )
                 }
                 isIconOnly
@@ -109,7 +109,7 @@ export default function ProductListsTable({
               <Button
                 onClick={() =>
                   router.push(
-                    `/${role}/products/lists/edit?kode_item=${encodeURIComponent(produk.kode_item)}`,
+                    `/${role}/warehouses/products/edit?kode_item=${encodeURIComponent(produk.kode_item)}`,
                   )
                 }
                 isIconOnly

@@ -22,9 +22,11 @@ import { formatDate } from "@/utils/formatDate";
 export default function WarehousesListsTable({
   gudang,
   handleDelete,
+  role,
 }: {
   gudang: WarehouseListType[] | undefined;
   handleDelete: (kode_gudang: string) => void;
+  role: string;
 }) {
   const { page, pages, data, setPage } = usePagination(
     gudang ? gudang : [],
@@ -89,7 +91,7 @@ export default function WarehousesListsTable({
                 size="sm"
                 onClick={() =>
                   router.push(
-                    `/owner/warehouses/lists/edit?kode_gudang=${gudang.kode_gudang}&nama=${gudang.nama}`,
+                    `/${role}/warehouses/lists/edit?kode_gudang=${gudang.kode_gudang}&nama=${gudang.nama}`,
                   )
                 }
               >
@@ -155,6 +157,9 @@ export default function WarehousesListsTable({
         total={pages}
         onChange={setPage}
         className="justify-self-center"
+        classNames={{
+          cursor: role == "owner" ? "bg-primary" : "bg-teal-500",
+        }}
       />
     </>
   );

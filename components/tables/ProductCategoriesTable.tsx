@@ -65,7 +65,7 @@ export default function ProductCategoriesTable({
                 size="sm"
                 onClick={() =>
                   router.push(
-                    `/${role}/products/categories/detail/${kategori.id_kategori}`,
+                    `/${role}/warehouses/categories/detail/${kategori.id_kategori}`,
                   )
                 }
               >
@@ -80,7 +80,7 @@ export default function ProductCategoriesTable({
                 size="sm"
                 onClick={() =>
                   router.push(
-                    `/${role}/products/categories/edit?id_kategori=${kategori.id_kategori}&nama=${kategori.nama}`,
+                    `/${role}/warehouses/categories/edit?id_kategori=${kategori.id_kategori}&nama=${kategori.nama}`,
                   )
                 }
               >

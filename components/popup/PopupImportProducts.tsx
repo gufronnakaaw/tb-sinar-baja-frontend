@@ -29,8 +29,10 @@ type ErrorResponse = {
 
 export default function PopupImportProducts({
   mutate,
+  role,
 }: {
   mutate: KeyedMutator<any>;
+  role: string;
 }) {
   const uploadDisclosure = useDisclosure();
   const errorDisclosure = useDisclosure();
@@ -207,8 +209,7 @@ export default function PopupImportProducts({
       <Button
         onPress={uploadDisclosure.onOpen}
         variant="solid"
-        color="primary"
-        className="w-full font-medium sm:w-max"
+        className={`w-full font-medium text-white sm:w-max ${role == "owner" ? "bg-primary" : "bg-teal-500"}`}
       >
         Unggah Produk
       </Button>
