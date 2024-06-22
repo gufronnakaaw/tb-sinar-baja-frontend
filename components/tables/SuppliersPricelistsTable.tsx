@@ -20,9 +20,11 @@ import { customStyleTable } from "@/utils/customStyleTable";
 export default function SuppliersPricelistsTable({
   supplier,
   mutate,
+  role,
 }: {
   supplier: SupplierType[] | undefined;
   mutate: KeyedMutator<any>;
+  role: string;
 }) {
   const { page, pages, data, setPage } = usePagination(
     supplier ? supplier : [],
@@ -63,7 +65,7 @@ export default function SuppliersPricelistsTable({
                 size="sm"
                 onClick={() =>
                   router.push(
-                    `/owner/suppliers/pricelists/detail?id_supplier=${supplier.id_supplier}&nama=${supplier.nama}`,
+                    `/${role}/purchases/pricelists/detail?id_supplier=${supplier.id_supplier}&nama=${supplier.nama}`,
                   )
                 }
               >
@@ -115,6 +117,9 @@ export default function SuppliersPricelistsTable({
         total={pages}
         onChange={setPage}
         className="justify-self-center"
+        classNames={{
+          cursor: role == "owner" ? "bg-primary" : "bg-teal-500",
+        }}
       />
     </>
   );

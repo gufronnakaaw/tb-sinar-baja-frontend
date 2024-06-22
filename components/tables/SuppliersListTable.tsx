@@ -114,7 +114,7 @@ export default function SuppliersListTable({
                 size="sm"
                 onClick={() => {
                   router.push(
-                    `/${role}/suppliers/lists/edit?id_supplier=${supplier.id_supplier}`,
+                    `/${role}/purchases/suppliers/edit?id_supplier=${supplier.id_supplier}`,
                   );
                 }}
               >
