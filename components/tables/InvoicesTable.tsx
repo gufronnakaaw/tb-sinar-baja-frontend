@@ -119,7 +119,7 @@ export default function InvoiceTable({
                 size="sm"
                 onClick={() =>
                   router.push(
-                    `/${role}/invoices/in/histories?id_invoice=${item.id_invoice}`,
+                    `/${role}/purchases/invin/histories?id_invoice=${item.id_invoice}`,
                   )
                 }
               >
@@ -135,7 +135,7 @@ export default function InvoiceTable({
                   size="sm"
                   onClick={() =>
                     router.push(
-                      `/${role}/invoices/in/payments?id_invoice=${item.id_invoice}`,
+                      `/${role}/purchases/invin/payments?id_invoice=${item.id_invoice}`,
                     )
                   }
                 >
@@ -160,7 +160,7 @@ export default function InvoiceTable({
       <Table
         isHeaderSticky
         aria-label="invoice table"
-        color="primary"
+        color="default"
         selectionMode="none"
         classNames={customStyleTable}
         className="scrollbar-hide"

@@ -123,7 +123,7 @@ export default function FinalTable({
                 size="sm"
                 onClick={() =>
                   router.push(
-                    `/${role}/preorders/out/detail?id_preorder=${item.id_preorder}`,
+                    `/${role}/purchases/preorders/detail?id_preorder=${item.id_preorder}`,
                   )
                 }
               >

@@ -87,7 +87,7 @@ export default function OffersTable({
                 size="sm"
                 onClick={() =>
                   router.push(
-                    `/${role}/preorders/offers/detail?id_penawaran=${penawaran.id_penawaran}`,
+                    `/${role}/purchases/offers/detail?id_penawaran=${penawaran.id_penawaran}`,
                   )
                 }
               >
