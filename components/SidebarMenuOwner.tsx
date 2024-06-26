@@ -1,22 +1,19 @@
-import { Accordion, AccordionItem } from "@nextui-org/react";
 import {
-  ArchiveBox,
   CaretRight,
+  ChartLine,
   Circle,
-  ClockClockwise,
-  ClockCounterClockwise,
   Gear,
   House,
-  Invoice,
+  Money,
   Package,
-  Truck,
-  Users,
+  ShoppingCartSimple,
 } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 // components
 import ButtonSidebar from "@/components/button/ButtonSidebar";
+import { Accordion, AccordionItem } from "@nextui-org/react";
 
 type SidebarMenuOwnerProps = {
   itemClasses: {
@@ -32,7 +29,7 @@ export default function SidebarMenuOwner({
 }: SidebarMenuOwnerProps) {
   const router = useRouter();
 
-  const [invoicesActive, setInvoicesActive] = useState<{
+  const [sellingActive, setSellingActive] = useState<{
     trigger: string;
     title: string;
   }>({
@@ -40,39 +37,7 @@ export default function SidebarMenuOwner({
     title: "",
   });
 
-  const [historiesActive, setHistoriesActive] = useState<{
-    trigger: string;
-    title: string;
-  }>({
-    trigger: "",
-    title: "",
-  });
-
-  const [preordersActive, setPreordersActive] = useState<{
-    trigger: string;
-    title: string;
-  }>({
-    trigger: "",
-    title: "",
-  });
-
-  const [productsActive, setProductsActive] = useState<{
-    trigger: string;
-    title: string;
-  }>({
-    trigger: "",
-    title: "",
-  });
-
-  const [suppliersActive, setSuppliersActive] = useState<{
-    trigger: string;
-    title: string;
-  }>({
-    trigger: "",
-    title: "",
-  });
-
-  const [membersActive, setMembersActive] = useState<{
+  const [purchasesActive, setPurchasesActive] = useState<{
     trigger: string;
     title: string;
   }>({
@@ -81,6 +46,14 @@ export default function SidebarMenuOwner({
   });
 
   const [warehousesActive, setWarehousesActive] = useState<{
+    trigger: string;
+    title: string;
+  }>({
+    trigger: "",
+    title: "",
+  });
+
+  const [financeActive, setFinanceActive] = useState<{
     trigger: string;
     title: string;
   }>({
@@ -104,80 +77,62 @@ export default function SidebarMenuOwner({
       const title = "text-white";
 
       if (
-        (router.pathname.startsWith("/owner/preorders") &&
-          router.pathname.includes("/owner/preorders/offers")) ||
-        router.pathname.includes("/owner/preorders/out") ||
-        router.pathname.includes("/owner/preorders/in")
+        router.pathname.startsWith("/owner/selling") &&
+        (router.asPath.includes("/owner/selling/histories?role=kasir") ||
+          router.asPath.includes("/owner/selling/histories?role=admin") ||
+          router.pathname.includes("/owner/selling/histories/[id]") ||
+          router.pathname.includes("/owner/selling/documents") ||
+          router.pathname.includes("/owner/selling/documents/[id]") ||
+          router.pathname.includes("/owner/selling/documents/edit/[id]") ||
+          router.pathname.includes("/owner/selling/return") ||
+          router.pathname.includes("/owner/selling/return/create") ||
+          router.pathname.includes("/owner/selling/return/detail"))
       ) {
-        setPreordersActive({
+        setSellingActive({
           trigger,
           title,
         });
       }
 
       if (
-        (router.pathname.startsWith("/owner/invoices") &&
-          router.pathname.includes("/owner/invoices/in")) ||
-        router.pathname.includes("/owner/invoices/out")
+        router.pathname.startsWith("/owner/purchases") &&
+        (router.pathname.includes("/owner/purchases/suppliers") ||
+          router.pathname.includes("/owner/purchases/suppliers/edit") ||
+          router.pathname.includes("/owner/purchases/pricelists") ||
+          router.pathname.includes("/owner/purchases/pricelists/edit") ||
+          router.pathname.includes("/owner/purchases/pricelists/detail") ||
+          router.pathname.includes("/owner/purchases/preorders") ||
+          router.pathname.includes("/owner/purchases/preorders/create") ||
+          router.pathname.includes("/owner/purchases/preorders/detail") ||
+          router.pathname.includes("/owner/purchases/offers") ||
+          router.pathname.includes("/owner/purchases/offers/create") ||
+          router.pathname.includes("/owner/purchases/offers/detail") ||
+          router.pathname.includes("/owner/purchases/invin") ||
+          router.pathname.includes("/owner/purchases/invin/create") ||
+          router.pathname.includes("/owner/purchases/invin/histories") ||
+          router.pathname.includes("/owner/purchases/invin/payments") ||
+          router.pathname.includes("/owner/purchases/invout") ||
+          router.pathname.includes("/owner/purchases/invout/create"))
       ) {
-        setInvoicesActive({
+        setPurchasesActive({
           trigger,
           title,
         });
       }
 
       if (
-        (router.pathname.startsWith("/owner/histories") &&
-          router.asPath.includes("/owner/histories?role=kasir")) ||
-        router.asPath.includes("/owner/histories?role=admin") ||
-        router.pathname.includes("/owner/histories/[id]")
-      ) {
-        setHistoriesActive({
-          trigger,
-          title,
-        });
-      }
-
-      if (
-        (router.pathname.startsWith("/owner/products") &&
-          router.pathname.includes("/owner/products/lists")) ||
-        router.pathname.includes("/owner/products/stocks") ||
-        router.pathname.includes("/owner/products/categories")
-      ) {
-        setProductsActive({
-          trigger,
-          title,
-        });
-      }
-
-      if (
-        (router.pathname.startsWith("/owner/suppliers") &&
-          router.pathname.includes("/owner/suppliers/lists")) ||
-        router.pathname.includes("/owner/suppliers/pricelists")
-      ) {
-        setSuppliersActive({
-          trigger,
-          title,
-        });
-      }
-
-      if (
-        (router.pathname.startsWith("/owner/members") &&
-          router.pathname.includes("/owner/members/lists")) ||
-        router.pathname.includes("/owner/members/levels")
-      ) {
-        setMembersActive({
-          trigger,
-          title,
-        });
-      }
-
-      if (
-        (router.pathname.startsWith("/owner/warehouses") &&
-          router.pathname.includes("/owner/warehouses/in")) ||
-        router.pathname.includes("/owner/warehouses/out") ||
-        router.pathname.includes("/owner/warehouses/documents") ||
-        router.pathname.includes("/owner/warehouses/lists")
+        router.pathname.startsWith("/owner/warehouses") &&
+        (router.asPath.includes("/owner/warehouses/products") ||
+          router.asPath.includes("/owner/warehouses/products/detail") ||
+          router.asPath.includes("/owner/warehouses/products/edit") ||
+          router.asPath.includes("/owner/warehouses/stocks") ||
+          router.asPath.includes("/owner/warehouses/stocks/edit") ||
+          router.asPath.includes("/owner/warehouses/categories") ||
+          router.asPath.includes("/owner/warehouses/categories/edit") ||
+          router.asPath.includes("/owner/warehouses/categories/detail/[id]") ||
+          router.asPath.includes("/owner/warehouses/broken") ||
+          router.asPath.includes("/owner/warehouses/lists") ||
+          router.asPath.includes("/owner/warehouses/lists/edit"))
       ) {
         setWarehousesActive({
           trigger,
@@ -186,10 +141,27 @@ export default function SidebarMenuOwner({
       }
 
       if (
-        (router.pathname.startsWith("/owner/settings") &&
-          router.pathname.includes("/owner/settings/quantityprice")) ||
-        router.pathname.includes("/owner/settings/cashierprice") ||
-        router.pathname.includes("/owner/settings/users")
+        router.pathname.startsWith("/owner/finance") &&
+        (router.asPath.includes("/owner/finance/profit") ||
+          router.asPath.includes("/owner/finance/loss") ||
+          router.asPath.includes("/owner/finance/debt") ||
+          router.asPath.includes("/owner/finance/receivable"))
+      ) {
+        setFinanceActive({
+          trigger,
+          title,
+        });
+      }
+
+      if (
+        router.pathname.startsWith("/owner/settings") &&
+        (router.pathname.includes("/owner/settings/quantityprice") ||
+          router.pathname.includes("/owner/settings/cashierprice") ||
+          router.pathname.includes("/owner/settings/members/lists") ||
+          router.pathname.includes("/owner/settings/members/lists/edit") ||
+          router.pathname.includes("/owner/settings/members/levels") ||
+          router.pathname.includes("/owner/settings/members/levels/edit") ||
+          router.pathname.includes("/owner/settings/users"))
       ) {
         setSettingsActive({
           trigger,
@@ -211,47 +183,54 @@ export default function SidebarMenuOwner({
         isCompact
         itemClasses={{
           ...itemClasses,
-          trigger: `${itemClasses.trigger} ${preordersActive.trigger}`,
-          title: `${itemClasses.title} ${preordersActive.title}`,
+          trigger: `${itemClasses.trigger} ${sellingActive.trigger}`,
+          title: `${itemClasses.title} ${sellingActive.title}`,
         }}
         className="p-0"
       >
         <AccordionItem
           aria-label="button"
-          title="Preorder"
+          title="Penjualan"
           indicator={
             <CaretRight
               weight="bold"
               size={16}
-              className={`${preordersActive.title ? preordersActive.title : "text-gray-600"}`}
+              className={`${sellingActive.title ? sellingActive.title : "text-gray-600"}`}
             />
           }
           startContent={
-            <ClockClockwise
+            <ChartLine
               weight="bold"
               size={20}
-              className={`${preordersActive.title ? preordersActive.title : "text-gray-600"}`}
+              className={`${sellingActive.title ? sellingActive.title : "text-gray-600"}`}
             />
           }
           className="grid gap-1"
         >
           <ButtonSidebar
-            label="Penawaran"
-            path="/owner/preorders/offers"
+            label="Riwayat Admin"
+            path="/owner/selling/histories?role=admin"
             icon={<Circle weight="fill" size={6} />}
             className="mx-4"
           />
 
           <ButtonSidebar
-            label="Keluar"
-            path="/owner/preorders/out"
+            label="Riwayat Kasir"
+            path="/owner/selling/histories?role=kasir"
             icon={<Circle weight="fill" size={6} />}
             className="mx-4"
           />
 
           <ButtonSidebar
-            label="Masuk"
-            path="/owner/preorders/in"
+            label="Surat Jalan"
+            path="/owner/selling/documents"
+            icon={<Circle weight="fill" size={6} />}
+            className="mx-4"
+          />
+
+          <ButtonSidebar
+            label="Retur Penjualan"
+            path="/owner/selling/return"
             icon={<Circle weight="fill" size={6} />}
             className="mx-4"
             isDev={true}
@@ -263,226 +242,78 @@ export default function SidebarMenuOwner({
         isCompact
         itemClasses={{
           ...itemClasses,
-          trigger: `${itemClasses.trigger} ${invoicesActive.trigger}`,
-          title: `${itemClasses.title} ${invoicesActive.title}`,
+          trigger: `${itemClasses.trigger} ${purchasesActive.trigger}`,
+          title: `${itemClasses.title} ${purchasesActive.title}`,
         }}
         className="p-0"
       >
         <AccordionItem
           aria-label="button"
-          title="Invoice"
+          title="Pembelian"
           indicator={
             <CaretRight
               weight="bold"
               size={16}
-              className={`${invoicesActive.title ? invoicesActive.title : "text-gray-600"}`}
+              className={`${purchasesActive.title ? purchasesActive.title : "text-gray-600"}`}
             />
           }
           startContent={
-            <Invoice
+            <ShoppingCartSimple
               weight="bold"
               size={20}
-              className={`${invoicesActive.title ? invoicesActive.title : "text-gray-600"}`}
+              className={`${purchasesActive.title ? purchasesActive.title : "text-gray-600"}`}
             />
           }
           className="grid gap-1"
         >
           <ButtonSidebar
-            label="Masuk"
-            path="/owner/invoices/in"
+            label="Buat Penawaran"
+            path="/owner/purchases/offers"
             icon={<Circle weight="fill" size={6} />}
             className="mx-4"
           />
 
           <ButtonSidebar
-            label="Keluar"
-            path="/owner/invoices/out"
+            label="Buat Preorder"
+            path="/owner/purchases/preorders"
+            icon={<Circle weight="fill" size={6} />}
+            className="mx-4"
+          />
+
+          <ButtonSidebar
+            label="Invoice Masuk"
+            path="/owner/purchases/invin"
+            icon={<Circle weight="fill" size={6} />}
+            className="mx-4"
+          />
+
+          <ButtonSidebar
+            label="Invoice Keluar"
+            path="/owner/purchases/invout"
+            icon={<Circle weight="fill" size={6} />}
+            className="mx-4"
+          />
+
+          <ButtonSidebar
+            label="Supplier"
+            path="/owner/purchases/suppliers"
+            icon={<Circle weight="fill" size={6} />}
+            className="mx-4"
+          />
+
+          <ButtonSidebar
+            label="Pricelist Supplier"
+            path="/owner/purchases/pricelists"
+            icon={<Circle weight="fill" size={6} />}
+            className="mx-4"
+          />
+
+          <ButtonSidebar
+            label="Form Barang Masuk"
+            path="/owner/purchases/forms"
             icon={<Circle weight="fill" size={6} />}
             className="mx-4"
             isDev={true}
-          />
-        </AccordionItem>
-      </Accordion>
-
-      <Accordion
-        isCompact
-        itemClasses={{
-          ...itemClasses,
-          trigger: `${itemClasses.trigger} ${historiesActive.trigger}`,
-          title: `${itemClasses.title} ${historiesActive.title}`,
-        }}
-        className="p-0"
-      >
-        <AccordionItem
-          aria-label="button"
-          title="Riwayat"
-          indicator={
-            <CaretRight
-              weight="bold"
-              size={16}
-              className={`${historiesActive.title ? historiesActive.title : "text-gray-600"}`}
-            />
-          }
-          startContent={
-            <ClockCounterClockwise
-              weight="bold"
-              size={20}
-              className={`${historiesActive.title ? historiesActive.title : "text-gray-600"}`}
-            />
-          }
-          className="grid gap-1"
-        >
-          <ButtonSidebar
-            label="Penjualan Admin"
-            path="/owner/histories?role=admin"
-            icon={<Circle weight="fill" size={6} />}
-            className="mx-4"
-          />
-
-          <ButtonSidebar
-            label="Penjualan Kasir"
-            path="/owner/histories?role=kasir"
-            icon={<Circle weight="fill" size={6} />}
-            className="mx-4"
-          />
-        </AccordionItem>
-      </Accordion>
-
-      <Accordion
-        isCompact
-        itemClasses={{
-          ...itemClasses,
-          trigger: `${itemClasses.trigger} ${productsActive.trigger}`,
-          title: `${itemClasses.title} ${productsActive.title}`,
-        }}
-        className="p-0"
-      >
-        <AccordionItem
-          aria-label="button"
-          title="Produk"
-          indicator={
-            <CaretRight
-              weight="bold"
-              size={16}
-              className={`${productsActive.title ? productsActive.title : "text-gray-600"}`}
-            />
-          }
-          startContent={
-            <ArchiveBox
-              weight="bold"
-              size={20}
-              className={`${productsActive.title ? productsActive.title : "text-gray-600"}`}
-            />
-          }
-          className="grid gap-1"
-        >
-          <ButtonSidebar
-            label="Daftar Produk"
-            path="/owner/products/lists"
-            icon={<Circle weight="fill" size={6} />}
-            className="mx-4"
-          />
-
-          <ButtonSidebar
-            label="Stok Produk"
-            path="/owner/products/stocks"
-            icon={<Circle weight="fill" size={6} />}
-            className="mx-4"
-          />
-
-          <ButtonSidebar
-            label="Kategori Produk"
-            path="/owner/products/categories"
-            icon={<Circle weight="fill" size={6} />}
-            className="mx-4"
-          />
-        </AccordionItem>
-      </Accordion>
-
-      <Accordion
-        isCompact
-        itemClasses={{
-          ...itemClasses,
-          trigger: `${itemClasses.trigger} ${suppliersActive.trigger}`,
-          title: `${itemClasses.title} ${suppliersActive.title}`,
-        }}
-        className="p-0"
-      >
-        <AccordionItem
-          aria-label="button"
-          title="Supplier"
-          indicator={
-            <CaretRight
-              weight="bold"
-              size={16}
-              className={`${suppliersActive.title ? suppliersActive.title : "text-gray-600"}`}
-            />
-          }
-          startContent={
-            <Truck
-              weight="bold"
-              size={20}
-              className={`${suppliersActive.title ? suppliersActive.title : "text-gray-600"}`}
-            />
-          }
-          className="grid gap-1"
-        >
-          <ButtonSidebar
-            label="Daftar Supplier"
-            path="/owner/suppliers/lists"
-            icon={<Circle weight="fill" size={6} />}
-            className="mx-4"
-          />
-
-          <ButtonSidebar
-            label="Harga Supplier"
-            path="/owner/suppliers/pricelists"
-            icon={<Circle weight="fill" size={6} />}
-            className="mx-4"
-          />
-        </AccordionItem>
-      </Accordion>
-
-      <Accordion
-        isCompact
-        itemClasses={{
-          ...itemClasses,
-          trigger: `${itemClasses.trigger} ${membersActive.trigger}`,
-          title: `${itemClasses.title} ${membersActive.title}`,
-        }}
-        className="p-0"
-      >
-        <AccordionItem
-          aria-label="button"
-          title="Member"
-          indicator={
-            <CaretRight
-              weight="bold"
-              size={16}
-              className={`${membersActive.title ? membersActive.title : "text-gray-600"}`}
-            />
-          }
-          startContent={
-            <Users
-              weight="bold"
-              size={20}
-              className={`${membersActive.title ? membersActive.title : "text-gray-600"}`}
-            />
-          }
-          className="grid gap-1"
-        >
-          <ButtonSidebar
-            label="Daftar Member"
-            path="/owner/members/lists"
-            icon={<Circle weight="fill" size={6} />}
-            className="mx-4"
-          />
-
-          <ButtonSidebar
-            label="Level Member"
-            path="/owner/members/levels"
-            icon={<Circle weight="fill" size={6} />}
-            className="mx-4"
           />
         </AccordionItem>
       </Accordion>
@@ -515,25 +346,41 @@ export default function SidebarMenuOwner({
           }
           className="grid gap-1"
         >
-          {/* <ButtonSidebar
-                        label="In"
-                        path="/owner/warehouses/in"
-                        icon={<Circle weight="fill" size={6} />}
-                        className="mx-4"
-                      /> */}
-
-          {/* <ButtonSidebar
-                        label="Out"
-                        path="/owner/warehouses/out"
-                        icon={<Circle weight="fill" size={6} />}
-                        className="mx-4"
-                      /> */}
-
           <ButtonSidebar
-            label="Surat Jalan"
-            path="/owner/warehouses/documents"
+            label="Produk"
+            path="/owner/warehouses/products"
             icon={<Circle weight="fill" size={6} />}
             className="mx-4"
+          />
+
+          <ButtonSidebar
+            label="Stok Produk"
+            path="/owner/warehouses/stocks"
+            icon={<Circle weight="fill" size={6} />}
+            className="mx-4"
+          />
+
+          <ButtonSidebar
+            label="Kategori Produk"
+            path="/owner/warehouses/categories"
+            icon={<Circle weight="fill" size={6} />}
+            className="mx-4"
+          />
+
+          <ButtonSidebar
+            label="Barang Rusak"
+            path="/owner/warehouses/broken"
+            icon={<Circle weight="fill" size={6} />}
+            className="mx-4"
+            isDev={true}
+          />
+
+          <ButtonSidebar
+            label="Barang Masuk"
+            path="/owner/warehouses/broken"
+            icon={<Circle weight="fill" size={6} />}
+            className="mx-4"
+            isDev={true}
           />
 
           <ButtonSidebar
@@ -541,6 +388,68 @@ export default function SidebarMenuOwner({
             path="/owner/warehouses/lists"
             icon={<Circle weight="fill" size={6} />}
             className="mx-4"
+          />
+        </AccordionItem>
+      </Accordion>
+
+      <Accordion
+        isCompact
+        itemClasses={{
+          ...itemClasses,
+          trigger: `${itemClasses.trigger} ${financeActive.trigger}`,
+          title: `${itemClasses.title} ${financeActive.title}`,
+        }}
+        className="p-0"
+      >
+        <AccordionItem
+          aria-label="button"
+          title="Keuangan"
+          indicator={
+            <CaretRight
+              weight="bold"
+              size={16}
+              className={`${financeActive.title ? financeActive.title : "text-gray-600"}`}
+            />
+          }
+          startContent={
+            <Money
+              weight="bold"
+              size={20}
+              className={`${financeActive.title ? financeActive.title : "text-gray-600"}`}
+            />
+          }
+          className="grid gap-1"
+        >
+          <ButtonSidebar
+            label="Laba"
+            path="/owner/finance/profit"
+            icon={<Circle weight="fill" size={6} />}
+            className="mx-4"
+            isDev={true}
+          />
+
+          <ButtonSidebar
+            label="Rugi"
+            path="/owner/finance/loss"
+            icon={<Circle weight="fill" size={6} />}
+            className="mx-4"
+            isDev={true}
+          />
+
+          <ButtonSidebar
+            label="Hutang"
+            path="/owner/finance/debt"
+            icon={<Circle weight="fill" size={6} />}
+            className="mx-4"
+            isDev={true}
+          />
+
+          <ButtonSidebar
+            label="Piutang"
+            path="/owner/finance/receivable"
+            icon={<Circle weight="fill" size={6} />}
+            className="mx-4"
+            isDev={true}
           />
         </AccordionItem>
       </Accordion>
@@ -583,6 +492,20 @@ export default function SidebarMenuOwner({
           <ButtonSidebar
             label="Harga Quantity"
             path="/owner/settings/quantityprice"
+            icon={<Circle weight="fill" size={6} />}
+            className="mx-4"
+          />
+
+          <ButtonSidebar
+            label="Member"
+            path="/owner/settings/members/lists"
+            icon={<Circle weight="fill" size={6} />}
+            className="mx-4"
+          />
+
+          <ButtonSidebar
+            label="Level Member"
+            path="/owner/settings/members/levels"
             icon={<Circle weight="fill" size={6} />}
             className="mx-4"
           />
