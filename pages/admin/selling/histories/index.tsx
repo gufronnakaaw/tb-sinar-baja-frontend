@@ -63,7 +63,7 @@ export default function AdminHistoriesPage(
 
           <HistoriesTable
             transaksi={filter}
-            path="/admin/histories"
+            path="/admin/selling/histories"
             role={props.role}
           />
         </div>
