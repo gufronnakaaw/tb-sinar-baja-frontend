@@ -35,7 +35,7 @@ export default function PriceQuantityUpdate(
       setLoading(false);
 
       alert("update berhasil");
-      return router.push("/owner/settings/quantityprice");
+      return router.back();
     } catch (error) {
       setLoading(false);
       const response = error as {

@@ -99,7 +99,9 @@ export default function UsersTable({
                 variant="light"
                 size="sm"
                 onClick={() =>
-                  router.push(`/owner/users/edit?username=${user.username}`)
+                  router.push(
+                    `/owner/settings/users/edit?username=${user.username}`,
+                  )
                 }
               >
                 <Pencil weight="bold" size={20} className="text-default-600" />

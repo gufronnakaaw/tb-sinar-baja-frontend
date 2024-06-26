@@ -49,7 +49,7 @@ export default function EditUser({
       });
       setLoading(false);
       alert("update berhasil");
-      return router.push("/owner/users");
+      return router.back();
     } catch (error) {
       setLoading(false);
       const response = error as {
@@ -76,9 +76,7 @@ export default function EditUser({
   return (
     <Layout title="Edit Pengguna">
       <Container className="gap-12">
-        <ButtonBack onClick={() => router.push("/owner/users")}>
-          Kembali
-        </ButtonBack>
+        <ButtonBack onClick={() => router.back()}>Kembali</ButtonBack>
 
         <div className="grid gap-6">
           <Input

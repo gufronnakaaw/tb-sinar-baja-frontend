@@ -1,46 +1,33 @@
 import { Button, Input, Spinner } from "@nextui-org/react";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 
-// components & utils
-import ButtonBack from "@/components/button/ButtonBack";
+// components
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
+
+import ButtonBack from "@/components/button/ButtonBack";
+import { GlobalResponse } from "@/types/global.type";
+import { LevelType } from "@/types/members";
 import { fetcher } from "@/utils/fetcher";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { useRouter } from "next/router";
+import { useState } from "react";
 
-export default function WarehousesUpdate({
-  kode_gudang,
-  nama,
-}: {
-  kode_gudang: string;
-  nama: string;
-}) {
+export default function WarehousesUpdate(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>,
+) {
   const router = useRouter();
-  const [namaGudang, setNamaGudang] = useState(nama);
-  const [client, setClient] = useState(false);
+  const [nama, setNama] = useState(props.level?.nama);
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setClient(true);
-  }, [router]);
-
-  if (!client) {
-    return;
-  }
-
-  if (!kode_gudang) {
-    return router.back();
-  }
 
   async function handleUpdate() {
     setLoading(true);
     try {
       await fetcher({
-        url: "/gudang",
+        url: "/level",
         method: "PATCH",
         data: {
-          kode_gudang,
-          nama: namaGudang,
+          id_level: props.level?.id_level,
+          nama,
         },
       });
       alert("update berhasil");
@@ -52,20 +39,20 @@ export default function WarehousesUpdate({
   }
 
   return (
-    <Layout title={`Update Gudang ${kode_gudang}`}>
+    <Layout title={`Update Level ${props.level?.nama}`}>
       <Container className="gap-12">
         <ButtonBack onClick={() => router.back()}>Kembali</ButtonBack>
 
         <div className="grid gap-6">
           <Input
-            defaultValue={namaGudang as string}
+            defaultValue={nama}
             isRequired
             variant="flat"
             color="default"
             labelPlacement="outside"
-            label="Nama Gudang"
-            placeholder="Masukan nama gudang..."
-            onChange={(e) => setNamaGudang(e.target.value)}
+            label="Nama Level"
+            placeholder="Masukan nama level..."
+            onChange={(e) => setNama(e.target.value)}
           />
 
           {loading ? (
@@ -85,7 +72,7 @@ export default function WarehousesUpdate({
               onClick={handleUpdate}
               className="justify-self-end font-medium"
             >
-              Update Gudang
+              Update
             </Button>
           )}
         </div>
@@ -94,15 +81,15 @@ export default function WarehousesUpdate({
   );
 }
 
-export const getServerSideProps = ({
-  query,
-}: {
-  query: { kode_gudang: string; nama: string };
-}) => {
+export const getServerSideProps = (async ({ query }) => {
+  const level: GlobalResponse<LevelType[]> = await fetcher({
+    url: "/level",
+    method: "GET",
+  });
+
   return {
     props: {
-      kode_gudang: query?.kode_gudang,
-      nama: query?.nama,
+      level: level.data.find((item) => item.id_level == query?.id_level),
     },
   };
-};
+}) satisfies GetServerSideProps<{ level: LevelType | undefined }>;

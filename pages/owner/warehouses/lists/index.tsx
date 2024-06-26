@@ -208,7 +208,11 @@ function SubComponentWarehousesPage({
             </Modal>
           </div>
 
-          <WarehousesListsTable gudang={gudang} handleDelete={handleDelete} />
+          <WarehousesListsTable
+            gudang={gudang}
+            handleDelete={handleDelete}
+            role="owner"
+          />
         </div>
       </Container>
     </Layout>

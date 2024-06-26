@@ -1,6 +1,6 @@
 import { Button, Input, Spinner } from "@nextui-org/react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 // components & utils
 import ButtonBack from "@/components/button/ButtonBack";
@@ -8,27 +8,18 @@ import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 import { fetcher } from "@/utils/fetcher";
 
-export default function WarehousesUpdate({
-  kode_gudang,
+export default function CategoriesUpdate({
+  id_kategori,
   nama,
 }: {
-  kode_gudang: string;
+  id_kategori: string;
   nama: string;
 }) {
   const router = useRouter();
-  const [namaGudang, setNamaGudang] = useState(nama);
-  const [client, setClient] = useState(false);
+  const [namaKategori, setNamaKategori] = useState(nama);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    setClient(true);
-  }, [router]);
-
-  if (!client) {
-    return;
-  }
-
-  if (!kode_gudang) {
+  if (!id_kategori) {
     return router.back();
   }
 
@@ -36,11 +27,11 @@ export default function WarehousesUpdate({
     setLoading(true);
     try {
       await fetcher({
-        url: "/gudang",
+        url: "/kategori",
         method: "PATCH",
         data: {
-          kode_gudang,
-          nama: namaGudang,
+          id_kategori: parseInt(id_kategori),
+          nama: namaKategori,
         },
       });
       alert("update berhasil");
@@ -52,20 +43,20 @@ export default function WarehousesUpdate({
   }
 
   return (
-    <Layout title={`Update Gudang ${kode_gudang}`}>
+    <Layout title={`Update kategori ${nama}`}>
       <Container className="gap-12">
         <ButtonBack onClick={() => router.back()}>Kembali</ButtonBack>
 
         <div className="grid gap-6">
           <Input
-            defaultValue={namaGudang as string}
+            defaultValue={namaKategori as string}
             isRequired
             variant="flat"
             color="default"
             labelPlacement="outside"
-            label="Nama Gudang"
-            placeholder="Masukan nama gudang..."
-            onChange={(e) => setNamaGudang(e.target.value)}
+            label="Nama Kategori"
+            placeholder="Masukan nama kategori..."
+            onChange={(e) => setNamaKategori(e.target.value)}
           />
 
           {loading ? (
@@ -85,7 +76,7 @@ export default function WarehousesUpdate({
               onClick={handleUpdate}
               className="justify-self-end font-medium"
             >
-              Update Gudang
+              Update Kategori
             </Button>
           )}
         </div>
@@ -97,11 +88,11 @@ export default function WarehousesUpdate({
 export const getServerSideProps = ({
   query,
 }: {
-  query: { kode_gudang: string; nama: string };
+  query: { id_kategori: string; nama: string };
 }) => {
   return {
     props: {
-      kode_gudang: query?.kode_gudang,
+      id_kategori: query?.id_kategori,
       nama: query?.nama,
     },
   };
