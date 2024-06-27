@@ -67,7 +67,7 @@ function SubComponentOffersPage({
               variant="solid"
               color="primary"
               className="w-full font-medium sm:w-max"
-              onClick={() => router.push("/owner/preorders/offers/create")}
+              onClick={() => router.push("/owner/purchases/offers/create")}
             >
               Buat Penawaran
             </Button>

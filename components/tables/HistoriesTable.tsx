@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { Eye, HandCoins } from "@phosphor-icons/react";
+import { Eye } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
 import StatusMetode from "../status/StatusMetode";
 import StatusPayment from "../status/StatusPayment";
@@ -53,7 +53,6 @@ export default function HistoriesTable({
         { name: "Tipe", uid: "tipe" },
         { name: "Metode", uid: "metode" },
         { name: "Total", uid: "total_pembayaran" },
-        { name: "Diterima", uid: "pembayaran" },
         { name: "Estimasi Barang", uid: "estimasi" },
         { name: "Status", uid: "status" },
         { name: "Aksi", uid: "action" },
@@ -108,14 +107,6 @@ export default function HistoriesTable({
             {formatRupiah(transaction.total_pembayaran)}
           </div>
         );
-      case "pembayaran":
-        return (
-          <div className="capitalize text-default-900">
-            {transaction.metode == "tempo"
-              ? formatRupiah(transaction.pembayaran)
-              : "-"}
-          </div>
-        );
       case "estimasi":
         return (
           <div className="capitalize text-default-900">
@@ -131,26 +122,6 @@ export default function HistoriesTable({
       case "action":
         return (
           <div className="flex max-w-[110px] items-center gap-1">
-            {transaction.status == "piutang" ? (
-              <CustomTooltip content="Bayar">
-                <Button
-                  isIconOnly
-                  variant="light"
-                  size="sm"
-                  onClick={() =>
-                    router.push(
-                      `/${path.split("/")[1]}/selling/histories/payment?id_transaksi=${transaction.id_transaksi}&total_pembayaran=${transaction.total_pembayaran}&sisa=${transaction.total_pembayaran - transaction.pembayaran}`,
-                    )
-                  }
-                >
-                  <HandCoins
-                    weight="bold"
-                    size={20}
-                    className="text-default-600"
-                  />
-                </Button>
-              </CustomTooltip>
-            ) : null}
             <CustomTooltip content="Detail">
               <Button
                 isIconOnly
@@ -199,7 +170,9 @@ export default function HistoriesTable({
       >
         <TableHeader columns={columnsTransaksi}>
           {(column) => (
-            <TableColumn key={column.uid}>{column.name}</TableColumn>
+            <TableColumn className="text-center" key={column.uid}>
+              {column.name}
+            </TableColumn>
           )}
         </TableHeader>
 
@@ -207,7 +180,7 @@ export default function HistoriesTable({
           {(transaction) => (
             <TableRow key={transaction.id_transaksi}>
               {(columnKey) => (
-                <TableCell>
+                <TableCell className="text-center">
                   {renderCellTransaksi(transaction, columnKey)}
                 </TableCell>
               )}

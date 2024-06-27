@@ -139,7 +139,7 @@ export default function PriceQuantityPage(
   }
 
   if (swr.isLoading) {
-    return <LoadingScreen role="admin" />;
+    return <LoadingScreen role="owner" />;
   }
 
   if (swr.error) {
@@ -213,7 +213,7 @@ export default function PriceQuantityPage(
 
                       <ProductTable
                         produk={produk}
-                        role="admin"
+                        role="owner"
                         isLoading={loadingProduk}
                         selectionChange={setSelection}
                       />

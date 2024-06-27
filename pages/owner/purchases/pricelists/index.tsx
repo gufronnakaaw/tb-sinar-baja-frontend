@@ -64,7 +64,11 @@ function SubComponentSuppliersPage({
             onChange={(e) => setSearch(e.target.value)}
           />
 
-          <SuppliersPricelistsTable supplier={supplier} mutate={mutate} />
+          <SuppliersPricelistsTable
+            supplier={supplier}
+            mutate={mutate}
+            role="owner"
+          />
         </div>
       </Container>
     </Layout>

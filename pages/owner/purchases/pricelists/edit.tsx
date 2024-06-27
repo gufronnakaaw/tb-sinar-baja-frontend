@@ -58,9 +58,7 @@ export default function SubComponentSuppliersPage(
       alert("harga produk berhasil diubah");
       setHarga(0);
       setHargaGrosir(0);
-      router.push(
-        `/owner/purchases/pricelists/detail?id_supplier=${props.id_supplier}&nama=${props.nama}`,
-      );
+      router.back();
     } catch (error) {
       const response = error as {
         success: boolean;

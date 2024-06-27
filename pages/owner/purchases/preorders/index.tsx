@@ -67,7 +67,7 @@ function SubComponentPreorder({
               variant="solid"
               color="primary"
               className="w-full font-medium sm:w-max"
-              onClick={() => router.push("/owner/preorders/out/create")}
+              onClick={() => router.push("/owner/purchases/preorders/create")}
             >
               Buat Pre Order
             </Button>

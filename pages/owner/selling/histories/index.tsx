@@ -36,7 +36,7 @@ export default function OwnerHistoriesPage(
   });
 
   if (swr.isLoading) {
-    return <LoadingScreen role="admin" />;
+    return <LoadingScreen role="owner" />;
   }
 
   if (swr.error) {

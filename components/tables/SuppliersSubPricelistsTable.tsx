@@ -82,7 +82,7 @@ export default function SuppliersSubPricelistsTable({
                 size="sm"
                 onClick={() =>
                   router.push(
-                    `/${role}/suppliers/pricelists/edit?id_supplier=${id_supplier}&nama=${nama}&nama_produk=${produk.nama_produk}&kode_item=${produk.kode_item}&harga=${produk.harga}&harga_grosir=${produk.harga_grosir}`,
+                    `/${role}/purchases/pricelists/edit?id_supplier=${id_supplier}&nama=${nama}&nama_produk=${produk.nama_produk}&kode_item=${produk.kode_item}&harga=${produk.harga}&harga_grosir=${produk.harga_grosir}`,
                   )
                 }
               >
