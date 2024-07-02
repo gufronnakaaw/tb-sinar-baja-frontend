@@ -289,7 +289,6 @@ function SubComponentMemberPage({
                       {loading ? (
                         <Button
                           variant="solid"
-                          color="primary"
                           startContent={<Spinner color="white" size="sm" />}
                           className={`${loading ? "cursor-not-allowed bg-teal-500 font-medium text-white" : ""}`}
                         >
@@ -298,20 +297,13 @@ function SubComponentMemberPage({
                       ) : (
                         <Button
                           variant="solid"
-                          color={
-                            Object.keys(input).length < 2 ||
-                            !input?.nama ||
-                            !levelId
-                              ? "default"
-                              : "primary"
-                          }
                           onClick={createMember}
                           disabled={
                             Object.keys(input).length < 2 ||
                             !input?.nama ||
                             !levelId
                           }
-                          className={`font-medium ${Object.keys(input).length < 2 || !input?.nama || !levelId ? "cursor-not-allowed bg-teal-500 text-white" : null}`}
+                          className={`bg-teal-500 font-medium text-white ${Object.keys(input).length < 2 || !input?.nama || !levelId ? "cursor-not-allowed" : null}`}
                         >
                           Tambah
                         </Button>
