@@ -25,9 +25,11 @@ export default function BaseTable({ role }: { role: string }) {
       >
         <TableHeader>
           <TableColumn>Testing</TableColumn>
+          <TableColumn>Testing</TableColumn>
         </TableHeader>
         <TableBody>
           <TableRow>
+            <TableCell>Testing</TableCell>
             <TableCell>Testing</TableCell>
           </TableRow>
         </TableBody>
