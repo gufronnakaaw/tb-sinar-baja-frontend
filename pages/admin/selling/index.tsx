@@ -370,6 +370,18 @@ export default function SellingPageAdmin() {
               </ModalBody>
               <ModalFooter>
                 <Button
+                  className="bg-teal-200 text-teal-600"
+                  onPress={() => {
+                    window.open(
+                      `${window.location.origin}/admin/settings/members/lists`,
+                      "popup",
+                      "location=yes,height=1000,width=1000,scrollbars=yes,status=yes",
+                    );
+                  }}
+                >
+                  Buat Member Baru
+                </Button>
+                <Button
                   className="bg-teal-500 text-white"
                   onPress={() => {
                     if (!idMember) {
