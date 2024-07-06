@@ -41,7 +41,7 @@ type ProdukDetailType = {
   rak: string;
   stok_aman: number;
   subkategori: string;
-  gudang: string;
+  gudang: { nama: string; kode_gudang: string }[];
   kategori: string;
   status_stok: string;
 };
@@ -61,7 +61,7 @@ export default function ProductDetail({
 
   Object.assign(backup, {
     kategori: `${produk.data.kategori} - ${produk.data.subkategori}`,
-    gudang: `${produk.data.gudang} - ${produk.data.rak}`,
+    gudang: `${produk.data.gudang.map((el) => el.nama).join(", ")} - ${produk.data.rak}`,
   });
 
   const filter = exclude(backup, [

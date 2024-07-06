@@ -84,7 +84,7 @@ export default function ProductStocksTable({
                 size="sm"
                 onClick={() =>
                   router.push(
-                    `/${role}/warehouses/stocks/edit?kode_item=${produk.kode_item}&stok=${produk.stok}&stok_aman=${produk.stok_aman}&nama_produk=${produk.nama_produk}`,
+                    `/${role}/warehouses/stocks/edit?kode_item=${produk.kode_item}`,
                   )
                 }
               >

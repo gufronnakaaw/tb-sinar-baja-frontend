@@ -42,7 +42,7 @@ type ProdukDetailType = {
   rak: string;
   stok_aman: number;
   subkategori: string;
-  gudang: string;
+  gudang: { nama: string; kode_gudang: string }[];
   kategori: string;
   status_stok: string;
   berat: number;
@@ -95,7 +95,12 @@ export default function ProductDetail({
   return (
     <Layout title="Edit Produk">
       <Container className="gap-12">
-        <ButtonBack onClick={() => router.back()}>Kembali</ButtonBack>
+        <ButtonBack
+          onClick={() => router.back()}
+          className="justify-self-start text-primary"
+        >
+          Kembali
+        </ButtonBack>
 
         <div className="grid gap-12">
           <div className="grid grid-cols-3 gap-6">
@@ -504,35 +509,6 @@ export default function ProductDetail({
               variant="flat"
               label={
                 <span className="inline-flex items-center">
-                  Gudang
-                  {
-                    <CustomTooltip content="Jika ingin merubah gudang wajib isi dengan Kode Gudang bukan Nama Gudang!">
-                      <WarningCircle
-                        weight="bold"
-                        size={16}
-                        className="ml-1 cursor-pointer text-default-600"
-                      />
-                    </CustomTooltip>
-                  }
-                </span>
-              }
-              labelPlacement="outside"
-              name="gudang_id"
-              placeholder="Masukan Gudang"
-              defaultValue={produk.data.gudang}
-              onChange={(e) => {
-                setInput({
-                  ...input,
-                  [e.target.name]: e.target.value,
-                });
-              }}
-            />
-
-            <Input
-              isRequired
-              variant="flat"
-              label={
-                <span className="inline-flex items-center">
                   Subkategori
                   {
                     <CustomTooltip content="Jika ingin merubah subkategori wajib isi dengan Kode Subkategori bukan Nama Subkategori!">
@@ -562,19 +538,17 @@ export default function ProductDetail({
         {loading ? (
           <Button
             variant="solid"
-            color="primary"
             startContent={<Spinner color="white" size="sm" />}
-            className={`${loading ? "cursor-not-allowed justify-self-end font-medium" : ""}`}
+            className={`bg-primary text-white ${loading ? "cursor-not-allowed justify-self-end font-medium" : ""}`}
           >
             Tunggu
           </Button>
         ) : (
           <Button
             variant="solid"
-            color="primary"
             size="md"
             onClick={handleUpdate}
-            className="w-max justify-self-end font-medium"
+            className="w-max justify-self-end bg-primary font-medium text-white"
           >
             Update Produk
           </Button>

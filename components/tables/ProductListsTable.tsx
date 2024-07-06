@@ -12,8 +12,6 @@ import { useRouter } from "next/router";
 // utils
 import CustomTooltip from "@/components/tooltip";
 import { formatDate } from "@/utils/formatDate";
-import { formatRupiah } from "@/utils/formatRupiah";
-import { PRICENAME } from "@/utils/price";
 import { Button } from "@nextui-org/react";
 import { Eye, Pencil } from "@phosphor-icons/react";
 
@@ -39,7 +37,7 @@ export default function ProductListsTable({
     { name: "Kode Item", uid: "kode_item" },
     { name: "Nama Produk", uid: "nama_produk" },
     { name: "Kategori", uid: "kategori" },
-    { name: "Harga Retail", uid: "harga_retail" },
+    { name: "Subkategori", uid: "subkategori" },
     { name: "Dibuat Pada", uid: "created_at" },
     { name: "Diubah Pada", uid: "updated_at" },
     { name: "Aksi", uid: "action" },
@@ -64,16 +62,10 @@ export default function ProductListsTable({
           </CustomTooltip>
         );
       case "kategori":
+        return <div className="w-max text-default-900">{produk.kategori}</div>;
+      case "subkategori":
         return (
-          <div className="w-max text-default-900">
-            {produk.kategori} - {produk.subkategori}
-          </div>
-        );
-      case "harga_retail":
-        return (
-          <div className="text-default-900">
-            {formatRupiah(produk[PRICENAME.harga_retail as keyof ProdukType])}
-          </div>
+          <div className="w-max text-default-900">{produk.subkategori}</div>
         );
       case "created_at":
         return (

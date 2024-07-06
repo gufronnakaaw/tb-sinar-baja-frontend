@@ -42,7 +42,7 @@ type ProdukDetailType = {
   rak: string;
   stok_aman: number;
   subkategori: string;
-  gudang: string;
+  gudang: { nama: string; kode_gudang: string }[];
   kategori: string;
   status_stok: string;
   berat: number;
@@ -496,35 +496,6 @@ export default function ProductDetail({
               name="rak"
               placeholder="Masukan Lokasi Rak"
               defaultValue={produk.data.rak}
-              onChange={(e) => {
-                setInput({
-                  ...input,
-                  [e.target.name]: e.target.value,
-                });
-              }}
-            />
-
-            <Input
-              isRequired
-              variant="flat"
-              label={
-                <span className="inline-flex items-center">
-                  Gudang
-                  {
-                    <CustomTooltip content="Jika ingin merubah gudang wajib isi dengan Kode Gudang bukan Nama Gudang!">
-                      <WarningCircle
-                        weight="bold"
-                        size={16}
-                        className="ml-1 cursor-pointer text-default-600"
-                      />
-                    </CustomTooltip>
-                  }
-                </span>
-              }
-              labelPlacement="outside"
-              name="gudang_id"
-              placeholder="Masukan Gudang"
-              defaultValue={produk.data.gudang}
               onChange={(e) => {
                 setInput({
                   ...input,

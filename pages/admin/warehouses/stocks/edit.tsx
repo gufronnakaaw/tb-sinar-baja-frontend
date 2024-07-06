@@ -1,60 +1,51 @@
-import { Button, Input, Spinner } from "@nextui-org/react";
+import { Button, Input, Select, SelectItem, Spinner } from "@nextui-org/react";
 import { WarningCircle } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 // components & utils
 import ButtonBack from "@/components/button/ButtonBack";
 import CustomTooltip from "@/components/tooltip";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
+import { GlobalResponse } from "@/types/global.type";
+import { ProdukType } from "@/types/products.type";
 import { fetcher } from "@/utils/fetcher";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
 export default function StockUpdate({
-  kode_item,
-  stok,
-  stok_aman,
-  nama_produk,
-}: {
-  kode_item: string;
-  stok: string;
-  stok_aman: string;
-  nama_produk: string;
-}) {
-  const [stokSekarang, setStokSekarang] = useState("0");
-  const [stokAmanSekarang, setStokAmanSekarang] = useState(stok_aman);
-  const [client, setClient] = useState(false);
+  produk,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [stokSekarang, setStokSekarang] = useState(0);
+  const [stokAmanSekarang, setStokAmanSekarang] = useState(0);
+  const [kodeGudang, setKodeGudang] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const gudang = produk.gudang as {
+    stok: number;
+    stok_aman: null;
+    nama: string;
+    kode_gudang: string;
+  }[];
 
   const router = useRouter();
 
-  useEffect(() => {
-    setClient(true);
-  }, [router]);
-
-  if (!client) {
-    return;
-  }
-
-  if (!kode_item) {
-    return router.back();
-  }
-
   async function handleUpdate() {
+    if (!kodeGudang) {
+      return alert("silahkan pilih gudang");
+    }
+
     setLoading(true);
 
     const data = {
-      kode_item,
+      kode_item: produk.kode_item,
+      stok: stokSekarang,
+      tipe: "increment",
     };
 
-    if (stokAmanSekarang != stok_aman) {
+    if (stokAmanSekarang) {
       Object.assign(data, {
-        stok_aman: parseInt(stokAmanSekarang),
-      });
-    } else {
-      Object.assign(data, {
-        stok: parseInt(stokSekarang),
-        tipe: "increment",
+        stok_aman: stokAmanSekarang,
       });
     }
 
@@ -62,11 +53,18 @@ export default function StockUpdate({
       await fetcher({
         url: "/produk/stok",
         method: "PATCH",
-        data,
+        data: {
+          ...data,
+          gudang: kodeGudang,
+        },
       });
       alert("update stok berhasil");
+      setLoading(false);
+
       return router.back();
     } catch (error) {
+      setLoading(false);
+
       const response = error as {
         success: boolean;
         status_code: number;
@@ -105,31 +103,58 @@ export default function StockUpdate({
             </h4>
 
             <div className="grid gap-[2px]">
-              <div className="grid grid-cols-[170px_10px_10fr]  gap-1 text-sm text-default-900">
+              <div className="grid grid-cols-[250px_10px_10fr]  gap-1 text-sm text-default-900">
                 <div className="text-sm font-medium text-default-600">
                   Nama Produk
                 </div>
                 <div className="font-medium">:</div>
-                <p className="font-bold text-teal-500">{nama_produk}</p>
+                <p className="font-bold text-teal-500">{produk.nama_produk}</p>
               </div>
-              <div className="grid grid-cols-[170px_10px_10fr]  gap-1 text-sm text-default-900">
-                <div className="text-sm font-medium text-default-600">
-                  Stok Sekarang
-                </div>
-                <div className="font-medium">:</div>
-                <p className="font-bold text-teal-500">{stok}</p>
-              </div>
-              <div className="grid grid-cols-[170px_10px_10fr]  gap-1 text-sm text-default-900">
-                <div className="grid text-sm font-medium text-default-600">
-                  Stok Aman Sekarang
-                </div>
-                <div className="font-medium">:</div>
-                <p className="font-bold text-teal-500">{stok_aman}</p>
-              </div>
+              {produk.gudang?.map((item) => {
+                return (
+                  <>
+                    <div className="grid grid-cols-[250px_10px_10fr]  gap-1 text-sm text-default-900">
+                      <div className="text-sm font-medium text-default-600">
+                        Stok {item.nama} Sekarang
+                      </div>
+                      <div className="font-medium">:</div>
+                      <p className="font-bold text-teal-500">{item.stok}</p>
+                    </div>
+                    <div className="grid grid-cols-[250px_10px_10fr]  gap-1 text-sm text-default-900">
+                      <div className="grid text-sm font-medium text-default-600">
+                        Stok Aman {item.nama} Sekarang
+                      </div>
+                      <div className="font-medium">:</div>
+                      <p className="font-bold text-teal-500">
+                        {item.stok_aman}
+                      </p>
+                    </div>
+                  </>
+                );
+              })}
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-4 md:grid md:grid-cols-2">
+          <div className="grid grid-cols-3 gap-4">
+            <Select
+              isRequired
+              labelPlacement="outside"
+              label="Pilih Gudang"
+              size="md"
+              className="w-full"
+              onChange={(e) => {
+                if (!e.target.value) return;
+                setKodeGudang(e.target.value);
+              }}
+              selectedKeys={[kodeGudang]}
+            >
+              {gudang.map((item) => (
+                <SelectItem key={item.nama} value={item.nama}>
+                  {item.nama}
+                </SelectItem>
+              ))}
+            </Select>
+
             <Input
               isRequired
               type="number"
@@ -138,8 +163,8 @@ export default function StockUpdate({
               labelPlacement="outside"
               label="Jumlah stok yang akan ditambah"
               placeholder="Stok"
-              defaultValue={stokSekarang as string}
-              onChange={(e) => setStokSekarang(e.target.value)}
+              value={!stokSekarang ? "" : `${stokSekarang}`}
+              onChange={(e) => setStokSekarang(parseInt(e.target.value))}
             />
 
             <Input
@@ -163,8 +188,8 @@ export default function StockUpdate({
                 </span>
               }
               placeholder="Stok Aman"
-              defaultValue={stokAmanSekarang as string}
-              onChange={(e) => setStokAmanSekarang(e.target.value)}
+              value={!stokAmanSekarang ? "" : `${stokAmanSekarang}`}
+              onChange={(e) => setStokAmanSekarang(parseInt(e.target.value))}
             />
           </div>
 
@@ -192,22 +217,17 @@ export default function StockUpdate({
   );
 }
 
-export const getServerSideProps = ({
-  query,
-}: {
-  query: {
-    kode_item: string;
-    stok: string;
-    stok_aman: string;
-    nama_produk: string;
-  };
-}) => {
+export const getServerSideProps = (async ({ query }) => {
+  const result: GlobalResponse<ProdukType> = await fetcher({
+    url: "/produk?kode_item=" + query?.kode_item,
+    method: "GET",
+  });
+
   return {
     props: {
-      kode_item: query?.kode_item,
-      stok: query?.stok,
-      stok_aman: query?.stok_aman,
-      nama_produk: query?.nama_produk,
+      produk: result.data,
     },
   };
-};
+}) satisfies GetServerSideProps<{
+  produk: ProdukType;
+}>;

@@ -41,7 +41,7 @@ type ProdukDetailType = {
   rak: string;
   stok_aman: number;
   subkategori: string;
-  gudang: string;
+  gudang: { nama: string; kode_gudang: string }[];
   kategori: string;
   status_stok: string;
 };
@@ -61,7 +61,7 @@ export default function ProductDetail({
 
   Object.assign(backup, {
     kategori: `${produk.data.kategori} - ${produk.data.subkategori}`,
-    gudang: `${produk.data.gudang} - ${produk.data.rak}`,
+    gudang: `${produk.data.gudang.map((el) => el.nama).join(", ")} - ${produk.data.rak}`,
   });
 
   const filter = exclude(backup, [
@@ -155,7 +155,12 @@ export default function ProductDetail({
   return (
     <Layout title="Detail Produk">
       <Container className="gap-8">
-        <ButtonBack onClick={() => router.back()}>Kembali</ButtonBack>
+        <ButtonBack
+          onClick={() => router.back()}
+          className="justify-self-start text-primary"
+        >
+          Kembali
+        </ButtonBack>
 
         <div className="grid gap-6">
           <h4 className="border-l-4 border-primary pl-4 text-[18px] font-bold text-default-900">
