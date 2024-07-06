@@ -1,5 +1,5 @@
 import { Button, Input } from "@nextui-org/react";
-import { ArrowLeft, Key, User } from "@phosphor-icons/react";
+import { Eye, EyeSlash, User } from "@phosphor-icons/react";
 import { signIn } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -7,8 +7,8 @@ import { useState } from "react";
 
 export default function LoginPage() {
   const router = useRouter();
-
   const [input, setInput] = useState({});
+  const [type, setType] = useState("password");
 
   async function handleLogin() {
     if (Object.keys(input).length < 2) return;
@@ -38,7 +38,7 @@ export default function LoginPage() {
         <div className="grid gap-8">
           <div className="text-center">
             <h1 className="text-[24px] font-bold leading-[140%] text-default-900">
-              Selamat Datang Di Aplikasi{" "}
+              Selamat Datang Di Aplikasi <br />
               <span className="text-primary">TB. Sinar Baja</span>
             </h1>
             <p className="font-medium text-default-500">
@@ -54,6 +54,7 @@ export default function LoginPage() {
               labelPlacement="outside"
               placeholder="Username"
               name="username"
+              autoComplete="off"
               endContent={
                 <User weight="bold" size={18} className="text-gray-600" />
               }
@@ -67,14 +68,32 @@ export default function LoginPage() {
 
             <Input
               isRequired
-              type="password"
+              type={type}
               variant="flat"
               color="default"
               labelPlacement="outside"
               placeholder="Password"
               name="password"
               endContent={
-                <Key weight="bold" size={18} className="text-gray-600" />
+                <button
+                  onClick={() =>
+                    type == "password" ? setType("text") : setType("password")
+                  }
+                >
+                  {type == "password" ? (
+                    <Eye
+                      weight="bold"
+                      size={18}
+                      className="cursor-pointer text-gray-600"
+                    />
+                  ) : (
+                    <EyeSlash
+                      weight="bold"
+                      size={18}
+                      className="cursor-pointer text-gray-600"
+                    />
+                  )}
+                </button>
               }
               onChange={(e) =>
                 setInput({
@@ -82,27 +101,20 @@ export default function LoginPage() {
                   [e.target.name]: e.target.value,
                 })
               }
+              onKeyUp={(e) => {
+                if (e.key == "Enter") {
+                  handleLogin();
+                }
+              }}
             />
 
-            <div className="mt-4 grid gap-2">
-              <Button
-                color="primary"
-                onClick={handleLogin}
-                className="font-semibold"
-              >
-                Login
-              </Button>
-
-              <Button
-                variant="light"
-                color="default"
-                onClick={() => router.push("/")}
-                startContent={<ArrowLeft weight="bold" size={16} />}
-                className="font-semibold"
-              >
-                Kembali
-              </Button>
-            </div>
+            <Button
+              color="primary"
+              onClick={handleLogin}
+              className="font-semibold"
+            >
+              Masuk
+            </Button>
           </div>
         </div>
 
