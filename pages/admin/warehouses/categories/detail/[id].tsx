@@ -59,7 +59,7 @@ export default function ProductsSubCategoriesPage(
   });
 
   if (swr.isLoading) {
-    return <LoadingScreen role="owner" />;
+    return <LoadingScreen role="admin" />;
   }
 
   if (swr.error) {

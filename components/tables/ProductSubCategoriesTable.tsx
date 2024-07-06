@@ -14,6 +14,7 @@ import {
   TableRow,
 } from "@nextui-org/react";
 import { Pencil } from "@phosphor-icons/react";
+import { useRouter } from "next/router";
 
 export default function ProductSubCategoriesTable({
   subkategori,
@@ -26,6 +27,7 @@ export default function ProductSubCategoriesTable({
     subkategori ? subkategori : [],
     10,
   );
+  const router = useRouter();
 
   const columnsSubKategori = [
     { name: "Kode", uid: "kode" },
@@ -57,7 +59,16 @@ export default function ProductSubCategoriesTable({
         return (
           <div className="flex max-w-[110px] items-center gap-1">
             <CustomTooltip content="Edit">
-              <Button isIconOnly variant="light" size="sm">
+              <Button
+                isIconOnly
+                variant="light"
+                size="sm"
+                onClick={() =>
+                  router.push(
+                    `/${role}/warehouses/categories/detail/edit?id_subkategori=${subkategori.id_subkategori}&nama=${subkategori.nama}`,
+                  )
+                }
+              >
                 <Pencil weight="bold" size={20} className="text-default-600" />
               </Button>
             </CustomTooltip>
