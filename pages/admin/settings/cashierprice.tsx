@@ -88,9 +88,9 @@ export default function CashierPricePage(
             </h4>
 
             <div className="grid gap-[2px]">
-              <div className="grid grid-cols-[220px_10px_5fr]  gap-1 text-sm text-default-900">
+              <div className="grid grid-cols-[110px_10px_5fr]  gap-1 text-sm text-default-900">
                 <div className="text-sm font-medium text-default-600">
-                  Harga yang saat ini digunakan
+                  Harga Saat Ini
                 </div>
                 <div className="font-medium">:</div>
                 <p className="font-bold text-teal-500">
@@ -104,6 +104,7 @@ export default function CashierPricePage(
             label="Pilih Harga"
             defaultSelectedKeys={[field]}
             onChange={(e) => setField(e.target.value)}
+            className="w-full"
           >
             {result}
           </Select>

@@ -84,9 +84,9 @@ export default function CashierPricePage(
         <div className="grid w-max gap-1 border-l-4 border-primary p-[1rem_0_1rem_1rem]">
           <h4 className="text-[18px] font-bold text-default-900">Informasi</h4>
 
-          <div className="grid grid-cols-[220px_10px_5fr] gap-1 text-sm text-default-900">
+          <div className="grid grid-cols-[110px_10px_5fr] gap-1 text-sm text-default-900">
             <div className="text-sm font-medium text-default-600">
-              Harga yang saat ini digunakan
+              Harga Saat Ini
             </div>
             <div className="font-medium">:</div>
             <p className="font-bold text-primary">
@@ -123,7 +123,7 @@ export default function CashierPricePage(
             onClick={handleUpdate}
             className="w-max justify-self-end font-medium"
           >
-            Update Harga
+            Update
           </Button>
         )}
       </Container>
