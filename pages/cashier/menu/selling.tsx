@@ -10,9 +10,25 @@ import {
   Input,
   Radio,
   RadioGroup,
+  Select,
+  SelectItem,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
   Textarea,
+  Tooltip,
 } from "@nextui-org/react";
-import { ArrowLeft, CaretUp, Circle } from "@phosphor-icons/react";
+import {
+  ArrowLeft,
+  CaretUp,
+  Circle,
+  Minus,
+  Plus,
+  Trash,
+} from "@phosphor-icons/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
@@ -20,17 +36,15 @@ import { useReactToPrint } from "react-to-print";
 import { useDebounce } from "use-debounce";
 
 // components
-import CardSellingProduct from "@/components/card/CardSellingProduct";
-import CardSellingQuantityProduct from "@/components/card/CardSellingQuantityProduct";
 import InputSearchBar from "@/components/input/InputSearchBar";
 import CustomTooltip from "@/components/tooltip";
 
 // utils
+import CardSellingCashier from "@/components/card/CardSellingCashier";
 import LoadingScreen from "@/components/LoadingScreen";
 import { TemplateNota } from "@/components/template/TemplateNota";
 import { GlobalResponse } from "@/types/global.type";
-import { ProdukType } from "@/types/products.type";
-import { ListProdukType } from "@/types/selling.type";
+import { HargaQuantity, ProdukSearchType } from "@/types/products.type";
 import { TransaksiType } from "@/types/transactions.type";
 import { fetcher } from "@/utils/fetcher";
 import { formatRupiah } from "@/utils/formatRupiah";
@@ -57,17 +71,34 @@ type Harga = {
   harga_6: string;
 };
 
+export type ListProdukCashier = {
+  kode_item: string;
+  nama_produk: string;
+  total_stok: number;
+  qty: number;
+  satuan_kecil: string;
+  harga: number;
+  gudang: {
+    stok: number;
+    stok_aman: null;
+    nama: string;
+    kode_gudang: string;
+  }[];
+  rak: string;
+  diskon_langsung_item: number;
+  diskon_persen_item: number;
+  total_harga: number;
+  subtotal: number;
+  hargaquantity: HargaQuantity[];
+  harga_selected: number;
+  gudang_id: string;
+};
+
 export default function SellingPage() {
-  const swr = useSWR<GlobalResponse<{ field: string }>>(
-    {
-      url: "/setting",
-      method: "GET",
-    },
-    fetcher,
-    {
-      refreshInterval: 5000,
-    },
-  );
+  const swr = useSWR<GlobalResponse<{ field: string }>>({
+    url: "/setting",
+    method: "GET",
+  });
 
   const router = useRouter();
 
@@ -77,6 +108,7 @@ export default function SellingPage() {
   const [alamat, setAlamat] = useState<string>("");
   const [pengiriman, setPengiriman] = useState<string>("");
   const [tipe, setTipe] = useState<string>("nota");
+  const [count, setCount] = useState(0);
 
   const [ongkir, setOngkir] = useState<number>(0);
   const [pajak, setPajak] = useState<number>(0);
@@ -86,7 +118,9 @@ export default function SellingPage() {
   const [totalDiskon, setTotalDiskon] = useState<number>(0);
   const [tunai, setTunai] = useState<number>(0);
   const [kembali, setKembali] = useState<number>(0);
-  const [produk, setProduk] = useState<ProdukType[]>([]);
+  const [produk, setProduk] = useState<ProdukSearchType[]>([]);
+  const [metode, setMetode] = useState("cash");
+  const [idTransaksi, setIdTransaksi] = useState("");
 
   const [loading, setLoading] = useState<boolean>(false);
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
@@ -99,7 +133,7 @@ export default function SellingPage() {
 
   const [search, setSearch] = useState<string>("");
   const [searchValue] = useDebounce(search, 800);
-  const [listProduk, setListProduk] = useState<ListProdukType[]>([]);
+  const [listProduk, setListProduk] = useState<ListProdukCashier[]>([]);
   const [totalPembayaran, setTotalPembayaran] = useState<number>(0);
   const [totalBelanja, setTotalBelanja] = useState<number>(0);
   const { status, data } = useSession();
@@ -128,16 +162,19 @@ export default function SellingPage() {
           persen_diskon: persenDiskon ? persenDiskon : null,
           tipe: "umum",
           unique_key,
-          tunai: tunai ? tunai : 0,
-          kembalian: kembali ? kembali : 0,
-          metode: "Cash",
+          tunai,
+          kembalian: kembali,
+          metode,
+          asal_transaksi: "kasir",
+          status: "lunas",
+          id_transaksi_bank: idTransaksi,
           list_produk: listProduk.map((produk) => {
             return {
               kode_item: produk.kode_item,
               jumlah: produk.qty,
               satuan: produk.satuan_kecil,
               nama_produk: produk.nama_produk,
-              gudang: produk.gudang,
+              gudang: produk.gudang_id,
               rak: produk.rak,
               harga: produk.harga,
               sub_total: produk.subtotal,
@@ -146,12 +183,16 @@ export default function SellingPage() {
         },
       });
 
+      setCount(1);
+
       setTitle(response.data.id_transaksi);
       setDataPrint(response.data as TransaksiType);
       setTimeout(() => {
         reactPrint();
       }, 100);
     } catch (error) {
+      setCount(0);
+
       const { status_code } = error as {
         success: boolean;
         status_code: number;
@@ -288,7 +329,7 @@ export default function SellingPage() {
       </div>
 
       <Head>
-        <title>Halaman Penjualan</title>
+        <title>Halaman Penjualan Kasir</title>
       </Head>
 
       <section className="mx-auto h-dvh max-w-[1440px] overflow-hidden">
@@ -301,7 +342,7 @@ export default function SellingPage() {
             onClick={() => router.push("/cashier/menu")}
             className="font-medium"
           >
-            Kambali ke Menu
+            Kembali
           </Button>
 
           <div className="flex items-center gap-4">
@@ -360,7 +401,7 @@ export default function SellingPage() {
           </div>
         </div>
 
-        <div className="grid h-[calc(100vh-64px)] grid-cols-[435px_auto_1fr] overflow-hidden">
+        <div className="grid h-[calc(100vh-64px)] grid-cols-[370px_auto_1fr] overflow-hidden">
           {/* ==== left content ==== */}
           <div className="flex flex-col gap-6 overflow-scroll p-4 scrollbar-hide">
             <div className="sticky left-0 top-0 grid gap-4">
@@ -390,9 +431,9 @@ export default function SellingPage() {
             <div className="grid gap-4 overflow-y-scroll scrollbar-hide">
               {produk.map((item) => {
                 return (
-                  <CardSellingProduct
+                  <CardSellingCashier
                     key={item.kode_item}
-                    {...{ ...item, setListProduk, field: swr.data?.data.field }}
+                    {...{ item, setListProduk, field: swr.data?.data.field }}
                   />
                 );
               })}
@@ -403,35 +444,505 @@ export default function SellingPage() {
 
           {/* ==== right content ==== */}
           <div className="relative grid grid-rows-[auto_1fr_auto] overflow-hidden bg-white scrollbar-hide">
-            <div className="sticky top-0 grid grid-cols-[1fr_repeat(3,140px)_42px] items-center gap-10 border-b border-gray-300 bg-white p-4">
-              <div className="text-sm font-semibold text-default-600">
-                Item{" "}
-                <span className="font-bold text-rose-500">
-                  {listProduk.length}
-                </span>
-              </div>
-              <div className="text-sm font-semibold text-default-600">Qty</div>
-              <div className="text-sm font-semibold text-default-600">
-                Harga
-              </div>
-              <div className="text-sm font-semibold text-default-600">
-                Subtotal
-              </div>
-              <div className="text-sm font-semibold text-default-600">Aksi</div>
-            </div>
-
-            <div className="overflow-y-scroll scrollbar-hide">
-              <div className="grid">
+            <Table
+              aria-label="Example static collection table"
+              classNames={{
+                wrapper: "rounded-none shadow-none",
+              }}
+            >
+              <TableHeader className="text-center">
+                <TableColumn className="w-[150px] text-center">
+                  Item ({listProduk.length})
+                </TableColumn>
+                <TableColumn className="w-[170px] text-center">Qty</TableColumn>
+                <TableColumn className="w-[165px] text-center">
+                  Pilih
+                </TableColumn>
+                <TableColumn className="w-[165px] text-center">
+                  Gudang
+                </TableColumn>
+                <TableColumn className="text-center">Harga</TableColumn>
+                <TableColumn className="text-center">Pot. Langsung</TableColumn>
+                <TableColumn className="text-center">Pot. Persen</TableColumn>
+                <TableColumn className="text-center">Subtotal</TableColumn>
+                <TableColumn className="text-center">Aksi</TableColumn>
+              </TableHeader>
+              <TableBody>
                 {listProduk.map((item) => {
                   return (
-                    <CardSellingQuantityProduct
-                      key={item.kode_item}
-                      {...{ ...item, setListProduk }}
-                    />
+                    <TableRow key={item.kode_item}>
+                      <TableCell>{item.nama_produk}</TableCell>
+                      <TableCell>
+                        <div className="flex gap-2">
+                          <Button
+                            isIconOnly
+                            variant="flat"
+                            size="sm"
+                            className="bg-rose-200 text-rose-600"
+                            onClick={() => {
+                              setListProduk((prev) => {
+                                if (prev.length != 0) {
+                                  const index = prev.findIndex(
+                                    (produk) =>
+                                      produk.kode_item == item.kode_item,
+                                  );
+
+                                  if (index != -1) {
+                                    prev[index] = {
+                                      ...prev[index],
+                                      qty:
+                                        prev[index].qty - 1 < 1
+                                          ? 0
+                                          : prev[index].qty - 1,
+                                      subtotal:
+                                        prev[index].qty - 1 < 1
+                                          ? 0
+                                          : (prev[index].qty - 1) *
+                                            prev[index].total_harga,
+                                    };
+
+                                    return [...prev];
+                                  }
+                                }
+                                return [...prev];
+                              });
+                            }}
+                          >
+                            <Minus weight="bold" size={16} />
+                          </Button>
+                          <Input
+                            value={!item.qty ? "" : `${item.qty}`}
+                            type="number"
+                            variant="flat"
+                            size="sm"
+                            min={0}
+                            step=".01"
+                            labelPlacement="outside"
+                            onChange={(e) => {
+                              const qty = e.target.value;
+
+                              if (!qty) {
+                                setListProduk((prev) => {
+                                  if (prev.length != 0) {
+                                    const index = prev.findIndex(
+                                      (produk) =>
+                                        produk.kode_item == item.kode_item,
+                                    );
+
+                                    if (index != -1) {
+                                      prev[index] = {
+                                        ...prev[index],
+                                        qty: 0,
+                                        subtotal: 0,
+                                      };
+
+                                      return [...prev];
+                                    }
+                                  }
+                                  return [...prev];
+                                });
+                              } else {
+                                if (parseFloat(qty) > item.total_stok) {
+                                  setListProduk((prev) => {
+                                    if (prev.length != 0) {
+                                      const index = prev.findIndex(
+                                        (produk) =>
+                                          produk.kode_item == item.kode_item,
+                                      );
+
+                                      if (index != -1) {
+                                        prev[index] = {
+                                          ...prev[index],
+                                          qty: item.total_stok,
+                                          subtotal:
+                                            item.total_stok *
+                                            prev[index].total_harga,
+                                        };
+
+                                        return [...prev];
+                                      }
+                                    }
+                                    return [...prev];
+                                  });
+                                } else {
+                                  setListProduk((prev) => {
+                                    if (prev.length != 0) {
+                                      const index = prev.findIndex(
+                                        (produk) =>
+                                          produk.kode_item == item.kode_item,
+                                      );
+
+                                      if (index != -1) {
+                                        prev[index] = {
+                                          ...prev[index],
+                                          qty: parseFloat(qty),
+                                          subtotal:
+                                            parseFloat(qty) *
+                                            prev[index].total_harga,
+                                        };
+
+                                        return [...prev];
+                                      }
+                                    }
+                                    return [...prev];
+                                  });
+                                }
+                              }
+                            }}
+                          />
+                          <Button
+                            isIconOnly
+                            variant="flat"
+                            size="sm"
+                            className="bg-rose-200 text-rose-600"
+                            onClick={() => {
+                              setListProduk((prev) => {
+                                if (prev.length != 0) {
+                                  const index = prev.findIndex(
+                                    (produk) =>
+                                      produk.kode_item == item.kode_item,
+                                  );
+
+                                  if (index != -1) {
+                                    prev[index] = {
+                                      ...prev[index],
+                                      qty:
+                                        prev[index].qty + 1 >=
+                                        prev[index].total_stok
+                                          ? prev[index].total_stok
+                                          : prev[index].qty + 1,
+                                      subtotal:
+                                        prev[index].qty + 1 >=
+                                        prev[index].total_stok
+                                          ? prev[index].total_stok *
+                                            prev[index].total_harga
+                                          : (prev[index].qty + 1) *
+                                            prev[index].total_harga,
+                                    };
+
+                                    return [...prev];
+                                  }
+                                }
+                                return [...prev];
+                              });
+                            }}
+                          >
+                            <Plus weight="bold" size={16} />
+                          </Button>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <Select
+                          label="Harga"
+                          size="sm"
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            if (!value) {
+                              setListProduk((prev) => {
+                                if (prev.length != 0) {
+                                  const index = prev.findIndex(
+                                    (produk) =>
+                                      produk.kode_item == item.kode_item,
+                                  );
+
+                                  if (index != -1) {
+                                    prev[index] = {
+                                      ...prev[index],
+                                      total_harga: item.harga,
+                                      harga_selected: item.harga,
+                                      subtotal: prev[index].qty * item.harga,
+                                      diskon_langsung_item: 0,
+                                      diskon_persen_item: 0,
+                                    };
+
+                                    return [...prev];
+                                  }
+                                }
+                                return [...prev];
+                              });
+                            } else {
+                              setListProduk((prev) => {
+                                if (prev.length != 0) {
+                                  const index = prev.findIndex(
+                                    (produk) =>
+                                      produk.kode_item == item.kode_item,
+                                  );
+
+                                  if (index != -1) {
+                                    prev[index] = {
+                                      ...prev[index],
+                                      total_harga: parseInt(value),
+                                      harga_selected: parseInt(value),
+                                      subtotal:
+                                        prev[index].qty * parseInt(value),
+                                      diskon_langsung_item: 0,
+                                      diskon_persen_item: 0,
+                                    };
+
+                                    return [...prev];
+                                  }
+                                }
+                                return [...prev];
+                              });
+                            }
+                          }}
+                          items={item.hargaquantity}
+                          defaultSelectedKeys={[item.harga.toString()]}
+                        >
+                          {(data) => (
+                            <SelectItem
+                              key={data.harga}
+                              textValue={formatRupiah(data.harga)}
+                            >
+                              <Tooltip content={data.keterangan}>
+                                {formatRupiah(data.harga)}
+                              </Tooltip>
+                            </SelectItem>
+                          )}
+                        </Select>
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <Select
+                          value={[item.gudang_id]}
+                          label="Gudang"
+                          size="sm"
+                          items={item.gudang}
+                          selectedKeys={[item.gudang_id]}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            if (!value) {
+                              setListProduk((prev) => {
+                                if (prev.length != 0) {
+                                  const index = prev.findIndex(
+                                    (produk) =>
+                                      produk.kode_item == item.kode_item,
+                                  );
+
+                                  if (index != -1) {
+                                    prev[index] = {
+                                      ...prev[index],
+                                      gudang_id: item.gudang_id,
+                                    };
+
+                                    return [...prev];
+                                  }
+                                }
+                                return [...prev];
+                              });
+                            } else {
+                              setListProduk((prev) => {
+                                if (prev.length != 0) {
+                                  const index = prev.findIndex(
+                                    (produk) =>
+                                      produk.kode_item == item.kode_item,
+                                  );
+
+                                  if (index != -1) {
+                                    prev[index] = {
+                                      ...prev[index],
+                                      gudang_id: value,
+                                    };
+
+                                    return [...prev];
+                                  }
+                                }
+                                return [...prev];
+                              });
+                            }
+                          }}
+                        >
+                          {(data) => (
+                            <SelectItem key={data.nama} value={data.nama}>
+                              {data.nama}
+                            </SelectItem>
+                          )}
+                        </Select>
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <p
+                          className={`${item.diskon_langsung_item || item.diskon_persen_item ? "text-danger line-through" : null}`}
+                        >
+                          {formatRupiah(item.harga_selected)}
+                        </p>
+                        {item.diskon_langsung_item ||
+                        item.diskon_persen_item ? (
+                          <p>{formatRupiah(item.total_harga)}</p>
+                        ) : null}
+                      </TableCell>
+                      <TableCell className="w-[40px] text-center">
+                        <Input
+                          value={
+                            !item.diskon_langsung_item
+                              ? ""
+                              : `${item.diskon_langsung_item}`
+                          }
+                          type="number"
+                          variant="flat"
+                          size="sm"
+                          min={0}
+                          onChange={(e) => {
+                            const diskon = e.target.value;
+                            if (!diskon) {
+                              setListProduk((prev) => {
+                                if (prev.length != 0) {
+                                  const index = prev.findIndex(
+                                    (produk) =>
+                                      produk.kode_item == item.kode_item,
+                                  );
+
+                                  if (index != -1) {
+                                    prev[index] = {
+                                      ...prev[index],
+                                      diskon_langsung_item: 0,
+                                      total_harga: prev[index].harga_selected,
+                                      subtotal:
+                                        prev[index].qty *
+                                        prev[index].harga_selected,
+                                    };
+
+                                    return [...prev];
+                                  }
+                                }
+                                return [...prev];
+                              });
+                            } else {
+                              setListProduk((prev) => {
+                                if (prev.length != 0) {
+                                  const index = prev.findIndex(
+                                    (produk) =>
+                                      produk.kode_item == item.kode_item,
+                                  );
+
+                                  if (index != -1) {
+                                    prev[index] = {
+                                      ...prev[index],
+                                      diskon_langsung_item: parseInt(diskon),
+                                      diskon_persen_item: 0,
+                                      total_harga: Math.round(
+                                        prev[index].harga_selected -
+                                          parseInt(diskon),
+                                      ),
+                                      subtotal:
+                                        prev[index].qty *
+                                        Math.round(
+                                          prev[index].harga_selected -
+                                            parseInt(diskon),
+                                        ),
+                                    };
+
+                                    return [...prev];
+                                  }
+                                }
+                                return [...prev];
+                              });
+                            }
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell className="w-[40px] text-center">
+                        <Input
+                          value={
+                            !item.diskon_persen_item
+                              ? ""
+                              : `${item.diskon_persen_item}`
+                          }
+                          type="number"
+                          variant="flat"
+                          size="sm"
+                          min={0}
+                          step=".01"
+                          onChange={(e) => {
+                            const diskon = e.target.value;
+
+                            if (!diskon) {
+                              setListProduk((prev) => {
+                                if (prev.length != 0) {
+                                  const index = prev.findIndex(
+                                    (produk) =>
+                                      produk.kode_item == item.kode_item,
+                                  );
+
+                                  if (index != -1) {
+                                    prev[index] = {
+                                      ...prev[index],
+                                      diskon_persen_item: 0,
+                                      total_harga: prev[index].harga_selected,
+                                      subtotal:
+                                        prev[index].qty *
+                                        prev[index].harga_selected,
+                                    };
+
+                                    return [...prev];
+                                  }
+                                }
+                                return [...prev];
+                              });
+                            } else {
+                              const persen = parseFloat(diskon);
+
+                              setListProduk((prev) => {
+                                if (prev.length != 0) {
+                                  const index = prev.findIndex(
+                                    (produk) =>
+                                      produk.kode_item == item.kode_item,
+                                  );
+
+                                  if (index != -1) {
+                                    const total = Math.round(
+                                      (prev[index].harga_selected / 100) *
+                                        persen,
+                                    );
+
+                                    prev[index] = {
+                                      ...prev[index],
+                                      diskon_langsung_item: 0,
+                                      diskon_persen_item: persen,
+                                      total_harga:
+                                        prev[index].harga_selected - total,
+                                      subtotal:
+                                        prev[index].qty *
+                                        (prev[index].harga_selected - total),
+                                    };
+
+                                    return [...prev];
+                                  }
+                                }
+                                return [...prev];
+                              });
+                            }
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {formatRupiah(item.subtotal)}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <CustomTooltip content="Hapus">
+                          <Button
+                            isIconOnly
+                            variant="flat"
+                            size="sm"
+                            className="bg-rose-200 text-rose-600"
+                            onClick={() => {
+                              setListProduk((prev) =>
+                                prev.filter(
+                                  (produk) =>
+                                    produk.kode_item != item.kode_item,
+                                ),
+                              );
+                            }}
+                          >
+                            <Trash weight="bold" size={20} />
+                          </Button>
+                        </CustomTooltip>
+                      </TableCell>
+                    </TableRow>
                   );
                 })}
-              </div>
-            </div>
+              </TableBody>
+            </Table>
+
+            <div className="grid"></div>
 
             <div className="sticky bottom-0 z-20 grid grid-cols-2 items-center gap-16 border-t border-gray-300 bg-white p-[1rem]">
               <div className="flex items-center justify-between gap-2">
@@ -459,32 +970,51 @@ export default function SellingPage() {
                   </Button>
                 </CustomTooltip>
 
-                <div className="grid w-full grid-cols-2 gap-4">
-                  <Button
-                    variant="flat"
-                    color="danger"
-                    className="w-full px-8 py-6 font-semibold"
-                    onClick={createTransaksi}
-                    disabled={listProduk.length == 0 || tunai < totalPembayaran}
-                  >
-                    Cetak
-                  </Button>
-                  <Button
-                    variant="solid"
-                    className="w-full bg-rose-500 px-8 py-6 font-semibold text-white"
-                    onClick={() => {
-                      if (
-                        confirm(
-                          "apakah anda yakin ingin menyesaikan transaksi ini?",
-                        )
-                      ) {
-                        router.reload();
-                      }
-                    }}
-                    disabled={listProduk.length == 0}
-                  >
-                    Selesai
-                  </Button>
+                <div
+                  className={`grid w-full ${count ? "grid-cols-2" : null} gap-4`}
+                >
+                  {count ? (
+                    <>
+                      <Button
+                        variant="flat"
+                        className="w-full bg-rose-200 px-8 py-6 font-semibold text-rose-600"
+                        onClick={() => {
+                          window.open(
+                            `${window.location.origin}/print?id_transaksi=${dataPrint?.id_transaksi}`,
+                          );
+                        }}
+                      >
+                        Cetak Ulang
+                      </Button>
+
+                      <Button
+                        variant="solid"
+                        className="w-full bg-rose-500 px-8 py-6 font-semibold text-white"
+                        onClick={() => {
+                          if (
+                            confirm(
+                              "apakah anda yakin ingin menyesaikan transaksi ini?",
+                            )
+                          ) {
+                            router.reload();
+                          }
+                        }}
+                      >
+                        Selesai
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button
+                        variant="flat"
+                        className="w-full bg-rose-200 px-8 py-6 font-semibold text-rose-600"
+                        onClick={createTransaksi}
+                        disabled={listProduk.length == 0}
+                      >
+                        Buat Transaksi
+                      </Button>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -748,32 +1278,96 @@ export default function SellingPage() {
                         ) : null}
                       </div>
 
-                      <Input
-                        value={tunai ? `${tunai}` : ""}
-                        isRequired
-                        type="number"
-                        size="sm"
-                        variant="flat"
-                        labelPlacement="outside"
+                      <RadioGroup
+                        value={metode}
+                        orientation="horizontal"
                         label={
-                          <span className="text-[12px] text-danger">Tunai</span>
+                          <p className="text-[12px] text-danger">
+                            Metode <span className="text-danger">*</span>
+                          </p>
                         }
-                        placeholder="Masukan tunai..."
-                        startContent={
-                          <div className="pointer-events-none flex items-center">
-                            <span className="text-sm text-default-600">Rp</span>
-                          </div>
-                        }
-                        className="w-full text-black"
+                        size="sm"
                         onChange={(e) => {
-                          if (e.target.value == "") {
+                          const value = e.target.value;
+                          setMetode(value);
+                          if (value == "transfer") {
                             setTunai(0);
-                          } else {
-                            setTunai(parseInt(e.target.value));
+                            setKembali(0);
+                          }
+
+                          if (value == "cash") {
+                            setIdTransaksi("");
+                          }
+
+                          if (value == "tempo") {
+                            setTunai(0);
+                            setKembali(0);
+                            setIdTransaksi("");
                           }
                         }}
-                        min={0}
-                      />
+                      >
+                        <Radio value="cash">
+                          <p className="text-sm font-medium text-default-600">
+                            Cash
+                          </p>
+                        </Radio>
+                        <Radio value="transfer">
+                          <p className="text-sm font-medium text-default-600">
+                            Transfer
+                          </p>
+                        </Radio>
+                      </RadioGroup>
+
+                      {metode == "cash" ? (
+                        <Input
+                          value={tunai ? `${tunai}` : ""}
+                          type="number"
+                          variant="flat"
+                          labelPlacement="outside"
+                          label={
+                            <p className="text-[12px] text-danger">
+                              Tunai <span className="text-danger">*</span>
+                            </p>
+                          }
+                          size="sm"
+                          placeholder="Masukan tunai..."
+                          startContent={
+                            <div className="pointer-events-none flex items-center">
+                              <span className="text-sm text-default-600">
+                                Rp
+                              </span>
+                            </div>
+                          }
+                          className="w-full text-black"
+                          onChange={(e) => {
+                            if (e.target.value == "") {
+                              setTunai(0);
+                            } else {
+                              setTunai(parseInt(e.target.value));
+                            }
+                          }}
+                          min={0}
+                        />
+                      ) : null}
+
+                      {metode == "transfer" ? (
+                        <Input
+                          value={idTransaksi}
+                          type="text"
+                          variant="flat"
+                          labelPlacement="outside"
+                          label={
+                            <p className="text-[12px] text-danger">
+                              ID Transaksi Bank{" "}
+                              <span className="text-danger">*</span>
+                            </p>
+                          }
+                          size="sm"
+                          placeholder="Masukan id transaksi bank..."
+                          className="w-full text-black"
+                          onChange={(e) => setIdTransaksi(e.target.value)}
+                        />
+                      ) : null}
                     </div>
 
                     <div className="h-3/4">
@@ -831,21 +1425,34 @@ export default function SellingPage() {
                           </p>
                         </div>
 
-                        <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
-                          <div className="font-bold">Tunai</div>
-                          <div className="font-bold">:</div>
-                          <p className="font-bold text-rose-500">
-                            {formatRupiah(tunai)}
-                          </p>
-                        </div>
+                        {metode == "cash" ? (
+                          <>
+                            <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                              <div className="font-bold">Tunai</div>
+                              <div className="font-bold">:</div>
+                              <p className="font-bold text-rose-500">
+                                {formatRupiah(tunai)}
+                              </p>
+                            </div>
 
-                        <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
-                          <div className="font-bold">Kembali</div>
-                          <div className="font-bold">:</div>
-                          <p className="font-bold text-rose-500">
-                            {formatRupiah(kembali)}
-                          </p>
-                        </div>
+                            <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                              <div className="font-bold">Kembali</div>
+                              <div className="font-bold">:</div>
+                              <p className="font-bold text-rose-500">
+                                {formatRupiah(kembali)}
+                              </p>
+                            </div>
+                          </>
+                        ) : null}
+                        {metode == "transfer" ? (
+                          <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                            <div className="font-bold">ID Transaksi Bank</div>
+                            <div className="font-bold">:</div>
+                            <p className="font-bold text-rose-500">
+                              {idTransaksi}
+                            </p>
+                          </div>
+                        ) : null}
                       </div>
                     </div>
                   </div>

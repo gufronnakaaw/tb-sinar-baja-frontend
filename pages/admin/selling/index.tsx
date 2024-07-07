@@ -43,17 +43,23 @@ import { HargaQuantity, ProdukSearchType } from "@/types/products.type";
 import { TransaksiType } from "@/types/transactions.type";
 import { estimation } from "@/utils/estimation";
 import { fetcher } from "@/utils/fetcher";
+import { formatDate } from "@/utils/formatDate";
 import { formatRupiah } from "@/utils/formatRupiah";
 import useSWR from "swr";
 
 export type ListProdukAdmin = {
   kode_item: string;
   nama_produk: string;
-  stok: number;
+  total_stok: number;
   qty: number;
   satuan_kecil: string;
   harga: number;
-  gudang: string;
+  gudang: {
+    stok: number;
+    stok_aman: null;
+    nama: string;
+    kode_gudang: string;
+  }[];
   rak: string;
   diskon_langsung_item: number;
   diskon_persen_item: number;
@@ -61,6 +67,7 @@ export type ListProdukAdmin = {
   subtotal: number;
   hargaquantity: HargaQuantity[];
   harga_selected: number;
+  gudang_id: string;
 };
 
 const unique_key = (Math.random() + 1).toString(36).substring(7);
@@ -80,6 +87,7 @@ export default function SellingPageAdmin() {
   const [alamat, setAlamat] = useState<string>("");
   const [pengiriman, setPengiriman] = useState<string>("");
   const [tipe, setTipe] = useState<string>("nota");
+  const [count, setCount] = useState(0);
 
   const [ongkir, setOngkir] = useState<number>(0);
   const [pajak, setPajak] = useState<number>(0);
@@ -105,7 +113,6 @@ export default function SellingPageAdmin() {
   const [listProdukAdmin, setListProdukAdmin] = useState<ListProdukAdmin[]>([]);
   const [totalPembayaran, setTotalPembayaran] = useState<number>(0);
   const [totalBelanja, setTotalBelanja] = useState<number>(0);
-  const [idMember, setIdMember] = useState("");
   const [member, setMember] = useState<MemberType>();
   const [metode, setMetode] = useState("cash");
   const [idTransaksi, setIdTransaksi] = useState("");
@@ -161,7 +168,7 @@ export default function SellingPageAdmin() {
               jumlah: produk.qty,
               satuan: produk.satuan_kecil,
               nama_produk: produk.nama_produk,
-              gudang: produk.gudang,
+              gudang: produk.gudang_id,
               rak: produk.rak,
               harga: produk.harga_selected,
               sub_total: produk.subtotal,
@@ -172,12 +179,16 @@ export default function SellingPageAdmin() {
         },
       });
 
+      setCount(1);
+
       setTitle(response.data.id_transaksi);
       setDataPrint(response.data as TransaksiType);
       setTimeout(() => {
         reactPrint();
       }, 100);
     } catch (error) {
+      setCount(0);
+
       const { status_code } = error as {
         success: boolean;
         status_code: number;
@@ -292,10 +303,10 @@ export default function SellingPageAdmin() {
     }
   }, [tunai, totalPembayaran]);
 
-  async function getMemberById() {
+  async function getMemberById(id_member: string) {
     try {
       const member: GlobalResponse<MemberType> = await fetcher({
-        url: "/member?id_member=" + idMember,
+        url: "/member?id_member=" + id_member,
         method: "GET",
       });
 
@@ -329,7 +340,7 @@ export default function SellingPageAdmin() {
       </div>
 
       <Head>
-        <title>Halaman Penjualan</title>
+        <title>Halaman Penjualan Admin</title>
       </Head>
 
       <Modal
@@ -354,9 +365,9 @@ export default function SellingPageAdmin() {
                       setSearch("");
                       setProduk([]);
                       if (!e) {
-                        setIdMember("");
+                        setMember(undefined);
                       } else {
-                        setIdMember(e as string);
+                        getMemberById(e as string);
                       }
                     }}
                   >
@@ -366,6 +377,83 @@ export default function SellingPageAdmin() {
                       </AutocompleteItem>
                     )}
                   </Autocomplete>
+
+                  {member ? (
+                    <div className="mt-4">
+                      <div className="grid w-max gap-2 border-l-4 border-teal-500 p-[1rem_0_1rem_1rem]">
+                        <h4 className="text-[18px] font-bold text-default-900">
+                          Informasi Member
+                        </h4>
+
+                        <div className="grid gap-[2px]">
+                          <div className="grid grid-cols-[100px_10px_10fr]  gap-1 text-sm text-default-900">
+                            <div className="text-sm font-medium text-default-600">
+                              Nama
+                            </div>
+                            <div className="font-medium">:</div>
+                            <p className="font-bold text-teal-500">
+                              {member?.nama}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="grid gap-[2px]">
+                          <div className="grid grid-cols-[100px_10px_10fr]  gap-1 text-sm text-default-900">
+                            <div className="text-sm font-medium text-default-600">
+                              Level
+                            </div>
+                            <div className="font-medium">:</div>
+                            <p className="font-bold text-teal-500">
+                              {member?.level}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="grid gap-[2px]">
+                          <div className="grid grid-cols-[100px_10px_10fr]  gap-1 text-sm text-default-900">
+                            <div className="text-sm font-medium text-default-600">
+                              Email
+                            </div>
+                            <div className="font-medium">:</div>
+                            <p className="font-bold text-teal-500">
+                              {member?.email}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="grid gap-[2px]">
+                          <div className="grid grid-cols-[100px_10px_10fr]  gap-1 text-sm text-default-900">
+                            <div className="text-sm font-medium text-default-600">
+                              No Telp
+                            </div>
+                            <div className="font-medium">:</div>
+                            <p className="font-bold text-teal-500">
+                              {member?.no_telp}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="grid gap-[2px]">
+                          <div className="grid grid-cols-[100px_10px_10fr]  gap-1 text-sm text-default-900">
+                            <div className="text-sm font-medium text-default-600">
+                              Alamat
+                            </div>
+                            <div className="font-medium">:</div>
+                            <p className="font-bold text-teal-500">
+                              {member?.alamat}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="grid gap-[2px]">
+                          <div className="grid grid-cols-[100px_10px_10fr]  gap-1 text-sm text-default-900">
+                            <div className="text-sm font-medium text-default-600">
+                              Dibuat Pada
+                            </div>
+                            <div className="font-medium">:</div>
+                            <p className="font-bold text-teal-500">
+                              {formatDate(member?.created_at)}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ) : null}
                 </div>
               </ModalBody>
               <ModalFooter>
@@ -384,14 +472,11 @@ export default function SellingPageAdmin() {
                 <Button
                   className="bg-teal-500 text-white"
                   onPress={() => {
-                    if (!idMember) {
-                      return alert("silahkan pilih member");
-                    }
+                    if (!member) return;
                     onClose();
-                    getMemberById();
                   }}
                 >
-                  Simpan
+                  Lanjut
                 </Button>
               </ModalFooter>
             </>
@@ -461,7 +546,6 @@ export default function SellingPageAdmin() {
                     key={item.kode_item}
                     item={item}
                     field={member?.field}
-                    level={member?.level}
                     setListProdukAdmin={setListProdukAdmin}
                   />
                 );
@@ -486,6 +570,9 @@ export default function SellingPageAdmin() {
                 <TableColumn className="w-[170px] text-center">Qty</TableColumn>
                 <TableColumn className="w-[165px] text-center">
                   Pilih
+                </TableColumn>
+                <TableColumn className="w-[165px] text-center">
+                  Gudang
                 </TableColumn>
                 <TableColumn className="text-center">Harga</TableColumn>
                 <TableColumn className="text-center">Pot. Langsung</TableColumn>
@@ -568,7 +655,7 @@ export default function SellingPageAdmin() {
                                   return [...prev];
                                 });
                               } else {
-                                if (parseFloat(qty) > item.stok) {
+                                if (parseFloat(qty) > item.total_stok) {
                                   setListProdukAdmin((prev) => {
                                     if (prev.length != 0) {
                                       const index = prev.findIndex(
@@ -579,9 +666,10 @@ export default function SellingPageAdmin() {
                                       if (index != -1) {
                                         prev[index] = {
                                           ...prev[index],
-                                          qty: item.stok,
+                                          qty: item.total_stok,
                                           subtotal:
-                                            item.stok * prev[index].total_harga,
+                                            item.total_stok *
+                                            prev[index].total_harga,
                                         };
 
                                         return [...prev];
@@ -632,12 +720,14 @@ export default function SellingPageAdmin() {
                                     prev[index] = {
                                       ...prev[index],
                                       qty:
-                                        prev[index].qty + 1 >= prev[index].stok
-                                          ? prev[index].stok
+                                        prev[index].qty + 1 >=
+                                        prev[index].total_stok
+                                          ? prev[index].total_stok
                                           : prev[index].qty + 1,
                                       subtotal:
-                                        prev[index].qty + 1 >= prev[index].stok
-                                          ? prev[index].stok *
+                                        prev[index].qty + 1 >=
+                                        prev[index].total_stok
+                                          ? prev[index].total_stok *
                                             prev[index].total_harga
                                           : (prev[index].qty + 1) *
                                             prev[index].total_harga,
@@ -726,6 +816,63 @@ export default function SellingPageAdmin() {
                               <Tooltip content={data.keterangan}>
                                 {formatRupiah(data.harga)}
                               </Tooltip>
+                            </SelectItem>
+                          )}
+                        </Select>
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <Select
+                          value={[item.gudang_id]}
+                          label="Gudang"
+                          size="sm"
+                          items={item.gudang}
+                          selectedKeys={[item.gudang_id]}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            if (!value) {
+                              setListProdukAdmin((prev) => {
+                                if (prev.length != 0) {
+                                  const index = prev.findIndex(
+                                    (produk) =>
+                                      produk.kode_item == item.kode_item,
+                                  );
+
+                                  if (index != -1) {
+                                    prev[index] = {
+                                      ...prev[index],
+                                      gudang_id: item.gudang_id,
+                                    };
+
+                                    return [...prev];
+                                  }
+                                }
+                                return [...prev];
+                              });
+                            } else {
+                              setListProdukAdmin((prev) => {
+                                if (prev.length != 0) {
+                                  const index = prev.findIndex(
+                                    (produk) =>
+                                      produk.kode_item == item.kode_item,
+                                  );
+
+                                  if (index != -1) {
+                                    prev[index] = {
+                                      ...prev[index],
+                                      gudang_id: value,
+                                    };
+
+                                    return [...prev];
+                                  }
+                                }
+                                return [...prev];
+                              });
+                            }
+                          }}
+                        >
+                          {(data) => (
+                            <SelectItem key={data.nama} value={data.nama}>
+                              {data.nama}
                             </SelectItem>
                           )}
                         </Select>
@@ -945,31 +1092,51 @@ export default function SellingPageAdmin() {
                   </Button>
                 </CustomTooltip>
 
-                <div className="grid w-full grid-cols-2 gap-4">
-                  <Button
-                    variant="flat"
-                    className="w-full bg-teal-200 px-8 py-6 font-semibold text-teal-600"
-                    onClick={createTransaksi}
-                    disabled={listProdukAdmin.length == 0}
-                  >
-                    Buat Transaksi
-                  </Button>
-                  <Button
-                    variant="solid"
-                    className="w-full bg-teal-500 px-8 py-6 font-semibold text-white"
-                    onClick={() => {
-                      if (
-                        confirm(
-                          "apakah anda yakin ingin menyesaikan transaksi ini?",
-                        )
-                      ) {
-                        router.reload();
-                      }
-                    }}
-                    disabled={listProdukAdmin.length == 0}
-                  >
-                    Selesai
-                  </Button>
+                <div
+                  className={`grid w-full ${count ? "grid-cols-2" : null} gap-4`}
+                >
+                  {count ? (
+                    <>
+                      <Button
+                        variant="flat"
+                        className="w-full bg-teal-200 px-8 py-6 font-semibold text-teal-600"
+                        onClick={() => {
+                          window.open(
+                            `${window.location.origin}/print?id_transaksi=${dataPrint?.id_transaksi}`,
+                          );
+                        }}
+                      >
+                        Cetak Ulang
+                      </Button>
+
+                      <Button
+                        variant="solid"
+                        className="w-full bg-teal-500 px-8 py-6 font-semibold text-white"
+                        onClick={() => {
+                          if (
+                            confirm(
+                              "apakah anda yakin ingin menyesaikan transaksi ini?",
+                            )
+                          ) {
+                            router.reload();
+                          }
+                        }}
+                      >
+                        Selesai
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button
+                        variant="flat"
+                        className="w-full bg-teal-200 px-8 py-6 font-semibold text-teal-600"
+                        onClick={createTransaksi}
+                        disabled={listProdukAdmin.length == 0}
+                      >
+                        Buat Transaksi
+                      </Button>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

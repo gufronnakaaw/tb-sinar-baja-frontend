@@ -26,7 +26,12 @@ export type ProdukType = {
   rak?: string;
   stok_aman: number;
   subkategori?: string;
-  gudang?: string;
+  gudang?: {
+    stok: number;
+    stok_aman: null;
+    nama: string;
+    kode_gudang: string;
+  }[];
   kategori: string;
   status_stok: string;
 };
@@ -66,13 +71,18 @@ export type ProdukSearchType = {
   harga_4: number;
   harga_5?: any;
   harga_6?: any;
-  stok?: number;
+  total_stok?: number;
   created_at: string;
   updated_at: string;
   rak?: string;
   stok_aman: number;
   subkategori?: string;
-  gudang?: string;
+  gudang?: {
+    stok: number;
+    stok_aman: null;
+    nama: string;
+    kode_gudang: string;
+  }[];
   kategori: string;
   status_stok: string;
   hargaquantity: HargaQuantity[];
