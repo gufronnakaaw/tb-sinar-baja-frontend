@@ -377,12 +377,11 @@ export default function SidebarMenuAdmin({
             path="/admin/warehouses/broken"
             icon={<Circle weight="fill" size={6} />}
             className="mx-4"
-            isDev={true}
           />
 
           <ButtonSidebar
             label="Barang Masuk"
-            path="/admin/warehouses/broken"
+            path="/admin/warehouses/entry"
             icon={<Circle weight="fill" size={6} />}
             className="mx-4"
             isDev={true}

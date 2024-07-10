@@ -371,12 +371,11 @@ export default function SidebarMenuOwner({
             path="/owner/warehouses/broken"
             icon={<Circle weight="fill" size={6} />}
             className="mx-4"
-            isDev={true}
           />
 
           <ButtonSidebar
             label="Barang Masuk"
-            path="/owner/warehouses/broken"
+            path="/owner/warehouses/entry"
             icon={<Circle weight="fill" size={6} />}
             className="mx-4"
             isDev={true}
