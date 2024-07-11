@@ -116,6 +116,13 @@ export default function LoginPage() {
             >
               Masuk
             </Button>
+            <Button
+              variant="flat"
+              className="font-semibold text-default-600"
+              onClick={() => router.push("/")}
+            >
+              Kembali
+            </Button>
           </div>
         </div>
 
