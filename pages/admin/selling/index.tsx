@@ -78,7 +78,7 @@ export default function SellingPageAdmin() {
     method: "GET",
   });
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const router = useRouter();
 
   const [noTelp, setNoTelp] = useState<string>("");
@@ -118,6 +118,7 @@ export default function SellingPageAdmin() {
   const [idTransaksi, setIdTransaksi] = useState("");
   const [dp, setDp] = useState(0);
   const [estimasi, setEstimasi] = useState(0);
+  const [stop, setStop] = useState(false);
 
   function getStatus(metode: string) {
     if (metode == "cash" || metode == "transfer") {
@@ -133,6 +134,8 @@ export default function SellingPageAdmin() {
     if (listProdukAdmin.length > 8) {
       return alert("maksimal 8 item");
     }
+
+    setStop(true);
 
     try {
       const response = await fetcher({
@@ -205,6 +208,43 @@ export default function SellingPageAdmin() {
   }
 
   useEffect(() => {
+    const transaksi = localStorage.getItem("transaksiadmin");
+
+    if (transaksi) {
+      onClose();
+    } else {
+      onOpen();
+    }
+  }, [onOpen, onClose]);
+
+  useEffect(() => {
+    const transaksi = localStorage.getItem("transaksiadmin");
+
+    if (transaksi) {
+      const parsing = JSON.parse(transaksi);
+      setMember(parsing.member);
+      setNoTelp(parsing.member.no_telp);
+      setPenerima(parsing.member.nama);
+      setAlamat(parsing.member.alamat);
+
+      setListProdukAdmin(parsing.list_produk);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!stop) {
+      const interval = setInterval(() => {
+        localStorage.setItem(
+          "transaksiadmin",
+          JSON.stringify({ member: member, list_produk: listProdukAdmin }),
+        );
+      }, 2500);
+
+      return () => clearInterval(interval);
+    }
+  }, [listProdukAdmin, member, stop]);
+
+  useEffect(() => {
     document.title = title;
   }, [title]);
 
@@ -212,21 +252,19 @@ export default function SellingPageAdmin() {
     setTotalBelanja(listProdukAdmin.reduce((a, b) => a + b.subtotal, 0));
 
     if (listProdukAdmin.length == 0) {
-      setNoTelp("");
-      setPenerima("");
-      setKeterangan("");
-      setAlamat("");
-      setPengiriman("");
-      setTipe("nota");
       setOngkir(0);
-      setPajak(0);
-      setPersenPajak(0);
       setDiskon(0);
       setPersenDiskon(0);
+      setPajak(0);
+      setPersenPajak(0);
       setTotalDiskon(0);
       setTunai(0);
       setKembali(0);
       setTipe("nota");
+      setMetode("cash");
+      setIdTransaksi("");
+      setDp(0);
+      setEstimasi(0);
     }
   }, [listProdukAdmin]);
 
@@ -311,18 +349,14 @@ export default function SellingPageAdmin() {
       });
 
       setMember(member.data);
-      setNoTelp(!member.data.no_telp ? "" : member.data.no_telp);
-      setPenerima(!member.data.nama ? "" : member.data.nama);
-      setAlamat(!member.data.alamat ? "" : member.data.alamat);
+      setNoTelp(member.data.no_telp ?? "");
+      setPenerima(member.data.nama ?? "");
+      setAlamat(member.data.alamat ?? "");
     } catch (error) {
       console.log(error);
       alert("ups sepertinya tidak bisa mendapatkan data member");
     }
   }
-
-  useEffect(() => {
-    onOpen();
-  }, [onOpen]);
 
   if (swr.isLoading) {
     return <LoadingScreen role="admin" />;
@@ -490,7 +524,10 @@ export default function SellingPageAdmin() {
             variant="light"
             size="sm"
             startContent={<ArrowLeft weight="bold" size={14} />}
-            onClick={() => router.back()}
+            onClick={() => {
+              localStorage.removeItem("transaksiadmin");
+              router.back();
+            }}
             className="font-medium text-teal-500"
           >
             Kembali
@@ -1118,6 +1155,7 @@ export default function SellingPageAdmin() {
                               "apakah anda yakin ingin menyesaikan transaksi ini?",
                             )
                           ) {
+                            localStorage.removeItem("transaksiadmin");
                             router.reload();
                           }
                         }}

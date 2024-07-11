@@ -136,12 +136,15 @@ export default function SellingPage() {
   const [listProduk, setListProduk] = useState<ListProdukCashier[]>([]);
   const [totalPembayaran, setTotalPembayaran] = useState<number>(0);
   const [totalBelanja, setTotalBelanja] = useState<number>(0);
+  const [stop, setStop] = useState(false);
   const { status, data } = useSession();
 
   async function createTransaksi() {
     if (listProduk.length > 8) {
       return alert("maksimal 8 item");
     }
+
+    setStop(true);
 
     try {
       const response = await fetcher({
@@ -207,6 +210,28 @@ export default function SellingPage() {
       }
     }
   }
+
+  useEffect(() => {
+    const transaksi = localStorage.getItem("transaksikasir");
+
+    if (transaksi) {
+      const parsing = JSON.parse(transaksi);
+      setListProduk(parsing.list_produk);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!stop) {
+      const interval = setInterval(() => {
+        localStorage.setItem(
+          "transaksikasir",
+          JSON.stringify({ list_produk: listProduk }),
+        );
+      }, 2500);
+
+      return () => clearInterval(interval);
+    }
+  }, [listProduk, stop]);
 
   function toggleMenu() {
     if (setMenuOpen) {
@@ -339,7 +364,10 @@ export default function SellingPage() {
             size="sm"
             color="danger"
             startContent={<ArrowLeft weight="bold" size={14} />}
-            onClick={() => router.push("/cashier/menu")}
+            onClick={() => {
+              localStorage.removeItem('transaksikasir')
+              router.back()
+            }}
             className="font-medium"
           >
             Kembali
@@ -996,6 +1024,7 @@ export default function SellingPage() {
                               "apakah anda yakin ingin menyesaikan transaksi ini?",
                             )
                           ) {
+                            localStorage.removeItem("transaksikasir");
                             router.reload();
                           }
                         }}
