@@ -35,7 +35,9 @@ export default function CardSellingCashier({
     subtotal: item[field as keyof ProdukSearchType] * 1,
     hargaquantity: item.hargaquantity,
     harga_selected: item[field as keyof ProdukSearchType],
-    gudang_id: !item.gudang ? "" : item.gudang[item.gudang.length - 1].nama,
+    gudang_id: !item.gudang?.length
+      ? ""
+      : item.gudang[item.gudang.length - 1].nama,
   };
 
   function handleAddProduk() {
@@ -58,34 +60,44 @@ export default function CardSellingCashier({
             {formatRupiah(item[field as keyof ProdukSearchType])}
           </p>
         </div>
-        {item.gudang?.map(({ nama, stok }) => {
-          return (
-            <>
-              <div className="grid grid-cols-[110px_6px_1fr] gap-1 text-sm text-black">
-                <div className="font-medium">Stok {nama}</div>
-                <div className="font-medium">:</div>
-                <p className="font-bold text-rose-500">
-                  {stok} {item.satuan_kecil}
-                </p>
-              </div>
-            </>
-          );
-        })}
+        {item.gudang?.length ? (
+          item.gudang?.map((element) => {
+            return (
+              <>
+                <div className="grid grid-cols-[110px_6px_1fr] gap-1 text-sm text-black">
+                  <div className="font-medium">Stok {element.nama}</div>
+                  <div className="font-medium">:</div>
+                  <p className="font-bold text-rose-500">
+                    {element.stok} {item.satuan_kecil}
+                  </p>
+                </div>
+              </>
+            );
+          })
+        ) : (
+          <div className="grid grid-cols-[110px_6px_1fr] gap-1 text-sm text-black">
+            <div className="font-medium">Stok</div>
+            <div className="font-medium">:</div>
+            <p className="font-bold text-rose-500">Tidak Ada</p>
+          </div>
+        )}
       </div>
 
       <div className="flex items-end justify-between gap-4">
-        {item[field as keyof ProdukSearchType] ? (
-          <CustomTooltip content="Tambahkan">
-            <Button
-              isIconOnly
-              variant="flat"
-              color="danger"
-              size="sm"
-              onClick={handleAddProduk}
-            >
-              <ArrowRight weight="bold" size={20} />
-            </Button>
-          </CustomTooltip>
+        {item.gudang?.length ? (
+          item[field as keyof ProdukSearchType] ? (
+            <CustomTooltip content="Tambahkan">
+              <Button
+                isIconOnly
+                variant="flat"
+                color="danger"
+                size="sm"
+                onClick={handleAddProduk}
+              >
+                <ArrowRight weight="bold" size={20} />
+              </Button>
+            </CustomTooltip>
+          ) : null
         ) : null}
       </div>
     </div>
