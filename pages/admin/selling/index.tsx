@@ -223,9 +223,9 @@ export default function SellingPageAdmin() {
     if (transaksi) {
       const parsing = JSON.parse(transaksi);
       setMember(parsing.member);
-      setNoTelp(parsing.member.no_telp);
-      setPenerima(parsing.member.nama);
-      setAlamat(parsing.member.alamat);
+      setNoTelp(!parsing.member ? "" : parsing.member.no_telp);
+      setPenerima(!parsing.member ? "" : parsing.member.nama);
+      setAlamat(!parsing.member ? "" : parsing.member.alamat);
 
       setListProdukAdmin(parsing.list_produk);
     }

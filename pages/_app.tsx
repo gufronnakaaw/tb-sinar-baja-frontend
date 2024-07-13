@@ -53,6 +53,14 @@ export default function App({
         }
       }
     };
+
+    if (
+      !router.pathname.includes("/admin/selling") ||
+      !router.pathname.includes("/cashier/menu/selling")
+    ) {
+      localStorage.removeItem("transaksiadmin");
+      localStorage.removeItem("transaksikasir");
+    }
   }, [router]);
 
   return (
