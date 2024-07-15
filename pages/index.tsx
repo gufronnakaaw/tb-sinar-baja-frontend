@@ -42,6 +42,21 @@ export default function HomePage() {
               Kasir
             </Button>
           </div>
+
+          <div className="px-3 lg:px-0">
+            <Button
+              size="lg"
+              onClick={() =>
+                window.open(
+                  "https://drive.google.com/drive/folders/16FsRISPdKOhqK2SxcOsD3OSZA_NqDvFU",
+                  "_blank",
+                )
+              }
+              className="w-full bg-zinc-300 font-semibold text-zinc-600"
+            >
+              Tutorial
+            </Button>
+          </div>
         </div>
 
         <p className="max-w-[500px] text-center text-sm font-medium text-default-500">
