@@ -70,6 +70,19 @@ export default function Navbar({ sidebarOpen, setSidebarOpen }: NavbarProps) {
               aria-label="danger zone section"
               title="Anda Yakin?"
             >
+              {data?.user.role.includes("admin") ? (
+                <DropdownItem
+                  key="cashier"
+                  color="danger"
+                  onClick={() => window.open("/cashier/menu")}
+                  className=" font-bold text-danger-600"
+                >
+                  Kasir Menu
+                </DropdownItem>
+              ) : (
+                <></>
+              )}
+
               <DropdownItem
                 key="logout"
                 color="danger"
