@@ -39,10 +39,9 @@ type ProdukDetailType = {
   stok: number;
   created_at: string;
   updated_at: string;
-  rak: string;
   stok_aman: number;
   subkategori: string;
-  gudang: { nama: string; kode_gudang: string }[];
+  gudang: { nama: string; kode_gudang: string, rak: string }[];
   kategori: string;
   status_stok: string;
   berat: number;
@@ -486,22 +485,6 @@ export default function ProductDetail({
               }}
               type="number"
               min={0}
-            />
-
-            <Input
-              isRequired
-              variant="flat"
-              label="Lokasi Rak"
-              labelPlacement="outside"
-              name="rak"
-              placeholder="Masukan Lokasi Rak"
-              defaultValue={produk.data.rak}
-              onChange={(e) => {
-                setInput({
-                  ...input,
-                  [e.target.name]: e.target.value,
-                });
-              }}
             />
 
             <Input

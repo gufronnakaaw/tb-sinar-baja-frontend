@@ -135,15 +135,12 @@ export default function ProductsListsPage(
 
       const date = new Date();
 
-      xlsx.utils.book_append_sheet(
-        workbook,
-        worksheet,
-        `${filterKategori?.id_kategori}_${filterKategori?.nama}`,
-      );
-      xlsx.writeFile(
-        workbook,
-        `${filterGudang?.nama}_${filterKategori?.nama}_${formatDateWithoutTime(date.toISOString())}.xlsx`,
-      );
+      // const sheetName = `${filterKategori?.id_kategori}_${filterKategori?.nama}`
+
+      xlsx.utils.book_append_sheet(workbook, worksheet, "Pricelist");
+      const filename = `${filterGudang?.nama} ${filterKategori?.nama} ${formatDateWithoutTime(date.toISOString())}`;
+
+      xlsx.writeFile(workbook, `${filename.split(" ").join("_")}.xlsx`);
     } catch (error) {
       alert("terjadi kesalahan pada saat export produk");
     }
