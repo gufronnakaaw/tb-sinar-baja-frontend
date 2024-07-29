@@ -1,5 +1,6 @@
 // components
 import { TemplateBeritaAcara } from "@/components/template/TemplateBeritaAcara";
+import { TemplateBeritaAcaraPo } from "@/components/template/TemplateBeritaAcaraPo";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 import { BrokenDetailType } from "@/types/broken.type";
@@ -45,7 +46,12 @@ export default function BrokenPrint({
             Cetak
           </Button>
         </div>
-        <TemplateBeritaAcara {...broken} ref={componentRef} />
+
+        {broken.type == "internal" ? (
+          <TemplateBeritaAcara {...broken} ref={componentRef} />
+        ) : (
+          <TemplateBeritaAcaraPo {...broken} ref={componentRef} />
+        )}
       </Container>
     </Layout>
   );

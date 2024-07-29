@@ -112,7 +112,8 @@ export default function SidebarMenuAdmin({
           router.pathname.includes("/admin/purchases/invin/histories") ||
           router.pathname.includes("/admin/purchases/invin/payments") ||
           router.pathname.includes("/admin/purchases/invout") ||
-          router.pathname.includes("/admin/purchases/invout/create"))
+          router.pathname.includes("/admin/purchases/invout/create") ||
+          router.pathname.includes("/admin/purchases/form"))
       ) {
         setPurchasesActive({
           trigger,
@@ -132,7 +133,8 @@ export default function SidebarMenuAdmin({
           router.asPath.includes("/admin/warehouses/categories/detail/[id]") ||
           router.asPath.includes("/admin/warehouses/broken") ||
           router.asPath.includes("/admin/warehouses/lists") ||
-          router.asPath.includes("/admin/warehouses/lists/edit"))
+          router.asPath.includes("/admin/warehouses/lists/edit") ||
+          router.asPath.includes("/admin/warehouses/entry"))
       ) {
         setWarehousesActive({
           trigger,
@@ -315,10 +317,9 @@ export default function SidebarMenuAdmin({
 
           <ButtonSidebar
             label="Form Barang Masuk"
-            path="/admin/purchases/forms"
+            path="/admin/purchases/form"
             icon={<Circle weight="fill" size={6} />}
             className="mx-4"
-            isDev={true}
           />
         </AccordionItem>
       </Accordion>
@@ -373,7 +374,7 @@ export default function SidebarMenuAdmin({
           />
 
           <ButtonSidebar
-            label="Barang Rusak"
+            label="Berita Acara"
             path="/admin/warehouses/broken"
             icon={<Circle weight="fill" size={6} />}
             className="mx-4"
@@ -384,7 +385,6 @@ export default function SidebarMenuAdmin({
             path="/admin/warehouses/entry"
             icon={<Circle weight="fill" size={6} />}
             className="mx-4"
-            isDev={true}
           />
 
           <ButtonSidebar

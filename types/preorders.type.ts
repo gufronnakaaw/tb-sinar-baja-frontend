@@ -64,6 +64,9 @@ export type FinalType = {
   created_at: string;
   sumber: string;
   status: string;
+  entry_gudang: boolean;
+  item_masuk: number;
+  item_order: number;
 };
 
 export type FinalDetail = {

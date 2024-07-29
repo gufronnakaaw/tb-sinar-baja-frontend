@@ -4,6 +4,7 @@ import { customStyleTable } from "@/utils/customStyleTable";
 import { formatDate } from "@/utils/formatDate";
 import {
   Button,
+  Chip,
   Pagination,
   Table,
   TableBody,
@@ -39,6 +40,7 @@ export default function BrokenTable({
         <TableHeader>
           <TableColumn>ID Berita Acara</TableColumn>
           <TableColumn>Jumlah Barang Rusak</TableColumn>
+          <TableColumn>Type</TableColumn>
           <TableColumn>Dibuat pada</TableColumn>
           <TableColumn>Aksi</TableColumn>
         </TableHeader>
@@ -47,22 +49,41 @@ export default function BrokenTable({
             <TableRow key={item.id_ba}>
               <TableCell>{item.id_ba}</TableCell>
               <TableCell>{item.jumlah_barang}</TableCell>
+              <TableCell>
+                <Chip
+                  variant="flat"
+                  color={item.type === "internal" ? "success" : "warning"}
+                  size="sm"
+                  classNames={{
+                    base: "px-3",
+                    content: "font-bold capitalize",
+                  }}
+                >
+                  {item.type}
+                </Chip>
+              </TableCell>
               <TableCell>{formatDate(item.created_at)}</TableCell>
               <TableCell>
-                <CustomTooltip content="Detail">
-                  <Button
-                    isIconOnly
-                    variant="light"
-                    size="sm"
-                    onClick={() =>
-                      router.push(
-                        `/${role}/warehouses/broken/detail?id_ba=${item.id_ba}`,
-                      )
-                    }
-                  >
-                    <Eye weight="bold" size={20} className="text-default-600" />
-                  </Button>
-                </CustomTooltip>
+                {item.type == "internal" ? (
+                  <CustomTooltip content="Detail">
+                    <Button
+                      isIconOnly
+                      variant="light"
+                      size="sm"
+                      onClick={() =>
+                        router.push(
+                          `/${role}/warehouses/broken/detail?id_ba=${item.id_ba}`,
+                        )
+                      }
+                    >
+                      <Eye
+                        weight="bold"
+                        size={20}
+                        className="text-default-600"
+                      />
+                    </Button>
+                  </CustomTooltip>
+                ) : null}
                 <CustomTooltip content="Print">
                   <Button
                     isIconOnly

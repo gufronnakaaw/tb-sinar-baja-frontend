@@ -26,6 +26,7 @@ export type BrokenItem = {
 export type BrokenData = {
   id_ba: string;
   jumlah_barang: number;
+  type: "internal" | "external";
   created_at: string;
 };
 
@@ -33,6 +34,7 @@ export type BrokenDetailType = {
   id_ba: string;
   jumlah_barang: number;
   created_at: string;
+  type: "internal" | "external";
   list_produk: {
     kode_item: string;
     nama_produk: string;

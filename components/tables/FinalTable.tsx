@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { Eye } from "@phosphor-icons/react";
+import { CheckCircle, Eye, XCircle } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
 import CustomTooltip from "../tooltip";
 
@@ -35,6 +35,9 @@ export default function FinalTable({
     { name: "Sumber", uid: "sumber" },
     { name: "Status", uid: "status" },
     { name: "Total", uid: "total" },
+    { name: "Total Item", uid: "item_order" },
+    { name: "Sudah Masuk Gudang", uid: "entry_gudang" },
+    { name: "Item Masuk Gudang", uid: "item_masuk" },
     { name: "Dibuat Pada", uid: "created_at" },
     { name: "Aksi", uid: "action" },
   ];
@@ -107,6 +110,36 @@ export default function FinalTable({
             {formatRupiah(item.total)}
           </div>
         );
+      case "item_order":
+        return <div className="w-max text-default-900">{item.item_order}</div>;
+      case "entry_gudang":
+        return (
+          <div className="w-max text-default-900">
+            <Chip
+              variant="flat"
+              color={item.entry_gudang ? "success" : "danger"}
+              size="sm"
+              startContent={
+                item.entry_gudang ? (
+                  <CheckCircle
+                    className="text-success"
+                    weight="fill"
+                    size={18}
+                  />
+                ) : (
+                  <XCircle className="text-danger" weight="fill" size={18} />
+                )
+              }
+              classNames={{
+                content: "font-medium capitalize",
+              }}
+            >
+              {item.entry_gudang ? "Sudah" : "Belum"}
+            </Chip>
+          </div>
+        );
+      case "item_masuk":
+        return <div className="w-max text-default-900">{item.item_masuk}</div>;
       case "created_at":
         return (
           <div className="w-max text-default-900">

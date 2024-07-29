@@ -112,7 +112,8 @@ export default function SidebarMenuOwner({
           router.pathname.includes("/owner/purchases/invin/histories") ||
           router.pathname.includes("/owner/purchases/invin/payments") ||
           router.pathname.includes("/owner/purchases/invout") ||
-          router.pathname.includes("/owner/purchases/invout/create"))
+          router.pathname.includes("/owner/purchases/invout/create") ||
+          router.pathname.includes("/owner/purchases/form"))
       ) {
         setPurchasesActive({
           trigger,
@@ -132,7 +133,8 @@ export default function SidebarMenuOwner({
           router.asPath.includes("/owner/warehouses/categories/detail/[id]") ||
           router.asPath.includes("/owner/warehouses/broken") ||
           router.asPath.includes("/owner/warehouses/lists") ||
-          router.asPath.includes("/owner/warehouses/lists/edit"))
+          router.asPath.includes("/owner/warehouses/lists/edit") ||
+          router.asPath.includes("/owner/warehouses/entry"))
       ) {
         setWarehousesActive({
           trigger,
@@ -309,10 +311,9 @@ export default function SidebarMenuOwner({
 
           <ButtonSidebar
             label="Form Barang Masuk"
-            path="/owner/purchases/forms"
+            path="/owner/purchases/form"
             icon={<Circle weight="fill" size={6} />}
             className="mx-4"
-            isDev={true}
           />
         </AccordionItem>
       </Accordion>
@@ -367,7 +368,7 @@ export default function SidebarMenuOwner({
           />
 
           <ButtonSidebar
-            label="Barang Rusak"
+            label="Berita Acara"
             path="/owner/warehouses/broken"
             icon={<Circle weight="fill" size={6} />}
             className="mx-4"
@@ -378,7 +379,6 @@ export default function SidebarMenuOwner({
             path="/owner/warehouses/entry"
             icon={<Circle weight="fill" size={6} />}
             className="mx-4"
-            isDev={true}
           />
 
           <ButtonSidebar

@@ -36,11 +36,9 @@ export default function BrokenPage() {
   });
 
   return (
-    <Layout title="Daftar Barang Rusak">
+    <Layout title="Berita Acara">
       <Container className="gap-8">
-        <h4 className="text-lg font-semibold text-default-900">
-          Daftar Barang Rusak
-        </h4>
+        <h4 className="text-lg font-semibold text-default-900">Berita Acara</h4>
 
         <div className="grid gap-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
