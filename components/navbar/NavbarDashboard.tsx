@@ -79,9 +79,7 @@ export default function Navbar({ sidebarOpen, setSidebarOpen }: NavbarProps) {
                 >
                   Kasir Menu
                 </DropdownItem>
-              ) : (
-                <></>
-              )}
+              ) : null}
 
               <DropdownItem
                 key="logout"
