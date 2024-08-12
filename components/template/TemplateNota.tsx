@@ -90,7 +90,7 @@ const Nota = (props: TransaksiType, ref: any) => {
         <div className="grid gap-4">
           <table className="table-auto border border-black">
             <thead>
-              <tr className="divide-x-1 divide-black border-b border-black text-left text-[10px] font-medium text-black">
+              <tr className="border-b border-black text-left text-[10px] font-medium text-black">
                 <th className="px-2 py-1">Jumlah</th>
                 <th className="px-2 py-1">Kode Item</th>
                 <th className="px-2 py-1">Nama Produk</th>

@@ -1,57 +1,12 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from "@nextui-org/react";
-import React, { forwardRef } from "react";
+import { forwardRef } from "react";
 
-import {
-  DocumentResponse,
-  TransaksiDetail,
-} from "@/pages/owner/warehouses/documents/[id]";
+import { DocumentResponse } from "@/pages/owner/warehouses/documents/[id]";
 import { formatDate } from "@/utils/formatDate";
 
 const SuratJalan = (props: DocumentResponse, ref: any) => {
-  const columns = [
-    { name: "Jumlah", uid: "jumlah" },
-    { name: "Nama Barang", uid: "nama_produk" },
-    { name: "Lokasi", uid: "lokasi" },
-  ];
-
   const warehouses = Array.from(
     new Set(props.transaksi.transaksidetail.map((item) => item.gudang)),
   );
-
-  const renderCell = (item: TransaksiDetail, columnKey: React.Key) => {
-    const cellValue = item[columnKey as keyof TransaksiDetail];
-
-    switch (columnKey) {
-      case "jumlah":
-        return (
-          <div className="text-[10px] font-medium text-black">
-            {item.jumlah} {item.satuan}
-          </div>
-        );
-      case "nama_produk":
-        return (
-          <div className="w-max text-[10px] font-medium text-black">
-            {item.nama_produk}
-          </div>
-        );
-      case "lokasi":
-        return (
-          <div className="w-max text-[10px] font-medium text-black">
-            {item.gudang}, {item.rak}
-          </div>
-        );
-
-      default:
-        return cellValue;
-    }
-  };
 
   return (
     <>
@@ -141,39 +96,32 @@ const SuratJalan = (props: DocumentResponse, ref: any) => {
             </div>
           </div>
 
-          <Table
-            removeWrapper
-            isHeaderSticky
-            aria-label="surat jalan table"
-            classNames={{
-              base: ["max-h-[calc(100vh-100px)] overflow-scroll"],
-              table: ["border border-black"],
-              thead: [
-                "[&>tr]:first:rounded-none [&>tr]:first:shadow-none border-b border-black",
-              ],
-              th: [
-                "px-5 h-[14px] text-[10px] first:rounded-none last:rounded-none bg-transparent text-black font-medium",
-              ],
-              td: ["px-5 py-0 h-[14px]"],
-            }}
-            className="scrollbar-hide"
-          >
-            <TableHeader columns={columns}>
-              {(column) => (
-                <TableColumn key={column.uid}>{column.name}</TableColumn>
-              )}
-            </TableHeader>
+          <table className="table-auto border border-black">
+            <thead>
+              <tr className="border-b border-black text-left text-[10px] font-medium text-black">
+                <th className="px-2 py-1">Jumlah</th>
+                <th className="px-2 py-1">Nama Barang</th>
+                <th className="px-2 py-1">Lokasi</th>
+              </tr>
+            </thead>
 
-            <TableBody items={props.transaksi.transaksidetail}>
-              {(item) => (
-                <TableRow key={item.nama_produk}>
-                  {(columnKey) => (
-                    <TableCell>{renderCell(item, columnKey)}</TableCell>
-                  )}
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+            <tbody>
+              {props.transaksi.transaksidetail.map((item) => (
+                <tr
+                  key={item.nama_produk}
+                  className="text-left text-[10px] text-black"
+                >
+                  <td className="w-[100px] px-2 py-1">
+                    {item.jumlah} {item.satuan}
+                  </td>
+                  <td className="w-max px-2 py-1">{item.nama_produk}</td>
+                  <td className="w-[150px] px-2 py-1">
+                    {item.gudang}, {item.rak}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
         <div className="flex items-center justify-between gap-4">
