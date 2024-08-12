@@ -1,95 +1,10 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from "@nextui-org/react";
+import { ReturnDetailPage } from "@/types/return.type";
+import { formatDateWithoutTime } from "@/utils/formatDate";
+import { formatRupiah } from "@/utils/formatRupiah";
+import { angkaTerbilang } from "@/utils/terbilang";
 import { forwardRef } from "react";
 
-// utils
-import { formatRupiah } from "@/utils/formatRupiah";
-
-import { ReturnDetail, ReturnDetailPage } from "@/types/return.type";
-import { formatDateWithoutTime } from "@/utils/formatDate";
-import { angkaTerbilang } from "@/utils/terbilang";
-
 const NotaReturn = (props: ReturnDetailPage, ref: any) => {
-  function checkDiskonItem(item: ReturnDetail) {
-    if (item.diskon_langsung_item) {
-      return item.diskon_langsung_item;
-    }
-
-    if (item.diskon_persen_item) {
-      return item.diskon_persen_item;
-    }
-
-    return 0;
-  }
-
-  const columns = [
-    { name: "Jumlah", uid: "jumlah" },
-    { name: "Kode Item", uid: "kode_item" },
-    { name: "Nama Produk", uid: "nama_produk" },
-    { name: "Harga", uid: "harga" },
-    { name: "Harga Setelah Diskon", uid: "harga_setelah_diskon" },
-    { name: "Penalti Per Item", uid: "penalti_item" },
-    { name: "Subtotal", uid: "subtotal" },
-  ];
-
-  const renderCell = (item: ReturnDetail, columnKey: React.Key) => {
-    const cellValue = item[columnKey as keyof ReturnDetail];
-
-    switch (columnKey) {
-      case "jumlah":
-        return (
-          <div className="text-[10px] font-medium text-black">
-            {item.jumlah} {item.satuan}
-          </div>
-        );
-      case "kode_item":
-        return (
-          <div className="text-[10px] font-medium text-black">
-            {item.kode_item}
-          </div>
-        );
-      case "nama_produk":
-        return (
-          <div className="max-w-[300px] text-[10px] font-medium text-black">
-            {item.nama_produk}
-          </div>
-        );
-      case "harga":
-        return (
-          <div className="max-w-[300px] text-[10px] font-medium text-black">
-            {formatRupiah(item.harga)}
-          </div>
-        );
-      case "harga_setelah_diskon":
-        return (
-          <div className="max-w-[300px] text-[10px] font-medium text-black">
-            {formatRupiah(item.harga_setelah_diskon)}
-          </div>
-        );
-      case "penalti_item":
-        return (
-          <div className="max-w-[300px] text-[10px] font-medium text-black">
-            {formatRupiah(item.penalti_item)}
-          </div>
-        );
-      case "subtotal":
-        return (
-          <div className="text-[10px] font-medium text-black">
-            {formatRupiah(item.total_pengembalian)}
-          </div>
-        );
-
-      default:
-        return cellValue;
-    }
-  };
-
   return (
     <>
       <div className="container grid gap-1 pt-4 font-inter" ref={ref}>
@@ -158,7 +73,46 @@ const NotaReturn = (props: ReturnDetailPage, ref: any) => {
         </div>
 
         <div className="mt-10 grid gap-4">
-          <Table
+          <table className="table-auto border border-black">
+            <thead>
+              <tr className="border-b border-black text-left text-[10px] font-medium text-black">
+                <th className="px-2 py-1">Jumlah</th>
+                <th className="px-2 py-1">Kode Item</th>
+                <th className="px-2 py-1">Nama Produk</th>
+                <th className="px-2 py-1">Harga</th>
+                <th className="px-2 py-1">Harga Setelah Diskon</th>
+                <th className="px-2 py-1">Pinalti Per Item</th>
+                <th className="px-2 py-1">Subtotal</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {props.returndetail.map((item) => (
+                <tr
+                  key={item.kode_item}
+                  className="text-left text-[10px] text-black"
+                >
+                  <td className="w-[100px] px-2 py-1">
+                    {item.jumlah} {item.satuan}
+                  </td>
+                  <td className="w-[120px] px-2 py-1">{item.kode_item}</td>
+                  <td className="w-max px-2 py-1">{item.nama_produk}</td>
+                  <td className="px-2 py-1">{formatRupiah(item.harga)}</td>
+                  <td className="px-2 py-1">
+                    {formatRupiah(item.harga_setelah_diskon)}
+                  </td>
+                  <td className="px-2 py-1">
+                    {formatRupiah(item.penalti_item)}
+                  </td>
+                  <td className="px-2 py-1">
+                    {formatRupiah(item.total_pengembalian)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {/* <Table
             isHeaderSticky
             aria-label="nota table"
             classNames={{
@@ -190,7 +144,7 @@ const NotaReturn = (props: ReturnDetailPage, ref: any) => {
                 </TableRow>
               )}
             </TableBody>
-          </Table>
+          </Table> */}
 
           <div className="flex items-center justify-between">
             <div className="grid">
@@ -237,6 +191,7 @@ const NotaReturn = (props: ReturnDetailPage, ref: any) => {
               </div>
             </div>
           </div>
+
           <div className="mr-5 mt-2 grid justify-self-end">
             <h1 className="text-[10px] font-normal text-black">
               Kediri, {formatDateWithoutTime(props.created_at)}
