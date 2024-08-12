@@ -1,30 +1,10 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from "@nextui-org/react";
-import { forwardRef } from "react";
-
-// utils
-import { formatRupiah } from "@/utils/formatRupiah";
-
 import { ListProduk, TransaksiType } from "@/types/transactions.type";
 import { formatDate } from "@/utils/formatDate";
+import { formatRupiah } from "@/utils/formatRupiah";
 import { angkaTerbilang } from "@/utils/terbilang";
+import { forwardRef } from "react";
 
 const Nota = (props: TransaksiType, ref: any) => {
-  const columns = [
-    { name: "Jumlah", uid: "jumlah" },
-    { name: "Kode Item", uid: "kode_item" },
-    { name: "Nama Produk", uid: "nama_produk" },
-    { name: "Harga", uid: "harga" },
-    { name: "Potongan", uid: "pot" },
-    { name: "Subtotal", uid: "subtotal" },
-  ];
-
   function checkDiskon(item: ListProduk) {
     if (!item.diskon_langsung_item && !item.diskon_persen_item) {
       return 0;
@@ -38,52 +18,6 @@ const Nota = (props: TransaksiType, ref: any) => {
       return `${item.diskon_persen_item}%`;
     }
   }
-
-  const renderCell = (transaction: ListProduk, columnKey: React.Key) => {
-    const cellValue = transaction[columnKey as keyof ListProduk];
-
-    switch (columnKey) {
-      case "jumlah":
-        return (
-          <div className="text-[10px] font-medium text-black">
-            {transaction.jumlah} {transaction.satuan}
-          </div>
-        );
-      case "kode_item":
-        return (
-          <div className="text-[10px] font-medium text-black">
-            {transaction.kode_item}
-          </div>
-        );
-      case "nama_produk":
-        return (
-          <div className="max-w-[300px] text-[10px] font-medium text-black">
-            {transaction.nama_produk}
-          </div>
-        );
-      case "harga":
-        return (
-          <div className="text-[10px] font-medium text-black">
-            {formatRupiah(transaction.harga)}
-          </div>
-        );
-      case "pot":
-        return (
-          <div className="text-[10px] font-medium text-black">
-            {checkDiskon(transaction)}
-          </div>
-        );
-      case "subtotal":
-        return (
-          <div className="text-[10px] font-medium text-black">
-            {formatRupiah(transaction.sub_total)}
-          </div>
-        );
-
-      default:
-        return cellValue;
-    }
-  };
 
   return (
     <>
@@ -154,39 +88,40 @@ const Nota = (props: TransaksiType, ref: any) => {
         </div>
 
         <div className="grid gap-4">
-          <Table
-            isHeaderSticky
-            aria-label="nota table"
-            classNames={{
-              base: ["max-h-[calc(100vh-100px)] overflow-scroll"],
-              table: ["border border-black"],
-              thead: [
-                "[&>tr]:first:rounded-none [&>tr]:first:shadow-none border-b border-black",
-              ],
-              th: [
-                "px-5 h-[14px] text-[10px] first:rounded-none last:rounded-none bg-transparent text-black font-medium",
-              ],
-              td: ["px-5 py-0 h-[14px]"],
-            }}
-            className="scrollbar-hide"
-            removeWrapper
-          >
-            <TableHeader columns={columns}>
-              {(column) => (
-                <TableColumn key={column.uid}>{column.name}</TableColumn>
-              )}
-            </TableHeader>
+          <table className="table-auto border border-black">
+            <thead>
+              <tr className="divide-x-1 divide-black border-b border-black text-left text-[10px] font-medium text-black">
+                <th className="px-2 py-1">Jumlah</th>
+                <th className="px-2 py-1">Kode Item</th>
+                <th className="px-2 py-1">Nama Produk</th>
+                <th className="px-2 py-1">Harga</th>
+                <th className="px-2 py-1">Potongan</th>
+                <th className="px-2 py-1">Subtotal</th>
+              </tr>
+            </thead>
 
-            <TableBody items={props.list_produk}>
-              {(transaction) => (
-                <TableRow key={transaction.kode_item}>
-                  {(columnKey) => (
-                    <TableCell>{renderCell(transaction, columnKey)}</TableCell>
-                  )}
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+            <tbody>
+              {props.list_produk?.map((transaction) => (
+                <tr
+                  key={transaction.kode_item}
+                  className="text-left text-[10px] text-black"
+                >
+                  <td className="w-[100px] px-2 py-1">
+                    {transaction.jumlah} {transaction.satuan}
+                  </td>
+                  <td className="w-max px-2 py-1">{transaction.kode_item}</td>
+                  <td className="w-max px-2 py-1">{transaction.nama_produk}</td>
+                  <td className="px-2 py-1">
+                    {formatRupiah(transaction.harga)}
+                  </td>
+                  <td className="px-2 py-1">{checkDiskon(transaction)}</td>
+                  <td className="px-2 py-1">
+                    {formatRupiah(transaction.sub_total)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
           <div className="flex items-center justify-between">
             <div className="grid">
