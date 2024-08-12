@@ -40,6 +40,10 @@ export default function CardSellingAdmin({
 
   function handleAddProduk() {
     setListProdukAdmin((prev) => {
+      if (prev.length == 8) {
+        return [...prev];
+      }
+
       if (prev.find((produk) => produk.kode_item == item.kode_item)) {
         return [...prev];
       }

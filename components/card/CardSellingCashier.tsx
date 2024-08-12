@@ -42,6 +42,10 @@ export default function CardSellingCashier({
 
   function handleAddProduk() {
     setListProduk((prev) => {
+      if (prev.length == 8) {
+        return [...prev];
+      }
+
       if (prev.find((produk) => produk.kode_item == item.kode_item)) {
         return [...prev];
       }
