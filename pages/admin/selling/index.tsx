@@ -593,11 +593,12 @@ export default function SellingPageAdmin() {
           <div className="h-full w-[1px] bg-gray-300" />
 
           {/* ==== right content ==== */}
-          <div className="relative grid grid-rows-[auto_1fr_auto] overflow-hidden bg-white scrollbar-hide">
+          <div className="relative grid grid-rows-[1fr_81px] overflow-hidden bg-white">
             <Table
               aria-label="Example static collection table"
               classNames={{
-                wrapper: "rounded-none shadow-none",
+                base: "w-full h-full overflow-scroll scrollbar-hide",
+                wrapper: "rounded-none shadow-none scrollbar-hide",
               }}
             >
               <TableHeader className="text-center">
@@ -617,6 +618,7 @@ export default function SellingPageAdmin() {
                 <TableColumn className="text-center">Subtotal</TableColumn>
                 <TableColumn className="text-center">Aksi</TableColumn>
               </TableHeader>
+
               <TableBody>
                 {listProdukAdmin.map((item) => {
                   return (
@@ -1097,11 +1099,12 @@ export default function SellingPageAdmin() {
                 })}
               </TableBody>
             </Table>
-            <div className="grid"></div>
 
-            <div className="sticky bottom-0 z-20 grid grid-cols-2 items-center gap-16 border-t border-gray-300 bg-white p-[1rem]">
+            <div className="z-20 grid grid-cols-2 items-center gap-16 border-t border-gray-300 bg-white p-[1rem]">
               <div className="flex items-center justify-between gap-2">
-                <p className="font-bold text-gray-600">Total Pembayaran :</p>
+                <p className="text-[14px] font-semibold text-gray-600">
+                  Total Pembayaran :
+                </p>
                 <h5 className="text-[24px] font-semibold text-teal-500">
                   {formatRupiah(totalPembayaran)}
                 </h5>
@@ -1181,11 +1184,11 @@ export default function SellingPageAdmin() {
 
             {/* --- menu additional information --- */}
             <div
-              className={`absolute left-0 z-10 h-[calc(100%-90px)] w-full bg-white text-white transition-all duration-500 ${
-                menuOpen ? "bottom-24" : "-bottom-full"
-              } overflow-y-scroll`}
+              className={`absolute left-0 z-10 h-[calc(100%-80px)] w-full transition-all duration-500 ${
+                menuOpen ? "bottom-[81px]" : "-bottom-full"
+              }`}
             >
-              <div className="flex h-full w-full flex-col gap-4 bg-white p-4">
+              <div className="flex h-full w-full flex-col gap-4 overflow-y-scroll bg-white p-4">
                 <h5 className="font-semibold text-default-900">
                   Informasi Tambahan
                 </h5>
@@ -1277,7 +1280,7 @@ export default function SellingPageAdmin() {
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 items-start gap-4">
                     <div className="grid gap-3">
                       <Input
                         value={ongkir ? `${ongkir}` : ""}
@@ -1550,108 +1553,107 @@ export default function SellingPageAdmin() {
                       ) : null}
                     </div>
 
-                    <div className="h-3/4">
-                      <div className="grid gap-1 border-l-4 border-teal-500 pl-6">
+                    <div className="grid gap-1 border-l-4 border-teal-500 pl-6">
+                      <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                        <div className="font-normal">Subtotal Produk</div>
+                        <div className="font-normal">:</div>
+                        <p className="font-normal">
+                          {formatRupiah(totalBelanja)}
+                        </p>
+                      </div>
+
+                      <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                        <div className="font-normal">Subtotal Ongkir</div>
+                        <div className="font-normal">:</div>
+                        <p className="font-normal">{formatRupiah(ongkir)}</p>
+                      </div>
+
+                      <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                        <div className="font-normal">Total Keseluruhan</div>
+                        <div className="font-normal">:</div>
+                        <p className="font-normal">
+                          {formatRupiah(ongkir + totalBelanja)}
+                        </p>
+                      </div>
+
+                      {tipe == "faktur" ? (
                         <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
-                          <div className="font-normal">Subtotal Produk</div>
+                          <div className="font-normal">
+                            Pajak ({persenPajak} %)
+                          </div>
+                          <div className="font-normal">:</div>
+                          <p className="font-normal">{formatRupiah(pajak)}</p>
+                        </div>
+                      ) : null}
+
+                      {diskon || persenDiskon ? (
+                        <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                          <div className="font-normal">
+                            Diskon {persenDiskon ? `(${persenDiskon}%)` : null}
+                          </div>
                           <div className="font-normal">:</div>
                           <p className="font-normal">
-                            {formatRupiah(totalBelanja)}
+                            -{formatRupiah(totalDiskon)}
                           </p>
                         </div>
+                      ) : null}
 
-                        <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
-                          <div className="font-normal">Subtotal Ongkir</div>
-                          <div className="font-normal">:</div>
-                          <p className="font-normal">{formatRupiah(ongkir)}</p>
-                        </div>
+                      <div className="mt-5 grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                        <div className="font-bold">Total Pembayaran</div>
+                        <div className="font-bold">:</div>
+                        <p className="font-bold">
+                          {formatRupiah(totalPembayaran)}
+                        </p>
+                      </div>
 
-                        <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
-                          <div className="font-normal">Total Keseluruhan</div>
-                          <div className="font-normal">:</div>
-                          <p className="font-normal">
-                            {formatRupiah(ongkir + totalBelanja)}
-                          </p>
-                        </div>
-
-                        {tipe == "faktur" ? (
+                      {metode == "cash" ? (
+                        <>
                           <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
-                            <div className="font-normal">
-                              Pajak ({persenPajak} %)
-                            </div>
-                            <div className="font-normal">:</div>
-                            <p className="font-normal">{formatRupiah(pajak)}</p>
-                          </div>
-                        ) : null}
-
-                        {diskon || persenDiskon ? (
-                          <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
-                            <div className="font-normal">
-                              Diskon{" "}
-                              {persenDiskon ? `(${persenDiskon}%)` : null}
-                            </div>
-                            <div className="font-normal">:</div>
-                            <p className="font-normal">
-                              -{formatRupiah(totalDiskon)}
-                            </p>
-                          </div>
-                        ) : null}
-
-                        <div className="mt-5 grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
-                          <div className="font-bold">Total Pembayaran</div>
-                          <div className="font-bold">:</div>
-                          <p className="font-bold">
-                            {formatRupiah(totalPembayaran)}
-                          </p>
-                        </div>
-
-                        {metode == "cash" ? (
-                          <>
-                            <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
-                              <div className="font-bold">Tunai</div>
-                              <div className="font-bold">:</div>
-                              <p className="font-bold text-teal-500">
-                                {formatRupiah(tunai)}
-                              </p>
-                            </div>
-
-                            <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
-                              <div className="font-bold">Kembali</div>
-                              <div className="font-bold">:</div>
-                              <p className="font-bold text-teal-500">
-                                {formatRupiah(kembali)}
-                              </p>
-                            </div>
-                          </>
-                        ) : null}
-                        {metode == "transfer" ? (
-                          <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
-                            <div className="font-bold">ID Transaksi Bank</div>
+                            <div className="font-bold">Tunai</div>
                             <div className="font-bold">:</div>
                             <p className="font-bold text-teal-500">
-                              {idTransaksi}
+                              {formatRupiah(tunai)}
                             </p>
                           </div>
-                        ) : null}
-                        {metode == "tempo" ? (
-                          <>
-                            <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
-                              <div className="font-bold">Dp</div>
-                              <div className="font-bold">:</div>
-                              <p className="font-bold text-teal-500">
-                                {formatRupiah(dp)}
-                              </p>
-                            </div>
-                            <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
-                              <div className="font-bold">Estimasi</div>
-                              <div className="font-bold">:</div>
-                              <p className="font-bold text-teal-500">
-                                {estimation(estimasi)}
-                              </p>
-                            </div>
-                          </>
-                        ) : null}
-                      </div>
+
+                          <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                            <div className="font-bold">Kembali</div>
+                            <div className="font-bold">:</div>
+                            <p className="font-bold text-teal-500">
+                              {formatRupiah(kembali)}
+                            </p>
+                          </div>
+                        </>
+                      ) : null}
+
+                      {metode == "transfer" ? (
+                        <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                          <div className="font-bold">ID Transaksi Bank</div>
+                          <div className="font-bold">:</div>
+                          <p className="font-bold text-teal-500">
+                            {idTransaksi}
+                          </p>
+                        </div>
+                      ) : null}
+
+                      {metode == "tempo" ? (
+                        <>
+                          <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                            <div className="font-bold">Dp</div>
+                            <div className="font-bold">:</div>
+                            <p className="font-bold text-teal-500">
+                              {formatRupiah(dp)}
+                            </p>
+                          </div>
+                          <div className="grid grid-cols-[150px_6px_1fr] gap-1 text-sm text-default-900">
+                            <div className="font-bold">Estimasi</div>
+                            <div className="font-bold">:</div>
+                            <p className="font-bold text-teal-500">
+                              {estimation(estimasi)}
+                            </p>
+                          </div>
+                        </>
+                      ) : null}
                     </div>
                   </div>
                 </div>
