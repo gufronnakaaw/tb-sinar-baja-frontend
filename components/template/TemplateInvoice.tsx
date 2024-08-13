@@ -1,11 +1,3 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from "@nextui-org/react";
 import { forwardRef } from "react";
 
 // utils
@@ -89,7 +81,7 @@ const Invoice = (props: InvoutType, ref: any) => {
   return (
     <>
       <div className="container grid gap-1 pt-4 font-inter" ref={ref}>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="flex items-start justify-between gap-4">
           <div className="grid gap-1">
             <h1 className="font-bold text-black">TB. SINAR BAJA</h1>
             <p className="max-w-[300px] text-[10px] font-medium text-black">
@@ -99,6 +91,7 @@ const Invoice = (props: InvoutType, ref: any) => {
             <p className="max-w-[300px] text-[10px] font-medium text-black">
               082140735711
             </p>
+
             <div className="mt-2">
               <h5 className="text-[10px] font-medium text-black">Kepada</h5>
               <h5 className="text-[10px] font-medium text-black">
@@ -110,52 +103,82 @@ const Invoice = (props: InvoutType, ref: any) => {
             </div>
           </div>
 
-          <div className="grid justify-end">
-            <div className="flex flex-col">
-              <h1 className="font-bold uppercase text-black">Invoice</h1>
-              <div className="grid h-3">
-                <div className="grid">
-                  <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
-                    <div className="font-medium">Nomor</div>
-                    <div className="font-medium">:</div>
-                    <p className="font-medium">{props.id_invoice}</p>
-                  </div>
+          <div className="grid items-start gap-1">
+            <h1 className="font-bold uppercase text-black">Invoice</h1>
 
-                  <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
-                    <div className="font-medium">ID Transaksi</div>
-                    <div className="font-medium">:</div>
-                    <p className="font-medium">
-                      {props.transaksi.id_transaksi}
-                    </p>
-                  </div>
+            <div className="grid">
+              <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
+                <div className="font-medium">Nomor</div>
+                <div className="font-medium">:</div>
+                <p className="font-medium">{props.id_invoice}</p>
+              </div>
 
-                  <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
-                    <div className="font-medium">Jatuh Tempo</div>
-                    <div className="font-medium">:</div>
-                    <p className="font-medium">{props.jatuh_tempo ?? "-"}</p>
-                  </div>
+              <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
+                <div className="font-medium">ID Transaksi</div>
+                <div className="font-medium">:</div>
+                <p className="font-medium">{props.transaksi.id_transaksi}</p>
+              </div>
 
-                  <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
-                    <div className="font-medium">Tanggal</div>
-                    <div className="font-medium">:</div>
-                    <p className="font-medium">
-                      {formatDateWithoutTime(props.created_at)}
-                    </p>
-                  </div>
+              <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
+                <div className="font-medium">Jatuh Tempo</div>
+                <div className="font-medium">:</div>
+                <p className="font-medium">{props.jatuh_tempo ?? "-"}</p>
+              </div>
 
-                  <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
-                    <div className="font-medium">No. Telpon</div>
-                    <div className="font-medium">:</div>
-                    <p className="font-medium">{props.transaksi.no_telp}</p>
-                  </div>
-                </div>
+              <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
+                <div className="font-medium">Tanggal</div>
+                <div className="font-medium">:</div>
+                <p className="font-medium">
+                  {formatDateWithoutTime(props.created_at)}
+                </p>
+              </div>
+
+              <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
+                <div className="font-medium">No. Telpon</div>
+                <div className="font-medium">:</div>
+                <p className="font-medium">{props.transaksi.no_telp}</p>
               </div>
             </div>
           </div>
         </div>
 
         <div className="grid gap-4">
-          <Table
+          <table className="table-auto border border-black">
+            <thead>
+              <tr className="border-b border-black text-left text-[10px] font-medium text-black">
+                <th className="px-2 py-1">Jumlah</th>
+                <th className="px-2 py-1">Kode Item</th>
+                <th className="px-2 py-1">Nama Produk</th>
+                <th className="px-2 py-1">Harga</th>
+                <th className="px-2 py-1">Potongan</th>
+                <th className="px-2 py-1">Subtotal</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {props.transaksi.list_produk?.map((item) => (
+                <tr
+                  key={item.kode_item}
+                  className="text-left text-[10px] text-black"
+                >
+                  <td className="w-[100px] px-2 py-1">
+                    {item.jumlah} {item.satuan}
+                  </td>
+                  <td className="w-max px-2 py-1">{item.kode_item}</td>
+                  <td className="w-max px-2 py-1">{item.nama_produk}</td>
+                  <td className="w-max px-2 py-1">
+                    {formatRupiah(item.harga)}
+                  </td>
+                  <td className="w-[100px] px-2 py-1">{checkDiskon(item)}</td>
+                  <td className="w-amax px-2 py-1">
+                    {formatRupiah(item.sub_total)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {/* <Table
             isHeaderSticky
             aria-label="nota table"
             classNames={{
@@ -187,17 +210,15 @@ const Invoice = (props: InvoutType, ref: any) => {
                 </TableRow>
               )}
             </TableBody>
-          </Table>
+          </Table> */}
 
-          <div className="flex items-center justify-between">
-            <div className="grid">
-              <div className="grid grid-cols-[45px_2px_1fr] gap-1 text-[10px] text-black">
-                <div className="w-24 font-bold italic">Terbilang</div>
-                <div className="font-bold italic">:</div>
-                <p className="font-bold capitalize italic">
-                  {angkaTerbilang(props.sisa)}
-                </p>
-              </div>
+          <div className="flex items-start justify-between">
+            <div className="grid grid-cols-[45px_2px_1fr] gap-1 text-[10px] text-black">
+              <div className="w-24 font-bold italic">Terbilang</div>
+              <div className="font-bold italic">:</div>
+              <p className="font-bold capitalize italic">
+                {angkaTerbilang(props.sisa)}
+              </p>
             </div>
 
             <div className="grid justify-self-end border border-black p-2">
@@ -253,11 +274,13 @@ const Invoice = (props: InvoutType, ref: any) => {
                   {formatRupiah(props.transaksi.total_pembayaran)}
                 </p>
               </div>
+
               <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-black">
                 <div className="w-24 font-medium">DP</div>
                 <div className="font-medium">:</div>
                 <p className="font-medium">{formatRupiah(props.dp)}</p>
               </div>
+
               <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-black">
                 <div className="w-24 font-medium">Tagihan</div>
                 <div className="font-medium">:</div>
@@ -265,6 +288,7 @@ const Invoice = (props: InvoutType, ref: any) => {
               </div>
             </div>
           </div>
+
           <div className="mr-5 mt-2 grid justify-self-end">
             <h1 className="text-[10px] font-normal text-black">
               Kediri, {formatDateWithoutTime(props.created_at)}
