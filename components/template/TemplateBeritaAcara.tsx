@@ -49,7 +49,7 @@ const BeritaAcara = (props: BrokenDetailType, ref: any) => {
                 <th className="px-2 py-1">Kode Item</th>
                 <th className="px-2 py-1">Nama Barang</th>
                 <th className="px-2 py-1">Keterangan</th>
-                <th className="px-2 py-1">Lokaasi</th>
+                <th className="px-2 py-1">Lokasi</th>
               </tr>
             </thead>
 

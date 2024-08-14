@@ -1,6 +1,6 @@
 // components
 import { TemplateBeritaAcara } from "@/components/template/TemplateBeritaAcara";
-import { TemplateOrder } from "@/components/template/TemplateOrder";
+import { TemplateBeritaAcaraPo } from "@/components/template/TemplateBeritaAcaraPo";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 import { BrokenDetailType } from "@/types/broken.type";
@@ -50,8 +50,7 @@ export default function BrokenPrint({
         {broken.type == "internal" ? (
           <TemplateBeritaAcara {...broken} ref={componentRef} />
         ) : (
-          <TemplateOrder />
-          // <TemplateBeritaAcaraPo {...broken} ref={componentRef} />
+          <TemplateBeritaAcaraPo {...broken} ref={componentRef} />
         )}
       </Container>
     </Layout>
