@@ -1,11 +1,3 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from "@nextui-org/react";
 import { forwardRef } from "react";
 
 import { BrokenDetailType } from "@/types/broken.type";
@@ -53,7 +45,7 @@ const BeritaAcaraPo = (props: BrokenDetailType, ref: any) => {
   return (
     <>
       <div className="container grid gap-2 pt-4 font-inter" ref={ref}>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="flex items-start justify-between gap-4">
           <div className="grid gap-1">
             <h1 className="font-bold text-black">TB. SINAR BAJA</h1>
             <p className="max-w-[300px] text-[10px] font-medium text-black">
@@ -64,71 +56,55 @@ const BeritaAcaraPo = (props: BrokenDetailType, ref: any) => {
               082140735711
             </p>
           </div>
-          <div className="grid justify-end">
-            <div className="flex flex-col">
-              <h1 className="font-bold uppercase text-black">Berita Acara</h1>
-              <div className="grid h-3">
-                <div className="grid">
-                  <div className="grid w-[250px] grid-cols-[80px_6px_1fr] gap-1 text-[10px] text-black">
-                    <div className="font-medium">ID Berita Acara</div>
-                    <div className="font-medium">:</div>
-                    <p className="font-medium">{props.id_ba}</p>
-                  </div>
 
-                  <div className="grid w-[250px] grid-cols-[80px_6px_1fr] gap-1 text-[10px] text-black">
-                    <div className="font-medium">Tanggal</div>
-                    <div className="font-medium">:</div>
-                    <p className="font-medium">
-                      {formatDate(props.created_at)}
-                    </p>
-                  </div>
-                </div>
+          <div className="grid items-start gap-1">
+            <h1 className="font-bold uppercase text-black">Berita Acara</h1>
+
+            <div className="grid">
+              <div className="grid w-[250px] grid-cols-[80px_6px_1fr] gap-1 text-[10px] text-black">
+                <div className="font-medium">ID Berita Acara</div>
+                <div className="font-medium">:</div>
+                <p className="font-medium">{props.id_ba}</p>
+              </div>
+
+              <div className="grid w-[250px] grid-cols-[80px_6px_1fr] gap-1 text-[10px] text-black">
+                <div className="font-medium">Tanggal</div>
+                <div className="font-medium">:</div>
+                <p className="font-medium">{formatDate(props.created_at)}</p>
               </div>
             </div>
           </div>
         </div>
+
         <div className="grid gap-1">
-          <div className="grid grid-cols-[1fr_100px] gap-4">
-            <div className="grid gap-1 text-[10px]">
-              <p className="font-medium text-black">
-                Berikut adalah data item yang mengalami masalah :
-              </p>
-            </div>
-          </div>
+          <p className="text-[10px] font-medium text-black">
+            Berikut adalah data item yang mengalami masalah :
+          </p>
 
-          <Table
-            isHeaderSticky
-            aria-label="broken table"
-            classNames={{
-              base: ["max-h-[calc(100vh-100px)] overflow-scroll"],
-              table: ["border border-black"],
-              thead: [
-                "[&>tr]:first:rounded-none [&>tr]:first:shadow-none border-b border-black",
-              ],
-              th: [
-                "px-5 h-[14px] text-[10px] first:rounded-none last:rounded-none bg-transparent text-black font-medium",
-              ],
-              td: ["px-5 py-0 h-[14px]"],
-            }}
-            className="scrollbar-hide"
-            removeWrapper
-          >
-            <TableHeader columns={columns}>
-              {(column) => (
-                <TableColumn key={column.uid}>{column.name}</TableColumn>
-              )}
-            </TableHeader>
+          <table className="table-auto border border-black">
+            <thead>
+              <tr className="border-b border-black text-left text-[10px] font-medium text-black">
+                <th className="px-2 py-1">Jumlah</th>
+                <th className="px-2 py-1">Kode Item</th>
+                <th className="px-2 py-1">Nama Barang</th>
+              </tr>
+            </thead>
 
-            <TableBody items={props.list_produk}>
-              {(item) => (
-                <TableRow key={item.kode_item}>
-                  {(columnKey) => (
-                    <TableCell>{renderCell(item, columnKey)}</TableCell>
-                  )}
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+            <tbody>
+              {props.list_produk.map((item) => (
+                <tr
+                  key={item.kode_item}
+                  className="text-left text-[10px] text-black"
+                >
+                  <td className="w-[100px] px-2 py-1">
+                    {item.jumlah} {item.satuan}
+                  </td>
+                  <td className="w-max px-2 py-1">{item.kode_item}</td>
+                  <td className="w-max px-2 py-1">{item.nama_produk}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
         <div className="flex items-center justify-between gap-4">
