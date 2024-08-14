@@ -349,7 +349,16 @@ export default function PopupImportProducts({
                       className="rounded-xl bg-default-100 px-2 py-2 text-small text-foreground-500 file:mr-4 file:rounded-md file:border-0 file:bg-default-200 file:px-2 file:py-[2px] file:text-sm file:font-medium file:text-primary hover:file:bg-default-300"
                       onChange={async (e) => {
                         if (!e.target.files) return;
-                        setFile(e.target.files[0]);
+                        const validExtensions = [
+                          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                          "application/vnd.ms-excel",
+                        ];
+
+                        if (!validExtensions.includes(e.target.files[0].type)) {
+                          return alert("file tidak valid");
+                        } else {
+                          setFile(e.target.files[0]);
+                        }
                       }}
                     />
                   </div>
