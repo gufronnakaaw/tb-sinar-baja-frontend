@@ -4,7 +4,6 @@ import {
   Circle,
   Gear,
   House,
-  Money,
   Package,
   ShoppingCartSimple,
 } from "@phosphor-icons/react";
@@ -86,7 +85,9 @@ export default function SidebarMenuOwner({
           router.pathname.includes("/owner/selling/documents/edit/[id]") ||
           router.pathname.includes("/owner/selling/return") ||
           router.pathname.includes("/owner/selling/return/create") ||
-          router.pathname.includes("/owner/selling/return/detail"))
+          router.pathname.includes("/owner/selling/return/detail") ||
+          router.pathname.includes("/owner/selling/invout") ||
+          router.pathname.includes("/owner/selling/invout/create"))
       ) {
         setSellingActive({
           trigger,
@@ -111,8 +112,6 @@ export default function SidebarMenuOwner({
           router.pathname.includes("/owner/purchases/invin/create") ||
           router.pathname.includes("/owner/purchases/invin/histories") ||
           router.pathname.includes("/owner/purchases/invin/payments") ||
-          router.pathname.includes("/owner/purchases/invout") ||
-          router.pathname.includes("/owner/purchases/invout/create") ||
           router.pathname.includes("/owner/purchases/form"))
       ) {
         setPurchasesActive({
@@ -236,6 +235,13 @@ export default function SidebarMenuOwner({
             icon={<Circle weight="fill" size={6} />}
             className="mx-4"
           />
+
+          <ButtonSidebar
+            label="Invoice Keluar"
+            path="/owner/selling/invout"
+            icon={<Circle weight="fill" size={6} />}
+            className="mx-4"
+          />
         </AccordionItem>
       </Accordion>
 
@@ -284,13 +290,6 @@ export default function SidebarMenuOwner({
           <ButtonSidebar
             label="Invoice Masuk"
             path="/owner/purchases/invin"
-            icon={<Circle weight="fill" size={6} />}
-            className="mx-4"
-          />
-
-          <ButtonSidebar
-            label="Invoice Keluar"
-            path="/owner/purchases/invout"
             icon={<Circle weight="fill" size={6} />}
             className="mx-4"
           />
@@ -390,7 +389,7 @@ export default function SidebarMenuOwner({
         </AccordionItem>
       </Accordion>
 
-      <Accordion
+      {/* <Accordion
         isCompact
         itemClasses={{
           ...itemClasses,
@@ -450,7 +449,7 @@ export default function SidebarMenuOwner({
             isDev={true}
           />
         </AccordionItem>
-      </Accordion>
+      </Accordion> */}
 
       <Accordion
         isCompact

@@ -79,7 +79,7 @@ export default function InvoutTable({
                     size="sm"
                     onClick={() =>
                       router.push(
-                        `/${role}/purchases/invout/histories?id_invoice=${item.id_invoice}`,
+                        `/${role}/selling/invout/histories?id_invoice=${item.id_invoice}`,
                       )
                     }
                   >
@@ -97,7 +97,7 @@ export default function InvoutTable({
                     size="sm"
                     onClick={() =>
                       router.push(
-                        `/${role}/purchases/invout/detail?id_invoice=${item.id_invoice}`,
+                        `/${role}/selling/invout/detail?id_invoice=${item.id_invoice}`,
                       )
                     }
                   >
@@ -111,7 +111,7 @@ export default function InvoutTable({
                     size="sm"
                     onClick={() =>
                       router.push(
-                        `/${role}/purchases/invout/payment?id_invoice=${item.id_invoice}`,
+                        `/${role}/selling/invout/payment?id_invoice=${item.id_invoice}`,
                       )
                     }
                   >
@@ -129,7 +129,7 @@ export default function InvoutTable({
                     size="sm"
                     onClick={() =>
                       router.push(
-                        `/${role}/purchases/invout/edit?id_invoice=${item.id_invoice}`,
+                        `/${role}/selling/invout/edit?id_invoice=${item.id_invoice}`,
                       )
                     }
                   >
