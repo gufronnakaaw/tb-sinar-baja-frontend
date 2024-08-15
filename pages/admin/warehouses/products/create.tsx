@@ -1,6 +1,5 @@
 import { Button, Input, Spinner } from "@nextui-org/react";
 import { WarningCircle } from "@phosphor-icons/react";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -11,7 +10,6 @@ import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 
 // utils
-import { GlobalResponse } from "@/types/global.type";
 import { fetcher } from "@/utils/fetcher";
 
 type ProdukDetailType = {
@@ -49,25 +47,26 @@ type ProdukDetailType = {
   harga_diskon: number;
 };
 
-export default function ProductDetail({
-  produk,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function ProductEdit() {
   const router = useRouter();
-  const [input, setInput] = useState({});
+  const [input, setInput] = useState<any>({});
   const [loading, setLoading] = useState(false);
 
-  async function handleUpdate() {
+  async function handleCreate() {
     setLoading(true);
     try {
       await fetcher({
-        url: "/produk",
-        method: "PATCH",
+        url: "/produk/bulk",
+        method: "POST",
         data: {
-          kode_item: produk.data.kode_item,
-          ...input,
+          gudang_id: input.gudang_id,
+          produk: [input],
         },
       });
-      alert("update berhasil");
+
+      setLoading(false);
+
+      alert("buat produk berhasil");
       return router.back();
     } catch (error) {
       setLoading(false);
@@ -93,20 +92,48 @@ export default function ProductDetail({
   }
 
   return (
-    <Layout title="Edit Produk">
+    <Layout title="Buat Produk">
       <Container className="gap-12">
         <ButtonBack
           onClick={() => router.back()}
-          className="justify-self-start text-primary"
+          className="justify-self-start text-teal-500"
         >
           Kembali
         </ButtonBack>
 
         <div className="grid gap-12">
           <div className="grid grid-cols-3 gap-6">
-            <h3 className="col-span-3 border-l-4 border-primary pl-4 text-[18px] font-semibold text-default-900">
+            <h3 className="col-span-3 border-l-4 border-teal-500 pl-4 text-[18px] font-semibold text-default-900">
               Informasi Utama Produk
             </h3>
+
+            <Input
+              isRequired
+              variant="flat"
+              label={
+                <span className="inline-flex items-center">
+                  Kode Item
+                  {
+                    <CustomTooltip content="Pembuatan Kode Item harus jelas, tidak disarankan menggunakan tanda selain strip!">
+                      <WarningCircle
+                        weight="bold"
+                        size={16}
+                        className="ml-1 cursor-pointer text-default-600"
+                      />
+                    </CustomTooltip>
+                  }
+                </span>
+              }
+              labelPlacement="outside"
+              name="kode_item"
+              placeholder="Masukan Kode Item"
+              onChange={(e) => {
+                setInput({
+                  ...input,
+                  [e.target.name]: e.target.value,
+                });
+              }}
+            />
 
             <Input
               isRequired
@@ -115,7 +142,6 @@ export default function ProductDetail({
               labelPlacement="outside"
               name="kode_pabrik"
               placeholder="Masukan Kode Pabrik"
-              defaultValue={produk.data.kode_pabrik}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -131,7 +157,6 @@ export default function ProductDetail({
               labelPlacement="outside"
               name="kode_toko"
               placeholder="Masukan Kode Toko"
-              defaultValue={produk.data.kode_toko}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -147,7 +172,6 @@ export default function ProductDetail({
               labelPlacement="outside"
               name="nama_produk"
               placeholder="Masukan Kode Produk"
-              defaultValue={produk.data.nama_produk}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -163,7 +187,6 @@ export default function ProductDetail({
               labelPlacement="outside"
               name="nama_produk_asli"
               placeholder="Masukan Nama Produk Asli"
-              defaultValue={produk.data.nama_produk_asli}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -179,7 +202,6 @@ export default function ProductDetail({
               labelPlacement="outside"
               name="nama_produk_sebutan"
               placeholder="Masukan Produk Sebutan"
-              defaultValue={produk.data.nama_produk_sebutan}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -195,7 +217,6 @@ export default function ProductDetail({
               labelPlacement="outside"
               name="merk"
               placeholder="Masukan Merk"
-              defaultValue={produk.data.merk}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -211,7 +232,6 @@ export default function ProductDetail({
               labelPlacement="outside"
               name="tipe"
               placeholder="Masukan Tipe"
-              defaultValue={produk.data.tipe}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -224,7 +244,7 @@ export default function ProductDetail({
           <div className="w-full border-b border-default-200" />
 
           <div className="grid grid-cols-2 gap-6">
-            <h3 className="col-span-2 border-l-4 border-primary pl-4 text-[18px] font-semibold text-default-900">
+            <h3 className="col-span-2 border-l-4 border-teal-500 pl-4 text-[18px] font-semibold text-default-900">
               Satuan Produk
             </h3>
 
@@ -235,7 +255,6 @@ export default function ProductDetail({
               labelPlacement="outside"
               name="satuan_besar"
               placeholder="Masukan Besaran"
-              defaultValue={produk.data.satuan_besar}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -251,7 +270,6 @@ export default function ProductDetail({
               label="Satuan Kecil"
               name="satuan_kecil"
               placeholder="Masukan Satuan Kecil"
-              defaultValue={produk.data.satuan_kecil}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -267,7 +285,6 @@ export default function ProductDetail({
               labelPlacement="outside"
               name="isi_satuan_besar"
               placeholder="Masukan Satuan Besar"
-              defaultValue={produk.data.isi_satuan_besar}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -283,7 +300,6 @@ export default function ProductDetail({
               labelPlacement="outside"
               name="konversi"
               placeholder="Masukan Konversi"
-              defaultValue={produk.data.konversi}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -296,7 +312,7 @@ export default function ProductDetail({
           <div className="w-full border-b border-default-200" />
 
           <div className="grid grid-cols-3 gap-6">
-            <h3 className="col-span-3 border-l-4 border-primary pl-4 text-[18px] font-semibold text-default-900">
+            <h3 className="col-span-3 border-l-4 border-teal-500 pl-4 text-[18px] font-semibold text-default-900">
               Harga Produk
             </h3>
 
@@ -307,7 +323,6 @@ export default function ProductDetail({
               labelPlacement="outside"
               name="harga_pokok"
               placeholder="Masukan Harga Pokok"
-              defaultValue={`${produk.data.harga_pokok}`}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -325,7 +340,6 @@ export default function ProductDetail({
               labelPlacement="outside"
               name="harga_1"
               placeholder="Masukan Harga Distributor"
-              defaultValue={`${produk.data.harga_1}`}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -343,7 +357,6 @@ export default function ProductDetail({
               labelPlacement="outside"
               name="harga_2"
               placeholder="Masukan Harga Agen"
-              defaultValue={`${produk.data.harga_2}`}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -361,7 +374,6 @@ export default function ProductDetail({
               labelPlacement="outside"
               name="harga_3"
               placeholder="Masukan Harga Grosir"
-              defaultValue={`${produk.data.harga_3}`}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -379,7 +391,6 @@ export default function ProductDetail({
               labelPlacement="outside"
               name="harga_4"
               placeholder="Masukan Harga Toko"
-              defaultValue={`${produk.data.harga_4}`}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -397,7 +408,6 @@ export default function ProductDetail({
               labelPlacement="outside"
               name="harga_5"
               placeholder="Masukan Harga Aplikator"
-              defaultValue={`${produk.data.harga_5}`}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -415,7 +425,6 @@ export default function ProductDetail({
               labelPlacement="outside"
               name="harga_6"
               placeholder="Masukan Harga Retail"
-              defaultValue={`${produk.data.harga_6}`}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -429,8 +438,8 @@ export default function ProductDetail({
 
           <div className="w-full border-b border-default-200" />
 
-          <div className="grid grid-cols-3 gap-6">
-            <h3 className="col-span-3 border-l-4 border-primary pl-4 text-[18px] font-semibold text-default-900">
+          <div className="grid grid-cols-4 gap-6">
+            <h3 className="col-span-4 border-l-4 border-teal-500 pl-4 text-[18px] font-semibold text-default-900">
               Informasi Tambahan
             </h3>
 
@@ -441,7 +450,6 @@ export default function ProductDetail({
               labelPlacement="outside"
               name="berat"
               placeholder="Masukan Berat"
-              defaultValue={`${produk.data.berat}`}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -459,7 +467,6 @@ export default function ProductDetail({
               labelPlacement="outside"
               name="volume"
               placeholder="Masukan Volume"
-              defaultValue={`${produk.data.volume}`}
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -475,9 +482,37 @@ export default function ProductDetail({
               variant="flat"
               label={
                 <span className="inline-flex items-center">
+                  Gudang
+                  {
+                    <CustomTooltip content="wajib isi dengan Kode Gudang bukan Nama Gudang!">
+                      <WarningCircle
+                        weight="bold"
+                        size={16}
+                        className="ml-1 cursor-pointer text-default-600"
+                      />
+                    </CustomTooltip>
+                  }
+                </span>
+              }
+              labelPlacement="outside"
+              name="gudang_id"
+              placeholder="Masukan Kode Gudang"
+              onChange={(e) => {
+                setInput({
+                  ...input,
+                  [e.target.name]: e.target.value,
+                });
+              }}
+            />
+
+            <Input
+              isRequired
+              variant="flat"
+              label={
+                <span className="inline-flex items-center">
                   Subkategori
                   {
-                    <CustomTooltip content="Jika ingin merubah subkategori wajib isi dengan Kode Subkategori bukan Nama Subkategori!">
+                    <CustomTooltip content="wajib isi dengan Kode Subkategori bukan Nama Subkategori!">
                       <WarningCircle
                         weight="bold"
                         size={16}
@@ -489,8 +524,58 @@ export default function ProductDetail({
               }
               labelPlacement="outside"
               name="subkategori_id"
-              placeholder="Masukan Subkategori"
-              defaultValue={produk.data.subkategori}
+              placeholder="Masukan Kode Subkategori"
+              onChange={(e) => {
+                setInput({
+                  ...input,
+                  [e.target.name]: e.target.value,
+                });
+              }}
+            />
+          </div>
+
+          <div className="grid grid-cols-3 gap-6">
+            <Input
+              isRequired
+              variant="flat"
+              label="Stok"
+              labelPlacement="outside"
+              name="stok"
+              placeholder="Masukan Stok"
+              onChange={(e) => {
+                setInput({
+                  ...input,
+                  [e.target.name]: parseInt(e.target.value),
+                });
+              }}
+              type="number"
+              min={0}
+            />
+
+            <Input
+              isRequired
+              variant="flat"
+              label="Stok Aman"
+              labelPlacement="outside"
+              name="stok_aman"
+              placeholder="Masukan Stok"
+              onChange={(e) => {
+                setInput({
+                  ...input,
+                  [e.target.name]: parseInt(e.target.value),
+                });
+              }}
+              type="number"
+              min={0}
+            />
+
+            <Input
+              isRequired
+              variant="flat"
+              label="Rak"
+              labelPlacement="outside"
+              name="rak"
+              placeholder="Masukan Rak"
               onChange={(e) => {
                 setInput({
                   ...input,
@@ -505,7 +590,7 @@ export default function ProductDetail({
           <Button
             variant="solid"
             startContent={<Spinner color="white" size="sm" />}
-            className={`bg-primary text-white ${loading ? "cursor-not-allowed justify-self-end font-medium" : ""}`}
+            className={`bg-teal-500 text-white ${loading ? "cursor-not-allowed justify-self-end font-medium" : ""}`}
           >
             Tunggu
           </Button>
@@ -513,28 +598,13 @@ export default function ProductDetail({
           <Button
             variant="solid"
             size="md"
-            onClick={handleUpdate}
-            className="w-max justify-self-end bg-primary font-medium text-white"
+            onClick={handleCreate}
+            className="w-max justify-self-end bg-teal-500 font-medium text-white"
           >
-            Update Produk
+            Create Produk
           </Button>
         )}
       </Container>
     </Layout>
   );
 }
-
-export const getServerSideProps = (async ({ query }) => {
-  const result = await fetcher({
-    url: "/produk?kode_item=" + query?.kode_item,
-    method: "GET",
-  });
-
-  const produk: GlobalResponse<ProdukDetailType> = result;
-
-  return {
-    props: {
-      produk,
-    },
-  };
-}) satisfies GetServerSideProps<{ produk: GlobalResponse<ProdukDetailType> }>;

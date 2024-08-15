@@ -41,7 +41,7 @@ type ProdukDetailType = {
   updated_at: string;
   stok_aman: number;
   subkategori: string;
-  gudang: { nama: string; kode_gudang: string, rak: string }[];
+  gudang: { nama: string; kode_gudang: string; rak: string }[];
   kategori: string;
   status_stok: string;
   berat: number;
@@ -49,7 +49,7 @@ type ProdukDetailType = {
   harga_diskon: number;
 };
 
-export default function ProductDetail({
+export default function ProductEdit({
   produk,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
@@ -70,6 +70,8 @@ export default function ProductDetail({
       alert("update berhasil");
       return router.back();
     } catch (error) {
+      setLoading(false);
+
       const response = error as {
         success: boolean;
         status_code: number;
@@ -415,24 +417,6 @@ export default function ProductDetail({
               name="harga_6"
               placeholder="Masukan Harga Retail"
               defaultValue={`${produk.data.harga_6}`}
-              onChange={(e) => {
-                setInput({
-                  ...input,
-                  [e.target.name]: parseInt(e.target.value),
-                });
-              }}
-              type="number"
-              min={0}
-            />
-
-            <Input
-              isRequired
-              variant="flat"
-              label="Harga Diskon"
-              labelPlacement="outside"
-              name="harga_diskon"
-              placeholder="Masukan Harga Disskon"
-              defaultValue={`${produk.data.harga_diskon}`}
               onChange={(e) => {
                 setInput({
                   ...input,

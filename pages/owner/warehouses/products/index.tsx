@@ -28,8 +28,9 @@ import {
   SelectItem,
   useDisclosure,
 } from "@nextui-org/react";
-import { Download } from "@phosphor-icons/react";
+import { Download, Plus } from "@phosphor-icons/react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { useRouter } from "next/router";
 import * as xlsx from "xlsx";
 
 export const getServerSideProps = (async ({ query }) => {
@@ -55,6 +56,7 @@ export const getServerSideProps = (async ({ query }) => {
 export default function ProductsListsPage(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
+  const router = useRouter();
   const [search, setSearch] = useState("");
   const [kategori, setKategori] = useState<ProdukKategoriType[]>([]);
   const [namaGudang, setNamaGudang] = useState(props.nama_gudang);
@@ -278,6 +280,15 @@ export default function ProductsListsPage(
                   )}
                 </ModalContent>
               </Modal>
+
+              <Button
+                variant="solid"
+                startContent={<Plus weight="bold" size={18} />}
+                className={`w-full bg-primary-200 font-medium text-primary-600 sm:w-max`}
+                onClick={() => router.push("/owner/warehouses/products/create")}
+              >
+                Tambah
+              </Button>
             </div>
           </div>
 
