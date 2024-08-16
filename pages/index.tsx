@@ -48,7 +48,7 @@ export default function HomePage() {
               size="lg"
               onClick={() =>
                 window.open(
-                  "https://drive.google.com/drive/folders/16FsRISPdKOhqK2SxcOsD3OSZA_NqDvFU",
+                  "http://sinarbajakediri.my.id/tutorialscm/",
                   "_blank",
                 )
               }

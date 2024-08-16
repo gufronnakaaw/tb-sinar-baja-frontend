@@ -982,7 +982,7 @@ export default function SellingPage() {
                 </h5>
               </div>
 
-              <div className="flex gap-4">
+              <div className={`flex gap-4 ${!menuOpen ? "col-span-1" : ""}`}>
                 <CustomTooltip content="Informasi Tambahan">
                   <Button
                     isIconOnly
@@ -1000,53 +1000,55 @@ export default function SellingPage() {
                   </Button>
                 </CustomTooltip>
 
-                <div
-                  className={`grid w-full ${count ? "grid-cols-2" : null} gap-4`}
-                >
-                  {count ? (
-                    <>
-                      <Button
-                        variant="flat"
-                        className="w-full bg-rose-200 px-8 py-6 font-semibold text-rose-600"
-                        onClick={() => {
-                          window.open(
-                            `${window.location.origin}/print?id_transaksi=${dataPrint?.id_transaksi}`,
-                          );
-                        }}
-                      >
-                        Cetak Ulang
-                      </Button>
+                {menuOpen ? (
+                  <div
+                    className={`grid w-full ${count ? "grid-cols-2" : null} gap-4`}
+                  >
+                    {count ? (
+                      <>
+                        <Button
+                          variant="flat"
+                          className="w-full bg-rose-200 px-8 py-6 font-semibold text-rose-600"
+                          onClick={() => {
+                            window.open(
+                              `${window.location.origin}/print?id_transaksi=${dataPrint?.id_transaksi}`,
+                            );
+                          }}
+                        >
+                          Cetak Ulang
+                        </Button>
 
-                      <Button
-                        variant="solid"
-                        className="w-full bg-rose-500 px-8 py-6 font-semibold text-white"
-                        onClick={() => {
-                          if (
-                            confirm(
-                              "apakah anda yakin ingin menyesaikan transaksi ini?",
-                            )
-                          ) {
-                            localStorage.removeItem("transaksikasir");
-                            router.reload();
-                          }
-                        }}
-                      >
-                        Selesai
-                      </Button>
-                    </>
-                  ) : (
-                    <>
-                      <Button
-                        variant="flat"
-                        className="w-full bg-rose-200 px-8 py-6 font-semibold text-rose-600"
-                        onClick={createTransaksi}
-                        disabled={listProduk.length == 0}
-                      >
-                        Buat Transaksi
-                      </Button>
-                    </>
-                  )}
-                </div>
+                        <Button
+                          variant="solid"
+                          className="w-full bg-rose-500 px-8 py-6 font-semibold text-white"
+                          onClick={() => {
+                            if (
+                              confirm(
+                                "apakah anda yakin ingin menyesaikan transaksi ini?",
+                              )
+                            ) {
+                              localStorage.removeItem("transaksikasir");
+                              router.reload();
+                            }
+                          }}
+                        >
+                          Selesai
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <Button
+                          variant="flat"
+                          className="w-full bg-rose-200 px-8 py-6 font-semibold text-rose-600"
+                          onClick={createTransaksi}
+                          isDisabled={listProduk.length == 0}
+                        >
+                          Buat Transaksi
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                ) : null}
               </div>
             </div>
 
