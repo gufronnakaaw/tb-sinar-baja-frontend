@@ -659,7 +659,7 @@ export default function CreatePreorder(
 
     try {
       if (sumber == "non_supplier") {
-        if (Object.keys(defaultInput).length < 5 && pesanan.length < 1) {
+        if (!defaultInput.nama || !pesanan.length) {
           return alert("silahkan isi dengan data lengkap");
         }
 
@@ -1068,6 +1068,7 @@ export default function CreatePreorder(
           size="md"
           className="w-max justify-self-end bg-teal-500 font-medium text-white"
           onClick={createPreorder}
+          isDisabled={!pesanan.length && !pesananSupplier.length}
         >
           Buat Pre Order
         </Button>

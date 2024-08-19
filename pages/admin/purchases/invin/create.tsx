@@ -2,6 +2,7 @@ import ButtonBack from "@/components/button/ButtonBack";
 import InputSearchBar from "@/components/input/InputSearchBar";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
+import usePagination from "@/hooks/usepagination";
 import { GlobalResponse } from "@/types/global.type";
 import { InvoiceType } from "@/types/invoice.type";
 import { FinalType } from "@/types/preorders.type";
@@ -20,6 +21,7 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
+  Pagination,
   Table,
   TableBody,
   TableCell,
@@ -49,6 +51,10 @@ export const getServerSideProps = (async () => {
 export default function CreateInvoice({
   preorder,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const { page, pages, data, setPage } = usePagination(
+    preorder ? preorder : [],
+    10,
+  );
   const router = useRouter();
   const [search, setSearch] = useState("");
   const [selection, setSelection] = useState("");
@@ -148,7 +154,14 @@ export default function CreateInvoice({
     }
   }
 
-  const preorderFilter = preorder.filter((item) => item.status == "kosong");
+  const preorderFilter = data.filter((item) => item.status == "kosong");
+
+  const filter = preorderFilter.filter((item) => {
+    return (
+      item.id_preorder.toLowerCase().includes(search.toLowerCase()) ||
+      item.nama_supplier.toLowerCase().includes(search.toLowerCase())
+    );
+  });
 
   return (
     <Layout title="Buat Invoice">
@@ -204,7 +217,7 @@ export default function CreateInvoice({
         <div className="grid gap-6">
           <div className="grid gap-4 xl:flex xl:items-end xl:justify-between">
             <InputSearchBar
-              placeholder="Cari ID Preorder atau Nama Supplier"
+              placeholder="Cari ID PO atau Nama Supplier"
               className="w-full"
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -235,7 +248,7 @@ export default function CreateInvoice({
               )}
             </TableHeader>
 
-            <TableBody items={preorderFilter} emptyContent="Preorder kosong!">
+            <TableBody items={filter} emptyContent="Preorder kosong!">
               {(item) => (
                 <TableRow key={item.id_preorder}>
                   {(columnKey) => (
@@ -245,6 +258,19 @@ export default function CreateInvoice({
               )}
             </TableBody>
           </Table>
+
+          <Pagination
+            isCompact
+            showControls
+            color="primary"
+            page={page}
+            total={pages}
+            onChange={setPage}
+            className="justify-self-center"
+            classNames={{
+              cursor: "bg-teal-500",
+            }}
+          />
 
           {selection ? (
             <>

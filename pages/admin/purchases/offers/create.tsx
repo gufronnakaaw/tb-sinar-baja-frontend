@@ -413,6 +413,7 @@ export default function CreateOffers(
           size="md"
           className="w-max justify-self-end bg-teal-500 font-medium text-white"
           onClick={createPenawaran}
+          isDisabled={!pesanan.length}
         >
           Buat Penawaran
         </Button>

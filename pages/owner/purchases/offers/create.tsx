@@ -307,7 +307,12 @@ export default function CreateOffers(
     <Layout title="Buat Penawaran">
       <Container className="gap-4">
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <ButtonBack onClick={() => router.back()}>Kembali</ButtonBack>
+          <ButtonBack
+            onClick={() => router.back()}
+            className="justify-self-start text-primary"
+          >
+            Kembali
+          </ButtonBack>
         </div>
 
         <Select
@@ -333,7 +338,7 @@ export default function CreateOffers(
         <Table
           isHeaderSticky
           aria-label="pricelist table"
-          color="primary"
+          color="default"
           selectionMode="none"
           classNames={customStyleTable}
           className="scrollbar-hide"
@@ -362,7 +367,7 @@ export default function CreateOffers(
         <Pagination
           isCompact
           showControls
-          color="primary"
+          color="default"
           page={page}
           total={pages}
           onChange={setPage}
@@ -381,7 +386,7 @@ export default function CreateOffers(
         <Table
           isHeaderSticky
           aria-label="pesanan table"
-          color="primary"
+          color="default"
           selectionMode="none"
           classNames={customStyleTable}
           className="scrollbar-hide"
@@ -405,10 +410,10 @@ export default function CreateOffers(
 
         <Button
           variant="solid"
-          color="primary"
           size="md"
-          className="w-max justify-self-end font-medium"
+          className="w-max justify-self-end bg-primary font-medium text-white"
           onClick={createPenawaran}
+          isDisabled={!pesanan.length}
         >
           Buat Penawaran
         </Button>
