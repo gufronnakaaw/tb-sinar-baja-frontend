@@ -7,6 +7,9 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  experimental: {
+    optimizePackageImports: ["@phosphor-icons/react", "@nextui-org/react"],
+  },
 };
 
 export default nextConfig;
