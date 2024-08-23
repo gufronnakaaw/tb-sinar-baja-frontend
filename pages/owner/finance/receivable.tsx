@@ -15,7 +15,7 @@ export default function ReceivablePage() {
         <div className="grid justify-center justify-items-center gap-4 rounded-xl border-[2px] border-default-200 p-8">
           <div className="text-center">
             <h4 className="text-sm font-medium text-default-900">
-              Uang yang telah anda pinjamkan,
+              Total uang yang belum dibayarkan oleh pembeli tempo,
             </h4>
             <p className="text-[12px] font-medium text-primary">
               {formatDayWithoutTime(new Date())}
