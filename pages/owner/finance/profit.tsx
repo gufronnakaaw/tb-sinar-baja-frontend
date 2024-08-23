@@ -62,7 +62,7 @@ export default function ProfitPage() {
 
         <div className="grid gap-3">
           <h6 className="text-sm font-semibold text-default-900">
-            Keuntungan 7 hari terakhir.
+            Keuntungan 7 Hari Terakhir
           </h6>
 
           <ProfitTable />
