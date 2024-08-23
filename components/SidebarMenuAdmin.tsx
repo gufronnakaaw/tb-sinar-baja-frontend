@@ -4,6 +4,7 @@ import {
   Circle,
   Gear,
   House,
+  Money,
   Package,
   ShoppingCartSimple,
 } from "@phosphor-icons/react";
@@ -395,7 +396,7 @@ export default function SidebarMenuAdmin({
         </AccordionItem>
       </Accordion>
 
-      {/* <Accordion
+      <Accordion
         isCompact
         itemClasses={{
           ...itemClasses,
@@ -428,7 +429,6 @@ export default function SidebarMenuAdmin({
             path="/admin/finance/profit"
             icon={<Circle weight="fill" size={6} />}
             className="mx-4"
-            isDev={true}
           />
 
           <ButtonSidebar
@@ -455,7 +455,7 @@ export default function SidebarMenuAdmin({
             isDev={true}
           />
         </AccordionItem>
-      </Accordion> */}
+      </Accordion>
 
       <Accordion
         isCompact
