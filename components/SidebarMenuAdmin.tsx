@@ -452,7 +452,6 @@ export default function SidebarMenuAdmin({
             path="/admin/finance/receivable"
             icon={<Circle weight="fill" size={6} />}
             className="mx-4"
-            isDev={true}
           />
         </AccordionItem>
       </Accordion>
