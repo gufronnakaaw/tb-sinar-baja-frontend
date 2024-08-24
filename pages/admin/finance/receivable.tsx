@@ -9,13 +9,13 @@ export default function ReceivablePage() {
     <Layout title="Receivable Page">
       <Container className="gap-8">
         <h4 className="text-lg font-semibold capitalize text-default-900">
-          Piutang Anda 🪙
+          Piutang
         </h4>
 
         <div className="grid justify-center justify-items-center gap-4 rounded-xl border-[2px] border-default-200 p-8">
           <div className="text-center">
             <h4 className="text-sm font-medium text-default-900">
-              Uang yang telah anda pinjamkan,
+              Total piutang yang belum dibayarkan,
             </h4>
             <p className="text-[12px] font-medium text-teal-500">
               {formatDayWithoutTime(new Date())}
