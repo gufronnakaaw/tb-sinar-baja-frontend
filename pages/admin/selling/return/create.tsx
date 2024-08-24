@@ -109,6 +109,18 @@ export default function CreateReturn(
     return Math.round((totalDiskon / 100) * 100);
   }
 
+  function DISKONPERQTY(transaksi: TransaksiType, item: ListProduk) {
+    const diskon = transaksi.diskon ? transaksi.diskon : 0;
+    const persentase = (diskon / transaksi.total_pembayaran) * 100;
+
+    const hitung = Math.round(
+      (parseFloat(persentase.toFixed(2)) / 100) * item.harga,
+    );
+
+    // return Math.round(hitung / item.jumlah);
+    return hitung;
+  }
+
   function checkDiskonItem(item: ListProduk) {
     if (item.diskon_langsung_item) {
       return item.diskon_langsung_item;
@@ -193,7 +205,9 @@ export default function CreateReturn(
               </p>
             </div>
             <div className="grid grid-cols-[185px_10px_10fr]  gap-1 text-sm text-default-900">
-              <div className="text-sm font-medium text-default-600">Total</div>
+              <div className="text-sm font-medium text-default-600">
+                Total Transaksi
+              </div>
               <div className="font-medium">:</div>
               <p className="font-bold text-teal-500">
                 {transaksi?.total_pembayaran
@@ -203,7 +217,7 @@ export default function CreateReturn(
             </div>
             <div className="grid grid-cols-[185px_10px_10fr]  gap-1 text-sm text-default-900">
               <div className="text-sm font-medium text-default-600">
-                Total Diskon Keseluruhan
+                Diskon Keseluruhan
               </div>
               <div className="font-medium">:</div>
               <p className="font-bold text-teal-500">
@@ -284,18 +298,13 @@ export default function CreateReturn(
                               penalti: 0,
                               total_pengembalian: 0,
                               dikembalikan: 0,
-                              diskon_per_item: diskonPerItem(
+                              diskon_per_item: DISKONPERQTY(
+                                transaksi as TransaksiType,
                                 item,
-                                transaksi?.diskon as number,
-                                transaksi?.list_produk?.length as number,
                               ),
                               harga_setelah_diskon:
                                 item.harga -
-                                diskonPerItem(
-                                  item,
-                                  transaksi?.diskon as number,
-                                  transaksi?.list_produk?.length as number,
-                                ) -
+                                DISKONPERQTY(transaksi as TransaksiType, item) -
                                 checkDiskonItem(item),
                             },
                           ];
@@ -317,6 +326,44 @@ export default function CreateReturn(
 
         <div className="grid w-max gap-2 border-l-4 border-teal-500 p-[1rem_0_1rem_1rem]">
           <h4 className="text-[18px] font-bold text-default-900">Item Retur</h4>
+
+          <div className="grid gap-[2px]">
+            <div className="grid grid-cols-[225px_10px_10fr]  gap-1 text-sm text-default-900">
+              <div className="flex text-sm font-medium text-default-600">
+                Persentase Diskon Per Item{" "}
+                {
+                  <CustomTooltip
+                    content={
+                      <>
+                        Persentase Diskon Per Item merupakan perhitungan dari{" "}
+                        <br /> <br /> (DISKON KESELURUHAN / TOTAL TRANSAKSI) *
+                        100
+                      </>
+                    }
+                  >
+                    <WarningCircle
+                      weight="bold"
+                      size={16}
+                      className="ml-1 cursor-pointer text-default-600"
+                    />
+                  </CustomTooltip>
+                }
+              </div>
+              <div className="font-medium">:</div>
+              <p className="font-bold text-teal-500">
+                {transaksi
+                  ? parseFloat(
+                      (
+                        ((transaksi.diskon ? transaksi.diskon : 0) /
+                          transaksi.total_pembayaran) *
+                        100
+                      ).toFixed(2),
+                    )
+                  : 0}
+                %
+              </p>
+            </div>
+          </div>
         </div>
 
         <Table
@@ -330,19 +377,19 @@ export default function CreateReturn(
           className="scrollbar-hide"
         >
           <TableHeader className="text-center">
-            <TableColumn className="text-center">Kode Item</TableColumn>
+            <TableColumn className="text-center">Qty</TableColumn>
             <TableColumn className="text-center">Nama Produk</TableColumn>
 
             <TableColumn className="w-max text-center">Harga</TableColumn>
             <TableColumn className="w-max text-center">
               <span className="inline-flex items-center">
-                Diskon Per Item{" "}
+                Diskon Per Qty{" "}
                 {
                   <CustomTooltip
                     content={
                       <>
-                        Diskon Per Item merupakan perhitungan dari <br /> <br />{" "}
-                        (diskon_keseluruhan / total_item) / qty)
+                        Diskon Per Qty merupakan perhitungan dari <br /> <br />{" "}
+                        (PERSENTASE DISKON PER ITEM * HARGA)
                       </>
                     }
                   >
@@ -364,8 +411,7 @@ export default function CreateReturn(
                     content={
                       <>
                         Harga setelah diskon merupakan perhitungan dari <br />{" "}
-                        <br /> (harga_item - diskon_per_item -
-                        potongan_per_item)
+                        <br /> (HARGA - DISKON PER QTY - POT PER ITEM)
                       </>
                     }
                   >
@@ -387,8 +433,8 @@ export default function CreateReturn(
                   <CustomTooltip
                     content={
                       <>
-                        Subtotal merupakan perhitungan dari <br /> <br />{" "}
-                        (harga_setelah_diskon * jumlah_dikembalikan) - penalti
+                        Subtotal merupakan perhitungan dari <br /> <br /> (HARGA
+                        SETELAH DISKON * JUMLAH DIKEMBALIKAN) - PENALTI
                       </>
                     }
                   >
@@ -406,7 +452,7 @@ export default function CreateReturn(
           <TableBody items={returnItems} emptyContent={"produk kosong"}>
             {(item) => (
               <TableRow key={item.kode_item}>
-                <TableCell>{item.kode_item}</TableCell>
+                <TableCell>{item.jumlah}</TableCell>
                 <TableCell>{item.nama_produk}</TableCell>
 
                 <TableCell className="text-center">
@@ -650,11 +696,7 @@ export default function CreateReturn(
                     total_pengembalian:
                       item.dikembalikan *
                       (item.harga -
-                        diskonPerItem(
-                          item,
-                          transaksi?.diskon as number,
-                          transaksi?.list_produk?.length as number,
-                        ) -
+                        DISKONPERQTY(transaksi as TransaksiType, item) -
                         checkDiskonItem(item)),
                   };
                 }),
