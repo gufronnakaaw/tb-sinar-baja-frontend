@@ -73,7 +73,7 @@ export default function DebtTable() {
   return (
     <>
       <Table
-        aria-label="receivable table"
+        aria-label="debt table"
         color="primary"
         selectionMode="none"
         classNames={customStyleTable}
