@@ -436,7 +436,6 @@ export default function SidebarMenuAdmin({
             path="/admin/finance/loss"
             icon={<Circle weight="fill" size={6} />}
             className="mx-4"
-            isDev={true}
           />
 
           <ButtonSidebar
