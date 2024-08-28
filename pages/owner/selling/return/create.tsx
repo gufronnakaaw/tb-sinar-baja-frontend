@@ -66,6 +66,9 @@ export default function CreateReturn(
           transaksi_id: idTransaksi,
           metode,
           ...input,
+          jumlah:
+            returnItems.reduce((a, b) => a + b.total_pengembalian, 0) -
+            penaltiKeseluruhan,
           penalti_keseluruhan: penaltiKeseluruhan,
           list_produk: returnItems,
         },
@@ -717,22 +720,6 @@ export default function CreateReturn(
 
         {metode == "transfer" ? (
           <div className="grid gap-4">
-            <Input
-              isRequired
-              variant="flat"
-              color="default"
-              label="Jumlah"
-              labelPlacement="outside"
-              name="jumlah"
-              placeholder="Ex: Rp200.000"
-              type="number"
-              onChange={(e) => {
-                setInput({
-                  ...input,
-                  [e.target.name]: parseInt(e.target.value),
-                });
-              }}
-            />
             <div className="grid grid-cols-4 gap-3">
               <Input
                 variant="flat"
@@ -795,30 +782,14 @@ export default function CreateReturn(
               />
             </div>
           </div>
-        ) : (
-          <Input
-            isRequired
-            variant="flat"
-            color="default"
-            label="Jumlah"
-            labelPlacement="outside"
-            name="jumlah"
-            placeholder="Ex: Rp200.000"
-            type="number"
-            onChange={(e) => {
-              setInput({
-                ...input,
-                [e.target.name]: parseInt(e.target.value),
-              });
-            }}
-          />
-        )}
+        ) : null}
 
         <Button
           variant="solid"
           size="md"
           className="w-max justify-self-end bg-primary font-medium text-white"
           onClick={createReturn}
+          isDisabled={!returnItems.length}
         >
           Buat Retur
         </Button>
