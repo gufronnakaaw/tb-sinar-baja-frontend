@@ -19,7 +19,7 @@ export default function LossPage({
   const router = useRouter();
 
   return (
-    <Layout title="Loss Page">
+    <Layout title="Halaman Rugi">
       <Container className="gap-8">
         <h4 className="text-lg font-semibold capitalize text-default-900">
           Kerugian

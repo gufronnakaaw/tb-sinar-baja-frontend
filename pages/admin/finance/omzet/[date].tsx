@@ -80,7 +80,7 @@ export default function DetailOmzet({
     }
   }
   return (
-    <Layout title="Detail">
+    <Layout title="Detail Halaman Omzet">
       <Container className="gap-12">
         <ButtonBack
           onClick={() => router.back()}

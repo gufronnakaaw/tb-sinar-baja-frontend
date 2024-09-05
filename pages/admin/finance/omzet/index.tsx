@@ -19,7 +19,7 @@ export default function OmzetPage({
   const router = useRouter();
 
   return (
-    <Layout title="Omzet Page">
+    <Layout title="Halaman Omzet">
       <Container className="gap-8">
         <h4 className="text-lg font-semibold capitalize text-default-900">
           Omzet

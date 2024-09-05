@@ -80,7 +80,7 @@ export default function DetailLoss({
     }
   }
   return (
-    <Layout title="Detail">
+    <Layout title="Detail Halaman Rugi">
       <Container className="gap-12">
         <ButtonBack
           onClick={() => router.back()}
