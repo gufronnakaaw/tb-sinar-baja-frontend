@@ -1,53 +1,72 @@
-import ReceivableTable from "@/components/tables/ReceivableTable";
+import LossTable from "@/components/tables/LossTable";
 import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 import { GlobalResponse } from "@/types/global.type";
-import { ReceivableType } from "@/types/receivable.type";
+import { LossType } from "@/types/loss.type";
 import { fetcher } from "@/utils/fetcher";
+import { formatDayWithoutTime } from "@/utils/formatDate";
 import { formatRupiah } from "@/utils/formatRupiah";
-import { Pagination } from "@nextui-org/react";
+import { Button, Pagination } from "@nextui-org/react";
+import { ArrowRight } from "@phosphor-icons/react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 
-export default function ReceivablePage({
-  receivable,
-  total_items,
-  page,
-  total,
+const startDate = "2024-07-01";
+
+export default function LossPage({
+  loss,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
+
   return (
-    <Layout title="Halaman Piutang">
+    <Layout title="Loss Page">
       <Container className="gap-8">
         <h4 className="text-lg font-semibold capitalize text-default-900">
-          Piutang
+          Kerugian
         </h4>
 
         <div className="grid justify-center justify-items-center gap-4 rounded-xl border-[2px] border-default-200 p-8">
           <div className="text-center">
             <h4 className="text-sm font-medium text-default-900">
-              Total piutang yang belum dibayarkan,
+              Total kerugian hari ini,
             </h4>
+            <p className="text-[12px] font-medium text-teal-500">
+              {formatDayWithoutTime(new Date())}
+            </p>
           </div>
 
-          <div className="text-[42px] font-bold text-default-900">
-            {formatRupiah(total)}
+          <div className="py-2 text-[42px] font-bold text-default-900">
+            {formatRupiah(loss.today.total)}
           </div>
+
+          <Button
+            color="default"
+            variant="flat"
+            size="sm"
+            endContent={<ArrowRight weight="bold" size={18} />}
+            className="w-max px-6 font-semibold"
+            isDisabled={!loss.today.total}
+            onClick={() =>
+              router.push(`/admin/finance/omzet/${loss.today.tanggal}`)
+            }
+          >
+            Detail Kerugian
+          </Button>
         </div>
 
         <div className="grid gap-3">
           <h6 className="text-sm font-semibold text-default-900">
-            Daftar Pembelian Tempo
+            Kerugian 7 Hari Terakhir
           </h6>
 
-          <ReceivableTable receivable={receivable} role="admin" />
+          <LossTable loss={loss} role="admin" />
 
           <Pagination
             isCompact
             showControls
             color="primary"
-            page={page}
-            total={Math.ceil(total_items / 7)}
+            page={loss.page}
+            total={Math.ceil(loss.total_items / 7)}
             onChange={(e) =>
               router.push({
                 query: {
@@ -69,26 +88,16 @@ export default function ReceivablePage({
 export const getServerSideProps = (async ({ query }) => {
   const page = !query?.page ? 1 : query.page;
 
-  const result: GlobalResponse<{
-    transaksi: ReceivableType[];
-    total_items: number;
-    page: number;
-    total: number;
-  }> = await fetcher({
-    url: `/keuangan/receivable?page=${page}`,
+  const result: GlobalResponse<LossType> = await fetcher({
+    url: `/keuangan/loss?start=${startDate}&page=${page}`,
     method: "GET",
   });
 
   return {
     props: {
-      receivable: result.data.transaksi,
-      total_items: result.data.total_items,
-      page: result.data.page,
-      total: result.data.total,
+      loss: result.data,
     },
   };
 }) satisfies GetServerSideProps<{
-  receivable: ReceivableType[];
-  total_items: number;
-  page: number;
+  loss: LossType;
 }>;

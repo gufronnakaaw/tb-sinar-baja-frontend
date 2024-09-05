@@ -144,7 +144,7 @@ export default function SidebarMenuAdmin({
 
       if (
         router.pathname.startsWith("/admin/finance") &&
-        (router.asPath.includes("/admin/finance/profit") ||
+        (router.asPath.includes("/admin/finance/omzet") ||
           router.asPath.includes("/admin/finance/loss") ||
           router.asPath.includes("/admin/finance/debt") ||
           router.asPath.includes("/admin/finance/receivable"))
@@ -425,8 +425,8 @@ export default function SidebarMenuAdmin({
           className="grid gap-1"
         >
           <ButtonSidebar
-            label="Laba"
-            path="/admin/finance/profit"
+            label="Omzet"
+            path="/admin/finance/omzet"
             icon={<Circle weight="fill" size={6} />}
             className="mx-4"
           />

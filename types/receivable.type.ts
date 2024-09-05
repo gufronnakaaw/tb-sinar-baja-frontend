@@ -1,7 +1,8 @@
-export type ReceivableTableType = {
-  id: number | string;
-  name: string;
-  due_date: string;
-  bill_amount: number;
-  bill_status: "lunas" | "belum bayar";
+export type ReceivableType = {
+  id_transaksi: string;
+  penerima: string;
+  total_pembayaran: number;
+  status: string;
+  id_invoice: string;
+  sisa: number;
 };
