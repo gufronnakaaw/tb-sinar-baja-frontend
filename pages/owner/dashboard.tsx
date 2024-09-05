@@ -17,9 +17,12 @@ import Layout from "@/components/wrapper/DashboardLayout";
 import { DashboardType } from "@/types/dashboard.type";
 import { GlobalResponse } from "@/types/global.type";
 import { formatRupiah } from "@/utils/formatRupiah";
+import { useRouter } from "next/router";
 import useSWR from "swr";
 
 export default function DashboardPage() {
+  const router = useRouter();
+
   const {
     data: dashboard,
     error,
@@ -67,7 +70,7 @@ export default function DashboardPage() {
                   size="sm"
                   endContent={<ArrowRight weight="bold" size={14} />}
                   className="w-max self-end font-medium text-default-600"
-                  onClick={() => alert("dalam tahap pengembangan")}
+                  onClick={() => router.push("/owner/finance/omzet")}
                 >
                   Selengkapnya
                 </Button>
@@ -125,7 +128,7 @@ export default function DashboardPage() {
                   size="sm"
                   endContent={<ArrowRight weight="bold" size={14} />}
                   className="w-max self-end font-medium text-default-600"
-                  onClick={() => alert("dalam tahap pengembangan")}
+                  onClick={() => router.push("/owner/warehouses/broken")}
                 >
                   Selengkapnya
                 </Button>
@@ -148,7 +151,7 @@ export default function DashboardPage() {
                   size="sm"
                   endContent={<ArrowRight weight="bold" size={14} />}
                   className="w-max self-end font-medium text-default-600"
-                  onClick={() => alert("dalam tahap pengembangan")}
+                  onClick={() => router.push("/owner/finance/debt")}
                 >
                   Selengkapnya
                 </Button>
@@ -177,7 +180,7 @@ export default function DashboardPage() {
                   size="sm"
                   endContent={<ArrowRight weight="bold" size={14} />}
                   className="w-max self-end font-medium text-default-600"
-                  onClick={() => alert("dalam tahap pengembangan")}
+                  onClick={() => router.push("/owner/finance/loss")}
                 >
                   Selengkapnya
                 </Button>
@@ -206,7 +209,7 @@ export default function DashboardPage() {
                   size="sm"
                   endContent={<ArrowRight weight="bold" size={14} />}
                   className="w-max self-end font-medium text-default-600"
-                  onClick={() => alert("dalam tahap pengembangan")}
+                  onClick={() => router.push("/owner/finance/receivable")}
                 >
                   Selengkapnya
                 </Button>
