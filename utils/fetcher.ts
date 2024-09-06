@@ -7,11 +7,23 @@ type FetcherParams = {
   token?: string;
 };
 
-export async function fetcher({ url, method, data, token }: FetcherParams) {
-  const port = process.env.NEXT_PUBLIC_MODE == "prod" ? 2424 : 3434;
+function getUrl(mode: string) {
+  if (mode == "dev") {
+    return `http://sinarbajakediri.my.id:3434/api`;
+  }
 
+  if (mode == "prod") {
+    return `http://172.168.22.15:2424/api`;
+  }
+
+  if (mode == "online") {
+    return `http://sinarbajakediri.my.id:2626/api`;
+  }
+}
+
+export async function fetcher({ url, method, data, token }: FetcherParams) {
   const options = {
-    url: `http://sinarbajakediri.my.id:${port}/api` + url,
+    url: getUrl(process.env.NEXT_PUBLIC_MODE as string) + url,
     method,
   };
 
