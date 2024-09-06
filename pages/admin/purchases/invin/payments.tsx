@@ -307,6 +307,12 @@ export default function CreatePayment({
                     className="w-full"
                     labelPlacement="outside"
                     name="bank_id"
+                    onChange={(e) => {
+                      setInput({
+                        ...input,
+                        [e.target.name]: parseInt(e.target.value),
+                      });
+                    }}
                   >
                     {supplierBank.map((bank) => {
                       return (
