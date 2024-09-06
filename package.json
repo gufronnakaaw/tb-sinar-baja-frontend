@@ -6,6 +6,8 @@
     "dev": "next dev --turbo -p 3333",
     "build": "next build",
     "start": "next start -p 3333",
+    "start:prod": "next start -p 2323",
+    "start:online": "next start -p 2525",
     "lint": "next lint"
   },
   "dependencies": {
