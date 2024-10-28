@@ -22,7 +22,7 @@ import {
   Tooltip,
   useDisclosure,
 } from "@nextui-org/react";
-import { ArrowLeft, CaretUp, Minus, Plus, Trash } from "@phosphor-icons/react";
+import { ArrowLeft, CaretUp, Trash } from "@phosphor-icons/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
@@ -576,7 +576,7 @@ export default function SellingPageAdmin() {
               </p>
             ) : null}
 
-            <div className="grid gap-4 overflow-y-scroll scrollbar-hide">
+            <div className="grid gap-4 overflow-y-scroll pb-48 scrollbar-hide">
               {produk.map((item) => {
                 return (
                   <CardSellingAdmin
@@ -605,7 +605,7 @@ export default function SellingPageAdmin() {
                 <TableColumn className="w-[150px] text-center">
                   Item ({listProdukAdmin.length})
                 </TableColumn>
-                <TableColumn className="w-[170px] text-center">Qty</TableColumn>
+                <TableColumn className="w-[100px] text-center">Qty</TableColumn>
                 <TableColumn className="w-[165px] text-center">
                   Pilih
                 </TableColumn>
@@ -626,7 +626,7 @@ export default function SellingPageAdmin() {
                       <TableCell>{item.nama_produk}</TableCell>
                       <TableCell>
                         <div className="flex gap-2">
-                          <Button
+                          {/* <Button
                             isIconOnly
                             variant="flat"
                             size="sm"
@@ -661,7 +661,7 @@ export default function SellingPageAdmin() {
                             }}
                           >
                             <Minus weight="bold" size={16} />
-                          </Button>
+                          </Button> */}
                           <Input
                             value={!item.qty ? "" : `${item.qty}`}
                             type="number"
@@ -742,7 +742,7 @@ export default function SellingPageAdmin() {
                               }
                             }}
                           />
-                          <Button
+                          {/* <Button
                             isIconOnly
                             variant="flat"
                             size="sm"
@@ -780,7 +780,7 @@ export default function SellingPageAdmin() {
                             }}
                           >
                             <Plus weight="bold" size={16} />
-                          </Button>
+                          </Button> */}
                         </div>
                       </TableCell>
                       <TableCell className="text-center">
