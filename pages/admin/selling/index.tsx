@@ -605,7 +605,7 @@ export default function SellingPageAdmin() {
                 <TableColumn className="w-[150px] text-center">
                   Item ({listProdukAdmin.length})
                 </TableColumn>
-                <TableColumn className="w-[100px] text-center">Qty</TableColumn>
+                <TableColumn className="w-[135px] text-center">Qty</TableColumn>
                 <TableColumn className="w-[165px] text-center">
                   Pilih
                 </TableColumn>
