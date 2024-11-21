@@ -29,15 +29,18 @@ export default function ProductTable({
   isLoading: boolean;
   selectionChange: any;
 }) {
-  const { page, pages, data, setPage } = usePagination(produk ? produk : [], 2);
   const [search, setSearch] = useState("");
 
-  const filter = data.filter((item) => {
-    return (
-      item.kode_item.toLowerCase().includes(search.toLowerCase()) ||
-      item.nama_produk.toLowerCase().includes(search.toLowerCase())
-    );
-  });
+  const filter = produk
+    ? produk.filter((item) => {
+        return (
+          item.kode_item.toLowerCase().includes(search.toLowerCase()) ||
+          item.nama_produk.toLowerCase().includes(search.toLowerCase())
+        );
+      })
+    : [];
+
+  const { page, pages, data, setPage } = usePagination(filter, 3);
 
   const columnsProduk = [
     { name: "Kode Item", uid: "kode_item" },
@@ -121,7 +124,7 @@ export default function ProductTable({
         </TableHeader>
 
         <TableBody
-          items={filter}
+          items={data}
           emptyContent="Produk kosong"
           isLoading={isLoading}
         >
