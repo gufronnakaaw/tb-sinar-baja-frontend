@@ -176,7 +176,7 @@ export default function Form({
                 key={item.id_preorder}
                 textValue={`${item.id_preorder} - ${item.nama_supplier}`}
               >
-                {item.id_preorder}
+                {item.id_preorder} - {item.nama_supplier}
               </AutocompleteItem>
             )}
           </Autocomplete>
