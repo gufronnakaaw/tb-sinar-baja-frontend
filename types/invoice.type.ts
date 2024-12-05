@@ -7,6 +7,7 @@ export type InvoiceType = {
   jatuh_tempo: string;
   created_at: string;
   status: string;
+  nama_supplier: string;
 };
 
 export type InvoiceDetail = {

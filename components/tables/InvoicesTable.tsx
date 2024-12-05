@@ -34,6 +34,7 @@ export default function InvoiceTable({
 
   const columnsInvoice = [
     { name: "Nomor Invoice", uid: "nomor_invoice" },
+    { name: "Nama Supplier", uid: "nama_supplier" },
     { name: "Jatuh Tempo", uid: "jatuh_tempo" },
     { name: "Status", uid: "status" },
     { name: "Tagihan", uid: "tagihan" },
@@ -72,6 +73,10 @@ export default function InvoiceTable({
       case "nomor_invoice":
         return (
           <div className="w-max text-default-900">{item.nomor_invoice}</div>
+        );
+      case "nama_supplier":
+        return (
+          <div className="w-max text-default-900">{item.nama_supplier}</div>
         );
       case "jatuh_tempo":
         return <div className="w-max text-default-900">{item.jatuh_tempo}</div>;
