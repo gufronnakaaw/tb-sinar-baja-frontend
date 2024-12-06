@@ -114,7 +114,9 @@ const Nota = (props: TransaksiType, ref: any) => {
                   <td className="px-2 py-1">
                     {formatRupiah(transaction.harga)}
                   </td>
-                  <td className="px-2 py-1">{checkDiskon(transaction)}</td>
+                  <td className="px-2 py-1">
+                    {formatRupiah(transaction.harga - transaction.sub_total)}
+                  </td>
                   <td className="px-2 py-1">
                     {formatRupiah(transaction.sub_total)}
                   </td>
