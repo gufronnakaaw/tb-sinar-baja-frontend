@@ -5,7 +5,7 @@ import { SessionProvider, getSession, signOut } from "next-auth/react";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import NextNProgress from "nextjs-progressbar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { SWRConfig } from "swr";
 
@@ -16,6 +16,7 @@ export default function App({
   pageProps: { session, ...pageProps },
 }: AppProps) {
   const router = useRouter();
+  const [isDesktop, setIsDesktop] = useState(false);
 
   function setColor() {
     const ownerColor = "#006FEE";
@@ -63,13 +64,33 @@ export default function App({
     }
   }, [router]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1150);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <NextUIProvider>
       <NextNProgress color={setColor()} />
       <SessionProvider session={session} refetchOnWindowFocus={false}>
         <Toaster />
         <SWRConfig value={{ refreshInterval: 10 * 1000, fetcher }}>
-          <Component {...pageProps} />
+          {!isDesktop ? (
+            <div className="flex h-screen items-center justify-center text-center">
+              ⚠️ Hanya bisa dioperasikan di komputer dengan resolusi minimal
+              1150 pixel.
+            </div>
+          ) : (
+            <Component {...pageProps} />
+          )}
         </SWRConfig>
       </SessionProvider>
     </NextUIProvider>
