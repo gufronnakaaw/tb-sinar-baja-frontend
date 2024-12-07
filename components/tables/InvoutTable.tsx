@@ -48,6 +48,7 @@ export default function InvoutTable({
         <TableHeader>
           <TableColumn className="text-center">ID Invoice Out</TableColumn>
           <TableColumn className="text-center">ID Transaksi</TableColumn>
+          <TableColumn className="text-center">Customer</TableColumn>
           <TableColumn className="text-center">Total</TableColumn>
           <TableColumn className="text-center">Sisa</TableColumn>
           <TableColumn className="text-center">Status</TableColumn>
@@ -59,6 +60,7 @@ export default function InvoutTable({
             <TableRow key={item.id_invoice}>
               <TableCell className="text-center">{item.id_invoice}</TableCell>
               <TableCell className="text-center">{item.transaksi_id}</TableCell>
+              <TableCell className="text-center">{item.penerima}</TableCell>
               <TableCell className="text-center">
                 {formatRupiah(item.tagihan)}
               </TableCell>
@@ -71,7 +73,7 @@ export default function InvoutTable({
               <TableCell className="text-center">
                 {item.jatuh_tempo ?? "-"}
               </TableCell>
-              <TableCell className="text-center">
+              <TableCell className="flex text-center">
                 <CustomTooltip content="Riwayat Pembayaran">
                   <Button
                     isIconOnly

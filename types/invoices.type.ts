@@ -11,6 +11,7 @@ export type InvoutType = {
   status: string;
   invoicekeluardetail: InvoutDetail[];
   transaksi: TransaksiType;
+  penerima: string;
 };
 
 export type InvoutDetail = {
