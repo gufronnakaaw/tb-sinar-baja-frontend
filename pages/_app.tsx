@@ -66,7 +66,7 @@ export default function App({
 
   useEffect(() => {
     const handleResize = () => {
-      setIsDesktop(window.innerWidth >= 1150);
+      setIsDesktop(window.innerWidth >= 1250);
     };
 
     handleResize();
@@ -86,7 +86,7 @@ export default function App({
           {!isDesktop ? (
             <div className="flex h-screen items-center justify-center text-center">
               ⚠️ Hanya bisa dioperasikan di komputer dengan resolusi minimal
-              1150 pixel.
+              1250 pixel.
             </div>
           ) : (
             <Component {...pageProps} />
