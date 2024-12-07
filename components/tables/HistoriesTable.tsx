@@ -49,6 +49,7 @@ export default function HistoriesTable({
     columnsTransaksi.push(
       ...[
         { name: "ID Transaksi", uid: "id_transaksi" },
+        { name: "Customer", uid: "penerima" },
         { name: "Tanggal", uid: "tanggal" },
         { name: "Tipe", uid: "tipe" },
         { name: "Metode", uid: "metode" },
@@ -62,6 +63,7 @@ export default function HistoriesTable({
     columnsTransaksi.push(
       ...[
         { name: "ID Transaksi", uid: "id_transaksi" },
+        { name: "Customer", uid: "penerima" },
         { name: "Tanggal", uid: "tanggal" },
         { name: "Tipe", uid: "tipe" },
         { name: "Metode", uid: "metode" },
@@ -82,6 +84,12 @@ export default function HistoriesTable({
       case "id_transaksi":
         return (
           <div className="text-default-900">{transaction.id_transaksi}</div>
+        );
+      case "penerima":
+        return (
+          <div className="text-default-900">
+            {transaction.penerima ? transaction.penerima : "-"}
+          </div>
         );
       case "tanggal":
         return (
