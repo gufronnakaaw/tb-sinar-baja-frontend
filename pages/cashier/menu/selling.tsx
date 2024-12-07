@@ -174,6 +174,8 @@ export default function SellingPage() {
               rak: produk.rak,
               harga: produk.harga,
               sub_total: produk.subtotal,
+              diskon_persen_item: produk.diskon_persen_item,
+              diskon_langsung_item: produk.diskon_langsung_item,
             };
           }),
         },
