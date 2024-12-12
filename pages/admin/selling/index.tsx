@@ -602,7 +602,7 @@ export default function SellingPageAdmin() {
               }}
             >
               <TableHeader className="text-center">
-                <TableColumn className="w-[115px] text-center">
+                <TableColumn className="w-[100px] text-center">
                   Item ({listProdukAdmin.length})
                 </TableColumn>
                 <TableColumn className="w-[160px] text-center">Qty</TableColumn>
@@ -623,7 +623,11 @@ export default function SellingPageAdmin() {
                 {listProdukAdmin.map((item) => {
                   return (
                     <TableRow key={item.kode_item}>
-                      <TableCell>{item.nama_produk}</TableCell>
+                      <TableCell>
+                        <CustomTooltip content={item.nama_produk}>
+                          <div className="line-clamp-2">{item.nama_produk}</div>
+                        </CustomTooltip>
+                      </TableCell>
                       <TableCell>
                         <div className="flex gap-2">
                           {/* <Button
