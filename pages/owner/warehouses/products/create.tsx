@@ -1,4 +1,4 @@
-import { Button, Input, Spinner } from "@nextui-org/react";
+import { Button, Input, Select, SelectItem, Spinner } from "@nextui-org/react";
 import { WarningCircle } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -10,7 +10,9 @@ import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 
 // utils
+import { WarehouseListType } from "@/types/warehouses.type";
 import { fetcher } from "@/utils/fetcher";
+import { InferGetServerSidePropsType } from "next";
 
 type ProdukDetailType = {
   kode_item: string;
@@ -47,7 +49,9 @@ type ProdukDetailType = {
   harga_diskon: number;
 };
 
-export default function ProductEdit() {
+export default function ProductEdit({
+  gudang,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
   const [input, setInput] = useState<any>({});
   const [loading, setLoading] = useState(false);
@@ -477,33 +481,27 @@ export default function ProductEdit() {
               min={0}
             />
 
-            <Input
+            <Select
               isRequired
-              variant="flat"
-              label={
-                <span className="inline-flex items-center">
-                  Gudang
-                  {
-                    <CustomTooltip content="wajib isi dengan Kode Gudang bukan Nama Gudang!">
-                      <WarningCircle
-                        weight="bold"
-                        size={16}
-                        className="ml-1 cursor-pointer text-default-600"
-                      />
-                    </CustomTooltip>
-                  }
-                </span>
-              }
               labelPlacement="outside"
-              name="gudang_id"
-              placeholder="Masukan Kode Gudang"
+              label="Pilih Gudang"
+              size="md"
+              className="w-full"
               onChange={(e) => {
+                if (!e.target.value) return;
                 setInput({
                   ...input,
-                  [e.target.name]: e.target.value,
+                  gudang_id: e.target.value,
                 });
               }}
-            />
+              selectedKeys={[input.gudang_id as string]}
+            >
+              {gudang.map((item) => (
+                <SelectItem key={item.kode_gudang} value={item.kode_gudang}>
+                  {item.nama}
+                </SelectItem>
+              ))}
+            </Select>
 
             <Input
               isRequired
@@ -608,3 +606,16 @@ export default function ProductEdit() {
     </Layout>
   );
 }
+
+export const getServerSideProps = async () => {
+  const result = await fetcher({
+    url: "/gudang",
+    method: "GET",
+  });
+
+  return {
+    props: {
+      gudang: result.data as WarehouseListType[],
+    },
+  };
+};
