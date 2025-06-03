@@ -13,7 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { Eye } from "@phosphor-icons/react";
+import { Eye, Pencil } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
 import CustomTooltip from "../tooltip";
 
@@ -80,6 +80,20 @@ export default function OffersTable({
       case "action":
         return (
           <div className="flex max-w-[110px] items-center gap-1">
+            <CustomTooltip content="Edit">
+              <Button
+                isIconOnly
+                variant="light"
+                size="sm"
+                onClick={() =>
+                  router.push(
+                    `/${role}/purchases/offers/edit/${penawaran.id_penawaran}`,
+                  )
+                }
+              >
+                <Pencil weight="bold" size={20} className="text-default-600" />
+              </Button>
+            </CustomTooltip>
             <CustomTooltip content="Detail">
               <Button
                 isIconOnly
