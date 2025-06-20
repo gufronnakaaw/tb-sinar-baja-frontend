@@ -19,6 +19,10 @@ function getUrl(mode: string) {
   if (mode == "online") {
     return `http://sinarbajakediri.my.id:2626/api`;
   }
+
+  if (mode == "vps") {
+    return `https://apitoko.sinarbajakediri.my.id/api`;
+  }
 }
 
 export async function fetcher({ url, method, data, token }: FetcherParams) {
