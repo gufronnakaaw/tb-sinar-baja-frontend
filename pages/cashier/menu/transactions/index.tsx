@@ -14,8 +14,9 @@ import LoadingScreen from "@/components/LoadingScreen";
 import HistoriesTable from "@/components/tables/HistoriesTable";
 import { GlobalResponse } from "@/types/global.type";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
-import useSWR from "swr";
+import useSWR, { KeyedMutator } from "swr";
 
 export const getServerSideProps = (async () => {
   const result = await fetcher({
@@ -47,6 +48,7 @@ export default function TransactionsPage(
       refreshInterval: 15000,
     },
   );
+  const session = useSession();
 
   if (swr.isLoading) {
     return <LoadingScreen role="cashier" />;
@@ -60,15 +62,23 @@ export default function TransactionsPage(
     return item.id_transaksi.toLowerCase().includes(search.toLowerCase());
   });
 
-  return <SubComponentTransactionsPage {...{ transaksi: filter, setSearch }} />;
+  return (
+    <SubComponentTransactionsPage
+      {...{ transaksi: filter, setSearch, session, mutate: swr.mutate }}
+    />
+  );
 }
 
 function SubComponentTransactionsPage({
   transaksi,
   setSearch,
+  session,
+  mutate,
 }: {
   transaksi: TransaksiType[] | undefined;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
+  session: any;
+  mutate: KeyedMutator<any>;
 }) {
   const router = useRouter();
 
@@ -100,10 +110,14 @@ function SubComponentTransactionsPage({
               />
             </div>
 
-            <HistoriesTable
-              transaksi={transaksi}
-              path="/cashier/menu/transactions"
-            />
+            {session.status === "authenticated" && (
+              <HistoriesTable
+                transaksi={transaksi}
+                path="/cashier/menu/transactions"
+                mutate={mutate}
+                roles={session.data.user.role}
+              />
+            )}
           </div>
         </div>
       </section>

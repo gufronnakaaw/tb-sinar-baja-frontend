@@ -9,6 +9,7 @@ import HistoriesTable from "@/components/tables/HistoriesTable";
 import { GlobalResponse } from "@/types/global.type";
 import { TransaksiType } from "@/types/transactions.type";
 import { InferGetServerSidePropsType } from "next";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 import useSWR from "swr";
 
@@ -30,6 +31,7 @@ export default function AdminHistoriesPage(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
   const [search, setSearch] = useState("");
+  const session = useSession();
   const swr = useSWR<GlobalResponse<TransaksiType[]>>({
     url: `/transaksi?role=${props.role}`,
     method: "GET",
@@ -61,11 +63,15 @@ export default function AdminHistoriesPage(
             onChange={(e) => setSearch(e.target.value)}
           />
 
-          <HistoriesTable
-            transaksi={filter}
-            path="/admin/selling/histories"
-            role={props.role}
-          />
+          {session.status === "authenticated" && (
+            <HistoriesTable
+              transaksi={filter}
+              path="/admin/selling/histories"
+              role={props.role}
+              roles={session.data.user.role}
+              mutate={swr.mutate}
+            />
+          )}
         </div>
       </Container>
     </Layout>

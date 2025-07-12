@@ -1,11 +1,13 @@
 import usePagination from "@/hooks/usepagination";
 import { TransaksiType } from "@/types/transactions.type";
 import { customStyleTable } from "@/utils/customStyleTable";
+import { fetcher } from "@/utils/fetcher";
 import { formatDate } from "@/utils/formatDate";
 import { formatRupiah } from "@/utils/formatRupiah";
 import { getPath } from "@/utils/getPath";
 import {
   Button,
+  Chip,
   Pagination,
   Table,
   TableBody,
@@ -14,8 +16,10 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { Eye } from "@phosphor-icons/react";
+import { ClockClockwise, Eye, Power, Trash } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
+import toast from "react-hot-toast";
+import { KeyedMutator } from "swr";
 import StatusMetode from "../status/StatusMetode";
 import StatusPayment from "../status/StatusPayment";
 import CustomTooltip from "../tooltip";
@@ -24,6 +28,8 @@ type HistoriesTableProps = {
   transaksi: TransaksiType[] | undefined;
   path: string;
   role?: string;
+  roles: string[];
+  mutate: KeyedMutator<any>;
 };
 
 type TransaksiTable = Pick<
@@ -35,13 +41,68 @@ export default function HistoriesTable({
   transaksi,
   path,
   role,
+  roles,
+  mutate,
 }: HistoriesTableProps) {
   const router = useRouter();
-
   const { page, pages, data, setPage } = usePagination(
     transaksi ? transaksi : [],
     10,
   );
+
+  async function handleDelete(id: string) {
+    try {
+      await toast.promise(
+        fetcher({
+          url: `/transaksi/${id}`,
+          method: "DELETE",
+        }),
+        {
+          loading: "Menghapus transaksi...",
+          success: () => {
+            mutate();
+            return "Transaksi berhasil dihapus";
+          },
+          error: (err) => {
+            console.error(err);
+            return "Gagal menghapus transaksi";
+          },
+        },
+      );
+    } catch (error) {
+      console.log(error);
+      toast.error("Terjadi kesalahan saat menghapus transaksi");
+    }
+  }
+
+  async function handleCancel(id: string, state: "success" | "cancelled") {
+    try {
+      await toast.promise(
+        fetcher({
+          url: `/transaksi/state`,
+          method: "PATCH",
+          data: {
+            transaksi_id: id,
+            state,
+          },
+        }),
+        {
+          loading: "Membatalkan transaksi...",
+          success: () => {
+            mutate();
+            return "Transaksi berhasil dibatalkan";
+          },
+          error: (err) => {
+            console.error(err);
+            return "Gagal membatalkan transaksi";
+          },
+        },
+      );
+    } catch (error) {
+      console.log(error);
+      toast.error("Terjadi kesalahan saat membatalkan transaksi");
+    }
+  }
 
   const columnsTransaksi = [];
 
@@ -56,6 +117,7 @@ export default function HistoriesTable({
         { name: "Total", uid: "total_pembayaran" },
         { name: "Estimasi Barang", uid: "estimasi" },
         { name: "Status", uid: "status" },
+        { name: "Kondisi", uid: "state" },
         { name: "Aksi", uid: "action" },
       ],
     );
@@ -69,6 +131,7 @@ export default function HistoriesTable({
         { name: "Metode", uid: "metode" },
         { name: "Total", uid: "total_pembayaran" },
         { name: "Status", uid: "status" },
+        { name: "Kondisi", uid: "state" },
         { name: "Aksi", uid: "action" },
       ],
     );
@@ -127,6 +190,22 @@ export default function HistoriesTable({
             <StatusPayment text={transaction.status} />
           </div>
         );
+      case "state":
+        return (
+          <div className="flex justify-center capitalize text-default-900">
+            <Chip
+              variant="flat"
+              color={transaction.state === "success" ? "success" : "danger"}
+              size="sm"
+              classNames={{
+                base: "px-3",
+                content: "font-medium capitalize",
+              }}
+            >
+              {transaction.state === "success" ? "Sukses" : "Dibatalkan"}
+            </Chip>
+          </div>
+        );
       case "action":
         return (
           <div className="flex max-w-[110px] items-center gap-1">
@@ -140,6 +219,61 @@ export default function HistoriesTable({
                 }
               >
                 <Eye weight="bold" size={20} className="text-default-600" />
+              </Button>
+            </CustomTooltip>
+
+            {roles.length && roles.includes("owner") ? (
+              <CustomTooltip content="Hapus">
+                <Button
+                  isIconOnly
+                  variant="light"
+                  size="sm"
+                  onClick={() => {
+                    if (
+                      confirm(
+                        "Apakah Anda yakin ingin menghapus transaksi ini?",
+                      )
+                    ) {
+                      handleDelete(transaction.id_transaksi);
+                    }
+                  }}
+                >
+                  <Trash weight="bold" size={20} className="text-default-600" />
+                </Button>
+              </CustomTooltip>
+            ) : null}
+
+            <CustomTooltip
+              content={
+                transaction.state === "success" ? "Batalkan" : "Kembalikan"
+              }
+            >
+              <Button
+                isIconOnly
+                variant="light"
+                size="sm"
+                onClick={() => {
+                  if (
+                    confirm(
+                      `Apakah Anda yakin ingin ${transaction.state === "success" ? "membatalkan" : "mengembalikan"} transaksi ini?`,
+                    )
+                  ) {
+                    handleCancel(
+                      transaction.id_transaksi,
+                      transaction.state === "success" ? "cancelled" : "success",
+                    );
+                  }
+                }}
+              >
+                {transaction.state === "success" ? (
+                  <Power weight="bold" size={20} className="text-default-600" />
+                ) : (
+                  <ClockClockwise
+                    weight="bold"
+                    size={20}
+                    className="text-default-600"
+                  />
+                )}
               </Button>
             </CustomTooltip>
           </div>

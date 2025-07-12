@@ -24,6 +24,7 @@ export interface TransaksiType {
   pembayaran: number;
   estimasi: string;
   asal_transaksi: string;
+  state: "success" | "cancelled";
 }
 
 export interface ListProduk {
