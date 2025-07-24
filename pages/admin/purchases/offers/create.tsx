@@ -36,6 +36,18 @@ export default function CreateOffers(
   const [loadingPricelist, setLoadingPricelist] = useState(false);
   const [pesanan, setPesanan] = useState<ProdukPenawaran[]>([]);
   const { page, pages, data, setPage } = usePagination(pricelist, 3);
+  const [supplierSearch, setSupplierSearch] = useState("");
+  const [selectedSupplier, setSelectedSupplier] = useState<string | null>(null);
+  const filteredSupplier = props.supplier.filter((item) =>
+    item.nama.toLowerCase().includes(supplierSearch.toLowerCase()),
+  );
+
+  const {
+    pages: supplierPages,
+    page: supplierPage,
+    data: supplierData,
+    setPage: setSupplierPage,
+  } = usePagination(filteredSupplier, 5);
 
   useEffect(() => {
     if (supplier) {
@@ -315,25 +327,61 @@ export default function CreateOffers(
           </ButtonBack>
         </div>
 
-        <Select
-          isRequired
-          label="Pilih Supplier"
-          className="w-full"
-          size="sm"
-          onChange={(e) => {
-            if (!e.target.value) {
-              setPricelist([]);
+        <div className="mb-4">
+          <Input
+            label="Cari Supplier"
+            placeholder="Ketik nama supplier..."
+            size="sm"
+            value={supplierSearch}
+            onChange={(e) => setSupplierSearch(e.target.value)}
+            className="mb-2"
+          />
+
+          <Table
+            isHeaderSticky
+            aria-label="supplier table"
+            selectionMode="single"
+            selectedKeys={selectedSupplier ? [selectedSupplier] : []}
+            onSelectionChange={(keys) => {
+              const id = Array.from(keys)[0] as string;
+              setSelectedSupplier(id);
+              setSupplier(id);
               setPesanan([]);
-              return alert("tidak boleh kosong!");
-            }
-            setSupplier(e.target.value);
-            setPesanan([]);
-          }}
-        >
-          {props.supplier.map((item) => {
-            return <SelectItem key={item.id_supplier}>{item.nama}</SelectItem>;
-          })}
-        </Select>
+              setPricelist([]);
+            }}
+            className="mb-2 scrollbar-hide"
+            color="success"
+          >
+            <TableHeader>
+              <TableColumn>ID Supplier</TableColumn>
+              <TableColumn>Nama Supplier</TableColumn>
+            </TableHeader>
+            <TableBody
+              emptyContent="Supplier tidak ditemukan"
+              items={supplierData}
+            >
+              {(item) => (
+                <TableRow key={item.id_supplier}>
+                  <TableCell>{item.id_supplier}</TableCell>
+                  <TableCell>{item.nama}</TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+
+          <Pagination
+            isCompact
+            showControls
+            color="default"
+            page={supplierPage}
+            total={supplierPages}
+            onChange={setSupplierPage}
+            className="justify-self-center"
+            classNames={{
+              cursor: "bg-teal-500",
+            }}
+          />
+        </div>
 
         <Table
           isHeaderSticky
