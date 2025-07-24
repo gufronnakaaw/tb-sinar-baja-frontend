@@ -27,12 +27,14 @@ export default function SuppliersListTable({
   role,
   onOpen,
   setBank,
+  setSupplierId,
 }: {
   supplier: SupplierType[] | undefined;
   mutate: KeyedMutator<any>;
   role: string;
   onOpen: () => void;
   setBank: React.Dispatch<React.SetStateAction<SupplierBank[]>>;
+  setSupplierId: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const { page, pages, data, setPage } = usePagination(
     supplier ? supplier : [],
@@ -150,9 +152,11 @@ export default function SuppliersListTable({
         method: "GET",
       });
 
+      setSupplierId(id_supplier);
       setBank(response.data);
       onOpen();
     } catch (error) {
+      setSupplierId("");
       setBank([]);
       const response = error as {
         success: boolean;

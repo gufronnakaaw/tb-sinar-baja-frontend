@@ -11,6 +11,7 @@ export type SupplierType = {
 
 export type SupplierBank = {
   id_table: number;
+  supplier_id: string;
   nama: string;
   atas_nama: string;
   no_rekening: string;

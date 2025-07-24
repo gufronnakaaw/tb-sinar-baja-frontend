@@ -11,7 +11,7 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { useState } from "react";
-import useSWR, { KeyedMutator } from "swr";
+import useSWR from "swr";
 
 // components
 import LoadingScreen from "@/components/LoadingScreen";
@@ -25,12 +25,28 @@ import { GlobalResponse } from "@/types/global.type";
 import { SupplierBank, SupplierType } from "@/types/suppliers.type";
 import { fetcher } from "@/utils/fetcher";
 
-export default function SuppliersPage() {
+export default function SuppliersPageAdmin() {
   const [search, setSearch] = useState("");
   const swr = useSWR<GlobalResponse<SupplierType[]>>({
     url: "/supplier",
     method: "GET",
   });
+
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const bankDisclosure = useDisclosure();
+  const [input, setInput] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [bank, setBank] = useState<SupplierBank[]>([]);
+  const [isAdding, setIsAdding] = useState(false);
+  const [editBankIndex, setEditBankIndex] = useState<number | null>(null);
+  const [bankForm, setBankForm] = useState({
+    id_table: 0,
+    supplier_id: "",
+    nama: "",
+    atas_nama: "",
+    no_rekening: "",
+  });
+  const [supplierId, setSupplierId] = useState("");
 
   if (swr.isLoading) {
     return <LoadingScreen role="admin" />;
@@ -47,27 +63,151 @@ export default function SuppliersPage() {
     );
   });
 
-  return (
-    <SubComponentSuppliersPage
-      {...{ supplier: filter, setSearch, mutate: swr.mutate }}
-    />
-  );
-}
+  async function refetchBank(id_supplier: string) {
+    try {
+      const response: GlobalResponse<SupplierBank[]> = await fetcher({
+        url: "/supplier/bank?id_supplier=" + id_supplier,
+        method: "GET",
+      });
 
-function SubComponentSuppliersPage({
-  supplier,
-  setSearch,
-  mutate,
-}: {
-  supplier: SupplierType[] | undefined;
-  setSearch: React.Dispatch<React.SetStateAction<string>>;
-  mutate: KeyedMutator<any>;
-}) {
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-  const bankDisclosure = useDisclosure();
-  const [input, setInput] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [bank, setBank] = useState<SupplierBank[]>([]);
+      setBank(response.data);
+    } catch (error) {
+      setBank([]);
+      const response = error as {
+        success: boolean;
+        status_code: number;
+        error: { name: string; message: string };
+      };
+
+      if (response.status_code >= 500) {
+        console.log(response.error);
+        return alert("terjadi masalah pada server");
+      }
+
+      if (response.status_code >= 400) {
+        console.log(response.error);
+        return alert(response.error.message);
+      }
+
+      console.log(response.error);
+      return alert("terjadi error tidak diketahui pada aplikasi");
+    }
+  }
+
+  async function createBank(data: typeof bankForm, supplier_id: string) {
+    setLoading(true);
+
+    try {
+      await fetcher({
+        url: "/supplier/bank",
+        method: "POST",
+        data: {
+          nama: data.nama,
+          atas_nama: data.atas_nama,
+          no_rekening: data.no_rekening,
+          id_supplier: supplier_id,
+        },
+      });
+
+      setLoading(false);
+      alert("Bank berhasil ditambahkan");
+
+      refetchBank(supplier_id);
+    } catch (error) {
+      const response = error as {
+        success: boolean;
+        status_code: number;
+        error: { name: string; message: string };
+      };
+      setLoading(false);
+
+      if (response.status_code >= 500) {
+        console.log(response.error);
+        return alert("terjadi masalah pada server");
+      }
+
+      if (response.status_code >= 400) {
+        console.log(response.error);
+        return alert(response.error.message);
+      }
+
+      console.log(response.error);
+      return alert("terjadi error tidak diketahui pada aplikasi");
+    }
+  }
+
+  async function updateBank(data: typeof bankForm) {
+    setLoading(true);
+
+    try {
+      await fetcher({
+        url: "/supplier/bank",
+        method: "PATCH",
+        data: {
+          bank_id: data.id_table,
+          nama: data.nama,
+          atas_nama: data.atas_nama,
+          no_rekening: data.no_rekening,
+        },
+      });
+
+      setLoading(false);
+      alert("Bank berhasil diperbarui");
+      refetchBank(data.supplier_id);
+    } catch (error) {
+      const response = error as {
+        success: boolean;
+        status_code: number;
+        error: { name: string; message: string };
+      };
+      setLoading(false);
+
+      if (response.status_code >= 500) {
+        console.log(response.error);
+        return alert("terjadi masalah pada server");
+      }
+
+      if (response.status_code >= 400) {
+        console.log(response.error);
+        return alert(response.error.message);
+      }
+
+      console.log(response.error);
+      return alert("terjadi error tidak diketahui pada aplikasi");
+    }
+  }
+
+  async function deleteBank(id_bank: number, supplier_id: string) {
+    if (!confirm("apakah anda yakin?")) return;
+
+    try {
+      await fetcher({
+        url: `/supplier/bank/${supplier_id}/${id_bank}`,
+        method: "DELETE",
+      });
+      alert("bank berhasil dihapus");
+      refetchBank(supplier_id);
+    } catch (error) {
+      const response = error as {
+        success: boolean;
+        status_code: number;
+        error: { name: string; message: string };
+      };
+
+      if (response.status_code >= 500) {
+        console.log(response.error);
+        return alert("terjadi masalah pada server");
+      }
+
+      if (response.status_code >= 400) {
+        console.log(response.error);
+        return alert(response.error.message);
+      }
+
+      console.log(response.error);
+      return alert("terjadi error tidak diketahui pada aplikasi");
+    }
+  }
 
   async function createSupplier() {
     setLoading(true);
@@ -112,7 +252,7 @@ function SubComponentSuppliersPage({
       setLoading(false);
       alert("supplier berhasil dibuat");
       onClose();
-      mutate();
+      swr.mutate();
     } catch (error) {
       const response = error as {
         success: boolean;
@@ -153,7 +293,8 @@ function SubComponentSuppliersPage({
 
             <Button
               variant="solid"
-              className="w-full bg-teal-500 font-medium text-white sm:w-max"
+              color="primary"
+              className="w-full font-medium sm:w-max"
               onClick={onOpen}
             >
               Tambah Supplier
@@ -343,8 +484,9 @@ function SubComponentSuppliersPage({
                       {loading ? (
                         <Button
                           variant="solid"
+                          color="primary"
                           startContent={<Spinner color="white" size="sm" />}
-                          className={`bg-teal-500 text-white ${loading ? "cursor-not-allowed font-medium" : ""}`}
+                          className={`${loading ? "cursor-not-allowed font-medium" : ""}`}
                         >
                           Tunggu
                         </Button>
@@ -362,7 +504,7 @@ function SubComponentSuppliersPage({
                             Object.keys(input).length < 9 ||
                             Object.values(input).includes("")
                           }
-                          className={`bg-teal-500 font-medium text-white ${Object.keys(input).length < 9 || Object.values(input).includes("") ? "cursor-not-allowed " : null}`}
+                          className={`font-medium ${Object.keys(input).length < 9 || Object.values(input).includes("") ? "cursor-not-allowed text-gray-400" : null}`}
                         >
                           Tambah
                         </Button>
@@ -381,6 +523,16 @@ function SubComponentSuppliersPage({
               size="lg"
               onClose={() => {
                 setBank([]);
+                setEditBankIndex(null);
+                setBankForm({
+                  nama: "",
+                  atas_nama: "",
+                  no_rekening: "",
+                  supplier_id: "",
+                  id_table: 0,
+                });
+                setIsAdding(false);
+                setSupplierId("");
               }}
             >
               <ModalContent>
@@ -391,50 +543,193 @@ function SubComponentSuppliersPage({
                     </ModalHeader>
 
                     <ModalBody>
-                      <div className="grid gap-[2px]">
-                        {bank.length > 0
-                          ? bank.map((item, index) => {
-                              return (
-                                <div key={item.id_table}>
-                                  <p className="text-md font-semibold text-default-900">
-                                    Bank {index + 1}
-                                  </p>
+                      <div className="grid gap-2">
+                        {(isAdding || editBankIndex !== null) && (
+                          <div className="mb-2 rounded-lg border bg-gray-50 p-3">
+                            <div className="grid grid-cols-3 gap-2">
+                              <Input
+                                label="Nama Bank"
+                                size="sm"
+                                value={bankForm.nama}
+                                onChange={(e) =>
+                                  setBankForm((form) => ({
+                                    ...form,
+                                    nama: e.target.value,
+                                  }))
+                                }
+                              />
+                              <Input
+                                label="Atas Nama"
+                                size="sm"
+                                value={bankForm.atas_nama}
+                                onChange={(e) =>
+                                  setBankForm((form) => ({
+                                    ...form,
+                                    atas_nama: e.target.value,
+                                  }))
+                                }
+                              />
+                              <Input
+                                label="No Rekening"
+                                size="sm"
+                                value={bankForm.no_rekening}
+                                onChange={(e) =>
+                                  setBankForm((form) => ({
+                                    ...form,
+                                    no_rekening: e.target.value,
+                                  }))
+                                }
+                              />
+                            </div>
+                            <div className="mt-3 flex gap-2">
+                              <Button
+                                color="primary"
+                                size="sm"
+                                onClick={async () => {
+                                  if (
+                                    !bankForm.nama ||
+                                    !bankForm.atas_nama ||
+                                    !bankForm.no_rekening
+                                  ) {
+                                    alert("Semua field wajib diisi");
+                                    return;
+                                  }
+                                  if (editBankIndex !== null) {
+                                    await updateBank(bankForm);
+                                  } else {
+                                    await createBank(bankForm, supplierId);
+                                  }
+                                  setIsAdding(false);
+                                  setEditBankIndex(null);
+                                  setBankForm({
+                                    nama: "",
+                                    atas_nama: "",
+                                    no_rekening: "",
+                                    supplier_id: "",
+                                    id_table: 0,
+                                  });
+                                }}
+                              >
+                                Simpan
+                              </Button>
+                              <Button
+                                color="danger"
+                                variant="light"
+                                size="sm"
+                                onClick={() => {
+                                  setIsAdding(false);
+                                  setEditBankIndex(null);
+                                  setBankForm({
+                                    nama: "",
+                                    atas_nama: "",
+                                    no_rekening: "",
+                                    supplier_id: "",
+                                    id_table: 0,
+                                  });
+                                }}
+                              >
+                                Batal
+                              </Button>
+                            </div>
+                          </div>
+                        )}
 
-                                  <div className="grid grid-cols-[100px_10px_10fr]  gap-1 text-sm text-default-900">
-                                    <div className="text-sm font-medium text-default-600">
-                                      Nama Bank
-                                    </div>
-                                    <div className="font-medium">:</div>
-                                    <p className="font-bold text-teal-500">
-                                      {item.nama}
-                                    </p>
-                                  </div>
-                                  <div className="grid grid-cols-[100px_10px_10fr]  gap-1 text-sm text-default-900">
-                                    <div className="text-sm font-medium text-default-600">
-                                      Atas Nama
-                                    </div>
-                                    <div className="font-medium">:</div>
-                                    <p className="font-bold text-teal-500">
-                                      {item.atas_nama}
-                                    </p>
-                                  </div>
-                                  <div className="grid grid-cols-[100px_10px_10fr]  gap-1 text-sm text-default-900">
-                                    <div className="grid text-sm font-medium text-default-600">
-                                      No Rekening
-                                    </div>
-                                    <div className="font-medium">:</div>
-                                    <p className="font-bold text-teal-500">
-                                      {item.no_rekening}
-                                    </p>
-                                  </div>
+                        {/* List Bank */}
+                        {bank.length > 0 ? (
+                          bank.map((item, index) => (
+                            <div
+                              key={item.id_table}
+                              className="relative rounded-lg border bg-white p-3"
+                            >
+                              <p className="text-md font-semibold text-default-900">
+                                Bank {index + 1}
+                              </p>
+                              <div className="grid grid-cols-[100px_10px_10fr] gap-1 text-sm text-default-900">
+                                <div className="text-sm font-medium text-default-600">
+                                  Nama Bank
                                 </div>
-                              );
-                            })
-                          : null}
+                                <div className="font-medium">:</div>
+                                <p className="font-bold text-primary">
+                                  {item.nama}
+                                </p>
+                              </div>
+                              <div className="grid grid-cols-[100px_10px_10fr] gap-1 text-sm text-default-900">
+                                <div className="text-sm font-medium text-default-600">
+                                  Atas Nama
+                                </div>
+                                <div className="font-medium">:</div>
+                                <p className="font-bold text-primary">
+                                  {item.atas_nama}
+                                </p>
+                              </div>
+                              <div className="grid grid-cols-[100px_10px_10fr] gap-1 text-sm text-default-900">
+                                <div className="text-sm font-medium text-default-600">
+                                  No Rekening
+                                </div>
+                                <div className="font-medium">:</div>
+                                <p className="font-bold text-primary">
+                                  {item.no_rekening}
+                                </p>
+                              </div>
+                              <div className="absolute right-2 top-2 flex gap-1">
+                                <Button
+                                  size="sm"
+                                  color="primary"
+                                  variant="light"
+                                  onClick={() => {
+                                    setEditBankIndex(index);
+                                    setBankForm({
+                                      nama: item.nama,
+                                      atas_nama: item.atas_nama,
+                                      no_rekening: item.no_rekening,
+                                      supplier_id: item.supplier_id,
+                                      id_table: item.id_table,
+                                    });
+                                    setIsAdding(false);
+                                  }}
+                                >
+                                  Edit
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  color="danger"
+                                  variant="light"
+                                  onClick={() => {
+                                    deleteBank(item.id_table, item.supplier_id);
+                                  }}
+                                >
+                                  Hapus
+                                </Button>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="text-center text-default-400">
+                            Belum ada data bank.
+                          </p>
+                        )}
                       </div>
                     </ModalBody>
 
-                    <ModalFooter></ModalFooter>
+                    <ModalFooter>
+                      <Button
+                        color="primary"
+                        variant="flat"
+                        onClick={() => {
+                          setIsAdding(true);
+                          setEditBankIndex(null);
+                          setBankForm({
+                            supplier_id: "",
+                            nama: "",
+                            atas_nama: "",
+                            no_rekening: "",
+                            id_table: 0,
+                          });
+                        }}
+                      >
+                        Tambah Bank
+                      </Button>
+                    </ModalFooter>
                   </>
                 )}
               </ModalContent>
@@ -443,11 +738,12 @@ function SubComponentSuppliersPage({
 
           <SuppliersListTable
             {...{
-              supplier,
-              mutate,
+              supplier: filter,
+              mutate: swr.mutate,
               role: "admin",
               onOpen: bankDisclosure.onOpen,
               setBank,
+              setSupplierId,
             }}
           />
         </div>
