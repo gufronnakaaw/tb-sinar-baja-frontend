@@ -3,11 +3,14 @@ import Container from "@/components/wrapper/DashboardContainer";
 import Layout from "@/components/wrapper/DashboardLayout";
 import { EntryType } from "@/types/entry.type";
 import { GlobalResponse } from "@/types/global.type";
+import { WarehouseListType } from "@/types/warehouses.type";
 import { fetcher } from "@/utils/fetcher";
 import {
   Button,
   Checkbox,
   Input,
+  Select,
+  SelectItem,
   Table,
   TableBody,
   TableCell,
@@ -18,11 +21,16 @@ import {
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import useSWR from "swr";
 
 export default function Entry({
   entry,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
+  const swr = useSWR<GlobalResponse<WarehouseListType[]>>({
+    url: "/gudang",
+    method: "GET",
+  });
 
   const [entryItems, setEntryItems] = useState<EntryType[]>(
     entry.map((item) => {
@@ -108,7 +116,7 @@ export default function Entry({
                   <TableRow key={item.kode_item}>
                     <TableCell>
                       <Checkbox
-                        value={item.checklist}
+                        isSelected={item.checklist}
                         onValueChange={(e) =>
                           setEntryItems((prev) => {
                             if (prev.length != 0) {
@@ -135,31 +143,39 @@ export default function Entry({
                     <TableCell>{item.jumlah}</TableCell>
                     <TableCell>{item.gudang.join(", ")}</TableCell>
                     <TableCell>
-                      <Input
-                        value={item.gudang_id}
-                        type="text"
-                        variant="flat"
-                        color="default"
-                        onChange={(e) =>
-                          setEntryItems((prev) => {
-                            if (prev.length != 0) {
-                              const index = prev.findIndex(
-                                (produk) => produk.kode_item == item.kode_item,
-                              );
-
-                              if (index != -1) {
-                                prev[index] = {
-                                  ...prev[index],
-                                  gudang_id: e.target.value.toUpperCase(),
-                                };
-
-                                return [...prev];
-                              }
-                            }
-                            return [...prev];
-                          })
+                      <Select
+                        label="Pilih Gudang"
+                        selectionMode="multiple"
+                        selectedKeys={
+                          item.gudang_id
+                            ? item.gudang_id.split(",").filter(Boolean)
+                            : []
                         }
-                      />
+                        onSelectionChange={(keys) => {
+                          setEntryItems((prev) =>
+                            prev.map((produk) =>
+                              produk.kode_item === item.kode_item
+                                ? {
+                                    ...produk,
+                                    gudang_id: Array.from(keys).join(","),
+                                  }
+                                : produk,
+                            ),
+                          );
+                        }}
+                        items={swr.data?.data || []}
+                        className="min-w-[120px]"
+                        size="sm"
+                      >
+                        {(gudang) => (
+                          <SelectItem
+                            key={gudang.kode_gudang}
+                            value={gudang.kode_gudang}
+                          >
+                            {gudang.nama}
+                          </SelectItem>
+                        )}
+                      </Select>
                     </TableCell>
                     <TableCell>
                       <Input
@@ -199,6 +215,7 @@ export default function Entry({
             size="md"
             className="w-max justify-self-end bg-primary font-medium text-white"
             onClick={updateStok}
+            isDisabled={!entryItems.some((item) => item.checklist)}
           >
             Simpan ke gudang
           </Button>
