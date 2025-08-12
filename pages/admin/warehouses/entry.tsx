@@ -215,7 +215,12 @@ export default function Entry({
             size="md"
             className="w-max justify-self-end bg-teal-500 font-medium text-white"
             onClick={updateStok}
-            isDisabled={!entryItems.some((item) => item.checklist)}
+            isDisabled={
+              !entryItems.some((item) => item.checklist) ||
+              entryItems
+                .filter((item) => item.checklist)
+                .some((item) => !item.jumlah_entry || !item.gudang_id)
+            }
           >
             Simpan ke gudang
           </Button>
