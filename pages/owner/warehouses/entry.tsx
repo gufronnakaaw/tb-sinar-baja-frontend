@@ -180,28 +180,27 @@ export default function Entry({
                     <TableCell>
                       <Input
                         value={item.jumlah_entry}
-                        type="text"
+                        type="number"
                         variant="flat"
                         color="default"
-                        onChange={(e) =>
-                          setEntryItems((prev) => {
-                            if (prev.length != 0) {
-                              const index = prev.findIndex(
-                                (produk) => produk.kode_item == item.kode_item,
-                              );
+                        min="0"
+                        max={item.jumlah}
+                        onChange={(e) => {
+                          const inputValue = parseInt(e.target.value) || 0;
+                          const finalValue =
+                            inputValue > item.jumlah ? item.jumlah : inputValue;
 
-                              if (index != -1) {
-                                prev[index] = {
-                                  ...prev[index],
-                                  jumlah_entry: e.target.value.toUpperCase(),
-                                };
-
-                                return [...prev];
-                              }
-                            }
-                            return [...prev];
-                          })
-                        }
+                          setEntryItems((prev) =>
+                            prev.map((produk) =>
+                              produk.kode_item === item.kode_item
+                                ? {
+                                    ...produk,
+                                    jumlah_entry: finalValue.toString(),
+                                  }
+                                : produk,
+                            ),
+                          );
+                        }}
                       />
                     </TableCell>
                   </TableRow>
