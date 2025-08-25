@@ -267,23 +267,45 @@ export default function Form({
                             return [...prev];
                           });
                         } else {
-                          setTemporaryItems((prev) => {
-                            if (prev.length != 0) {
-                              const index = prev.findIndex(
-                                (produk) => produk.kode_item == item.kode_item,
-                              );
+                          if (parseFloat(jumlah) > item.qty) {
+                            setTemporaryItems((prev) => {
+                              if (prev.length != 0) {
+                                const index = prev.findIndex(
+                                  (produk) =>
+                                    produk.kode_item == item.kode_item,
+                                );
 
-                              if (index != -1) {
-                                prev[index] = {
-                                  ...prev[index],
-                                  jumlah_entry: parseFloat(jumlah),
-                                };
+                                if (index != -1) {
+                                  prev[index] = {
+                                    ...prev[index],
+                                    jumlah_entry: prev[index].qty,
+                                  };
 
-                                return [...prev];
+                                  return [...prev];
+                                }
                               }
-                            }
-                            return [...prev];
-                          });
+                              return [...prev];
+                            });
+                          } else {
+                            setTemporaryItems((prev) => {
+                              if (prev.length != 0) {
+                                const index = prev.findIndex(
+                                  (produk) =>
+                                    produk.kode_item == item.kode_item,
+                                );
+
+                                if (index != -1) {
+                                  prev[index] = {
+                                    ...prev[index],
+                                    jumlah_entry: parseFloat(jumlah),
+                                  };
+
+                                  return [...prev];
+                                }
+                              }
+                              return [...prev];
+                            });
+                          }
                         }
                       }}
                     />
