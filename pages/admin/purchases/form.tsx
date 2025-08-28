@@ -446,6 +446,10 @@ export default function Form({
             size="md"
             className="w-max justify-self-end bg-teal-500 font-medium text-white"
             onClick={createEntry}
+            isDisabled={
+              !idPreorder ||
+              !temporaryItems.filter((item) => item.checklist).length
+            }
           >
             Simpan
           </Button>

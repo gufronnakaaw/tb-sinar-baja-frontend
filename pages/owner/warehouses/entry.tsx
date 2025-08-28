@@ -118,23 +118,13 @@ export default function Entry({
                       <Checkbox
                         isSelected={item.checklist}
                         onValueChange={(e) =>
-                          setEntryItems((prev) => {
-                            if (prev.length != 0) {
-                              const index = prev.findIndex(
-                                (produk) => produk.kode_item == item.kode_item,
-                              );
-
-                              if (index != -1) {
-                                prev[index] = {
-                                  ...prev[index],
-                                  checklist: e,
-                                };
-
-                                return [...prev];
-                              }
-                            }
-                            return [...prev];
-                          })
+                          setEntryItems((prev) =>
+                            prev.map((produk) =>
+                              produk.kode_item === item.kode_item
+                                ? { ...produk, checklist: e }
+                                : produk,
+                            ),
+                          )
                         }
                       />
                     </TableCell>
